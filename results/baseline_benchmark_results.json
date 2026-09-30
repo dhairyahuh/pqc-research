@@ -1,0 +1,201 @@
+{
+  "metadata": {
+    "timestamp": "2026-09-30T13:35:47Z",
+    "liboqs_version": "0.16.0",
+    "cpu_architecture": "arm64",
+    "iterations_per_op": 500
+  },
+  "ml_kem": {
+    "ML-KEM-512": {
+      "object_sizes": {
+        "public_key_bytes": 800,
+        "secret_key_bytes": 1632,
+        "ciphertext_bytes": 768,
+        "shared_secret_bytes": 32
+      },
+      "keygen": {
+        "mean_us": 12.04,
+        "median_us": 12.0,
+        "stdev_us": 0.25,
+        "min_us": 11.46,
+        "max_us": 13.54,
+        "ops_per_sec": 83088.0
+      },
+      "encaps": {
+        "mean_us": 13.56,
+        "median_us": 13.54,
+        "stdev_us": 0.57,
+        "min_us": 13.21,
+        "max_us": 24.92,
+        "ops_per_sec": 73726.4
+      },
+      "decaps": {
+        "mean_us": 15.49,
+        "median_us": 15.5,
+        "stdev_us": 0.63,
+        "min_us": 15.08,
+        "max_us": 26.42,
+        "ops_per_sec": 64561.2
+      }
+    },
+    "ML-KEM-768": {
+      "object_sizes": {
+        "public_key_bytes": 1184,
+        "secret_key_bytes": 2400,
+        "ciphertext_bytes": 1088,
+        "shared_secret_bytes": 32
+      },
+      "keygen": {
+        "mean_us": 17.89,
+        "median_us": 17.62,
+        "stdev_us": 0.48,
+        "min_us": 17.42,
+        "max_us": 20.08,
+        "ops_per_sec": 55904.2
+      },
+      "encaps": {
+        "mean_us": 19.52,
+        "median_us": 19.5,
+        "stdev_us": 0.19,
+        "min_us": 19.29,
+        "max_us": 21.75,
+        "ops_per_sec": 51225.9
+      },
+      "decaps": {
+        "mean_us": 22.63,
+        "median_us": 22.62,
+        "stdev_us": 0.16,
+        "min_us": 22.42,
+        "max_us": 24.62,
+        "ops_per_sec": 44184.1
+      }
+    },
+    "ML-KEM-1024": {
+      "object_sizes": {
+        "public_key_bytes": 1568,
+        "secret_key_bytes": 3168,
+        "ciphertext_bytes": 1568,
+        "shared_secret_bytes": 32
+      },
+      "keygen": {
+        "mean_us": 26.57,
+        "median_us": 26.62,
+        "stdev_us": 0.86,
+        "min_us": 25.58,
+        "max_us": 30.75,
+        "ops_per_sec": 37638.8
+      },
+      "encaps": {
+        "mean_us": 28.44,
+        "median_us": 28.42,
+        "stdev_us": 0.24,
+        "min_us": 28.17,
+        "max_us": 33.54,
+        "ops_per_sec": 35161.5
+      },
+      "decaps": {
+        "mean_us": 32.58,
+        "median_us": 32.54,
+        "stdev_us": 0.63,
+        "min_us": 32.29,
+        "max_us": 42.46,
+        "ops_per_sec": 30693.8
+      }
+    }
+  },
+  "ml_dsa": {
+    "ML-DSA-44": {
+      "object_sizes": {
+        "public_key_bytes": 1312,
+        "secret_key_bytes": 2560,
+        "signature_bytes": 2420
+      },
+      "keygen": {
+        "mean_us": 39.94,
+        "median_us": 39.62,
+        "stdev_us": 1.04,
+        "min_us": 37.17,
+        "max_us": 43.0,
+        "ops_per_sec": 25038.1
+      },
+      "sign": {
+        "mean_us": 116.74,
+        "median_us": 103.75,
+        "stdev_us": 50.91,
+        "min_us": 71.29,
+        "max_us": 442.33,
+        "ops_per_sec": 8566.2
+      },
+      "verify": {
+        "mean_us": 37.46,
+        "median_us": 37.33,
+        "stdev_us": 1.43,
+        "min_us": 37.12,
+        "max_us": 63.38,
+        "ops_per_sec": 26694.0
+      }
+    },
+    "ML-DSA-65": {
+      "object_sizes": {
+        "public_key_bytes": 1952,
+        "secret_key_bytes": 4032,
+        "signature_bytes": 3309
+      },
+      "keygen": {
+        "mean_us": 68.68,
+        "median_us": 68.33,
+        "stdev_us": 1.18,
+        "min_us": 68.04,
+        "max_us": 73.42,
+        "ops_per_sec": 14560.6
+      },
+      "sign": {
+        "mean_us": 174.3,
+        "median_us": 155.0,
+        "stdev_us": 71.06,
+        "min_us": 108.12,
+        "max_us": 687.04,
+        "ops_per_sec": 5737.1
+      },
+      "verify": {
+        "mean_us": 62.95,
+        "median_us": 62.83,
+        "stdev_us": 0.84,
+        "min_us": 62.58,
+        "max_us": 73.33,
+        "ops_per_sec": 15885.0
+      }
+    },
+    "ML-DSA-87": {
+      "object_sizes": {
+        "public_key_bytes": 2592,
+        "secret_key_bytes": 4896,
+        "signature_bytes": 4627
+      },
+      "keygen": {
+        "mean_us": 116.04,
+        "median_us": 116.0,
+        "stdev_us": 1.3,
+        "min_us": 113.38,
+        "max_us": 129.79,
+        "ops_per_sec": 8617.9
+      },
+      "sign": {
+        "mean_us": 247.6,
+        "median_us": 220.9,
+        "stdev_us": 80.37,
+        "min_us": 173.67,
+        "max_us": 693.0,
+        "ops_per_sec": 4038.7
+      },
+      "verify": {
+        "mean_us": 109.19,
+        "median_us": 108.88,
+        "stdev_us": 1.83,
+        "min_us": 108.5,
+        "max_us": 135.67,
+        "ops_per_sec": 9158.7
+      }
+    }
+  }
+}
