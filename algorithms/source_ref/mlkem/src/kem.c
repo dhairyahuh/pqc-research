@@ -447,6 +447,14 @@ int mlk_kem_dec(uint8_t ss[MLKEM_SSBYTES],
   }
 
   fail = mlk_ct_memcmp(ct, tmp, MLKEM_INDCCA_CIPHERTEXTBYTES);
+#if defined(MLKEM_RESEARCH_FAULT_HOOKS)
+  {
+    int fail_int = (int)fail;
+    extern void hook_decaps_verify_flag(int *fail_flag);
+    hook_decaps_verify_flag(&fail_int);
+    fail = (uint8_t)fail_int;
+  }
+#endif
 
   /* Compute rejection key */
   mlk_memcpy(tmp, sk + MLKEM_INDCCA_SECRETKEYBYTES - MLKEM_SYMBYTES,

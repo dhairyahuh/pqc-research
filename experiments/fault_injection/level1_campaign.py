@@ -1,14 +1,13 @@
 """
-Phase 4A: Level 1 (API & Input Buffer) Fault Injection Experimental Campaign.
-Evaluates ML-KEM-768 and ML-DSA-65 under controlled software fault abstractions:
-- SEU (Single-bit flips)
-- Multi-bit flips
-- Burst corruption
-- Byte-level corruption
-- Buffer truncation
-
-Records structured metadata, computes Wilson score 95% confidence intervals,
-and explicitly analyzes the ML-KEM implicit rejection vs. session desynchronization duality.
+Phase 4A (Corrected Taxonomy): Level 1 Fault Injection Campaign.
+Evaluates ML-KEM-768 and ML-DSA-65 under controlled software fault abstractions.
+Strictly separates:
+- CORRECT_VALID_DECAPSULATION
+- EXPECTED_IMPLICIT_REJECTION
+- EXPECTED_SIGNATURE_REJECTION
+- EXPLICIT_ERROR
+- UNEXPECTED_INCORRECT_OUTPUT
+- CRASH / TIMEOUT
 """
 
 import os
@@ -21,22 +20,19 @@ from typing import Dict, List, Any, Tuple
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "../..")))
 from algorithms.oqs_wrapper import MLKEM, MLDSA, get_liboqs_version
 from fault_injection.fault_models.fault_definitions import (
-    FaultClass, OutcomeClass, FaultDescriptor, FaultResult
+    FaultClass, CryptoOutcomeClass, FaultDescriptor, CryptoFaultResult
 )
 from fault_injection.injector.engine import FaultInjectorEngine
 from fault_injection.scheduler.scheduler import DeterministicScheduler
 
 
 def calculate_wilson_ci(k: int, n: int, confidence: float = 0.95) -> Tuple[float, float, float]:
-    """
-    Computes binomial proportion and Wilson score interval.
-    Returns (proportion, lower_bound, upper_bound) in percent.
-    """
+    """Computes binomial proportion and Wilson score interval (percentage)."""
     if n == 0:
         return 0.0, 0.0, 0.0
 
     p_hat = k / n
-    z = 1.95996  # 95% two-sided normal quantile
+    z = 1.95996
 
     denominator = 1.0 + (z**2) / n
     center_adj = p_hat + (z**2) / (2 * n)
@@ -51,9 +47,8 @@ def run_kem_level1_experiment(
     iterations: int = 1000,
     master_seed: int = 421098
 ) -> Dict[str, Any]:
-    """Runs Level 1 input fault campaigns on ML-KEM-768."""
     print("\n" + "=" * 75)
-    print(" RUNNING PHASE 4A: ML-KEM-768 LEVEL 1 FAULT CAMPAIGN")
+    print(" RUNNING PHASE 4A: ML-KEM-768 LEVEL 1 FAULT CAMPAIGN (CORRECTED TAXONOMY)")
     print(f" Target: ML-KEM-768 | Iterations per test: {iterations} | Master Seed: {master_seed}")
     print("=" * 75)
 
@@ -71,7 +66,7 @@ def run_kem_level1_experiment(
 
     for c in campaigns:
         print(f"\n[+] Executing {c['name']} ({c['target']})...")
-        counts = {o.value: 0 for o in OutcomeClass}
+        counts = {o.value: 0 for o in CryptoOutcomeClass}
         detailed_samples = []
 
         if c["class"] == FaultClass.SEU:
@@ -87,14 +82,12 @@ def run_kem_level1_experiment(
             )
 
         for fault in fault_gen:
-            # 1. Baseline legitimate execution
             pk, sk = kem.keypair()
             ct, ss_enc = kem.encaps(pk)
 
             t0 = time.perf_counter_ns()
-            outcome = OutcomeClass.CORRECT
+            outcome = CryptoOutcomeClass.CORRECT_VALID_DECAPSULATION
             fault_detected = False
-            recovered = False
             err_code = 0
             details = None
 
@@ -108,53 +101,59 @@ def run_kem_level1_experiment(
                     ss_dec = kem.decaps(corrupted_ct, sk)
 
                     if ss_dec == ss_enc:
-                        # Theoretically impossible for FIPS 203 under ciphertext corruption
-                        outcome = OutcomeClass.CORRECT
+                        outcome = CryptoOutcomeClass.CORRECT_VALID_DECAPSULATION
                     else:
-                        # FIPS 203 Section 7.3: Decapsulation returns pseudorandom key (implicit rejection)
-                        # At KEM level: Expected rejection mechanism
-                        # At System/Spacecraft level: Silent Data Corruption (SDC) / session desync
-                        outcome = OutcomeClass.SILENT_DATA_CORRUPTION
+                        # FIPS 203 Section 7.3: Standard-mandated implicit rejection
+                        outcome = CryptoOutcomeClass.EXPECTED_IMPLICIT_REJECTION
                         fault_detected = False
-                        details = "Implicit rejection triggered: FO transform produced alternate pseudorandom key without error"
+                        details = "FO transform executed implicit rejection (pseudorandom shared secret returned)"
 
                 elif c["target"] == "public_key":
                     corrupted_pk = FaultInjectorEngine.inject_seu_bit_flip(pk, fault.target_index, fault.bit_index)
-                    # Encapsulate under corrupted public key
-                    ct_f, ss_enc_f = kem.encaps(corrupted_pk)
-                    ss_dec_f = kem.decaps(ct_f, sk)
-
-                    if ss_enc_f == ss_dec_f:
-                        outcome = OutcomeClass.CORRECT
-                    else:
-                        outcome = OutcomeClass.SILENT_DATA_CORRUPTION
-                        details = "Corrupted public key produced mismatched ciphertext/shared secret"
+                    try:
+                        ct_f, ss_enc_f = kem.encaps(corrupted_pk)
+                        ss_dec_f = kem.decaps(ct_f, sk)
+                        if ss_enc_f == ss_dec_f:
+                            outcome = CryptoOutcomeClass.CORRECT_VALID_DECAPSULATION
+                        else:
+                            outcome = CryptoOutcomeClass.EXPECTED_IMPLICIT_REJECTION
+                            details = "Corrupted public key caused re-encryption check mismatch in decapsulation"
+                    except RuntimeError as e:
+                        outcome = CryptoOutcomeClass.EXPLICIT_ERROR
+                        err_code = 1
+                        fault_detected = True
+                        details = f"Library validation caught invalid public key encoding: {e}"
 
                 elif c["target"] == "secret_key":
                     corrupted_sk = FaultInjectorEngine.inject_seu_bit_flip(sk, fault.target_index, fault.bit_index)
-                    ss_dec = kem.decaps(ct, corrupted_sk)
-
-                    if ss_dec == ss_enc:
-                        outcome = OutcomeClass.CORRECT
-                    else:
-                        outcome = OutcomeClass.SILENT_DATA_CORRUPTION
-                        details = "Corrupted secret key produced mismatched shared secret during decapsulation"
+                    try:
+                        ss_dec = kem.decaps(ct, corrupted_sk)
+                        if ss_dec == ss_enc:
+                            outcome = CryptoOutcomeClass.CORRECT_VALID_DECAPSULATION
+                            details = "Bit-flip in unused/rejection-only portion of secret key did not affect valid decapsulation"
+                        else:
+                            outcome = CryptoOutcomeClass.EXPECTED_IMPLICIT_REJECTION
+                            details = "Corrupted secret key altered decoded message, triggering FO implicit rejection"
+                    except RuntimeError as e:
+                        outcome = CryptoOutcomeClass.EXPLICIT_ERROR
+                        err_code = 1
+                        fault_detected = True
+                        details = f"Library validation caught invalid secret key encoding (modulus violation): {e}"
 
             except Exception as e:
-                outcome = OutcomeClass.CRASH
+                outcome = CryptoOutcomeClass.CRASH
                 err_code = -1
                 details = str(e)
 
             t1 = time.perf_counter_ns()
             runtime_us = (t1 - t0) / 1000.0
 
-            res = FaultResult(
+            res = CryptoFaultResult(
                 fault=fault,
                 baseline_result=ss_enc.hex()[:16] + "...",
                 faulted_result=ss_dec.hex()[:16] + "..." if 'ss_dec' in locals() else "N/A",
                 outcome_class=outcome,
                 fault_detected=fault_detected,
-                recovered=recovered,
                 runtime_us=round(runtime_us, 2),
                 memory_bytes=len(ct) + len(pk) + len(sk),
                 error_code=err_code,
@@ -165,9 +164,9 @@ def run_kem_level1_experiment(
             if len(detailed_samples) < 5:
                 detailed_samples.append(res.to_dict())
 
-        # Statistical analysis with Wilson score interval
-        sdc_rate, sdc_low, sdc_high = calculate_wilson_ci(counts[OutcomeClass.SILENT_DATA_CORRUPTION.value], iterations)
-        crash_rate, _, _ = calculate_wilson_ci(counts[OutcomeClass.CRASH.value], iterations)
+        imp_rate, imp_low, imp_high = calculate_wilson_ci(counts[CryptoOutcomeClass.EXPECTED_IMPLICIT_REJECTION.value], iterations)
+        err_rate, err_low, err_high = calculate_wilson_ci(counts[CryptoOutcomeClass.EXPLICIT_ERROR.value], iterations)
+        cor_rate, cor_low, cor_high = calculate_wilson_ci(counts[CryptoOutcomeClass.CORRECT_VALID_DECAPSULATION.value], iterations)
 
         campaign_results[c["name"]] = {
             "target": c["target"],
@@ -175,14 +174,17 @@ def run_kem_level1_experiment(
             "iterations": iterations,
             "counts": counts,
             "rates_pct": {
-                "silent_data_corruption": {"rate": sdc_rate, "ci_95": [sdc_low, sdc_high]},
-                "crash": {"rate": crash_rate}
+                "expected_implicit_rejection": {"rate": imp_rate, "ci_95": [imp_low, imp_high]},
+                "explicit_error": {"rate": err_rate, "ci_95": [err_low, err_high]},
+                "correct_valid_decapsulation": {"rate": cor_rate, "ci_95": [cor_low, cor_high]}
             },
             "sample_records": detailed_samples
         }
 
-        print(f"  Outcome counts: {counts}")
-        print(f"  Silent Data Corruption (SDC): {sdc_rate}% [95% CI: {sdc_low}% - {sdc_high}%]")
+        print(f"  Counts: {counts}")
+        print(f"  EXPECTED_IMPLICIT_REJECTION: {imp_rate}% [95% CI: {imp_low}% - {imp_high}%]")
+        print(f"  EXPLICIT_ERROR:              {err_rate}% [95% CI: {err_low}% - {err_high}%]")
+        print(f"  CORRECT_VALID_DECAPSULATION: {cor_rate}% [95% CI: {cor_low}% - {cor_high}%]")
 
     return campaign_results
 
@@ -191,9 +193,8 @@ def run_dsa_level1_experiment(
     iterations: int = 1000,
     master_seed: int = 890123
 ) -> Dict[str, Any]:
-    """Runs Level 1 input fault campaigns on ML-DSA-65."""
     print("\n" + "=" * 75)
-    print(" RUNNING PHASE 4A: ML-DSA-65 LEVEL 1 FAULT CAMPAIGN")
+    print(" RUNNING PHASE 4A: ML-DSA-65 LEVEL 1 FAULT CAMPAIGN (CORRECTED TAXONOMY)")
     print(f" Target: ML-DSA-65 | Iterations per test: {iterations} | Master Seed: {master_seed}")
     print("=" * 75)
 
@@ -213,7 +214,7 @@ def run_dsa_level1_experiment(
 
     for c in campaigns:
         print(f"\n[+] Executing {c['name']} ({c['target']})...")
-        counts = {o.value: 0 for o in OutcomeClass}
+        counts = {o.value: 0 for o in CryptoOutcomeClass}
         detailed_samples = []
 
         if c["type"] == "single_bit_flip":
@@ -233,9 +234,8 @@ def run_dsa_level1_experiment(
             signature = sig.sign(base_msg, sk)
 
             t0 = time.perf_counter_ns()
-            outcome = OutcomeClass.CORRECT
+            outcome = CryptoOutcomeClass.CORRECT_VALID_DECAPSULATION
             fault_detected = False
-            recovered = False
             err_code = 0
             details = None
 
@@ -250,50 +250,47 @@ def run_dsa_level1_experiment(
 
                     valid = sig.verify(base_msg, corrupted_sig, pk)
                     if valid:
-                        # Catastrophic: corrupted signature verified!
-                        outcome = OutcomeClass.SILENT_DATA_CORRUPTION
-                        details = "Corrupted signature accepted as valid by verifier"
+                        outcome = CryptoOutcomeClass.UNEXPECTED_INCORRECT_OUTPUT
+                        details = "Corrupted signature unexpectedly accepted as valid by verifier"
                     else:
-                        # Correct cryptographic behavior: invalid signature detected and rejected
-                        outcome = OutcomeClass.EXPECTED_REJECTION
+                        outcome = CryptoOutcomeClass.EXPECTED_SIGNATURE_REJECTION
                         fault_detected = True
-                        details = "Verifier correctly rejected corrupted signature"
+                        details = "Verifier rejected corrupted signature under tested API corruption conditions"
 
                 elif c["target"] == "message":
                     corrupted_msg = FaultInjectorEngine.inject_seu_bit_flip(base_msg, fault.target_index, fault.bit_index)
                     valid = sig.verify(corrupted_msg, signature, pk)
                     if valid:
-                        outcome = OutcomeClass.SILENT_DATA_CORRUPTION
+                        outcome = CryptoOutcomeClass.UNEXPECTED_INCORRECT_OUTPUT
                     else:
-                        outcome = OutcomeClass.EXPECTED_REJECTION
+                        outcome = CryptoOutcomeClass.EXPECTED_SIGNATURE_REJECTION
                         fault_detected = True
-                        details = "Verifier correctly rejected signature on altered message"
+                        details = "Verifier rejected signature on altered message"
 
                 elif c["target"] == "public_key":
                     corrupted_pk = FaultInjectorEngine.inject_seu_bit_flip(pk, fault.target_index, fault.bit_index)
                     valid = sig.verify(base_msg, signature, corrupted_pk)
                     if valid:
-                        outcome = OutcomeClass.SILENT_DATA_CORRUPTION
+                        outcome = CryptoOutcomeClass.UNEXPECTED_INCORRECT_OUTPUT
                     else:
-                        outcome = OutcomeClass.EXPECTED_REJECTION
+                        outcome = CryptoOutcomeClass.EXPECTED_SIGNATURE_REJECTION
                         fault_detected = True
-                        details = "Verifier correctly rejected signature under corrupted public key"
+                        details = "Verifier rejected signature under corrupted public key"
 
             except Exception as e:
-                outcome = OutcomeClass.CRASH
+                outcome = CryptoOutcomeClass.CRASH
                 err_code = -1
                 details = str(e)
 
             t1 = time.perf_counter_ns()
             runtime_us = (t1 - t0) / 1000.0
 
-            res = FaultResult(
+            res = CryptoFaultResult(
                 fault=fault,
                 baseline_result="VALID",
-                faulted_result="VALID" if outcome == OutcomeClass.CORRECT else "REJECTED",
+                faulted_result="VALID" if outcome == CryptoOutcomeClass.CORRECT_VALID_DECAPSULATION else "REJECTED",
                 outcome_class=outcome,
                 fault_detected=fault_detected,
-                recovered=recovered,
                 runtime_us=round(runtime_us, 2),
                 memory_bytes=len(signature) + len(pk),
                 error_code=err_code,
@@ -304,9 +301,7 @@ def run_dsa_level1_experiment(
             if len(detailed_samples) < 5:
                 detailed_samples.append(res.to_dict())
 
-        # Statistical analysis with Wilson score interval
-        rejection_rate, rej_low, rej_high = calculate_wilson_ci(counts[OutcomeClass.EXPECTED_REJECTION.value], iterations)
-        sdc_rate, sdc_low, sdc_high = calculate_wilson_ci(counts[OutcomeClass.SILENT_DATA_CORRUPTION.value], iterations)
+        rej_rate, rej_low, rej_high = calculate_wilson_ci(counts[CryptoOutcomeClass.EXPECTED_SIGNATURE_REJECTION.value], iterations)
 
         campaign_results[c["name"]] = {
             "target": c["target"],
@@ -314,21 +309,20 @@ def run_dsa_level1_experiment(
             "iterations": iterations,
             "counts": counts,
             "rates_pct": {
-                "expected_rejection": {"rate": rejection_rate, "ci_95": [rej_low, rej_high]},
-                "silent_data_corruption": {"rate": sdc_rate, "ci_95": [sdc_low, sdc_high]}
+                "expected_signature_rejection": {"rate": rej_rate, "ci_95": [rej_low, rej_high]}
             },
             "sample_records": detailed_samples
         }
 
-        print(f"  Outcome counts: {counts}")
-        print(f"  Expected Rejection: {rejection_rate}% [95% CI: {rej_low}% - {rej_high}%]")
+        print(f"  Counts: {counts}")
+        print(f"  EXPECTED_SIGNATURE_REJECTION: {rej_rate}% [95% CI: {rej_low}% - {rej_high}%]")
 
     return campaign_results
 
 
 def main():
     print("==========================================================================")
-    print(" PQC SPACE SYSTEMS FAULT RESILIENCE RESEARCH - PHASE 4A LEVEL 1 CAMPAIGN")
+    print(" PQC SPACE SYSTEMS FAULT RESILIENCE - LEVEL 1 CAMPAIGN (CORRECTED)")
     print(f" Host: Apple M1 (arm64) | liboqs version: {get_liboqs_version()}")
     print("==========================================================================")
 
@@ -339,7 +333,7 @@ def main():
         "metadata": {
             "timestamp": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
             "liboqs_version": get_liboqs_version(),
-            "phase": "4A_Level1_Input_API",
+            "phase": "4A_Level1_Corrected_Taxonomy",
             "iterations_per_campaign": 1000
         },
         "ml_kem_768": kem_results,

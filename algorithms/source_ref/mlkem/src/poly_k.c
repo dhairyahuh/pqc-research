@@ -228,6 +228,12 @@ void mlk_polyvec_basemul_acc_montgomery_cached(
 #endif /* MLK_USE_NATIVE_POLYVEC_BASEMUL_ACC_MONTGOMERY_CACHED */
 
   mlk_polyvec_basemul_acc_montgomery_cached_c(r, a, b, b_cache);
+#if defined(MLKEM_RESEARCH_FAULT_HOOKS)
+  {
+    extern void hook_polymul_accumulator(int16_t *coeffs, size_t count);
+    hook_polymul_accumulator(r->coeffs, MLKEM_N);
+  }
+#endif
 }
 
 /* Reference: Does not exist in the reference implementation @[REF].

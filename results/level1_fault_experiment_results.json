@@ -1,8 +1,8 @@
 {
   "metadata": {
-    "timestamp": "2026-09-30T23:23:27Z",
+    "timestamp": "2026-09-30T23:28:34Z",
     "liboqs_version": "0.16.0",
-    "phase": "4A_Level1_Input_API",
+    "phase": "4A_Level1_Corrected_Taxonomy",
     "iterations_per_campaign": 1000
   },
   "ml_kem_768": {
@@ -11,25 +11,35 @@
       "fault_type": "single_bit_flip",
       "iterations": 1000,
       "counts": {
-        "CORRECT": 0,
-        "EXPECTED_REJECTION": 0,
-        "DETECTED_FAILURE": 0,
-        "RECOVERED": 0,
-        "INCORRECT_OUTPUT": 0,
-        "SILENT_DATA_CORRUPTION": 1000,
+        "CORRECT_VALID_DECAPSULATION": 0,
+        "EXPECTED_IMPLICIT_REJECTION": 1000,
+        "EXPECTED_SIGNATURE_REJECTION": 0,
+        "EXPLICIT_ERROR": 0,
+        "UNEXPECTED_INCORRECT_OUTPUT": 0,
         "CRASH": 0,
         "TIMEOUT": 0
       },
       "rates_pct": {
-        "silent_data_corruption": {
+        "expected_implicit_rejection": {
           "rate": 100.0,
           "ci_95": [
             99.62,
             100.0
           ]
         },
-        "crash": {
-          "rate": 0.0
+        "explicit_error": {
+          "rate": 0.0,
+          "ci_95": [
+            0.0,
+            0.38
+          ]
+        },
+        "correct_valid_decapsulation": {
+          "rate": 0.0,
+          "ci_95": [
+            0.0,
+            0.38
+          ]
         }
       },
       "sample_records": [
@@ -49,15 +59,14 @@
             "duration": 1,
             "magnitude": 1
           },
-          "baseline_result": "8b21b771ed05f4e9...",
-          "faulted_result": "d5c3d987013bbd12...",
-          "outcome_class": "SILENT_DATA_CORRUPTION",
+          "baseline_result": "0f0ca08bcd0c7811...",
+          "faulted_result": "b5c685aaf16d45c5...",
+          "outcome_class": "EXPECTED_IMPLICIT_REJECTION",
           "fault_detected": false,
-          "recovered": false,
-          "runtime_us": 37.79,
+          "runtime_us": 35.79,
           "memory_bytes": 4672,
           "error_code": 0,
-          "details": "Implicit rejection triggered: FO transform produced alternate pseudorandom key without error"
+          "details": "FO transform executed implicit rejection (pseudorandom shared secret returned)"
         },
         {
           "fault": {
@@ -75,15 +84,14 @@
             "duration": 1,
             "magnitude": 1
           },
-          "baseline_result": "96ee3d54cd1b6ae2...",
-          "faulted_result": "0a8f28ad1fd91819...",
-          "outcome_class": "SILENT_DATA_CORRUPTION",
+          "baseline_result": "246bda0a290be487...",
+          "faulted_result": "fe52f741ab13fad3...",
+          "outcome_class": "EXPECTED_IMPLICIT_REJECTION",
           "fault_detected": false,
-          "recovered": false,
-          "runtime_us": 37.58,
+          "runtime_us": 26.71,
           "memory_bytes": 4672,
           "error_code": 0,
-          "details": "Implicit rejection triggered: FO transform produced alternate pseudorandom key without error"
+          "details": "FO transform executed implicit rejection (pseudorandom shared secret returned)"
         },
         {
           "fault": {
@@ -101,15 +109,14 @@
             "duration": 1,
             "magnitude": 1
           },
-          "baseline_result": "da3fdec3147e25b6...",
-          "faulted_result": "efc88de377317129...",
-          "outcome_class": "SILENT_DATA_CORRUPTION",
+          "baseline_result": "a951e1b745c54f14...",
+          "faulted_result": "c109240c0bb7d0df...",
+          "outcome_class": "EXPECTED_IMPLICIT_REJECTION",
           "fault_detected": false,
-          "recovered": false,
-          "runtime_us": 30.88,
+          "runtime_us": 24.92,
           "memory_bytes": 4672,
           "error_code": 0,
-          "details": "Implicit rejection triggered: FO transform produced alternate pseudorandom key without error"
+          "details": "FO transform executed implicit rejection (pseudorandom shared secret returned)"
         },
         {
           "fault": {
@@ -127,15 +134,14 @@
             "duration": 1,
             "magnitude": 1
           },
-          "baseline_result": "89a4a1e836d02913...",
-          "faulted_result": "db2e21861abea8fd...",
-          "outcome_class": "SILENT_DATA_CORRUPTION",
+          "baseline_result": "f8414c4c8e686a3a...",
+          "faulted_result": "d979bc34f57336c7...",
+          "outcome_class": "EXPECTED_IMPLICIT_REJECTION",
           "fault_detected": false,
-          "recovered": false,
-          "runtime_us": 30.62,
+          "runtime_us": 24.71,
           "memory_bytes": 4672,
           "error_code": 0,
-          "details": "Implicit rejection triggered: FO transform produced alternate pseudorandom key without error"
+          "details": "FO transform executed implicit rejection (pseudorandom shared secret returned)"
         },
         {
           "fault": {
@@ -153,15 +159,14 @@
             "duration": 1,
             "magnitude": 1
           },
-          "baseline_result": "6f8d156c2ee7c619...",
-          "faulted_result": "300aefbd7c8ef9a5...",
-          "outcome_class": "SILENT_DATA_CORRUPTION",
+          "baseline_result": "646de8e4bb8fccfb...",
+          "faulted_result": "19a2b05ac6f438df...",
+          "outcome_class": "EXPECTED_IMPLICIT_REJECTION",
           "fault_detected": false,
-          "recovered": false,
-          "runtime_us": 30.17,
+          "runtime_us": 24.33,
           "memory_bytes": 4672,
           "error_code": 0,
-          "details": "Implicit rejection triggered: FO transform produced alternate pseudorandom key without error"
+          "details": "FO transform executed implicit rejection (pseudorandom shared secret returned)"
         }
       ]
     },
@@ -170,25 +175,35 @@
       "fault_type": "burst_corruption",
       "iterations": 1000,
       "counts": {
-        "CORRECT": 0,
-        "EXPECTED_REJECTION": 0,
-        "DETECTED_FAILURE": 0,
-        "RECOVERED": 0,
-        "INCORRECT_OUTPUT": 0,
-        "SILENT_DATA_CORRUPTION": 1000,
+        "CORRECT_VALID_DECAPSULATION": 0,
+        "EXPECTED_IMPLICIT_REJECTION": 1000,
+        "EXPECTED_SIGNATURE_REJECTION": 0,
+        "EXPLICIT_ERROR": 0,
+        "UNEXPECTED_INCORRECT_OUTPUT": 0,
         "CRASH": 0,
         "TIMEOUT": 0
       },
       "rates_pct": {
-        "silent_data_corruption": {
+        "expected_implicit_rejection": {
           "rate": 100.0,
           "ci_95": [
             99.62,
             100.0
           ]
         },
-        "crash": {
-          "rate": 0.0
+        "explicit_error": {
+          "rate": 0.0,
+          "ci_95": [
+            0.0,
+            0.38
+          ]
+        },
+        "correct_valid_decapsulation": {
+          "rate": 0.0,
+          "ci_95": [
+            0.0,
+            0.38
+          ]
         }
       },
       "sample_records": [
@@ -208,15 +223,14 @@
             "duration": 1,
             "magnitude": 4
           },
-          "baseline_result": "7c97f9a8794e6600...",
-          "faulted_result": "e108f105448db21c...",
-          "outcome_class": "SILENT_DATA_CORRUPTION",
+          "baseline_result": "b3faa74007433531...",
+          "faulted_result": "52a10b9bac28aa4b...",
+          "outcome_class": "EXPECTED_IMPLICIT_REJECTION",
           "fault_detected": false,
-          "recovered": false,
-          "runtime_us": 44.92,
+          "runtime_us": 46.12,
           "memory_bytes": 4672,
           "error_code": 0,
-          "details": "Implicit rejection triggered: FO transform produced alternate pseudorandom key without error"
+          "details": "FO transform executed implicit rejection (pseudorandom shared secret returned)"
         },
         {
           "fault": {
@@ -234,15 +248,14 @@
             "duration": 1,
             "magnitude": 4
           },
-          "baseline_result": "f5ca702501e34f02...",
-          "faulted_result": "b6ff907833d708d6...",
-          "outcome_class": "SILENT_DATA_CORRUPTION",
+          "baseline_result": "c4d0c7f0605680b6...",
+          "faulted_result": "7564cb04f0ad4f8b...",
+          "outcome_class": "EXPECTED_IMPLICIT_REJECTION",
           "fault_detected": false,
-          "recovered": false,
-          "runtime_us": 43.79,
+          "runtime_us": 44.54,
           "memory_bytes": 4672,
           "error_code": 0,
-          "details": "Implicit rejection triggered: FO transform produced alternate pseudorandom key without error"
+          "details": "FO transform executed implicit rejection (pseudorandom shared secret returned)"
         },
         {
           "fault": {
@@ -260,15 +273,14 @@
             "duration": 1,
             "magnitude": 4
           },
-          "baseline_result": "6190d24df60814e4...",
-          "faulted_result": "19ff09ca48185145...",
-          "outcome_class": "SILENT_DATA_CORRUPTION",
+          "baseline_result": "fc2a5b709a58a7f2...",
+          "faulted_result": "ef3f4ac8133ae120...",
+          "outcome_class": "EXPECTED_IMPLICIT_REJECTION",
           "fault_detected": false,
-          "recovered": false,
-          "runtime_us": 43.92,
+          "runtime_us": 43.58,
           "memory_bytes": 4672,
           "error_code": 0,
-          "details": "Implicit rejection triggered: FO transform produced alternate pseudorandom key without error"
+          "details": "FO transform executed implicit rejection (pseudorandom shared secret returned)"
         },
         {
           "fault": {
@@ -286,15 +298,14 @@
             "duration": 1,
             "magnitude": 4
           },
-          "baseline_result": "90d0e275750e3b87...",
-          "faulted_result": "46c5e4557496b730...",
-          "outcome_class": "SILENT_DATA_CORRUPTION",
+          "baseline_result": "5e479e218dc773f5...",
+          "faulted_result": "0ddf1b994f057924...",
+          "outcome_class": "EXPECTED_IMPLICIT_REJECTION",
           "fault_detected": false,
-          "recovered": false,
-          "runtime_us": 43.54,
+          "runtime_us": 43.38,
           "memory_bytes": 4672,
           "error_code": 0,
-          "details": "Implicit rejection triggered: FO transform produced alternate pseudorandom key without error"
+          "details": "FO transform executed implicit rejection (pseudorandom shared secret returned)"
         },
         {
           "fault": {
@@ -312,15 +323,14 @@
             "duration": 1,
             "magnitude": 4
           },
-          "baseline_result": "6faa1d6fb9111fc8...",
-          "faulted_result": "93301fc0cdc39c8e...",
-          "outcome_class": "SILENT_DATA_CORRUPTION",
+          "baseline_result": "a3c110b7404ec879...",
+          "faulted_result": "20afd0f0f552b974...",
+          "outcome_class": "EXPECTED_IMPLICIT_REJECTION",
           "fault_detected": false,
-          "recovered": false,
-          "runtime_us": 43.25,
+          "runtime_us": 43.79,
           "memory_bytes": 4672,
           "error_code": 0,
-          "details": "Implicit rejection triggered: FO transform produced alternate pseudorandom key without error"
+          "details": "FO transform executed implicit rejection (pseudorandom shared secret returned)"
         }
       ]
     },
@@ -329,25 +339,35 @@
       "fault_type": "single_bit_flip",
       "iterations": 1000,
       "counts": {
-        "CORRECT": 0,
-        "EXPECTED_REJECTION": 0,
-        "DETECTED_FAILURE": 0,
-        "RECOVERED": 0,
-        "INCORRECT_OUTPUT": 0,
-        "SILENT_DATA_CORRUPTION": 945,
-        "CRASH": 55,
+        "CORRECT_VALID_DECAPSULATION": 0,
+        "EXPECTED_IMPLICIT_REJECTION": 951,
+        "EXPECTED_SIGNATURE_REJECTION": 0,
+        "EXPLICIT_ERROR": 49,
+        "UNEXPECTED_INCORRECT_OUTPUT": 0,
+        "CRASH": 0,
         "TIMEOUT": 0
       },
       "rates_pct": {
-        "silent_data_corruption": {
-          "rate": 94.5,
+        "expected_implicit_rejection": {
+          "rate": 95.1,
           "ci_95": [
-            92.91,
-            95.75
+            93.58,
+            96.27
           ]
         },
-        "crash": {
-          "rate": 5.5
+        "explicit_error": {
+          "rate": 4.9,
+          "ci_95": [
+            3.73,
+            6.42
+          ]
+        },
+        "correct_valid_decapsulation": {
+          "rate": 0.0,
+          "ci_95": [
+            0.0,
+            0.38
+          ]
         }
       },
       "sample_records": [
@@ -367,15 +387,14 @@
             "duration": 1,
             "magnitude": 1
           },
-          "baseline_result": "c5aaa25eef093877...",
-          "faulted_result": "4cbd05bd6d983cf9...",
-          "outcome_class": "SILENT_DATA_CORRUPTION",
+          "baseline_result": "4eb35963a1b651d9...",
+          "faulted_result": "77e669a3dffc853a...",
+          "outcome_class": "EXPECTED_IMPLICIT_REJECTION",
           "fault_detected": false,
-          "recovered": false,
-          "runtime_us": 49.04,
+          "runtime_us": 49.62,
           "memory_bytes": 4672,
           "error_code": 0,
-          "details": "Corrupted public key produced mismatched ciphertext/shared secret"
+          "details": "Corrupted public key caused re-encryption check mismatch in decapsulation"
         },
         {
           "fault": {
@@ -393,15 +412,14 @@
             "duration": 1,
             "magnitude": 1
           },
-          "baseline_result": "3030b228428b94c4...",
-          "faulted_result": "4cbd05bd6d983cf9...",
-          "outcome_class": "SILENT_DATA_CORRUPTION",
+          "baseline_result": "1db4e7fa3eb36d1f...",
+          "faulted_result": "77e669a3dffc853a...",
+          "outcome_class": "EXPECTED_IMPLICIT_REJECTION",
           "fault_detected": false,
-          "recovered": false,
-          "runtime_us": 47.67,
+          "runtime_us": 48.83,
           "memory_bytes": 4672,
           "error_code": 0,
-          "details": "Corrupted public key produced mismatched ciphertext/shared secret"
+          "details": "Corrupted public key caused re-encryption check mismatch in decapsulation"
         },
         {
           "fault": {
@@ -419,15 +437,14 @@
             "duration": 1,
             "magnitude": 1
           },
-          "baseline_result": "be2f4bc9d8184692...",
-          "faulted_result": "4cbd05bd6d983cf9...",
-          "outcome_class": "SILENT_DATA_CORRUPTION",
+          "baseline_result": "29d257f59239c8c1...",
+          "faulted_result": "77e669a3dffc853a...",
+          "outcome_class": "EXPECTED_IMPLICIT_REJECTION",
           "fault_detected": false,
-          "recovered": false,
-          "runtime_us": 84.67,
+          "runtime_us": 47.67,
           "memory_bytes": 4672,
           "error_code": 0,
-          "details": "Corrupted public key produced mismatched ciphertext/shared secret"
+          "details": "Corrupted public key caused re-encryption check mismatch in decapsulation"
         },
         {
           "fault": {
@@ -445,15 +462,14 @@
             "duration": 1,
             "magnitude": 1
           },
-          "baseline_result": "9a9563870076fe10...",
-          "faulted_result": "4cbd05bd6d983cf9...",
-          "outcome_class": "SILENT_DATA_CORRUPTION",
+          "baseline_result": "dc8258249a99306d...",
+          "faulted_result": "77e669a3dffc853a...",
+          "outcome_class": "EXPECTED_IMPLICIT_REJECTION",
           "fault_detected": false,
-          "recovered": false,
-          "runtime_us": 46.21,
+          "runtime_us": 47.17,
           "memory_bytes": 4672,
           "error_code": 0,
-          "details": "Corrupted public key produced mismatched ciphertext/shared secret"
+          "details": "Corrupted public key caused re-encryption check mismatch in decapsulation"
         },
         {
           "fault": {
@@ -471,15 +487,14 @@
             "duration": 1,
             "magnitude": 1
           },
-          "baseline_result": "8fe29c928753fe29...",
-          "faulted_result": "4cbd05bd6d983cf9...",
-          "outcome_class": "SILENT_DATA_CORRUPTION",
+          "baseline_result": "fad87d55dcd0bb0b...",
+          "faulted_result": "77e669a3dffc853a...",
+          "outcome_class": "EXPECTED_IMPLICIT_REJECTION",
           "fault_detected": false,
-          "recovered": false,
-          "runtime_us": 45.46,
+          "runtime_us": 47.42,
           "memory_bytes": 4672,
           "error_code": 0,
-          "details": "Corrupted public key produced mismatched ciphertext/shared secret"
+          "details": "Corrupted public key caused re-encryption check mismatch in decapsulation"
         }
       ]
     },
@@ -488,25 +503,35 @@
       "fault_type": "single_bit_flip",
       "iterations": 1000,
       "counts": {
-        "CORRECT": 8,
-        "EXPECTED_REJECTION": 0,
-        "DETECTED_FAILURE": 0,
-        "RECOVERED": 0,
-        "INCORRECT_OUTPUT": 0,
-        "SILENT_DATA_CORRUPTION": 496,
-        "CRASH": 496,
+        "CORRECT_VALID_DECAPSULATION": 8,
+        "EXPECTED_IMPLICIT_REJECTION": 496,
+        "EXPECTED_SIGNATURE_REJECTION": 0,
+        "EXPLICIT_ERROR": 496,
+        "UNEXPECTED_INCORRECT_OUTPUT": 0,
+        "CRASH": 0,
         "TIMEOUT": 0
       },
       "rates_pct": {
-        "silent_data_corruption": {
+        "expected_implicit_rejection": {
           "rate": 49.6,
           "ci_95": [
             46.51,
             52.69
           ]
         },
-        "crash": {
-          "rate": 49.6
+        "explicit_error": {
+          "rate": 49.6,
+          "ci_95": [
+            46.51,
+            52.69
+          ]
+        },
+        "correct_valid_decapsulation": {
+          "rate": 0.8,
+          "ci_95": [
+            0.41,
+            1.57
+          ]
         }
       },
       "sample_records": [
@@ -526,15 +551,14 @@
             "duration": 1,
             "magnitude": 1
           },
-          "baseline_result": "0cb9a97f2a3653be...",
-          "faulted_result": "c524d5096d9ff0e5...",
-          "outcome_class": "SILENT_DATA_CORRUPTION",
+          "baseline_result": "d54de285aeb1fd14...",
+          "faulted_result": "6ec93bf791b23980...",
+          "outcome_class": "EXPECTED_IMPLICIT_REJECTION",
           "fault_detected": false,
-          "recovered": false,
-          "runtime_us": 29.08,
+          "runtime_us": 31.54,
           "memory_bytes": 4672,
           "error_code": 0,
-          "details": "Corrupted secret key produced mismatched shared secret during decapsulation"
+          "details": "Corrupted secret key altered decoded message, triggering FO implicit rejection"
         },
         {
           "fault": {
@@ -552,15 +576,14 @@
             "duration": 1,
             "magnitude": 1
           },
-          "baseline_result": "5f7c386f74fa5c80...",
-          "faulted_result": "c524d5096d9ff0e5...",
-          "outcome_class": "CRASH",
-          "fault_detected": false,
-          "recovered": false,
-          "runtime_us": 12.79,
+          "baseline_result": "0cd1231624787037...",
+          "faulted_result": "6ec93bf791b23980...",
+          "outcome_class": "EXPLICIT_ERROR",
+          "fault_detected": true,
+          "runtime_us": 13.62,
           "memory_bytes": 4672,
-          "error_code": -1,
-          "details": "ML-KEM decapsulation failed with status -1"
+          "error_code": 1,
+          "details": "Library validation caught invalid secret key encoding (modulus violation): ML-KEM decapsulation failed with status -1"
         },
         {
           "fault": {
@@ -578,15 +601,14 @@
             "duration": 1,
             "magnitude": 1
           },
-          "baseline_result": "ca7d458802db8b44...",
-          "faulted_result": "c524d5096d9ff0e5...",
-          "outcome_class": "CRASH",
-          "fault_detected": false,
-          "recovered": false,
-          "runtime_us": 7.12,
+          "baseline_result": "7071c13f48b2200c...",
+          "faulted_result": "6ec93bf791b23980...",
+          "outcome_class": "EXPLICIT_ERROR",
+          "fault_detected": true,
+          "runtime_us": 7.08,
           "memory_bytes": 4672,
-          "error_code": -1,
-          "details": "ML-KEM decapsulation failed with status -1"
+          "error_code": 1,
+          "details": "Library validation caught invalid secret key encoding (modulus violation): ML-KEM decapsulation failed with status -1"
         },
         {
           "fault": {
@@ -604,15 +626,14 @@
             "duration": 1,
             "magnitude": 1
           },
-          "baseline_result": "5a8f9a6c4fa1248b...",
-          "faulted_result": "fc59858761719935...",
-          "outcome_class": "SILENT_DATA_CORRUPTION",
+          "baseline_result": "cdafeff8f45f8f2a...",
+          "faulted_result": "1c3336f3784f60c0...",
+          "outcome_class": "EXPECTED_IMPLICIT_REJECTION",
           "fault_detected": false,
-          "recovered": false,
-          "runtime_us": 25.88,
+          "runtime_us": 26.62,
           "memory_bytes": 4672,
           "error_code": 0,
-          "details": "Corrupted secret key produced mismatched shared secret during decapsulation"
+          "details": "Corrupted secret key altered decoded message, triggering FO implicit rejection"
         },
         {
           "fault": {
@@ -630,15 +651,14 @@
             "duration": 1,
             "magnitude": 1
           },
-          "baseline_result": "ac1625c959bae7b3...",
-          "faulted_result": "fc59858761719935...",
-          "outcome_class": "CRASH",
-          "fault_detected": false,
-          "recovered": false,
-          "runtime_us": 6.71,
+          "baseline_result": "8c33979db78f3c3d...",
+          "faulted_result": "1c3336f3784f60c0...",
+          "outcome_class": "EXPLICIT_ERROR",
+          "fault_detected": true,
+          "runtime_us": 7.96,
           "memory_bytes": 4672,
-          "error_code": -1,
-          "details": "ML-KEM decapsulation failed with status -1"
+          "error_code": 1,
+          "details": "Library validation caught invalid secret key encoding (modulus violation): ML-KEM decapsulation failed with status -1"
         }
       ]
     }
@@ -649,28 +669,20 @@
       "fault_type": "single_bit_flip",
       "iterations": 1000,
       "counts": {
-        "CORRECT": 0,
-        "EXPECTED_REJECTION": 1000,
-        "DETECTED_FAILURE": 0,
-        "RECOVERED": 0,
-        "INCORRECT_OUTPUT": 0,
-        "SILENT_DATA_CORRUPTION": 0,
+        "CORRECT_VALID_DECAPSULATION": 0,
+        "EXPECTED_IMPLICIT_REJECTION": 0,
+        "EXPECTED_SIGNATURE_REJECTION": 1000,
+        "EXPLICIT_ERROR": 0,
+        "UNEXPECTED_INCORRECT_OUTPUT": 0,
         "CRASH": 0,
         "TIMEOUT": 0
       },
       "rates_pct": {
-        "expected_rejection": {
+        "expected_signature_rejection": {
           "rate": 100.0,
           "ci_95": [
             99.62,
             100.0
-          ]
-        },
-        "silent_data_corruption": {
-          "rate": 0.0,
-          "ci_95": [
-            0.0,
-            0.38
           ]
         }
       },
@@ -693,13 +705,12 @@
           },
           "baseline_result": "VALID",
           "faulted_result": "REJECTED",
-          "outcome_class": "EXPECTED_REJECTION",
+          "outcome_class": "EXPECTED_SIGNATURE_REJECTION",
           "fault_detected": true,
-          "recovered": false,
-          "runtime_us": 76.71,
+          "runtime_us": 75.17,
           "memory_bytes": 5261,
           "error_code": 0,
-          "details": "Verifier correctly rejected corrupted signature"
+          "details": "Verifier rejected corrupted signature under tested API corruption conditions"
         },
         {
           "fault": {
@@ -719,13 +730,12 @@
           },
           "baseline_result": "VALID",
           "faulted_result": "REJECTED",
-          "outcome_class": "EXPECTED_REJECTION",
+          "outcome_class": "EXPECTED_SIGNATURE_REJECTION",
           "fault_detected": true,
-          "recovered": false,
-          "runtime_us": 71.08,
+          "runtime_us": 72.04,
           "memory_bytes": 5261,
           "error_code": 0,
-          "details": "Verifier correctly rejected corrupted signature"
+          "details": "Verifier rejected corrupted signature under tested API corruption conditions"
         },
         {
           "fault": {
@@ -745,13 +755,12 @@
           },
           "baseline_result": "VALID",
           "faulted_result": "REJECTED",
-          "outcome_class": "EXPECTED_REJECTION",
+          "outcome_class": "EXPECTED_SIGNATURE_REJECTION",
           "fault_detected": true,
-          "recovered": false,
-          "runtime_us": 70.17,
+          "runtime_us": 65.96,
           "memory_bytes": 5261,
           "error_code": 0,
-          "details": "Verifier correctly rejected corrupted signature"
+          "details": "Verifier rejected corrupted signature under tested API corruption conditions"
         },
         {
           "fault": {
@@ -771,13 +780,12 @@
           },
           "baseline_result": "VALID",
           "faulted_result": "REJECTED",
-          "outcome_class": "EXPECTED_REJECTION",
+          "outcome_class": "EXPECTED_SIGNATURE_REJECTION",
           "fault_detected": true,
-          "recovered": false,
-          "runtime_us": 69.08,
+          "runtime_us": 70.12,
           "memory_bytes": 5261,
           "error_code": 0,
-          "details": "Verifier correctly rejected corrupted signature"
+          "details": "Verifier rejected corrupted signature under tested API corruption conditions"
         },
         {
           "fault": {
@@ -797,13 +805,12 @@
           },
           "baseline_result": "VALID",
           "faulted_result": "REJECTED",
-          "outcome_class": "EXPECTED_REJECTION",
+          "outcome_class": "EXPECTED_SIGNATURE_REJECTION",
           "fault_detected": true,
-          "recovered": false,
-          "runtime_us": 69.5,
+          "runtime_us": 67.12,
           "memory_bytes": 5261,
           "error_code": 0,
-          "details": "Verifier correctly rejected corrupted signature"
+          "details": "Verifier rejected corrupted signature under tested API corruption conditions"
         }
       ]
     },
@@ -812,28 +819,20 @@
       "fault_type": "burst_corruption",
       "iterations": 1000,
       "counts": {
-        "CORRECT": 0,
-        "EXPECTED_REJECTION": 1000,
-        "DETECTED_FAILURE": 0,
-        "RECOVERED": 0,
-        "INCORRECT_OUTPUT": 0,
-        "SILENT_DATA_CORRUPTION": 0,
+        "CORRECT_VALID_DECAPSULATION": 0,
+        "EXPECTED_IMPLICIT_REJECTION": 0,
+        "EXPECTED_SIGNATURE_REJECTION": 1000,
+        "EXPLICIT_ERROR": 0,
+        "UNEXPECTED_INCORRECT_OUTPUT": 0,
         "CRASH": 0,
         "TIMEOUT": 0
       },
       "rates_pct": {
-        "expected_rejection": {
+        "expected_signature_rejection": {
           "rate": 100.0,
           "ci_95": [
             99.62,
             100.0
-          ]
-        },
-        "silent_data_corruption": {
-          "rate": 0.0,
-          "ci_95": [
-            0.0,
-            0.38
           ]
         }
       },
@@ -856,13 +855,12 @@
           },
           "baseline_result": "VALID",
           "faulted_result": "REJECTED",
-          "outcome_class": "EXPECTED_REJECTION",
+          "outcome_class": "EXPECTED_SIGNATURE_REJECTION",
           "fault_detected": true,
-          "recovered": false,
-          "runtime_us": 90.17,
+          "runtime_us": 92.83,
           "memory_bytes": 5261,
           "error_code": 0,
-          "details": "Verifier correctly rejected corrupted signature"
+          "details": "Verifier rejected corrupted signature under tested API corruption conditions"
         },
         {
           "fault": {
@@ -882,13 +880,12 @@
           },
           "baseline_result": "VALID",
           "faulted_result": "REJECTED",
-          "outcome_class": "EXPECTED_REJECTION",
+          "outcome_class": "EXPECTED_SIGNATURE_REJECTION",
           "fault_detected": true,
-          "recovered": false,
-          "runtime_us": 89.96,
+          "runtime_us": 89.33,
           "memory_bytes": 5261,
           "error_code": 0,
-          "details": "Verifier correctly rejected corrupted signature"
+          "details": "Verifier rejected corrupted signature under tested API corruption conditions"
         },
         {
           "fault": {
@@ -908,13 +905,12 @@
           },
           "baseline_result": "VALID",
           "faulted_result": "REJECTED",
-          "outcome_class": "EXPECTED_REJECTION",
+          "outcome_class": "EXPECTED_SIGNATURE_REJECTION",
           "fault_detected": true,
-          "recovered": false,
-          "runtime_us": 84.08,
+          "runtime_us": 88.21,
           "memory_bytes": 5261,
           "error_code": 0,
-          "details": "Verifier correctly rejected corrupted signature"
+          "details": "Verifier rejected corrupted signature under tested API corruption conditions"
         },
         {
           "fault": {
@@ -934,13 +930,12 @@
           },
           "baseline_result": "VALID",
           "faulted_result": "REJECTED",
-          "outcome_class": "EXPECTED_REJECTION",
+          "outcome_class": "EXPECTED_SIGNATURE_REJECTION",
           "fault_detected": true,
-          "recovered": false,
-          "runtime_us": 84.5,
+          "runtime_us": 87.25,
           "memory_bytes": 5261,
           "error_code": 0,
-          "details": "Verifier correctly rejected corrupted signature"
+          "details": "Verifier rejected corrupted signature under tested API corruption conditions"
         },
         {
           "fault": {
@@ -960,13 +955,12 @@
           },
           "baseline_result": "VALID",
           "faulted_result": "REJECTED",
-          "outcome_class": "EXPECTED_REJECTION",
+          "outcome_class": "EXPECTED_SIGNATURE_REJECTION",
           "fault_detected": true,
-          "recovered": false,
-          "runtime_us": 87.5,
+          "runtime_us": 83.96,
           "memory_bytes": 5261,
           "error_code": 0,
-          "details": "Verifier correctly rejected corrupted signature"
+          "details": "Verifier rejected corrupted signature under tested API corruption conditions"
         }
       ]
     },
@@ -975,28 +969,20 @@
       "fault_type": "single_bit_flip",
       "iterations": 1000,
       "counts": {
-        "CORRECT": 0,
-        "EXPECTED_REJECTION": 1000,
-        "DETECTED_FAILURE": 0,
-        "RECOVERED": 0,
-        "INCORRECT_OUTPUT": 0,
-        "SILENT_DATA_CORRUPTION": 0,
+        "CORRECT_VALID_DECAPSULATION": 0,
+        "EXPECTED_IMPLICIT_REJECTION": 0,
+        "EXPECTED_SIGNATURE_REJECTION": 1000,
+        "EXPLICIT_ERROR": 0,
+        "UNEXPECTED_INCORRECT_OUTPUT": 0,
         "CRASH": 0,
         "TIMEOUT": 0
       },
       "rates_pct": {
-        "expected_rejection": {
+        "expected_signature_rejection": {
           "rate": 100.0,
           "ci_95": [
             99.62,
             100.0
-          ]
-        },
-        "silent_data_corruption": {
-          "rate": 0.0,
-          "ci_95": [
-            0.0,
-            0.38
           ]
         }
       },
@@ -1019,13 +1005,12 @@
           },
           "baseline_result": "VALID",
           "faulted_result": "REJECTED",
-          "outcome_class": "EXPECTED_REJECTION",
+          "outcome_class": "EXPECTED_SIGNATURE_REJECTION",
           "fault_detected": true,
-          "recovered": false,
-          "runtime_us": 71.08,
+          "runtime_us": 71.33,
           "memory_bytes": 5261,
           "error_code": 0,
-          "details": "Verifier correctly rejected signature on altered message"
+          "details": "Verifier rejected signature on altered message"
         },
         {
           "fault": {
@@ -1045,13 +1030,12 @@
           },
           "baseline_result": "VALID",
           "faulted_result": "REJECTED",
-          "outcome_class": "EXPECTED_REJECTION",
+          "outcome_class": "EXPECTED_SIGNATURE_REJECTION",
           "fault_detected": true,
-          "recovered": false,
-          "runtime_us": 69.88,
+          "runtime_us": 67.38,
           "memory_bytes": 5261,
           "error_code": 0,
-          "details": "Verifier correctly rejected signature on altered message"
+          "details": "Verifier rejected signature on altered message"
         },
         {
           "fault": {
@@ -1071,13 +1055,12 @@
           },
           "baseline_result": "VALID",
           "faulted_result": "REJECTED",
-          "outcome_class": "EXPECTED_REJECTION",
+          "outcome_class": "EXPECTED_SIGNATURE_REJECTION",
           "fault_detected": true,
-          "recovered": false,
-          "runtime_us": 69.88,
+          "runtime_us": 67.12,
           "memory_bytes": 5261,
           "error_code": 0,
-          "details": "Verifier correctly rejected signature on altered message"
+          "details": "Verifier rejected signature on altered message"
         },
         {
           "fault": {
@@ -1097,13 +1080,12 @@
           },
           "baseline_result": "VALID",
           "faulted_result": "REJECTED",
-          "outcome_class": "EXPECTED_REJECTION",
+          "outcome_class": "EXPECTED_SIGNATURE_REJECTION",
           "fault_detected": true,
-          "recovered": false,
-          "runtime_us": 69.38,
+          "runtime_us": 67.71,
           "memory_bytes": 5261,
           "error_code": 0,
-          "details": "Verifier correctly rejected signature on altered message"
+          "details": "Verifier rejected signature on altered message"
         },
         {
           "fault": {
@@ -1123,13 +1105,12 @@
           },
           "baseline_result": "VALID",
           "faulted_result": "REJECTED",
-          "outcome_class": "EXPECTED_REJECTION",
+          "outcome_class": "EXPECTED_SIGNATURE_REJECTION",
           "fault_detected": true,
-          "recovered": false,
-          "runtime_us": 68.38,
+          "runtime_us": 68.25,
           "memory_bytes": 5261,
           "error_code": 0,
-          "details": "Verifier correctly rejected signature on altered message"
+          "details": "Verifier rejected signature on altered message"
         }
       ]
     },
@@ -1138,28 +1119,20 @@
       "fault_type": "single_bit_flip",
       "iterations": 1000,
       "counts": {
-        "CORRECT": 0,
-        "EXPECTED_REJECTION": 1000,
-        "DETECTED_FAILURE": 0,
-        "RECOVERED": 0,
-        "INCORRECT_OUTPUT": 0,
-        "SILENT_DATA_CORRUPTION": 0,
+        "CORRECT_VALID_DECAPSULATION": 0,
+        "EXPECTED_IMPLICIT_REJECTION": 0,
+        "EXPECTED_SIGNATURE_REJECTION": 1000,
+        "EXPLICIT_ERROR": 0,
+        "UNEXPECTED_INCORRECT_OUTPUT": 0,
         "CRASH": 0,
         "TIMEOUT": 0
       },
       "rates_pct": {
-        "expected_rejection": {
+        "expected_signature_rejection": {
           "rate": 100.0,
           "ci_95": [
             99.62,
             100.0
-          ]
-        },
-        "silent_data_corruption": {
-          "rate": 0.0,
-          "ci_95": [
-            0.0,
-            0.38
           ]
         }
       },
@@ -1182,13 +1155,12 @@
           },
           "baseline_result": "VALID",
           "faulted_result": "REJECTED",
-          "outcome_class": "EXPECTED_REJECTION",
+          "outcome_class": "EXPECTED_SIGNATURE_REJECTION",
           "fault_detected": true,
-          "recovered": false,
-          "runtime_us": 73.12,
+          "runtime_us": 70.67,
           "memory_bytes": 5261,
           "error_code": 0,
-          "details": "Verifier correctly rejected signature under corrupted public key"
+          "details": "Verifier rejected signature under corrupted public key"
         },
         {
           "fault": {
@@ -1208,13 +1180,12 @@
           },
           "baseline_result": "VALID",
           "faulted_result": "REJECTED",
-          "outcome_class": "EXPECTED_REJECTION",
+          "outcome_class": "EXPECTED_SIGNATURE_REJECTION",
           "fault_detected": true,
-          "recovered": false,
-          "runtime_us": 70.17,
+          "runtime_us": 70.42,
           "memory_bytes": 5261,
           "error_code": 0,
-          "details": "Verifier correctly rejected signature under corrupted public key"
+          "details": "Verifier rejected signature under corrupted public key"
         },
         {
           "fault": {
@@ -1234,13 +1205,12 @@
           },
           "baseline_result": "VALID",
           "faulted_result": "REJECTED",
-          "outcome_class": "EXPECTED_REJECTION",
+          "outcome_class": "EXPECTED_SIGNATURE_REJECTION",
           "fault_detected": true,
-          "recovered": false,
-          "runtime_us": 69.75,
+          "runtime_us": 69.67,
           "memory_bytes": 5261,
           "error_code": 0,
-          "details": "Verifier correctly rejected signature under corrupted public key"
+          "details": "Verifier rejected signature under corrupted public key"
         },
         {
           "fault": {
@@ -1260,13 +1230,12 @@
           },
           "baseline_result": "VALID",
           "faulted_result": "REJECTED",
-          "outcome_class": "EXPECTED_REJECTION",
+          "outcome_class": "EXPECTED_SIGNATURE_REJECTION",
           "fault_detected": true,
-          "recovered": false,
-          "runtime_us": 66.79,
+          "runtime_us": 69.79,
           "memory_bytes": 5261,
           "error_code": 0,
-          "details": "Verifier correctly rejected signature under corrupted public key"
+          "details": "Verifier rejected signature under corrupted public key"
         },
         {
           "fault": {
@@ -1286,13 +1255,12 @@
           },
           "baseline_result": "VALID",
           "faulted_result": "REJECTED",
-          "outcome_class": "EXPECTED_REJECTION",
+          "outcome_class": "EXPECTED_SIGNATURE_REJECTION",
           "fault_detected": true,
-          "recovered": false,
-          "runtime_us": 67.5,
+          "runtime_us": 66.92,
           "memory_bytes": 5261,
           "error_code": 0,
-          "details": "Verifier correctly rejected signature under corrupted public key"
+          "details": "Verifier rejected signature under corrupted public key"
         }
       ]
     },
@@ -1301,28 +1269,20 @@
       "fault_type": "truncation",
       "iterations": 1000,
       "counts": {
-        "CORRECT": 0,
-        "EXPECTED_REJECTION": 1000,
-        "DETECTED_FAILURE": 0,
-        "RECOVERED": 0,
-        "INCORRECT_OUTPUT": 0,
-        "SILENT_DATA_CORRUPTION": 0,
+        "CORRECT_VALID_DECAPSULATION": 0,
+        "EXPECTED_IMPLICIT_REJECTION": 0,
+        "EXPECTED_SIGNATURE_REJECTION": 1000,
+        "EXPLICIT_ERROR": 0,
+        "UNEXPECTED_INCORRECT_OUTPUT": 0,
         "CRASH": 0,
         "TIMEOUT": 0
       },
       "rates_pct": {
-        "expected_rejection": {
+        "expected_signature_rejection": {
           "rate": 100.0,
           "ci_95": [
             99.62,
             100.0
-          ]
-        },
-        "silent_data_corruption": {
-          "rate": 0.0,
-          "ci_95": [
-            0.0,
-            0.38
           ]
         }
       },
@@ -1345,13 +1305,12 @@
           },
           "baseline_result": "VALID",
           "faulted_result": "REJECTED",
-          "outcome_class": "EXPECTED_REJECTION",
+          "outcome_class": "EXPECTED_SIGNATURE_REJECTION",
           "fault_detected": true,
-          "recovered": false,
-          "runtime_us": 35.21,
+          "runtime_us": 30.08,
           "memory_bytes": 5261,
           "error_code": 0,
-          "details": "Verifier correctly rejected corrupted signature"
+          "details": "Verifier rejected corrupted signature under tested API corruption conditions"
         },
         {
           "fault": {
@@ -1371,13 +1330,12 @@
           },
           "baseline_result": "VALID",
           "faulted_result": "REJECTED",
-          "outcome_class": "EXPECTED_REJECTION",
+          "outcome_class": "EXPECTED_SIGNATURE_REJECTION",
           "fault_detected": true,
-          "recovered": false,
-          "runtime_us": 4.92,
+          "runtime_us": 4.29,
           "memory_bytes": 5261,
           "error_code": 0,
-          "details": "Verifier correctly rejected corrupted signature"
+          "details": "Verifier rejected corrupted signature under tested API corruption conditions"
         },
         {
           "fault": {
@@ -1397,13 +1355,12 @@
           },
           "baseline_result": "VALID",
           "faulted_result": "REJECTED",
-          "outcome_class": "EXPECTED_REJECTION",
+          "outcome_class": "EXPECTED_SIGNATURE_REJECTION",
           "fault_detected": true,
-          "recovered": false,
-          "runtime_us": 4.04,
+          "runtime_us": 3.83,
           "memory_bytes": 5261,
           "error_code": 0,
-          "details": "Verifier correctly rejected corrupted signature"
+          "details": "Verifier rejected corrupted signature under tested API corruption conditions"
         },
         {
           "fault": {
@@ -1423,13 +1380,12 @@
           },
           "baseline_result": "VALID",
           "faulted_result": "REJECTED",
-          "outcome_class": "EXPECTED_REJECTION",
+          "outcome_class": "EXPECTED_SIGNATURE_REJECTION",
           "fault_detected": true,
-          "recovered": false,
-          "runtime_us": 3.83,
+          "runtime_us": 3.71,
           "memory_bytes": 5261,
           "error_code": 0,
-          "details": "Verifier correctly rejected corrupted signature"
+          "details": "Verifier rejected corrupted signature under tested API corruption conditions"
         },
         {
           "fault": {
@@ -1449,13 +1405,12 @@
           },
           "baseline_result": "VALID",
           "faulted_result": "REJECTED",
-          "outcome_class": "EXPECTED_REJECTION",
+          "outcome_class": "EXPECTED_SIGNATURE_REJECTION",
           "fault_detected": true,
-          "recovered": false,
-          "runtime_us": 3.96,
+          "runtime_us": 3.71,
           "memory_bytes": 5261,
           "error_code": 0,
-          "details": "Verifier correctly rejected corrupted signature"
+          "details": "Verifier rejected corrupted signature under tested API corruption conditions"
         }
       ]
     }

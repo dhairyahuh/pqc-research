@@ -301,6 +301,12 @@ void mlk_poly_cbd2(mlk_poly *r, const uint8_t buf[2 * MLKEM_N / 4])
       r->coeffs[8 * i + j] = (int16_t)(a - b);
     }
   }
+#if defined(MLKEM_RESEARCH_FAULT_HOOKS)
+  {
+    extern void hook_sampling_coefficient(int16_t *coeffs, size_t count);
+    hook_sampling_coefficient(r->coeffs, MLKEM_N);
+  }
+#endif
 }
 #endif /* MLK_CONFIG_MULTILEVEL_WITH_SHARED || MLKEM_ETA1 == 2 || \
           !MLK_CONFIG_NO_ENCAPS_API || !MLK_CONFIG_NO_DECAPS_API */

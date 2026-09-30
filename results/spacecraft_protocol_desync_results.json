@@ -1,0 +1,353 @@
+{
+  "metadata": {
+    "timestamp": "2026-09-30T23:29:07Z",
+    "experiment": "Abstract Spacecraft Protocol Desynchronization",
+    "iterations_per_mode": 1000
+  },
+  "unauthenticated_protocol": {
+    "protocol_mode": "Unauthenticated (Raw Stream)",
+    "iterations": 1000,
+    "counts": {
+      "KEY_MATCH": 0,
+      "KEY_MISMATCH_DETECTED": 0,
+      "KEY_MISMATCH_UNDETECTED": 1000,
+      "SESSION_ABORTED": 0,
+      "SESSION_RECOVERED": 0,
+      "TIMEOUT": 0
+    },
+    "statistics": {
+      "KEY_MATCH": {
+        "rate_pct": 0.0,
+        "ci_95": [
+          0.0,
+          0.38
+        ]
+      },
+      "KEY_MISMATCH_DETECTED": {
+        "rate_pct": 0.0,
+        "ci_95": [
+          0.0,
+          0.38
+        ]
+      },
+      "KEY_MISMATCH_UNDETECTED": {
+        "rate_pct": 100.0,
+        "ci_95": [
+          99.62,
+          100.0
+        ]
+      },
+      "SESSION_ABORTED": {
+        "rate_pct": 0.0,
+        "ci_95": [
+          0.0,
+          0.38
+        ]
+      },
+      "SESSION_RECOVERED": {
+        "rate_pct": 0.0,
+        "ci_95": [
+          0.0,
+          0.38
+        ]
+      },
+      "TIMEOUT": {
+        "rate_pct": 0.0,
+        "ci_95": [
+          0.0,
+          0.38
+        ]
+      }
+    },
+    "sample_records": [
+      {
+        "fault": {
+          "experiment_id": "SPACECRAFT-PROTO-SIM",
+          "algorithm": "ML-KEM",
+          "parameter_set": "ML-KEM-768",
+          "fault_class": "SEU",
+          "fault_type": "single_bit_flip",
+          "target": "uplink_ciphertext",
+          "target_index": 630,
+          "bit_index": 6,
+          "injection_stage": "uplink_rf_channel",
+          "injection_time": 0.0,
+          "seed": 4611444799790259569,
+          "duration": 1,
+          "magnitude": 1
+        },
+        "ground_key": "71ce24b8ea24562b...",
+        "spacecraft_key": "f04725c8f0b7c83e...",
+        "keys_match": false,
+        "protocol_outcome": "KEY_MISMATCH_UNDETECTED",
+        "detection_latency_us": 30.92,
+        "details": "Retries used: 0"
+      },
+      {
+        "fault": {
+          "experiment_id": "SPACECRAFT-PROTO-SIM",
+          "algorithm": "ML-KEM",
+          "parameter_set": "ML-KEM-768",
+          "fault_class": "SEU",
+          "fault_type": "single_bit_flip",
+          "target": "uplink_ciphertext",
+          "target_index": 336,
+          "bit_index": 6,
+          "injection_stage": "uplink_rf_channel",
+          "injection_time": 0.0,
+          "seed": 460253738542486443,
+          "duration": 1,
+          "magnitude": 1
+        },
+        "ground_key": "d1717691483c047d...",
+        "spacecraft_key": "4145b72f40ecc130...",
+        "keys_match": false,
+        "protocol_outcome": "KEY_MISMATCH_UNDETECTED",
+        "detection_latency_us": 25.25,
+        "details": "Retries used: 0"
+      },
+      {
+        "fault": {
+          "experiment_id": "SPACECRAFT-PROTO-SIM",
+          "algorithm": "ML-KEM",
+          "parameter_set": "ML-KEM-768",
+          "fault_class": "SEU",
+          "fault_type": "single_bit_flip",
+          "target": "uplink_ciphertext",
+          "target_index": 13,
+          "bit_index": 4,
+          "injection_stage": "uplink_rf_channel",
+          "injection_time": 0.0,
+          "seed": 5445420977526997840,
+          "duration": 1,
+          "magnitude": 1
+        },
+        "ground_key": "21d1714d970fb62a...",
+        "spacecraft_key": "f12200a1163cee9f...",
+        "keys_match": false,
+        "protocol_outcome": "KEY_MISMATCH_UNDETECTED",
+        "detection_latency_us": 23.88,
+        "details": "Retries used: 0"
+      },
+      {
+        "fault": {
+          "experiment_id": "SPACECRAFT-PROTO-SIM",
+          "algorithm": "ML-KEM",
+          "parameter_set": "ML-KEM-768",
+          "fault_class": "SEU",
+          "fault_type": "single_bit_flip",
+          "target": "uplink_ciphertext",
+          "target_index": 588,
+          "bit_index": 7,
+          "injection_stage": "uplink_rf_channel",
+          "injection_time": 0.0,
+          "seed": 3078154462051949456,
+          "duration": 1,
+          "magnitude": 1
+        },
+        "ground_key": "1db3e43d4ed12c8c...",
+        "spacecraft_key": "96c41a05f030974a...",
+        "keys_match": false,
+        "protocol_outcome": "KEY_MISMATCH_UNDETECTED",
+        "detection_latency_us": 23.54,
+        "details": "Retries used: 0"
+      },
+      {
+        "fault": {
+          "experiment_id": "SPACECRAFT-PROTO-SIM",
+          "algorithm": "ML-KEM",
+          "parameter_set": "ML-KEM-768",
+          "fault_class": "SEU",
+          "fault_type": "single_bit_flip",
+          "target": "uplink_ciphertext",
+          "target_index": 812,
+          "bit_index": 3,
+          "injection_stage": "uplink_rf_channel",
+          "injection_time": 0.0,
+          "seed": 17771994586213161436,
+          "duration": 1,
+          "magnitude": 1
+        },
+        "ground_key": "4464090429b00b91...",
+        "spacecraft_key": "7de663c5959f6387...",
+        "keys_match": false,
+        "protocol_outcome": "KEY_MISMATCH_UNDETECTED",
+        "detection_latency_us": 23.67,
+        "details": "Retries used: 0"
+      }
+    ]
+  },
+  "authenticated_protocol": {
+    "protocol_mode": "Authenticated (HMAC/AEAD)",
+    "iterations": 1000,
+    "counts": {
+      "KEY_MATCH": 0,
+      "KEY_MISMATCH_DETECTED": 0,
+      "KEY_MISMATCH_UNDETECTED": 0,
+      "SESSION_ABORTED": 0,
+      "SESSION_RECOVERED": 1000,
+      "TIMEOUT": 0
+    },
+    "statistics": {
+      "KEY_MATCH": {
+        "rate_pct": 0.0,
+        "ci_95": [
+          0.0,
+          0.38
+        ]
+      },
+      "KEY_MISMATCH_DETECTED": {
+        "rate_pct": 0.0,
+        "ci_95": [
+          0.0,
+          0.38
+        ]
+      },
+      "KEY_MISMATCH_UNDETECTED": {
+        "rate_pct": 0.0,
+        "ci_95": [
+          0.0,
+          0.38
+        ]
+      },
+      "SESSION_ABORTED": {
+        "rate_pct": 0.0,
+        "ci_95": [
+          0.0,
+          0.38
+        ]
+      },
+      "SESSION_RECOVERED": {
+        "rate_pct": 100.0,
+        "ci_95": [
+          99.62,
+          100.0
+        ]
+      },
+      "TIMEOUT": {
+        "rate_pct": 0.0,
+        "ci_95": [
+          0.0,
+          0.38
+        ]
+      }
+    },
+    "sample_records": [
+      {
+        "fault": {
+          "experiment_id": "SPACECRAFT-PROTO-SIM",
+          "algorithm": "ML-KEM",
+          "parameter_set": "ML-KEM-768",
+          "fault_class": "SEU",
+          "fault_type": "single_bit_flip",
+          "target": "uplink_ciphertext",
+          "target_index": 630,
+          "bit_index": 6,
+          "injection_stage": "uplink_rf_channel",
+          "injection_time": 0.0,
+          "seed": 4611444799790259569,
+          "duration": 1,
+          "magnitude": 1
+        },
+        "ground_key": "bf2d2a3eac5b9966...",
+        "spacecraft_key": "8b6c5954837b6419...",
+        "keys_match": false,
+        "protocol_outcome": "SESSION_RECOVERED",
+        "detection_latency_us": 75.88,
+        "details": "Retries used: 1"
+      },
+      {
+        "fault": {
+          "experiment_id": "SPACECRAFT-PROTO-SIM",
+          "algorithm": "ML-KEM",
+          "parameter_set": "ML-KEM-768",
+          "fault_class": "SEU",
+          "fault_type": "single_bit_flip",
+          "target": "uplink_ciphertext",
+          "target_index": 336,
+          "bit_index": 6,
+          "injection_stage": "uplink_rf_channel",
+          "injection_time": 0.0,
+          "seed": 460253738542486443,
+          "duration": 1,
+          "magnitude": 1
+        },
+        "ground_key": "7eda408a548939e0...",
+        "spacecraft_key": "3bd7d0e54dbaa237...",
+        "keys_match": false,
+        "protocol_outcome": "SESSION_RECOVERED",
+        "detection_latency_us": 75.42,
+        "details": "Retries used: 1"
+      },
+      {
+        "fault": {
+          "experiment_id": "SPACECRAFT-PROTO-SIM",
+          "algorithm": "ML-KEM",
+          "parameter_set": "ML-KEM-768",
+          "fault_class": "SEU",
+          "fault_type": "single_bit_flip",
+          "target": "uplink_ciphertext",
+          "target_index": 13,
+          "bit_index": 4,
+          "injection_stage": "uplink_rf_channel",
+          "injection_time": 0.0,
+          "seed": 5445420977526997840,
+          "duration": 1,
+          "magnitude": 1
+        },
+        "ground_key": "098c5518b6570f26...",
+        "spacecraft_key": "9abd6e214b8ceee3...",
+        "keys_match": false,
+        "protocol_outcome": "SESSION_RECOVERED",
+        "detection_latency_us": 75.12,
+        "details": "Retries used: 1"
+      },
+      {
+        "fault": {
+          "experiment_id": "SPACECRAFT-PROTO-SIM",
+          "algorithm": "ML-KEM",
+          "parameter_set": "ML-KEM-768",
+          "fault_class": "SEU",
+          "fault_type": "single_bit_flip",
+          "target": "uplink_ciphertext",
+          "target_index": 588,
+          "bit_index": 7,
+          "injection_stage": "uplink_rf_channel",
+          "injection_time": 0.0,
+          "seed": 3078154462051949456,
+          "duration": 1,
+          "magnitude": 1
+        },
+        "ground_key": "2d4fcc53bda5f4e4...",
+        "spacecraft_key": "f742d3d8b1867543...",
+        "keys_match": false,
+        "protocol_outcome": "SESSION_RECOVERED",
+        "detection_latency_us": 74.29,
+        "details": "Retries used: 1"
+      },
+      {
+        "fault": {
+          "experiment_id": "SPACECRAFT-PROTO-SIM",
+          "algorithm": "ML-KEM",
+          "parameter_set": "ML-KEM-768",
+          "fault_class": "SEU",
+          "fault_type": "single_bit_flip",
+          "target": "uplink_ciphertext",
+          "target_index": 812,
+          "bit_index": 3,
+          "injection_stage": "uplink_rf_channel",
+          "injection_time": 0.0,
+          "seed": 17771994586213161436,
+          "duration": 1,
+          "magnitude": 1
+        },
+        "ground_key": "dfdb803236cc061d...",
+        "spacecraft_key": "574111a9008e19f6...",
+        "keys_match": false,
+        "protocol_outcome": "SESSION_RECOVERED",
+        "detection_latency_us": 73.46,
+        "details": "Retries used: 1"
+      }
+    ]
+  }
+}

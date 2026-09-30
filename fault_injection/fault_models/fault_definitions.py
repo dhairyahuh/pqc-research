@@ -1,9 +1,22 @@
 """
 Formal Fault Definitions, Classifications, and Metadata Schemas for PQC Fault Experiments.
-Adheres strictly to the research taxonomy:
-- Fault Classes: SEU, MULTI_BIT, BURST, TRANSIENT, PERSISTENT
-- Outcome Classes: CORRECT, EXPECTED_REJECTION, DETECTED_FAILURE, RECOVERED,
-                   INCORRECT_OUTPUT, SILENT_DATA_CORRUPTION, CRASH, TIMEOUT
+Adheres strictly to the corrected research taxonomy:
+
+Cryptographic Layer Outcomes:
+- CORRECT_VALID_DECAPSULATION: Legitimate cryptographic output matches ground truth.
+- EXPECTED_IMPLICIT_REJECTION: Cryptographically expected FO transform behavior on invalid input.
+- EXPECTED_SIGNATURE_REJECTION: Cryptographically expected signature verification rejection on tampered input.
+- EXPLICIT_ERROR: Handled error code returned by implementation (e.g. invalid modulus / deserialization check).
+- UNEXPECTED_INCORRECT_OUTPUT: Undetected invalid output violating specification guarantees.
+- CRASH: Uncaught exception, segmentation fault, or process abort.
+- TIMEOUT: Infinite loop, hang, or watchdog expiration.
+
+System/Protocol Layer Outcomes:
+- KEY_MATCH: Spacecraft and Ground session keys identical.
+- KEY_MISMATCH_DETECTED: Session key divergence detected by protocol (e.g. MAC/AEAD authentication failure).
+- KEY_MISMATCH_UNDETECTED: Session key divergence unhandled, resulting in silent payload corruption.
+- SESSION_ABORTED: Handled session termination.
+- SESSION_RECOVERED: Session re-established via retry / handshake recovery.
 """
 
 from enum import Enum
@@ -15,18 +28,26 @@ class FaultClass(str, Enum):
     SEU = "SEU"                   # Single Event Upset: 1-bit flip
     MULTI_BIT = "MULTI_BIT"       # Multiple independent bit flips
     BURST = "BURST"               # Contiguous multi-bit/byte burst corruption
-    TRANSIENT = "TRANSIENT"       # Temporary value glitch
-    PERSISTENT = "PERSISTENT"     # Persistent / stuck-at degradation
+    TRANSIENT = "TRANSIENT"       # Temporary arithmetic / intermediate value glitch
+    PERSISTENT = "PERSISTENT"     # Persistent / stuck-at memory degradation
 
 
-class OutcomeClass(str, Enum):
-    CORRECT = "CORRECT"
-    EXPECTED_REJECTION = "EXPECTED_REJECTION"
-    DETECTED_FAILURE = "DETECTED_FAILURE"
-    RECOVERED = "RECOVERED"
-    INCORRECT_OUTPUT = "INCORRECT_OUTPUT"
-    SILENT_DATA_CORRUPTION = "SILENT_DATA_CORRUPTION"
+class CryptoOutcomeClass(str, Enum):
+    CORRECT_VALID_DECAPSULATION = "CORRECT_VALID_DECAPSULATION"
+    EXPECTED_IMPLICIT_REJECTION = "EXPECTED_IMPLICIT_REJECTION"
+    EXPECTED_SIGNATURE_REJECTION = "EXPECTED_SIGNATURE_REJECTION"
+    EXPLICIT_ERROR = "EXPLICIT_ERROR"
+    UNEXPECTED_INCORRECT_OUTPUT = "UNEXPECTED_INCORRECT_OUTPUT"
     CRASH = "CRASH"
+    TIMEOUT = "TIMEOUT"
+
+
+class ProtocolOutcomeClass(str, Enum):
+    KEY_MATCH = "KEY_MATCH"
+    KEY_MISMATCH_DETECTED = "KEY_MISMATCH_DETECTED"
+    KEY_MISMATCH_UNDETECTED = "KEY_MISMATCH_UNDETECTED"
+    SESSION_ABORTED = "SESSION_ABORTED"
+    SESSION_RECOVERED = "SESSION_RECOVERED"
     TIMEOUT = "TIMEOUT"
 
 
@@ -51,13 +72,12 @@ class FaultDescriptor:
 
 
 @dataclass
-class FaultResult:
+class CryptoFaultResult:
     fault: FaultDescriptor
     baseline_result: str
     faulted_result: str
-    outcome_class: OutcomeClass
+    outcome_class: CryptoOutcomeClass
     fault_detected: bool
-    recovered: bool
     runtime_us: float
     memory_bytes: int
     error_code: int
@@ -66,4 +86,20 @@ class FaultResult:
     def to_dict(self) -> Dict[str, Any]:
         d = asdict(self)
         d["outcome_class"] = self.outcome_class.value
+        return d
+
+
+@dataclass
+class ProtocolFaultResult:
+    fault: FaultDescriptor
+    ground_key: str
+    spacecraft_key: str
+    keys_match: bool
+    protocol_outcome: ProtocolOutcomeClass
+    detection_latency_us: float
+    details: Optional[str] = None
+
+    def to_dict(self) -> Dict[str, Any]:
+        d = asdict(self)
+        d["protocol_outcome"] = self.protocol_outcome.value
         return d

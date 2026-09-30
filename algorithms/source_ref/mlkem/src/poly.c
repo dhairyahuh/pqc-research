@@ -471,6 +471,12 @@ void mlk_poly_ntt(mlk_poly *r)
 #endif /* MLK_USE_NATIVE_NTT */
 
   mlk_poly_ntt_c(r);
+#if defined(MLKEM_RESEARCH_FAULT_HOOKS)
+  {
+    extern void hook_ntt_coefficient(int16_t *coeffs, size_t count);
+    hook_ntt_coefficient(r->coeffs, MLKEM_N);
+  }
+#endif
 }
 
 
@@ -572,6 +578,12 @@ void mlk_poly_invntt_tomont(mlk_poly *r)
 #endif /* MLK_USE_NATIVE_INTT */
 
   mlk_poly_invntt_tomont_c(r);
+#if defined(MLKEM_RESEARCH_FAULT_HOOKS)
+  {
+    extern void hook_ntt_coefficient(int16_t *coeffs, size_t count);
+    hook_ntt_coefficient(r->coeffs, MLKEM_N);
+  }
+#endif
 }
 #endif /* !MLK_CONFIG_NO_ENCAPS_API || !MLK_CONFIG_NO_DECAPS_API */
 #else  /* !MLK_CONFIG_MULTILEVEL_NO_SHARED */

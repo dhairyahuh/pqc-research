@@ -24,17 +24,26 @@ typedef enum {
     FAULT_CLASS_PERSISTENT = 4   // Stuck-at / persistent memory degradation
 } fault_class_t;
 
-// Outcome Classifications
+// Cryptographic Layer Outcome Classifications
 typedef enum {
-    OUTCOME_CORRECT = 0,                 // Fault had no impact; output is legitimate
-    OUTCOME_EXPECTED_REJECTION = 1,      // Standard cryptographic rejection (e.g. invalid signature rejected)
-    OUTCOME_DETECTED_FAILURE = 2,        // An explicit integrity/resilience check detected corruption
-    OUTCOME_RECOVERED = 3,               // Detected and corrected (e.g. retry / checkpoint)
-    OUTCOME_INCORRECT_OUTPUT = 4,        // Output differs from baseline without detection
-    OUTCOME_SILENT_DATA_CORRUPTION = 5,  // Cryptographic state changed silently (e.g. implicit rejection desync)
-    OUTCOME_CRASH = 6,                   // Segmentation fault, bus error, abort
-    OUTCOME_TIMEOUT = 7                  // Infinite loop or watchdog expiration
-} outcome_class_t;
+    CRYPTO_OUTCOME_CORRECT_VALID = 0,       // Legitimate output matches ground truth
+    CRYPTO_OUTCOME_IMPLICIT_REJECTION = 1,  // Cryptographically expected FO transform rejection
+    CRYPTO_OUTCOME_SIGNATURE_REJECTION = 2, // Cryptographically expected signature rejection
+    CRYPTO_OUTCOME_EXPLICIT_ERROR = 3,      // Checked library error (e.g. check_sk/check_pk)
+    CRYPTO_OUTCOME_UNEXPECTED_OUTPUT = 4,   // Undetected invalid output violating guarantees
+    CRYPTO_OUTCOME_CRASH = 5,               // Segmentation fault, bus error, abort
+    CRYPTO_OUTCOME_TIMEOUT = 6              // Infinite loop or watchdog expiration
+} crypto_outcome_class_t;
+
+// Protocol Layer Outcome Classifications
+typedef enum {
+    PROTOCOL_OUTCOME_KEY_MATCH = 0,
+    PROTOCOL_OUTCOME_KEY_MISMATCH_DETECTED = 1,
+    PROTOCOL_OUTCOME_KEY_MISMATCH_UNDETECTED = 2,
+    PROTOCOL_OUTCOME_SESSION_ABORTED = 3,
+    PROTOCOL_OUTCOME_SESSION_RECOVERED = 4,
+    PROTOCOL_OUTCOME_TIMEOUT = 5
+} protocol_outcome_class_t;
 
 // Fault Specification
 typedef struct {
@@ -45,7 +54,7 @@ typedef struct {
     const char *fault_type_str;
     const char *target_name;
     size_t target_index;      // Byte or coefficient index
-    uint8_t bit_index;        // Bit position within byte/element (0..7 or 0..15/31)
+    uint8_t bit_index;        // Bit position within byte/element
     const char *injection_stage;
     uint64_t seed;
     uint32_t duration;
@@ -54,13 +63,12 @@ typedef struct {
 
 // Execution Result Record
 typedef struct {
-    outcome_class_t outcome_class;
+    crypto_outcome_class_t outcome_class;
     bool fault_detected;
-    bool recovered;
     double runtime_us;
     size_t memory_bytes;
     int32_t error_code;
-} fault_result_t;
+} crypto_fault_result_t;
 
 // Core C Buffer Inversion Routines
 int inject_bit_flip(uint8_t *buffer, size_t buf_len, size_t byte_offset, uint8_t bit_pos);
@@ -68,7 +76,8 @@ int inject_byte_corruption(uint8_t *buffer, size_t buf_len, size_t byte_offset, 
 int inject_burst_corruption(uint8_t *buffer, size_t buf_len, size_t start_offset, size_t length, uint64_t seed);
 int inject_polynomial_coefficient_glitch(int16_t *coeffs, size_t num_coeffs, size_t coeff_idx, int16_t delta);
 
-const char *outcome_class_to_string(outcome_class_t outcome);
+const char *crypto_outcome_to_string(crypto_outcome_class_t outcome);
+const char *protocol_outcome_to_string(protocol_outcome_class_t outcome);
 const char *fault_class_to_string(fault_class_t fclass);
 
 #ifdef __cplusplus
