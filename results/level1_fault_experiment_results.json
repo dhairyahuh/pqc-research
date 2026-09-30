@@ -1,0 +1,1463 @@
+{
+  "metadata": {
+    "timestamp": "2026-09-30T23:23:27Z",
+    "liboqs_version": "0.16.0",
+    "phase": "4A_Level1_Input_API",
+    "iterations_per_campaign": 1000
+  },
+  "ml_kem_768": {
+    "SEU_Ciphertext": {
+      "target": "ciphertext",
+      "fault_type": "single_bit_flip",
+      "iterations": 1000,
+      "counts": {
+        "CORRECT": 0,
+        "EXPECTED_REJECTION": 0,
+        "DETECTED_FAILURE": 0,
+        "RECOVERED": 0,
+        "INCORRECT_OUTPUT": 0,
+        "SILENT_DATA_CORRUPTION": 1000,
+        "CRASH": 0,
+        "TIMEOUT": 0
+      },
+      "rates_pct": {
+        "silent_data_corruption": {
+          "rate": 100.0,
+          "ci_95": [
+            99.62,
+            100.0
+          ]
+        },
+        "crash": {
+          "rate": 0.0
+        }
+      },
+      "sample_records": [
+        {
+          "fault": {
+            "experiment_id": "MLKEM768-L1-CAMPAIGN",
+            "algorithm": "ML-KEM",
+            "parameter_set": "ML-KEM-768",
+            "fault_class": "SEU",
+            "fault_type": "single_bit_flip",
+            "target": "ciphertext",
+            "target_index": 333,
+            "bit_index": 4,
+            "injection_stage": "pre_operation",
+            "injection_time": 0.0,
+            "seed": 5758133424589612270,
+            "duration": 1,
+            "magnitude": 1
+          },
+          "baseline_result": "8b21b771ed05f4e9...",
+          "faulted_result": "d5c3d987013bbd12...",
+          "outcome_class": "SILENT_DATA_CORRUPTION",
+          "fault_detected": false,
+          "recovered": false,
+          "runtime_us": 37.79,
+          "memory_bytes": 4672,
+          "error_code": 0,
+          "details": "Implicit rejection triggered: FO transform produced alternate pseudorandom key without error"
+        },
+        {
+          "fault": {
+            "experiment_id": "MLKEM768-L1-CAMPAIGN",
+            "algorithm": "ML-KEM",
+            "parameter_set": "ML-KEM-768",
+            "fault_class": "SEU",
+            "fault_type": "single_bit_flip",
+            "target": "ciphertext",
+            "target_index": 846,
+            "bit_index": 2,
+            "injection_stage": "pre_operation",
+            "injection_time": 0.0,
+            "seed": 8023716188970431130,
+            "duration": 1,
+            "magnitude": 1
+          },
+          "baseline_result": "96ee3d54cd1b6ae2...",
+          "faulted_result": "0a8f28ad1fd91819...",
+          "outcome_class": "SILENT_DATA_CORRUPTION",
+          "fault_detected": false,
+          "recovered": false,
+          "runtime_us": 37.58,
+          "memory_bytes": 4672,
+          "error_code": 0,
+          "details": "Implicit rejection triggered: FO transform produced alternate pseudorandom key without error"
+        },
+        {
+          "fault": {
+            "experiment_id": "MLKEM768-L1-CAMPAIGN",
+            "algorithm": "ML-KEM",
+            "parameter_set": "ML-KEM-768",
+            "fault_class": "SEU",
+            "fault_type": "single_bit_flip",
+            "target": "ciphertext",
+            "target_index": 1043,
+            "bit_index": 5,
+            "injection_stage": "pre_operation",
+            "injection_time": 0.0,
+            "seed": 16198792341942057046,
+            "duration": 1,
+            "magnitude": 1
+          },
+          "baseline_result": "da3fdec3147e25b6...",
+          "faulted_result": "efc88de377317129...",
+          "outcome_class": "SILENT_DATA_CORRUPTION",
+          "fault_detected": false,
+          "recovered": false,
+          "runtime_us": 30.88,
+          "memory_bytes": 4672,
+          "error_code": 0,
+          "details": "Implicit rejection triggered: FO transform produced alternate pseudorandom key without error"
+        },
+        {
+          "fault": {
+            "experiment_id": "MLKEM768-L1-CAMPAIGN",
+            "algorithm": "ML-KEM",
+            "parameter_set": "ML-KEM-768",
+            "fault_class": "SEU",
+            "fault_type": "single_bit_flip",
+            "target": "ciphertext",
+            "target_index": 128,
+            "bit_index": 5,
+            "injection_stage": "pre_operation",
+            "injection_time": 0.0,
+            "seed": 7923091303117586667,
+            "duration": 1,
+            "magnitude": 1
+          },
+          "baseline_result": "89a4a1e836d02913...",
+          "faulted_result": "db2e21861abea8fd...",
+          "outcome_class": "SILENT_DATA_CORRUPTION",
+          "fault_detected": false,
+          "recovered": false,
+          "runtime_us": 30.62,
+          "memory_bytes": 4672,
+          "error_code": 0,
+          "details": "Implicit rejection triggered: FO transform produced alternate pseudorandom key without error"
+        },
+        {
+          "fault": {
+            "experiment_id": "MLKEM768-L1-CAMPAIGN",
+            "algorithm": "ML-KEM",
+            "parameter_set": "ML-KEM-768",
+            "fault_class": "SEU",
+            "fault_type": "single_bit_flip",
+            "target": "ciphertext",
+            "target_index": 827,
+            "bit_index": 7,
+            "injection_stage": "pre_operation",
+            "injection_time": 0.0,
+            "seed": 8901627653034633787,
+            "duration": 1,
+            "magnitude": 1
+          },
+          "baseline_result": "6f8d156c2ee7c619...",
+          "faulted_result": "300aefbd7c8ef9a5...",
+          "outcome_class": "SILENT_DATA_CORRUPTION",
+          "fault_detected": false,
+          "recovered": false,
+          "runtime_us": 30.17,
+          "memory_bytes": 4672,
+          "error_code": 0,
+          "details": "Implicit rejection triggered: FO transform produced alternate pseudorandom key without error"
+        }
+      ]
+    },
+    "Burst_Ciphertext": {
+      "target": "ciphertext",
+      "fault_type": "burst_corruption",
+      "iterations": 1000,
+      "counts": {
+        "CORRECT": 0,
+        "EXPECTED_REJECTION": 0,
+        "DETECTED_FAILURE": 0,
+        "RECOVERED": 0,
+        "INCORRECT_OUTPUT": 0,
+        "SILENT_DATA_CORRUPTION": 1000,
+        "CRASH": 0,
+        "TIMEOUT": 0
+      },
+      "rates_pct": {
+        "silent_data_corruption": {
+          "rate": 100.0,
+          "ci_95": [
+            99.62,
+            100.0
+          ]
+        },
+        "crash": {
+          "rate": 0.0
+        }
+      },
+      "sample_records": [
+        {
+          "fault": {
+            "experiment_id": "MLKEM768-L1-CAMPAIGN",
+            "algorithm": "ML-KEM",
+            "parameter_set": "ML-KEM-768",
+            "fault_class": "BURST",
+            "fault_type": "burst_byte_corruption",
+            "target": "ciphertext",
+            "target_index": 333,
+            "bit_index": 0,
+            "injection_stage": "pre_decaps",
+            "injection_time": 0.0,
+            "seed": 5758133424589612270,
+            "duration": 1,
+            "magnitude": 4
+          },
+          "baseline_result": "7c97f9a8794e6600...",
+          "faulted_result": "e108f105448db21c...",
+          "outcome_class": "SILENT_DATA_CORRUPTION",
+          "fault_detected": false,
+          "recovered": false,
+          "runtime_us": 44.92,
+          "memory_bytes": 4672,
+          "error_code": 0,
+          "details": "Implicit rejection triggered: FO transform produced alternate pseudorandom key without error"
+        },
+        {
+          "fault": {
+            "experiment_id": "MLKEM768-L1-CAMPAIGN",
+            "algorithm": "ML-KEM",
+            "parameter_set": "ML-KEM-768",
+            "fault_class": "BURST",
+            "fault_type": "burst_byte_corruption",
+            "target": "ciphertext",
+            "target_index": 846,
+            "bit_index": 0,
+            "injection_stage": "pre_decaps",
+            "injection_time": 0.0,
+            "seed": 8023716188970431130,
+            "duration": 1,
+            "magnitude": 4
+          },
+          "baseline_result": "f5ca702501e34f02...",
+          "faulted_result": "b6ff907833d708d6...",
+          "outcome_class": "SILENT_DATA_CORRUPTION",
+          "fault_detected": false,
+          "recovered": false,
+          "runtime_us": 43.79,
+          "memory_bytes": 4672,
+          "error_code": 0,
+          "details": "Implicit rejection triggered: FO transform produced alternate pseudorandom key without error"
+        },
+        {
+          "fault": {
+            "experiment_id": "MLKEM768-L1-CAMPAIGN",
+            "algorithm": "ML-KEM",
+            "parameter_set": "ML-KEM-768",
+            "fault_class": "BURST",
+            "fault_type": "burst_byte_corruption",
+            "target": "ciphertext",
+            "target_index": 1043,
+            "bit_index": 0,
+            "injection_stage": "pre_decaps",
+            "injection_time": 0.0,
+            "seed": 16198792341942057046,
+            "duration": 1,
+            "magnitude": 4
+          },
+          "baseline_result": "6190d24df60814e4...",
+          "faulted_result": "19ff09ca48185145...",
+          "outcome_class": "SILENT_DATA_CORRUPTION",
+          "fault_detected": false,
+          "recovered": false,
+          "runtime_us": 43.92,
+          "memory_bytes": 4672,
+          "error_code": 0,
+          "details": "Implicit rejection triggered: FO transform produced alternate pseudorandom key without error"
+        },
+        {
+          "fault": {
+            "experiment_id": "MLKEM768-L1-CAMPAIGN",
+            "algorithm": "ML-KEM",
+            "parameter_set": "ML-KEM-768",
+            "fault_class": "BURST",
+            "fault_type": "burst_byte_corruption",
+            "target": "ciphertext",
+            "target_index": 128,
+            "bit_index": 0,
+            "injection_stage": "pre_decaps",
+            "injection_time": 0.0,
+            "seed": 7923091303117586667,
+            "duration": 1,
+            "magnitude": 4
+          },
+          "baseline_result": "90d0e275750e3b87...",
+          "faulted_result": "46c5e4557496b730...",
+          "outcome_class": "SILENT_DATA_CORRUPTION",
+          "fault_detected": false,
+          "recovered": false,
+          "runtime_us": 43.54,
+          "memory_bytes": 4672,
+          "error_code": 0,
+          "details": "Implicit rejection triggered: FO transform produced alternate pseudorandom key without error"
+        },
+        {
+          "fault": {
+            "experiment_id": "MLKEM768-L1-CAMPAIGN",
+            "algorithm": "ML-KEM",
+            "parameter_set": "ML-KEM-768",
+            "fault_class": "BURST",
+            "fault_type": "burst_byte_corruption",
+            "target": "ciphertext",
+            "target_index": 827,
+            "bit_index": 0,
+            "injection_stage": "pre_decaps",
+            "injection_time": 0.0,
+            "seed": 8901627653034633787,
+            "duration": 1,
+            "magnitude": 4
+          },
+          "baseline_result": "6faa1d6fb9111fc8...",
+          "faulted_result": "93301fc0cdc39c8e...",
+          "outcome_class": "SILENT_DATA_CORRUPTION",
+          "fault_detected": false,
+          "recovered": false,
+          "runtime_us": 43.25,
+          "memory_bytes": 4672,
+          "error_code": 0,
+          "details": "Implicit rejection triggered: FO transform produced alternate pseudorandom key without error"
+        }
+      ]
+    },
+    "SEU_PublicKey": {
+      "target": "public_key",
+      "fault_type": "single_bit_flip",
+      "iterations": 1000,
+      "counts": {
+        "CORRECT": 0,
+        "EXPECTED_REJECTION": 0,
+        "DETECTED_FAILURE": 0,
+        "RECOVERED": 0,
+        "INCORRECT_OUTPUT": 0,
+        "SILENT_DATA_CORRUPTION": 945,
+        "CRASH": 55,
+        "TIMEOUT": 0
+      },
+      "rates_pct": {
+        "silent_data_corruption": {
+          "rate": 94.5,
+          "ci_95": [
+            92.91,
+            95.75
+          ]
+        },
+        "crash": {
+          "rate": 5.5
+        }
+      },
+      "sample_records": [
+        {
+          "fault": {
+            "experiment_id": "MLKEM768-L1-CAMPAIGN",
+            "algorithm": "ML-KEM",
+            "parameter_set": "ML-KEM-768",
+            "fault_class": "SEU",
+            "fault_type": "single_bit_flip",
+            "target": "public_key",
+            "target_index": 333,
+            "bit_index": 4,
+            "injection_stage": "pre_operation",
+            "injection_time": 0.0,
+            "seed": 5758133424589612270,
+            "duration": 1,
+            "magnitude": 1
+          },
+          "baseline_result": "c5aaa25eef093877...",
+          "faulted_result": "4cbd05bd6d983cf9...",
+          "outcome_class": "SILENT_DATA_CORRUPTION",
+          "fault_detected": false,
+          "recovered": false,
+          "runtime_us": 49.04,
+          "memory_bytes": 4672,
+          "error_code": 0,
+          "details": "Corrupted public key produced mismatched ciphertext/shared secret"
+        },
+        {
+          "fault": {
+            "experiment_id": "MLKEM768-L1-CAMPAIGN",
+            "algorithm": "ML-KEM",
+            "parameter_set": "ML-KEM-768",
+            "fault_class": "SEU",
+            "fault_type": "single_bit_flip",
+            "target": "public_key",
+            "target_index": 846,
+            "bit_index": 2,
+            "injection_stage": "pre_operation",
+            "injection_time": 0.0,
+            "seed": 8023716188970431130,
+            "duration": 1,
+            "magnitude": 1
+          },
+          "baseline_result": "3030b228428b94c4...",
+          "faulted_result": "4cbd05bd6d983cf9...",
+          "outcome_class": "SILENT_DATA_CORRUPTION",
+          "fault_detected": false,
+          "recovered": false,
+          "runtime_us": 47.67,
+          "memory_bytes": 4672,
+          "error_code": 0,
+          "details": "Corrupted public key produced mismatched ciphertext/shared secret"
+        },
+        {
+          "fault": {
+            "experiment_id": "MLKEM768-L1-CAMPAIGN",
+            "algorithm": "ML-KEM",
+            "parameter_set": "ML-KEM-768",
+            "fault_class": "SEU",
+            "fault_type": "single_bit_flip",
+            "target": "public_key",
+            "target_index": 1043,
+            "bit_index": 5,
+            "injection_stage": "pre_operation",
+            "injection_time": 0.0,
+            "seed": 16198792341942057046,
+            "duration": 1,
+            "magnitude": 1
+          },
+          "baseline_result": "be2f4bc9d8184692...",
+          "faulted_result": "4cbd05bd6d983cf9...",
+          "outcome_class": "SILENT_DATA_CORRUPTION",
+          "fault_detected": false,
+          "recovered": false,
+          "runtime_us": 84.67,
+          "memory_bytes": 4672,
+          "error_code": 0,
+          "details": "Corrupted public key produced mismatched ciphertext/shared secret"
+        },
+        {
+          "fault": {
+            "experiment_id": "MLKEM768-L1-CAMPAIGN",
+            "algorithm": "ML-KEM",
+            "parameter_set": "ML-KEM-768",
+            "fault_class": "SEU",
+            "fault_type": "single_bit_flip",
+            "target": "public_key",
+            "target_index": 128,
+            "bit_index": 5,
+            "injection_stage": "pre_operation",
+            "injection_time": 0.0,
+            "seed": 7923091303117586667,
+            "duration": 1,
+            "magnitude": 1
+          },
+          "baseline_result": "9a9563870076fe10...",
+          "faulted_result": "4cbd05bd6d983cf9...",
+          "outcome_class": "SILENT_DATA_CORRUPTION",
+          "fault_detected": false,
+          "recovered": false,
+          "runtime_us": 46.21,
+          "memory_bytes": 4672,
+          "error_code": 0,
+          "details": "Corrupted public key produced mismatched ciphertext/shared secret"
+        },
+        {
+          "fault": {
+            "experiment_id": "MLKEM768-L1-CAMPAIGN",
+            "algorithm": "ML-KEM",
+            "parameter_set": "ML-KEM-768",
+            "fault_class": "SEU",
+            "fault_type": "single_bit_flip",
+            "target": "public_key",
+            "target_index": 827,
+            "bit_index": 7,
+            "injection_stage": "pre_operation",
+            "injection_time": 0.0,
+            "seed": 8901627653034633787,
+            "duration": 1,
+            "magnitude": 1
+          },
+          "baseline_result": "8fe29c928753fe29...",
+          "faulted_result": "4cbd05bd6d983cf9...",
+          "outcome_class": "SILENT_DATA_CORRUPTION",
+          "fault_detected": false,
+          "recovered": false,
+          "runtime_us": 45.46,
+          "memory_bytes": 4672,
+          "error_code": 0,
+          "details": "Corrupted public key produced mismatched ciphertext/shared secret"
+        }
+      ]
+    },
+    "SEU_SecretKey": {
+      "target": "secret_key",
+      "fault_type": "single_bit_flip",
+      "iterations": 1000,
+      "counts": {
+        "CORRECT": 8,
+        "EXPECTED_REJECTION": 0,
+        "DETECTED_FAILURE": 0,
+        "RECOVERED": 0,
+        "INCORRECT_OUTPUT": 0,
+        "SILENT_DATA_CORRUPTION": 496,
+        "CRASH": 496,
+        "TIMEOUT": 0
+      },
+      "rates_pct": {
+        "silent_data_corruption": {
+          "rate": 49.6,
+          "ci_95": [
+            46.51,
+            52.69
+          ]
+        },
+        "crash": {
+          "rate": 49.6
+        }
+      },
+      "sample_records": [
+        {
+          "fault": {
+            "experiment_id": "MLKEM768-L1-CAMPAIGN",
+            "algorithm": "ML-KEM",
+            "parameter_set": "ML-KEM-768",
+            "fault_class": "SEU",
+            "fault_type": "single_bit_flip",
+            "target": "secret_key",
+            "target_index": 666,
+            "bit_index": 4,
+            "injection_stage": "pre_operation",
+            "injection_time": 0.0,
+            "seed": 5758133424589612270,
+            "duration": 1,
+            "magnitude": 1
+          },
+          "baseline_result": "0cb9a97f2a3653be...",
+          "faulted_result": "c524d5096d9ff0e5...",
+          "outcome_class": "SILENT_DATA_CORRUPTION",
+          "fault_detected": false,
+          "recovered": false,
+          "runtime_us": 29.08,
+          "memory_bytes": 4672,
+          "error_code": 0,
+          "details": "Corrupted secret key produced mismatched shared secret during decapsulation"
+        },
+        {
+          "fault": {
+            "experiment_id": "MLKEM768-L1-CAMPAIGN",
+            "algorithm": "ML-KEM",
+            "parameter_set": "ML-KEM-768",
+            "fault_class": "SEU",
+            "fault_type": "single_bit_flip",
+            "target": "secret_key",
+            "target_index": 1693,
+            "bit_index": 2,
+            "injection_stage": "pre_operation",
+            "injection_time": 0.0,
+            "seed": 8023716188970431130,
+            "duration": 1,
+            "magnitude": 1
+          },
+          "baseline_result": "5f7c386f74fa5c80...",
+          "faulted_result": "c524d5096d9ff0e5...",
+          "outcome_class": "CRASH",
+          "fault_detected": false,
+          "recovered": false,
+          "runtime_us": 12.79,
+          "memory_bytes": 4672,
+          "error_code": -1,
+          "details": "ML-KEM decapsulation failed with status -1"
+        },
+        {
+          "fault": {
+            "experiment_id": "MLKEM768-L1-CAMPAIGN",
+            "algorithm": "ML-KEM",
+            "parameter_set": "ML-KEM-768",
+            "fault_class": "SEU",
+            "fault_type": "single_bit_flip",
+            "target": "secret_key",
+            "target_index": 2086,
+            "bit_index": 5,
+            "injection_stage": "pre_operation",
+            "injection_time": 0.0,
+            "seed": 16198792341942057046,
+            "duration": 1,
+            "magnitude": 1
+          },
+          "baseline_result": "ca7d458802db8b44...",
+          "faulted_result": "c524d5096d9ff0e5...",
+          "outcome_class": "CRASH",
+          "fault_detected": false,
+          "recovered": false,
+          "runtime_us": 7.12,
+          "memory_bytes": 4672,
+          "error_code": -1,
+          "details": "ML-KEM decapsulation failed with status -1"
+        },
+        {
+          "fault": {
+            "experiment_id": "MLKEM768-L1-CAMPAIGN",
+            "algorithm": "ML-KEM",
+            "parameter_set": "ML-KEM-768",
+            "fault_class": "SEU",
+            "fault_type": "single_bit_flip",
+            "target": "secret_key",
+            "target_index": 257,
+            "bit_index": 5,
+            "injection_stage": "pre_operation",
+            "injection_time": 0.0,
+            "seed": 7923091303117586667,
+            "duration": 1,
+            "magnitude": 1
+          },
+          "baseline_result": "5a8f9a6c4fa1248b...",
+          "faulted_result": "fc59858761719935...",
+          "outcome_class": "SILENT_DATA_CORRUPTION",
+          "fault_detected": false,
+          "recovered": false,
+          "runtime_us": 25.88,
+          "memory_bytes": 4672,
+          "error_code": 0,
+          "details": "Corrupted secret key produced mismatched shared secret during decapsulation"
+        },
+        {
+          "fault": {
+            "experiment_id": "MLKEM768-L1-CAMPAIGN",
+            "algorithm": "ML-KEM",
+            "parameter_set": "ML-KEM-768",
+            "fault_class": "SEU",
+            "fault_type": "single_bit_flip",
+            "target": "secret_key",
+            "target_index": 1654,
+            "bit_index": 7,
+            "injection_stage": "pre_operation",
+            "injection_time": 0.0,
+            "seed": 8901627653034633787,
+            "duration": 1,
+            "magnitude": 1
+          },
+          "baseline_result": "ac1625c959bae7b3...",
+          "faulted_result": "fc59858761719935...",
+          "outcome_class": "CRASH",
+          "fault_detected": false,
+          "recovered": false,
+          "runtime_us": 6.71,
+          "memory_bytes": 4672,
+          "error_code": -1,
+          "details": "ML-KEM decapsulation failed with status -1"
+        }
+      ]
+    }
+  },
+  "ml_dsa_65": {
+    "SEU_Signature": {
+      "target": "signature",
+      "fault_type": "single_bit_flip",
+      "iterations": 1000,
+      "counts": {
+        "CORRECT": 0,
+        "EXPECTED_REJECTION": 1000,
+        "DETECTED_FAILURE": 0,
+        "RECOVERED": 0,
+        "INCORRECT_OUTPUT": 0,
+        "SILENT_DATA_CORRUPTION": 0,
+        "CRASH": 0,
+        "TIMEOUT": 0
+      },
+      "rates_pct": {
+        "expected_rejection": {
+          "rate": 100.0,
+          "ci_95": [
+            99.62,
+            100.0
+          ]
+        },
+        "silent_data_corruption": {
+          "rate": 0.0,
+          "ci_95": [
+            0.0,
+            0.38
+          ]
+        }
+      },
+      "sample_records": [
+        {
+          "fault": {
+            "experiment_id": "MLDSA65-L1-CAMPAIGN",
+            "algorithm": "ML-DSA",
+            "parameter_set": "ML-DSA-65",
+            "fault_class": "SEU",
+            "fault_type": "single_bit_flip",
+            "target": "signature",
+            "target_index": 1403,
+            "bit_index": 0,
+            "injection_stage": "pre_verify",
+            "injection_time": 0.0,
+            "seed": 7147961223854310601,
+            "duration": 1,
+            "magnitude": 1
+          },
+          "baseline_result": "VALID",
+          "faulted_result": "REJECTED",
+          "outcome_class": "EXPECTED_REJECTION",
+          "fault_detected": true,
+          "recovered": false,
+          "runtime_us": 76.71,
+          "memory_bytes": 5261,
+          "error_code": 0,
+          "details": "Verifier correctly rejected corrupted signature"
+        },
+        {
+          "fault": {
+            "experiment_id": "MLDSA65-L1-CAMPAIGN",
+            "algorithm": "ML-DSA",
+            "parameter_set": "ML-DSA-65",
+            "fault_class": "SEU",
+            "fault_type": "single_bit_flip",
+            "target": "signature",
+            "target_index": 3242,
+            "bit_index": 3,
+            "injection_stage": "pre_verify",
+            "injection_time": 0.0,
+            "seed": 10565136641141796870,
+            "duration": 1,
+            "magnitude": 1
+          },
+          "baseline_result": "VALID",
+          "faulted_result": "REJECTED",
+          "outcome_class": "EXPECTED_REJECTION",
+          "fault_detected": true,
+          "recovered": false,
+          "runtime_us": 71.08,
+          "memory_bytes": 5261,
+          "error_code": 0,
+          "details": "Verifier correctly rejected corrupted signature"
+        },
+        {
+          "fault": {
+            "experiment_id": "MLDSA65-L1-CAMPAIGN",
+            "algorithm": "ML-DSA",
+            "parameter_set": "ML-DSA-65",
+            "fault_class": "SEU",
+            "fault_type": "single_bit_flip",
+            "target": "signature",
+            "target_index": 1546,
+            "bit_index": 7,
+            "injection_stage": "pre_verify",
+            "injection_time": 0.0,
+            "seed": 720598017708869468,
+            "duration": 1,
+            "magnitude": 1
+          },
+          "baseline_result": "VALID",
+          "faulted_result": "REJECTED",
+          "outcome_class": "EXPECTED_REJECTION",
+          "fault_detected": true,
+          "recovered": false,
+          "runtime_us": 70.17,
+          "memory_bytes": 5261,
+          "error_code": 0,
+          "details": "Verifier correctly rejected corrupted signature"
+        },
+        {
+          "fault": {
+            "experiment_id": "MLDSA65-L1-CAMPAIGN",
+            "algorithm": "ML-DSA",
+            "parameter_set": "ML-DSA-65",
+            "fault_class": "SEU",
+            "fault_type": "single_bit_flip",
+            "target": "signature",
+            "target_index": 2837,
+            "bit_index": 3,
+            "injection_stage": "pre_verify",
+            "injection_time": 0.0,
+            "seed": 11551787009714715220,
+            "duration": 1,
+            "magnitude": 1
+          },
+          "baseline_result": "VALID",
+          "faulted_result": "REJECTED",
+          "outcome_class": "EXPECTED_REJECTION",
+          "fault_detected": true,
+          "recovered": false,
+          "runtime_us": 69.08,
+          "memory_bytes": 5261,
+          "error_code": 0,
+          "details": "Verifier correctly rejected corrupted signature"
+        },
+        {
+          "fault": {
+            "experiment_id": "MLDSA65-L1-CAMPAIGN",
+            "algorithm": "ML-DSA",
+            "parameter_set": "ML-DSA-65",
+            "fault_class": "SEU",
+            "fault_type": "single_bit_flip",
+            "target": "signature",
+            "target_index": 2990,
+            "bit_index": 2,
+            "injection_stage": "pre_verify",
+            "injection_time": 0.0,
+            "seed": 13126364468576063989,
+            "duration": 1,
+            "magnitude": 1
+          },
+          "baseline_result": "VALID",
+          "faulted_result": "REJECTED",
+          "outcome_class": "EXPECTED_REJECTION",
+          "fault_detected": true,
+          "recovered": false,
+          "runtime_us": 69.5,
+          "memory_bytes": 5261,
+          "error_code": 0,
+          "details": "Verifier correctly rejected corrupted signature"
+        }
+      ]
+    },
+    "Burst_Signature": {
+      "target": "signature",
+      "fault_type": "burst_corruption",
+      "iterations": 1000,
+      "counts": {
+        "CORRECT": 0,
+        "EXPECTED_REJECTION": 1000,
+        "DETECTED_FAILURE": 0,
+        "RECOVERED": 0,
+        "INCORRECT_OUTPUT": 0,
+        "SILENT_DATA_CORRUPTION": 0,
+        "CRASH": 0,
+        "TIMEOUT": 0
+      },
+      "rates_pct": {
+        "expected_rejection": {
+          "rate": 100.0,
+          "ci_95": [
+            99.62,
+            100.0
+          ]
+        },
+        "silent_data_corruption": {
+          "rate": 0.0,
+          "ci_95": [
+            0.0,
+            0.38
+          ]
+        }
+      },
+      "sample_records": [
+        {
+          "fault": {
+            "experiment_id": "MLDSA65-L1-CAMPAIGN",
+            "algorithm": "ML-DSA",
+            "parameter_set": "ML-DSA-65",
+            "fault_class": "BURST",
+            "fault_type": "burst_byte_corruption",
+            "target": "signature",
+            "target_index": 1403,
+            "bit_index": 0,
+            "injection_stage": "pre_verify",
+            "injection_time": 0.0,
+            "seed": 7147961223854310601,
+            "duration": 1,
+            "magnitude": 4
+          },
+          "baseline_result": "VALID",
+          "faulted_result": "REJECTED",
+          "outcome_class": "EXPECTED_REJECTION",
+          "fault_detected": true,
+          "recovered": false,
+          "runtime_us": 90.17,
+          "memory_bytes": 5261,
+          "error_code": 0,
+          "details": "Verifier correctly rejected corrupted signature"
+        },
+        {
+          "fault": {
+            "experiment_id": "MLDSA65-L1-CAMPAIGN",
+            "algorithm": "ML-DSA",
+            "parameter_set": "ML-DSA-65",
+            "fault_class": "BURST",
+            "fault_type": "burst_byte_corruption",
+            "target": "signature",
+            "target_index": 3242,
+            "bit_index": 0,
+            "injection_stage": "pre_verify",
+            "injection_time": 0.0,
+            "seed": 10565136641141796870,
+            "duration": 1,
+            "magnitude": 4
+          },
+          "baseline_result": "VALID",
+          "faulted_result": "REJECTED",
+          "outcome_class": "EXPECTED_REJECTION",
+          "fault_detected": true,
+          "recovered": false,
+          "runtime_us": 89.96,
+          "memory_bytes": 5261,
+          "error_code": 0,
+          "details": "Verifier correctly rejected corrupted signature"
+        },
+        {
+          "fault": {
+            "experiment_id": "MLDSA65-L1-CAMPAIGN",
+            "algorithm": "ML-DSA",
+            "parameter_set": "ML-DSA-65",
+            "fault_class": "BURST",
+            "fault_type": "burst_byte_corruption",
+            "target": "signature",
+            "target_index": 1546,
+            "bit_index": 0,
+            "injection_stage": "pre_verify",
+            "injection_time": 0.0,
+            "seed": 720598017708869468,
+            "duration": 1,
+            "magnitude": 4
+          },
+          "baseline_result": "VALID",
+          "faulted_result": "REJECTED",
+          "outcome_class": "EXPECTED_REJECTION",
+          "fault_detected": true,
+          "recovered": false,
+          "runtime_us": 84.08,
+          "memory_bytes": 5261,
+          "error_code": 0,
+          "details": "Verifier correctly rejected corrupted signature"
+        },
+        {
+          "fault": {
+            "experiment_id": "MLDSA65-L1-CAMPAIGN",
+            "algorithm": "ML-DSA",
+            "parameter_set": "ML-DSA-65",
+            "fault_class": "BURST",
+            "fault_type": "burst_byte_corruption",
+            "target": "signature",
+            "target_index": 2837,
+            "bit_index": 0,
+            "injection_stage": "pre_verify",
+            "injection_time": 0.0,
+            "seed": 11551787009714715220,
+            "duration": 1,
+            "magnitude": 4
+          },
+          "baseline_result": "VALID",
+          "faulted_result": "REJECTED",
+          "outcome_class": "EXPECTED_REJECTION",
+          "fault_detected": true,
+          "recovered": false,
+          "runtime_us": 84.5,
+          "memory_bytes": 5261,
+          "error_code": 0,
+          "details": "Verifier correctly rejected corrupted signature"
+        },
+        {
+          "fault": {
+            "experiment_id": "MLDSA65-L1-CAMPAIGN",
+            "algorithm": "ML-DSA",
+            "parameter_set": "ML-DSA-65",
+            "fault_class": "BURST",
+            "fault_type": "burst_byte_corruption",
+            "target": "signature",
+            "target_index": 2990,
+            "bit_index": 0,
+            "injection_stage": "pre_verify",
+            "injection_time": 0.0,
+            "seed": 13126364468576063989,
+            "duration": 1,
+            "magnitude": 4
+          },
+          "baseline_result": "VALID",
+          "faulted_result": "REJECTED",
+          "outcome_class": "EXPECTED_REJECTION",
+          "fault_detected": true,
+          "recovered": false,
+          "runtime_us": 87.5,
+          "memory_bytes": 5261,
+          "error_code": 0,
+          "details": "Verifier correctly rejected corrupted signature"
+        }
+      ]
+    },
+    "SEU_Message": {
+      "target": "message",
+      "fault_type": "single_bit_flip",
+      "iterations": 1000,
+      "counts": {
+        "CORRECT": 0,
+        "EXPECTED_REJECTION": 1000,
+        "DETECTED_FAILURE": 0,
+        "RECOVERED": 0,
+        "INCORRECT_OUTPUT": 0,
+        "SILENT_DATA_CORRUPTION": 0,
+        "CRASH": 0,
+        "TIMEOUT": 0
+      },
+      "rates_pct": {
+        "expected_rejection": {
+          "rate": 100.0,
+          "ci_95": [
+            99.62,
+            100.0
+          ]
+        },
+        "silent_data_corruption": {
+          "rate": 0.0,
+          "ci_95": [
+            0.0,
+            0.38
+          ]
+        }
+      },
+      "sample_records": [
+        {
+          "fault": {
+            "experiment_id": "MLDSA65-L1-CAMPAIGN",
+            "algorithm": "ML-DSA",
+            "parameter_set": "ML-DSA-65",
+            "fault_class": "SEU",
+            "fault_type": "single_bit_flip",
+            "target": "message",
+            "target_index": 21,
+            "bit_index": 0,
+            "injection_stage": "pre_verify",
+            "injection_time": 0.0,
+            "seed": 7147961223854310601,
+            "duration": 1,
+            "magnitude": 1
+          },
+          "baseline_result": "VALID",
+          "faulted_result": "REJECTED",
+          "outcome_class": "EXPECTED_REJECTION",
+          "fault_detected": true,
+          "recovered": false,
+          "runtime_us": 71.08,
+          "memory_bytes": 5261,
+          "error_code": 0,
+          "details": "Verifier correctly rejected signature on altered message"
+        },
+        {
+          "fault": {
+            "experiment_id": "MLDSA65-L1-CAMPAIGN",
+            "algorithm": "ML-DSA",
+            "parameter_set": "ML-DSA-65",
+            "fault_class": "SEU",
+            "fault_type": "single_bit_flip",
+            "target": "message",
+            "target_index": 61,
+            "bit_index": 3,
+            "injection_stage": "pre_verify",
+            "injection_time": 0.0,
+            "seed": 10565136641141796870,
+            "duration": 1,
+            "magnitude": 1
+          },
+          "baseline_result": "VALID",
+          "faulted_result": "REJECTED",
+          "outcome_class": "EXPECTED_REJECTION",
+          "fault_detected": true,
+          "recovered": false,
+          "runtime_us": 69.88,
+          "memory_bytes": 5261,
+          "error_code": 0,
+          "details": "Verifier correctly rejected signature on altered message"
+        },
+        {
+          "fault": {
+            "experiment_id": "MLDSA65-L1-CAMPAIGN",
+            "algorithm": "ML-DSA",
+            "parameter_set": "ML-DSA-65",
+            "fault_class": "SEU",
+            "fault_type": "single_bit_flip",
+            "target": "message",
+            "target_index": 24,
+            "bit_index": 7,
+            "injection_stage": "pre_verify",
+            "injection_time": 0.0,
+            "seed": 720598017708869468,
+            "duration": 1,
+            "magnitude": 1
+          },
+          "baseline_result": "VALID",
+          "faulted_result": "REJECTED",
+          "outcome_class": "EXPECTED_REJECTION",
+          "fault_detected": true,
+          "recovered": false,
+          "runtime_us": 69.88,
+          "memory_bytes": 5261,
+          "error_code": 0,
+          "details": "Verifier correctly rejected signature on altered message"
+        },
+        {
+          "fault": {
+            "experiment_id": "MLDSA65-L1-CAMPAIGN",
+            "algorithm": "ML-DSA",
+            "parameter_set": "ML-DSA-65",
+            "fault_class": "SEU",
+            "fault_type": "single_bit_flip",
+            "target": "message",
+            "target_index": 44,
+            "bit_index": 3,
+            "injection_stage": "pre_verify",
+            "injection_time": 0.0,
+            "seed": 11551787009714715220,
+            "duration": 1,
+            "magnitude": 1
+          },
+          "baseline_result": "VALID",
+          "faulted_result": "REJECTED",
+          "outcome_class": "EXPECTED_REJECTION",
+          "fault_detected": true,
+          "recovered": false,
+          "runtime_us": 69.38,
+          "memory_bytes": 5261,
+          "error_code": 0,
+          "details": "Verifier correctly rejected signature on altered message"
+        },
+        {
+          "fault": {
+            "experiment_id": "MLDSA65-L1-CAMPAIGN",
+            "algorithm": "ML-DSA",
+            "parameter_set": "ML-DSA-65",
+            "fault_class": "SEU",
+            "fault_type": "single_bit_flip",
+            "target": "message",
+            "target_index": 46,
+            "bit_index": 2,
+            "injection_stage": "pre_verify",
+            "injection_time": 0.0,
+            "seed": 13126364468576063989,
+            "duration": 1,
+            "magnitude": 1
+          },
+          "baseline_result": "VALID",
+          "faulted_result": "REJECTED",
+          "outcome_class": "EXPECTED_REJECTION",
+          "fault_detected": true,
+          "recovered": false,
+          "runtime_us": 68.38,
+          "memory_bytes": 5261,
+          "error_code": 0,
+          "details": "Verifier correctly rejected signature on altered message"
+        }
+      ]
+    },
+    "SEU_PublicKey": {
+      "target": "public_key",
+      "fault_type": "single_bit_flip",
+      "iterations": 1000,
+      "counts": {
+        "CORRECT": 0,
+        "EXPECTED_REJECTION": 1000,
+        "DETECTED_FAILURE": 0,
+        "RECOVERED": 0,
+        "INCORRECT_OUTPUT": 0,
+        "SILENT_DATA_CORRUPTION": 0,
+        "CRASH": 0,
+        "TIMEOUT": 0
+      },
+      "rates_pct": {
+        "expected_rejection": {
+          "rate": 100.0,
+          "ci_95": [
+            99.62,
+            100.0
+          ]
+        },
+        "silent_data_corruption": {
+          "rate": 0.0,
+          "ci_95": [
+            0.0,
+            0.38
+          ]
+        }
+      },
+      "sample_records": [
+        {
+          "fault": {
+            "experiment_id": "MLDSA65-L1-CAMPAIGN",
+            "algorithm": "ML-DSA",
+            "parameter_set": "ML-DSA-65",
+            "fault_class": "SEU",
+            "fault_type": "single_bit_flip",
+            "target": "public_key",
+            "target_index": 701,
+            "bit_index": 0,
+            "injection_stage": "pre_verify",
+            "injection_time": 0.0,
+            "seed": 7147961223854310601,
+            "duration": 1,
+            "magnitude": 1
+          },
+          "baseline_result": "VALID",
+          "faulted_result": "REJECTED",
+          "outcome_class": "EXPECTED_REJECTION",
+          "fault_detected": true,
+          "recovered": false,
+          "runtime_us": 73.12,
+          "memory_bytes": 5261,
+          "error_code": 0,
+          "details": "Verifier correctly rejected signature under corrupted public key"
+        },
+        {
+          "fault": {
+            "experiment_id": "MLDSA65-L1-CAMPAIGN",
+            "algorithm": "ML-DSA",
+            "parameter_set": "ML-DSA-65",
+            "fault_class": "SEU",
+            "fault_type": "single_bit_flip",
+            "target": "public_key",
+            "target_index": 1621,
+            "bit_index": 3,
+            "injection_stage": "pre_verify",
+            "injection_time": 0.0,
+            "seed": 10565136641141796870,
+            "duration": 1,
+            "magnitude": 1
+          },
+          "baseline_result": "VALID",
+          "faulted_result": "REJECTED",
+          "outcome_class": "EXPECTED_REJECTION",
+          "fault_detected": true,
+          "recovered": false,
+          "runtime_us": 70.17,
+          "memory_bytes": 5261,
+          "error_code": 0,
+          "details": "Verifier correctly rejected signature under corrupted public key"
+        },
+        {
+          "fault": {
+            "experiment_id": "MLDSA65-L1-CAMPAIGN",
+            "algorithm": "ML-DSA",
+            "parameter_set": "ML-DSA-65",
+            "fault_class": "SEU",
+            "fault_type": "single_bit_flip",
+            "target": "public_key",
+            "target_index": 773,
+            "bit_index": 7,
+            "injection_stage": "pre_verify",
+            "injection_time": 0.0,
+            "seed": 720598017708869468,
+            "duration": 1,
+            "magnitude": 1
+          },
+          "baseline_result": "VALID",
+          "faulted_result": "REJECTED",
+          "outcome_class": "EXPECTED_REJECTION",
+          "fault_detected": true,
+          "recovered": false,
+          "runtime_us": 69.75,
+          "memory_bytes": 5261,
+          "error_code": 0,
+          "details": "Verifier correctly rejected signature under corrupted public key"
+        },
+        {
+          "fault": {
+            "experiment_id": "MLDSA65-L1-CAMPAIGN",
+            "algorithm": "ML-DSA",
+            "parameter_set": "ML-DSA-65",
+            "fault_class": "SEU",
+            "fault_type": "single_bit_flip",
+            "target": "public_key",
+            "target_index": 1418,
+            "bit_index": 3,
+            "injection_stage": "pre_verify",
+            "injection_time": 0.0,
+            "seed": 11551787009714715220,
+            "duration": 1,
+            "magnitude": 1
+          },
+          "baseline_result": "VALID",
+          "faulted_result": "REJECTED",
+          "outcome_class": "EXPECTED_REJECTION",
+          "fault_detected": true,
+          "recovered": false,
+          "runtime_us": 66.79,
+          "memory_bytes": 5261,
+          "error_code": 0,
+          "details": "Verifier correctly rejected signature under corrupted public key"
+        },
+        {
+          "fault": {
+            "experiment_id": "MLDSA65-L1-CAMPAIGN",
+            "algorithm": "ML-DSA",
+            "parameter_set": "ML-DSA-65",
+            "fault_class": "SEU",
+            "fault_type": "single_bit_flip",
+            "target": "public_key",
+            "target_index": 1495,
+            "bit_index": 2,
+            "injection_stage": "pre_verify",
+            "injection_time": 0.0,
+            "seed": 13126364468576063989,
+            "duration": 1,
+            "magnitude": 1
+          },
+          "baseline_result": "VALID",
+          "faulted_result": "REJECTED",
+          "outcome_class": "EXPECTED_REJECTION",
+          "fault_detected": true,
+          "recovered": false,
+          "runtime_us": 67.5,
+          "memory_bytes": 5261,
+          "error_code": 0,
+          "details": "Verifier correctly rejected signature under corrupted public key"
+        }
+      ]
+    },
+    "Truncated_Signature": {
+      "target": "signature",
+      "fault_type": "truncation",
+      "iterations": 1000,
+      "counts": {
+        "CORRECT": 0,
+        "EXPECTED_REJECTION": 1000,
+        "DETECTED_FAILURE": 0,
+        "RECOVERED": 0,
+        "INCORRECT_OUTPUT": 0,
+        "SILENT_DATA_CORRUPTION": 0,
+        "CRASH": 0,
+        "TIMEOUT": 0
+      },
+      "rates_pct": {
+        "expected_rejection": {
+          "rate": 100.0,
+          "ci_95": [
+            99.62,
+            100.0
+          ]
+        },
+        "silent_data_corruption": {
+          "rate": 0.0,
+          "ci_95": [
+            0.0,
+            0.38
+          ]
+        }
+      },
+      "sample_records": [
+        {
+          "fault": {
+            "experiment_id": "MLDSA65-L1-CAMPAIGN",
+            "algorithm": "ML-DSA",
+            "parameter_set": "ML-DSA-65",
+            "fault_class": "BURST",
+            "fault_type": "burst_byte_corruption",
+            "target": "signature",
+            "target_index": 1403,
+            "bit_index": 0,
+            "injection_stage": "pre_verify",
+            "injection_time": 0.0,
+            "seed": 7147961223854310601,
+            "duration": 1,
+            "magnitude": 4
+          },
+          "baseline_result": "VALID",
+          "faulted_result": "REJECTED",
+          "outcome_class": "EXPECTED_REJECTION",
+          "fault_detected": true,
+          "recovered": false,
+          "runtime_us": 35.21,
+          "memory_bytes": 5261,
+          "error_code": 0,
+          "details": "Verifier correctly rejected corrupted signature"
+        },
+        {
+          "fault": {
+            "experiment_id": "MLDSA65-L1-CAMPAIGN",
+            "algorithm": "ML-DSA",
+            "parameter_set": "ML-DSA-65",
+            "fault_class": "BURST",
+            "fault_type": "burst_byte_corruption",
+            "target": "signature",
+            "target_index": 3242,
+            "bit_index": 0,
+            "injection_stage": "pre_verify",
+            "injection_time": 0.0,
+            "seed": 10565136641141796870,
+            "duration": 1,
+            "magnitude": 4
+          },
+          "baseline_result": "VALID",
+          "faulted_result": "REJECTED",
+          "outcome_class": "EXPECTED_REJECTION",
+          "fault_detected": true,
+          "recovered": false,
+          "runtime_us": 4.92,
+          "memory_bytes": 5261,
+          "error_code": 0,
+          "details": "Verifier correctly rejected corrupted signature"
+        },
+        {
+          "fault": {
+            "experiment_id": "MLDSA65-L1-CAMPAIGN",
+            "algorithm": "ML-DSA",
+            "parameter_set": "ML-DSA-65",
+            "fault_class": "BURST",
+            "fault_type": "burst_byte_corruption",
+            "target": "signature",
+            "target_index": 1546,
+            "bit_index": 0,
+            "injection_stage": "pre_verify",
+            "injection_time": 0.0,
+            "seed": 720598017708869468,
+            "duration": 1,
+            "magnitude": 4
+          },
+          "baseline_result": "VALID",
+          "faulted_result": "REJECTED",
+          "outcome_class": "EXPECTED_REJECTION",
+          "fault_detected": true,
+          "recovered": false,
+          "runtime_us": 4.04,
+          "memory_bytes": 5261,
+          "error_code": 0,
+          "details": "Verifier correctly rejected corrupted signature"
+        },
+        {
+          "fault": {
+            "experiment_id": "MLDSA65-L1-CAMPAIGN",
+            "algorithm": "ML-DSA",
+            "parameter_set": "ML-DSA-65",
+            "fault_class": "BURST",
+            "fault_type": "burst_byte_corruption",
+            "target": "signature",
+            "target_index": 2837,
+            "bit_index": 0,
+            "injection_stage": "pre_verify",
+            "injection_time": 0.0,
+            "seed": 11551787009714715220,
+            "duration": 1,
+            "magnitude": 4
+          },
+          "baseline_result": "VALID",
+          "faulted_result": "REJECTED",
+          "outcome_class": "EXPECTED_REJECTION",
+          "fault_detected": true,
+          "recovered": false,
+          "runtime_us": 3.83,
+          "memory_bytes": 5261,
+          "error_code": 0,
+          "details": "Verifier correctly rejected corrupted signature"
+        },
+        {
+          "fault": {
+            "experiment_id": "MLDSA65-L1-CAMPAIGN",
+            "algorithm": "ML-DSA",
+            "parameter_set": "ML-DSA-65",
+            "fault_class": "BURST",
+            "fault_type": "burst_byte_corruption",
+            "target": "signature",
+            "target_index": 2990,
+            "bit_index": 0,
+            "injection_stage": "pre_verify",
+            "injection_time": 0.0,
+            "seed": 13126364468576063989,
+            "duration": 1,
+            "magnitude": 4
+          },
+          "baseline_result": "VALID",
+          "faulted_result": "REJECTED",
+          "outcome_class": "EXPECTED_REJECTION",
+          "fault_detected": true,
+          "recovered": false,
+          "runtime_us": 3.96,
+          "memory_bytes": 5261,
+          "error_code": 0,
+          "details": "Verifier correctly rejected corrupted signature"
+        }
+      ]
+    }
+  }
+}
