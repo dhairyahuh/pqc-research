@@ -1,0 +1,111 @@
+{
+  "phase": 5,
+  "title": "Cross-Implementation Fault-Surface Validation",
+  "date": "2026-10-01",
+  "implementations": {
+    "A": {
+      "name": "mlkem-native / mldsa-native C reference",
+      "version": "vendored snapshot",
+      "backend": "C reference scalar",
+      "compiler": "Apple clang 21.0.0",
+      "target": "arm64-apple-darwin27",
+      "optimization": "-O3",
+      "instrumented": true
+    },
+    "B": {
+      "name": "liboqs 0.16.0",
+      "backend": "pq-code-package AArch64 assembly",
+      "compiler": "Homebrew build (likely Apple clang)",
+      "target": "arm64-apple-darwin",
+      "instrumented": false,
+      "shared_source": true,
+      "shared_source_note": "liboqs wraps mlkem-native and mldsa-native with AArch64 backends"
+    }
+  },
+  "independence_assessment": "NOT_INDEPENDENT — same algorithmic source (pq-code-package)",
+  "mlkem_results": {
+    "baseline_equivalence": {
+      "test_count": 4,
+      "passed": 4,
+      "description": "Deterministic keygen/encaps/decaps produce byte-identical outputs",
+      "result": "ALL_MATCH"
+    },
+    "instrumentation_transparency": {
+      "test_count": 3,
+      "passed": 3,
+      "description": "Fault hooks (dormant) do not alter cryptographic outputs",
+      "result": "TRANSPARENT"
+    },
+    "cross_backend_key_agreement": {
+      "trials": 500,
+      "cref_self_agreement": 500,
+      "liboqs_self_agreement": 500,
+      "cross_ref_decaps_oqs_ct": 500,
+      "cross_oqs_decaps_ref_ct": 500,
+      "errors": 0,
+      "result": "100% agreement all directions"
+    },
+    "fault_injection_reproduction": {
+      "experiments": [
+        {"name": "NTT-L1-B0-delta1", "trials": 200, "correct_pct": 0.0, "rej_pct": 100.0},
+        {"name": "NTT-L1-B0-delta13", "trials": 200, "correct_pct": 0.0, "rej_pct": 100.0},
+        {"name": "NTT-L4-B0-delta1", "trials": 200, "correct_pct": 0.0, "rej_pct": 100.0},
+        {"name": "NTT-L7-B0-delta1", "trials": 200, "correct_pct": 0.0, "rej_pct": 100.0},
+        {"name": "NTT-L3-B0-twiddle-bit4", "trials": 200, "correct_pct": 0.0, "rej_pct": 100.0},
+        {"name": "NTT-L5-B0-interm-zero", "trials": 200, "correct_pct": 0.0, "rej_pct": 100.0},
+        {"name": "NTT-L1-B0-delta12-boundary", "trials": 200, "correct_pct": 0.0, "rej_pct": 100.0},
+        {"name": "NTT-L1-B0-delta832-max", "trials": 200, "correct_pct": 0.0, "rej_pct": 100.0}
+      ],
+      "note": "All NTT faults produce 100% implicit rejection across all tested magnitudes and layers"
+    },
+    "fo_predicate_reproduction": {
+      "trials": 200,
+      "valid_ct_forced_fail_rejection_pct": 100.0,
+      "valid_ct_no_fault_correct_pct": 100.0,
+      "corrupted_ct_forced_pass_garbled_pct": 59.5,
+      "corrupted_ct_no_fault_rejection_pct": 100.0,
+      "note": "FO predicate override B2 produces garbled key in 59.5% of trials; remaining 40.5% may produce correct decryption despite 1-byte CT corruption"
+    }
+  },
+  "mldsa_results": {
+    "cross_backend_interop": {
+      "trials": 200,
+      "cref_self_verify": 200,
+      "cref_sign_oqs_verify": 200,
+      "oqs_self_verify": 200,
+      "oqs_sign_cref_verify": 200,
+      "errors": 0,
+      "result": "100% bidirectional interoperability"
+    },
+    "norm_check_faults": {
+      "trials": 100,
+      "norm_z_force_pass_valid_sig_pct": 90.0,
+      "norm_z_force_fail_exhaustion_pct": 0.0,
+      "note": "Norm-z bypass produces valid signatures 90% of the time; 10% fail due to other checks. Force-fail does not exhaust because the fault is transient (single attempt)."
+    },
+    "verification_gate_audit": {
+      "trials": 200,
+      "valid_sig_normal_accept": 200,
+      "valid_sig_forced_reject": 200,
+      "invalid_sig_normal_reject": 200,
+      "invalid_sig_forced_accept": 200,
+      "phase4_correction": "Boolean override is NOT cryptographic forgery"
+    }
+  },
+  "compiler_sensitivity": {
+    "configurations_tested": ["O0", "O3"],
+    "compiler": "Apple clang 21.0.0",
+    "target": "arm64-apple-darwin27",
+    "pk_checksum_O0": "0x85a689b8b8fd0ec4",
+    "pk_checksum_O3": "0x85a689b8b8fd0ec4",
+    "sk_checksum_O0": "0xe24048933b2c6e2c",
+    "sk_checksum_O3": "0xe24048933b2c6e2c",
+    "ct_checksum_O0": "0x22149e7f1c6b41b9",
+    "ct_checksum_O3": "0x22149e7f1c6b41b9",
+    "ss_checksum_O0": "0x2c24c6945c7d79af",
+    "ss_checksum_O3": "0x2c24c6945c7d79af",
+    "faulted_ss_O0": "0xc3bd6a3c536e921b",
+    "faulted_ss_O3": "0xc3bd6a3c536e921b",
+    "result": "IDENTICAL — optimization level does not change cryptographic outputs or fault outcomes"
+  }
+}

@@ -96,6 +96,29 @@ $(OBJ_DIR)/mldsa87_inst.o: algorithms/source_ref/mldsa/mldsa_native.c algorithms
 $(BIN_DIR)/mldsa_campaign_runner: experiments/mldsa/mldsa_campaign_runner.c $(OBJ_DIR)/mldsa44_inst.o $(OBJ_DIR)/mldsa65_inst.o $(OBJ_DIR)/mldsa87_inst.o $(OBJ_DIR)/mldsa_fault_hooks.o | $(BIN_DIR)
 	$(CC) $(CFLAGS) -I . -I algorithms/source_ref/mldsa $^ -o $@ $(LDFLAGS)
 
+# Phase 5 Cross-Implementation ML-KEM Experiment
+$(BIN_DIR)/phase5_mlkem: experiments/phase5/phase5_mlkem_cross_impl.c $(OBJ_DIR)/mlkem768.o $(OBJ_DIR)/mlkem768_inst.o $(OBJ_DIR)/mlkem_fault_hooks.o | $(BIN_DIR)
+	$(CC) $(CFLAGS) -I . -I algorithms/source_ref/mlkem $^ -o $@ $(LDFLAGS)
+
+# Phase 5 Cross-Implementation ML-DSA Experiment
+$(BIN_DIR)/phase5_mldsa: experiments/phase5/phase5_mldsa_cross_impl.c $(OBJ_DIR)/mldsa65.o $(OBJ_DIR)/mldsa65_inst.o $(OBJ_DIR)/mldsa_fault_hooks.o | $(BIN_DIR)
+	$(CC) $(CFLAGS) -I . -I algorithms/source_ref/mldsa $^ -o $@ $(LDFLAGS)
+
+# Phase 5 Compiler Sensitivity Tests (multiple optimization levels)
+$(OBJ_DIR)/mlkem768_inst_O0.o: algorithms/source_ref/mlkem/mlkem_native.c | $(OBJ_DIR)
+	$(CC) -O0 -std=c99 -I algorithms/source_ref/mlkem -DMLK_CONFIG_NAMESPACE_PREFIX=mlkem768 -DMLK_CONFIG_PARAMETER_SET=768 -DMLKEM_RESEARCH_FAULT_HOOKS -c $< -o $@
+
+$(OBJ_DIR)/mlkem_fault_hooks_O0.o: algorithms/source_ref/mlkem_fault_hooks.c | $(OBJ_DIR)
+	$(CC) -O0 -std=c99 -I algorithms/source_ref/mlkem -DMLKEM_RESEARCH_FAULT_HOOKS -c $< -o $@
+
+$(BIN_DIR)/phase5_compiler_O0: experiments/phase5/compiler_sensitivity_test.c $(OBJ_DIR)/mlkem768_inst_O0.o $(OBJ_DIR)/mlkem_fault_hooks_O0.o | $(BIN_DIR)
+	$(CC) -O0 -Wall -std=c11 -I . -I algorithms/source_ref/mlkem $^ -o $@
+
+$(BIN_DIR)/phase5_compiler_O3: experiments/phase5/compiler_sensitivity_test.c $(OBJ_DIR)/mlkem768_inst.o $(OBJ_DIR)/mlkem_fault_hooks.o | $(BIN_DIR)
+	$(CC) -O3 -Wall -std=c11 -I . -I algorithms/source_ref/mlkem $^ -o $@
+
+phase5: $(BIN_DIR)/phase5_mlkem $(BIN_DIR)/phase5_mldsa $(BIN_DIR)/phase5_compiler_O0 $(BIN_DIR)/phase5_compiler_O3
+
 clean:
 	rm -rf $(BIN_DIR)
 
@@ -111,4 +134,14 @@ test: all
 	@echo "\n=== Running Phase 4B Internal Fault Experiment ==="
 	./$(BIN_DIR)/mlkem768_internal_fault_experiment
 
-.PHONY: all clean test
+test-phase5: phase5
+	@echo "\n=== Phase 5: ML-KEM Cross-Implementation ==="
+	./$(BIN_DIR)/phase5_mlkem
+	@echo "\n=== Phase 5: ML-DSA Cross-Implementation ==="
+	./$(BIN_DIR)/phase5_mldsa
+	@echo "\n=== Phase 5: Compiler Sensitivity -O0 ==="
+	./$(BIN_DIR)/phase5_compiler_O0 O0
+	@echo "\n=== Phase 5: Compiler Sensitivity -O3 ==="
+	./$(BIN_DIR)/phase5_compiler_O3 O3
+
+.PHONY: all clean test phase5 test-phase5

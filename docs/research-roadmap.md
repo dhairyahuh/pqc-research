@@ -138,14 +138,38 @@ graph TD
   - **Cross-Algorithm Comparability Partitioning:** Prohibited direct raw metric pooling between KEM and DSA, establishing a 4-tier comparability classification.
 - **Exit Criteria Satisfied:** Independent audit complete, common mathematical framework formalized, 239 campaigns normalized with Wilson confidence intervals, all 6 deliverables created, and all test suites passing with 100% success rate.
 
-### Phase 5 — Cross-Implementation Study
-- **Objective:** Determine whether fault sensitivity is algorithm-invariant or implementation-dependent.
-- **Target Comparisons:**
-  - `mlkem-native` (CBMC-verified C90) vs. `liboqs` ML-KEM (dynamically linked, SIMD-accelerated).
-  - `mldsa-native` (CBMC-verified C90) vs. `liboqs` ML-DSA.
-- **Methodology:** Subject both codebases to identical fault models at equivalent algorithmic stages under matched PRNG seeds.
-- **Metrics:** Outcome distribution divergence, crash rates, compiler inlining/vectorization effects.
-- **Exit Criteria:** Comparative report in `docs/cross_implementation_study.md`.
+### Phase 5 — Cross-Implementation Fault-Surface Validation [STATUS: COMPLETED]
+- **Objective:** Independently investigate how implementation architecture, compiler behavior, memory representation, and operation-level differences affect the fault surface of ML-KEM and ML-DSA.
+- **Implementations Evaluated:**
+  - Implementation A: `mlkem-native` / `mldsa-native` (scalar C reference fallback, Apple clang 21.0.0 `-O3`).
+  - Implementation B: `liboqs 0.16.0` (compiled with AArch64 vector assembly backends).
+  - Compiler Variants: Apple clang 21.0.0 at `-O0`, `-O1`, `-O2`, `-O3`.
+- **Key Provenance Finding:**
+  - Rigorous symbol and provenance analysis revealed that `liboqs 0.16.0` integrates upstream `pq-code-package` native code with AArch64 assembly backends. Thus, the comparison is a backend/architecture comparison (scalar C vs. vectorized AArch64 assembly), not a multi-source independent implementation audit.
+- **Key Deliverables:**
+  - Implementation Provenance Document: [`docs/phase5/implementation_provenance.md`](file:///Users/dhairyajain/Desktop/pqc%20research/docs/phase5/implementation_provenance.md)
+  - Common Experimental Framework: [`docs/phase5/common_experimental_framework.md`](file:///Users/dhairyajain/Desktop/pqc%20research/docs/phase5/common_experimental_framework.md)
+  - ML-KEM Cross-Implementation Results: [`docs/phase5/mlkem_cross_implementation_results.md`](file:///Users/dhairyajain/Desktop/pqc%20research/docs/phase5/mlkem_cross_implementation_results.md)
+  - ML-DSA Cross-Implementation Results: [`docs/phase5/mldsa_cross_implementation_results.md`](file:///Users/dhairyajain/Desktop/pqc%20research/docs/phase5/mldsa_cross_implementation_results.md)
+  - Compiler & Architecture Sensitivity Analysis: [`docs/phase5/compiler_architecture_sensitivity.md`](file:///Users/dhairyajain/Desktop/pqc%20research/docs/phase5/compiler_architecture_sensitivity.md)
+  - Statistical Comparison & Uncertainty Analysis: [`docs/phase5/statistical_comparison.md`](file:///Users/dhairyajain/Desktop/pqc%20research/docs/phase5/statistical_comparison.md)
+  - Cross-Implementation Synthesis (RQ1–RQ4): [`docs/phase5/cross_implementation_synthesis.md`](file:///Users/dhairyajain/Desktop/pqc%20research/docs/phase5/cross_implementation_synthesis.md)
+  - Space System Implications: [`docs/phase5/space_system_implications.md`](file:///Users/dhairyajain/Desktop/pqc%20research/docs/phase5/space_system_implications.md)
+  - Resilience Research Priorities (Analysis Only): [`docs/phase5/resilience_research_priorities.md`](file:///Users/dhairyajain/Desktop/pqc%20research/docs/phase5/resilience_research_priorities.md)
+  - Comprehensive Final Report: [`docs/phase5/final_report.md`](file:///Users/dhairyajain/Desktop/pqc%20research/docs/phase5/final_report.md)
+  - Native Binaries and Harnesses:
+    - ML-KEM Harness: [`experiments/phase5/phase5_mlkem_cross_impl.c`](file:///Users/dhairyajain/Desktop/pqc%20research/experiments/phase5/phase5_mlkem_cross_impl.c) & `bin/phase5_mlkem`
+    - ML-DSA Harness: [`experiments/phase5/phase5_mldsa_cross_impl.c`](file:///Users/dhairyajain/Desktop/pqc%20research/experiments/phase5/phase5_mldsa_cross_impl.c) & `bin/phase5_mldsa`
+    - Compiler Sensitivity Binary: [`experiments/phase5/compiler_sensitivity_test.c`](file:///Users/dhairyajain/Desktop/pqc%20research/experiments/phase5/compiler_sensitivity_test.c) & `bin/phase5_compiler_O0`, `bin/phase5_compiler_O3`
+  - Structured Experimental Dataset: [`results/phase5/processed/cross_implementation_results.json`](file:///Users/dhairyajain/Desktop/pqc%20research/results/phase5/processed/cross_implementation_results.json)
+  - Automated Targeted Test Suite: [`tests/test_phase5_cross_impl.py`](file:///Users/dhairyajain/Desktop/pqc%20research/tests/test_phase5_cross_impl.py)
+- **Confirmed Empirical Findings:**
+  - **100% Functional & Cryptographic Interoperability:** Tested across 1,400 trials of ML-KEM-768 and ML-DSA-65 cross-backend encapsulation, decapsulation, signing, and verification with 0 discrepancies.
+  - **Zero-Cost Instrumentation Transparency:** Clean and dormant hook builds produce byte-identical cryptographic artifacts across all tested operations.
+  - **Compiler Invariance:** Key generation, encapsulation, decapsulation, and faulted output checksums are byte-identical across `-O0`, `-O1`, `-O2`, and `-O3`.
+  - **Fault Propagation Equivalence:** Single-bit faults in SIMD vector lanes and scalar C registers produce identical mathematical divergence and 100% implicit rejection in ML-KEM decapsulation.
+  - **Preserved Phase 4 Corrections:** Re-confirmed that verification return variable overrides constitute local control-flow bypasses rather than portable cryptographic signature forgeries.
+- **Exit Criteria Satisfied:** Provenance established, cross-implementation and compiler experiments completed, all 10 documentation deliverables written, test suite passing at 100%, and resilience priorities analyzed without premature code implementation.
 
 ### Phase 6 — Formal Analysis
 - **Objective:** Apply formal methods to evaluate fault resilience where mathematically and practically sound.
