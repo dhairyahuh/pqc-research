@@ -1,0 +1,22 @@
+{
+  "phase": "7J",
+  "total_butterflies": 9856,
+  "forward_butterflies": 5376,
+  "inverse_butterflies": 4480,
+  "extended_campaign_trials": 1600,
+  "benchmarks": {
+    "baseline": {"mean_us": 63.90, "median_us": 63.00, "stddev_us": 1.96, "p95_us": 67.00},
+    "forward_only": {"mean_us": 72.80, "median_us": 72.00, "overhead_pct": 13.92},
+    "inverse_only": {"mean_us": 70.24, "median_us": 70.00, "overhead_pct": 9.92},
+    "combined": {"mean_us": 80.04, "median_us": 79.00, "overhead_pct": 25.26},
+    "dmr": {"mean_us": 159.18, "median_us": 159.00, "overhead_pct": 149.11}
+  },
+  "timing_assessment": {
+    "valid_mean_us": 78.56,
+    "invalid_mean_us": 78.68,
+    "ratio_mean": 1.0016,
+    "ratio_median": 1.0000,
+    "cohens_d": 0.0666,
+    "welch_t": 1.490
+  }
+}

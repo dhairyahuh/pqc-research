@@ -268,4 +268,19 @@ test-phase7i: phase7i
 	@echo "\n=== Phase 7I: Python Unit & Full Decapsulation Regression Tests ==="
 	python3 -m unittest discover -s tests/phase7i -v
 
-.PHONY: all clean test phase5 test-phase5 phase6 test-phase6 phase6b test-phase6b phase7 test-phase7 phase7b test-phase7b phase7c test-phase7c phase7d test-phase7d phase7e test-phase7e phase7f test-phase7f phase7g test-phase7g phase7h test-phase7h phase7i test-phase7i
+# Phase 7J Independent Validation of Combined Forward and Inverse NTT Fault Monitoring
+$(BIN_DIR)/phase7j_independent_validator: experiments/phase7j/phase7j_independent_validator.c $(OBJ_DIR)/mlkem768_inst.o $(OBJ_DIR)/mlkem_fault_hooks.o | $(BIN_DIR)
+	$(CC) $(CFLAGS) -I . -I algorithms/source_ref/mlkem $^ -o $@ $(LDFLAGS)
+
+phase7j: $(BIN_DIR)/phase7j_independent_validator
+
+test-phase7j: phase7j
+	@echo "\n=== Phase 7J: Independent Python Audit of Phase 7I Raw Data ==="
+	python3 experiments/phase7j/audit_phase7i_analysis.py
+	@echo "\n=== Phase 7J: Independent Validator & Extended Campaign ==="
+	./$(BIN_DIR)/phase7j_independent_validator
+	@echo "\n=== Phase 7J: Python Unit & Audit Regression Tests ==="
+	python3 -m unittest discover -s tests/phase7j -v
+
+.PHONY: all clean test phase5 test-phase5 phase6 test-phase6 phase6b test-phase6b phase7 test-phase7 phase7b test-phase7b phase7c test-phase7c phase7d test-phase7d phase7e test-phase7e phase7f test-phase7f phase7g test-phase7g phase7h test-phase7h phase7i test-phase7i phase7j test-phase7j
+
