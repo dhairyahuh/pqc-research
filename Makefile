@@ -184,4 +184,14 @@ test-phase7b: phase7b
 	@echo "\n=== Phase 7B: Independent Validation & Claim Reconciliation ==="
 	./$(BIN_DIR)/phase7b_validation
 
-.PHONY: all clean test phase5 test-phase5 phase6 test-phase6 phase6b test-phase6b phase7 test-phase7 phase7b test-phase7b
+# Phase 7C Oracle-Free Native Decapsulation Monitoring
+$(BIN_DIR)/phase7c_oracle_free: experiments/phase7c/phase7c_oracle_free_harness.c $(OBJ_DIR)/mlkem768_inst.o $(OBJ_DIR)/mlkem_fault_hooks.o | $(BIN_DIR)
+	$(CC) $(CFLAGS) -I . -I algorithms/source_ref/mlkem $^ -o $@ $(LDFLAGS)
+
+phase7c: $(BIN_DIR)/phase7c_oracle_free
+
+test-phase7c: phase7c
+	@echo "\n=== Phase 7C: Oracle-Free Native Decapsulation Monitoring ==="
+	./$(BIN_DIR)/phase7c_oracle_free
+
+.PHONY: all clean test phase5 test-phase5 phase6 test-phase6 phase6b test-phase6b phase7 test-phase7 phase7b test-phase7b phase7c test-phase7c

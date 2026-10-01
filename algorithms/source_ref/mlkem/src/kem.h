@@ -62,7 +62,12 @@
 #endif /* !MLK_CONFIG_NO_ENCAPS_API */
 #if !defined(MLK_CONFIG_NO_DECAPS_API)
 #define mlk_kem_dec MLK_NAMESPACE_K(dec) MLK_CONTEXT_PARAMETERS_3
+#define mlk_kem_dec_monitored MLK_NAMESPACE_K(dec_monitored) MLK_CONTEXT_PARAMETERS_4
 #define mlk_kem_check_sk MLK_NAMESPACE_K(check_sk) MLK_CONTEXT_PARAMETERS_1
+
+#define MLK_DECAPS_STATUS_SUCCESS 0x5A5A5A5AU
+#define MLK_DECAPS_STATUS_REJECT  0xA5A5A5A5U
+#define MLK_DECAPS_STATUS_FAULT   0xFFFFFFFFU
 #endif
 
 /**
@@ -348,6 +353,14 @@ __contract__(
   ensures(return_value != 0 ==>
           array_unchanged_or_zeroized_u8(ss, MLKEM_SSBYTES))
 );
+
+MLK_EXTERNAL_API
+MLK_MUST_CHECK_RETURN_VALUE
+int mlk_kem_dec_monitored(uint8_t ss[MLKEM_SSBYTES],
+                          const uint8_t ct[MLKEM_INDCCA_CIPHERTEXTBYTES],
+                          const uint8_t sk[MLKEM_INDCCA_SECRETKEYBYTES],
+                          uint32_t *internal_status,
+                          MLK_CONFIG_CONTEXT_PARAMETER_TYPE context);
 #endif /* !MLK_CONFIG_NO_DECAPS_API */
 
 #endif /* !MLK_KEM_H */

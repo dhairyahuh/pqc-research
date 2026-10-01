@@ -219,6 +219,7 @@
 #undef mlk_kem_check_pk
 #undef mlk_kem_check_sk
 #undef mlk_kem_dec
+#undef mlk_kem_dec_monitored
 #undef mlk_kem_enc
 #undef mlk_kem_enc_derand
 #undef mlk_kem_keypair

@@ -400,10 +400,11 @@ cleanup:
  *            - We include secret key check
  *            - We include stack buffer zeroization */
 MLK_EXTERNAL_API
-int mlk_kem_dec(uint8_t ss[MLKEM_SSBYTES],
-                const uint8_t ct[MLKEM_INDCCA_CIPHERTEXTBYTES],
-                const uint8_t sk[MLKEM_INDCCA_SECRETKEYBYTES],
-                MLK_CONFIG_CONTEXT_PARAMETER_TYPE context)
+int mlk_kem_dec_monitored(uint8_t ss[MLKEM_SSBYTES],
+                          const uint8_t ct[MLKEM_INDCCA_CIPHERTEXTBYTES],
+                          const uint8_t sk[MLKEM_INDCCA_SECRETKEYBYTES],
+                          uint32_t *internal_status,
+                          MLK_CONFIG_CONTEXT_PARAMETER_TYPE context)
 {
   int ret = 0;
   uint8_t fail;
@@ -416,6 +417,10 @@ int mlk_kem_dec(uint8_t ss[MLKEM_SSBYTES],
   if (buf == NULL || kr == NULL || tmp == NULL)
   {
     ret = MLK_ERR_OUT_OF_MEMORY;
+    if (internal_status != NULL)
+    {
+      *internal_status = MLK_DECAPS_STATUS_FAULT;
+    }
     goto cleanup;
   }
 
@@ -423,12 +428,20 @@ int mlk_kem_dec(uint8_t ss[MLKEM_SSBYTES],
   ret = mlk_kem_check_sk(sk, context);
   if (ret != 0)
   {
+    if (internal_status != NULL)
+    {
+      *internal_status = MLK_DECAPS_STATUS_FAULT;
+    }
     goto cleanup;
   }
 
   ret = mlk_indcpa_dec(buf, ct, sk, context);
   if (ret != 0)
   {
+    if (internal_status != NULL)
+    {
+      *internal_status = MLK_DECAPS_STATUS_FAULT;
+    }
     goto cleanup;
   }
 
@@ -443,6 +456,10 @@ int mlk_kem_dec(uint8_t ss[MLKEM_SSBYTES],
   ret = mlk_indcpa_enc(tmp, buf, pk, kr + MLKEM_SYMBYTES, context);
   if (ret != 0)
   {
+    if (internal_status != NULL)
+    {
+      *internal_status = MLK_DECAPS_STATUS_FAULT;
+    }
     goto cleanup;
   }
 
@@ -455,6 +472,30 @@ int mlk_kem_dec(uint8_t ss[MLKEM_SSBYTES],
     fail = (uint8_t)fail_int;
   }
 #endif
+
+  /* Dual-rail verification: independent reverse comparison to detect predicate flips */
+  uint8_t fail_chk = 0;
+  for (size_t i = 0; i < MLKEM_INDCCA_CIPHERTEXTBYTES; i++) {
+    fail_chk |= (ct[MLKEM_INDCCA_CIPHERTEXTBYTES - 1 - i] ^ tmp[MLKEM_INDCCA_CIPHERTEXTBYTES - 1 - i]);
+  }
+  fail_chk = mlk_ct_cmask_nonzero_u8(fail_chk);
+
+  if (internal_status != NULL)
+  {
+    /* If the primary comparison flag and the reverse check disagree,
+     * a control-flow / register corruption occurred on the FO predicate */
+    if (fail != fail_chk)
+    {
+      *internal_status = MLK_DECAPS_STATUS_FAULT;
+      fail = 0xFF; /* Force implicit rejection to ensure candidate key is never leaked */
+    }
+    else
+    {
+      uint32_t is_fail = ((uint32_t)fail | (0 - (uint32_t)fail)) >> 31;
+      *internal_status = (1 - is_fail) * MLK_DECAPS_STATUS_SUCCESS +
+                         is_fail * MLK_DECAPS_STATUS_REJECT;
+    }
+  }
 
   /* Compute rejection key */
   mlk_memcpy(tmp, sk + MLKEM_INDCCA_SECRETKEYBYTES - MLKEM_SYMBYTES,
@@ -474,6 +515,15 @@ cleanup:
   MLK_FREE(buf, uint8_t, 2 * MLKEM_SYMBYTES, context);
 
   return ret;
+}
+
+MLK_EXTERNAL_API
+int mlk_kem_dec(uint8_t ss[MLKEM_SSBYTES],
+                const uint8_t ct[MLKEM_INDCCA_CIPHERTEXTBYTES],
+                const uint8_t sk[MLKEM_INDCCA_SECRETKEYBYTES],
+                MLK_CONFIG_CONTEXT_PARAMETER_TYPE context)
+{
+  return mlk_kem_dec_monitored(ss, ct, sk, NULL, context);
 }
 #endif /* !MLK_CONFIG_NO_DECAPS_API */
 
