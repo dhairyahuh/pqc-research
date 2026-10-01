@@ -1,0 +1,73 @@
+{
+  "phase": "7B",
+  "auditor": "Independent Cryptographic Auditor",
+  "benchmark": {
+    "trials": 2000,
+    "config1_baseline_mean_us": 79.18,
+    "config1_baseline_median_us": 79.00,
+    "config1_baseline_std_us": 2.07,
+    "config4_dmr_mean_us": 158.89,
+    "config4_dmr_overhead_pct": 100.66,
+    "config5_layered_mean_us": 94.25,
+    "config5_layered_overhead_pct": 19.03
+  },
+  "coverage_reproduced": {
+    "trials_per_class": 150,
+    "intermediate_t": {
+      "config1_pct": 0.00,
+      "config2_pct": 0.00,
+      "config3_pct": 14.00,
+      "config4_pct": 96.67,
+      "config5_pct": 96.67
+    },
+    "twiddle_zeta": {
+      "config1_pct": 0.00,
+      "config2_pct": 0.00,
+      "config3_pct": 14.00,
+      "config4_pct": 100.00,
+      "config5_pct": 100.00
+    },
+    "output_add": {
+      "config1_pct": 0.00,
+      "config2_pct": 100.00,
+      "config3_pct": 100.00,
+      "config4_pct": 98.67,
+      "config5_pct": 100.00
+    },
+    "correlated_mult": {
+      "config1_pct": 0.00,
+      "config2_pct": 0.00,
+      "config3_pct": 0.00,
+      "config4_pct": 100.00,
+      "config5_pct": 100.00
+    },
+    "pre_invocation_input": {
+      "config1_pct": 0.00,
+      "config2_pct": 0.00,
+      "config3_pct": 0.00,
+      "config4_pct": 0.00,
+      "config5_pct": 100.00
+    },
+    "checker_perturb": {
+      "config1_pct": 0.00,
+      "config2_pct": 0.00,
+      "config3_pct": 0.00,
+      "config4_pct": 0.00,
+      "config5_pct": 100.00
+    },
+    "control_fo_gate": {
+      "config1_pct": 0.00,
+      "config2_pct": 0.00,
+      "config3_pct": 0.00,
+      "config4_pct": 0.00,
+      "config5_pct": 100.00
+    },
+    "persistent_stuck": {
+      "config1_pct": 0.00,
+      "config2_pct": 0.00,
+      "config3_pct": 0.00,
+      "config4_pct": 0.00,
+      "config5_pct": 100.00
+    }
+  }
+}

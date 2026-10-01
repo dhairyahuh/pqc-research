@@ -174,4 +174,14 @@ test-phase7: phase7
 	@echo "\n=== Phase 7: Targeted Layered Fault-Resilience Evaluation ==="
 	./$(BIN_DIR)/phase7_layered
 
-.PHONY: all clean test phase5 test-phase5 phase6 test-phase6 phase6b test-phase6b phase7 test-phase7
+# Phase 7B Independent Validation and Claim Reconciliation
+$(BIN_DIR)/phase7b_validation: experiments/phase7b/independent_validation_harness.c $(OBJ_DIR)/mlkem768_inst.o $(OBJ_DIR)/mlkem_fault_hooks.o | $(BIN_DIR)
+	$(CC) $(CFLAGS) -I . -I algorithms/source_ref/mlkem $^ -o $@ $(LDFLAGS)
+
+phase7b: $(BIN_DIR)/phase7b_validation
+
+test-phase7b: phase7b
+	@echo "\n=== Phase 7B: Independent Validation & Claim Reconciliation ==="
+	./$(BIN_DIR)/phase7b_validation
+
+.PHONY: all clean test phase5 test-phase5 phase6 test-phase6 phase6b test-phase6b phase7 test-phase7 phase7b test-phase7b
