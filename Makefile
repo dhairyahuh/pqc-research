@@ -216,4 +216,18 @@ test-phase7e: phase7e
 	@echo "\n=== Phase 7E: Python Unit & Mathematical Reference Tests ==="
 	python3 -m unittest discover -s tests/phase7e -v
 
-.PHONY: all clean test phase5 test-phase5 phase6 test-phase6 phase6b test-phase6b phase7 test-phase7 phase7b test-phase7b phase7c test-phase7c phase7d test-phase7d phase7e test-phase7e
+# Phase 7F Independent Validation and Publication-Readiness Audit
+$(BIN_DIR)/bench_active_ntt: experiments/phase7f/bench_active_ntt.c | $(BIN_DIR)
+	$(CC) $(CFLAGS) $^ -o $@ $(LDFLAGS)
+
+phase7f: $(BIN_DIR)/bench_active_ntt
+
+test-phase7f: phase7f
+	@echo "\n=== Phase 7F: Independent Audit Script & Metric Verification ==="
+	python3 experiments/phase7f/reproduce_audit.py
+	@echo "\n=== Phase 7F: Active NTT Microbenchmark Execution ==="
+	./$(BIN_DIR)/bench_active_ntt
+	@echo "\n=== Phase 7F: Python Unit & Regression Audit Tests ==="
+	python3 -m unittest discover -s tests/phase7f -v
+
+.PHONY: all clean test phase5 test-phase5 phase6 test-phase6 phase6b test-phase6b phase7 test-phase7 phase7b test-phase7b phase7c test-phase7c phase7d test-phase7d phase7e test-phase7e phase7f test-phase7f

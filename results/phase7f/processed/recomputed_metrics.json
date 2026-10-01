@@ -1,0 +1,120 @@
+{
+  "phase": "7F",
+  "title": "Independent Audit and Publication-Readiness Reconciliation",
+  "trial_reproduction": {
+    "total_trials": 1050,
+    "layers": {
+      "layer_1": {
+        "n": 150,
+        "rec_a_rate": 0.0,
+        "rec_b_rate": 1.0,
+        "rec_c_rate": 0.0,
+        "rec_d_rate": 1.0,
+        "rec_e_rate": 1.0,
+        "ci_95_low": 97.5,
+        "ci_95_high": 100.0,
+        "correct_key_rate": 1.0
+      },
+      "layer_2": {
+        "n": 150,
+        "rec_a_rate": 0.0,
+        "rec_b_rate": 0.0,
+        "rec_c_rate": 0.0,
+        "rec_d_rate": 0.0,
+        "rec_e_rate": 1.0,
+        "ci_95_low": 97.5,
+        "ci_95_high": 100.0,
+        "correct_key_rate": 1.0
+      },
+      "layer_3": {
+        "n": 150,
+        "rec_a_rate": 0.0,
+        "rec_b_rate": 0.0,
+        "rec_c_rate": 0.0,
+        "rec_d_rate": 0.0,
+        "rec_e_rate": 1.0,
+        "ci_95_low": 97.5,
+        "ci_95_high": 100.0,
+        "correct_key_rate": 1.0
+      },
+      "layer_4": {
+        "n": 150,
+        "rec_a_rate": 0.0,
+        "rec_b_rate": 0.0,
+        "rec_c_rate": 1.0,
+        "rec_d_rate": 1.0,
+        "rec_e_rate": 1.0,
+        "ci_95_low": 97.5,
+        "ci_95_high": 100.0,
+        "correct_key_rate": 1.0
+      },
+      "layer_5": {
+        "n": 150,
+        "rec_a_rate": 0.0,
+        "rec_b_rate": 0.0,
+        "rec_c_rate": 0.0,
+        "rec_d_rate": 0.0,
+        "rec_e_rate": 1.0,
+        "ci_95_low": 97.5,
+        "ci_95_high": 100.0,
+        "correct_key_rate": 1.0
+      },
+      "layer_6": {
+        "n": 150,
+        "rec_a_rate": 0.0,
+        "rec_b_rate": 0.0,
+        "rec_c_rate": 0.0,
+        "rec_d_rate": 0.0,
+        "rec_e_rate": 1.0,
+        "ci_95_low": 97.5,
+        "ci_95_high": 100.0,
+        "correct_key_rate": 1.0
+      },
+      "layer_7": {
+        "n": 150,
+        "rec_a_rate": 1.0,
+        "rec_b_rate": 1.0,
+        "rec_c_rate": 1.0,
+        "rec_d_rate": 1.0,
+        "rec_e_rate": 1.0,
+        "ci_95_low": 97.5,
+        "ci_95_high": 100.0,
+        "correct_key_rate": 1.0
+      }
+    },
+    "overall": {
+      "rec_a_rate": 0.14285714285714285,
+      "rec_b_rate": 0.2857142857142857,
+      "rec_c_rate": 0.2857142857142857,
+      "rec_d_rate": 0.42857142857142855,
+      "rec_e_rate": 1.0,
+      "correct_key_rate_e": 1.0,
+      "undetected_corrupt_rate_e": 0.0
+    }
+  },
+  "t_reuse_mathematical_audit": {
+    "faulty_delta": 42,
+    "reused_t_diff_eval": 0,
+    "reused_t_sum_eval": 0,
+    "reused_t_detected": false,
+    "recomputed_t_diff_eval": 84,
+    "recomputed_t_sum_eval": 0,
+    "recomputed_t_detected": true
+  },
+  "ntt_microbenchmark_ns": {
+    "unmonitored_poly_ntt_ns": 217.05,
+    "monitored_l7_reused_t_ns": 964.4,
+    "monitored_all_reused_t_ns": 4269.95,
+    "monitored_all_recomputed_t_ns": 3681.25,
+    "unmonitored_poly_ntt_us": 0.22,
+    "monitored_all_poly_ntt_us": 4.27,
+    "delta_per_poly_us": 4.05,
+    "implied_decaps_overhead_us": 12.15
+  },
+  "audit_findings": {
+    "finding_1_t_reuse_blindspot": "Reusing intermediate product t in the butterfly difference invariant evaluates to zero under multiplier and twiddle corruption. The zero-multiplication invariant only checks adder/subtractor integrity and output register state, not multiplier execution.",
+    "finding_2_harness_simulation_abstraction": "Phase 7E Section 2 fault campaign passed opt_time_poly = NULL, simulating stage detection via flg_e = MLK_STATUS_FAULT rather than invoking mlkem768_poly_ntt_stage_monitored.",
+    "finding_3_benchmark_bypassed_checks": "Benchmark Section 3 passed opt_time_poly = NULL, so NTT checks were bypassed. Measured 20.26% overhead is native decapsulation + CRC32, not 7-layer NTT butterfly checks. Actual 7-layer monitoring adds ~4.05 us per polynomial (~12-15 us per decapsulation).",
+    "finding_4_zero_undetected_failures_supported": "Fujisaki-Okamoto re-encryption in ML-KEM ensures 0.0% undetected corrupted keys across all evaluated faults."
+  }
+}
