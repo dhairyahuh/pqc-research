@@ -144,4 +144,14 @@ test-phase5: phase5
 	@echo "\n=== Phase 5: Compiler Sensitivity -O3 ==="
 	./$(BIN_DIR)/phase5_compiler_O3 O3
 
-.PHONY: all clean test phase5 test-phase5
+# Phase 6 Targeted Resilience Prototyping
+$(BIN_DIR)/phase6_resilience: experiments/phase6/phase6_resilience_harness.c $(OBJ_DIR)/mlkem768.o $(OBJ_DIR)/mlkem768_inst.o $(OBJ_DIR)/mlkem_fault_hooks.o $(OBJ_DIR)/mldsa65.o $(OBJ_DIR)/mldsa65_inst.o $(OBJ_DIR)/mldsa_fault_hooks.o | $(BIN_DIR)
+	$(CC) $(CFLAGS) -I . -I algorithms/source_ref/mlkem -I algorithms/source_ref/mldsa $^ -o $@ $(LDFLAGS)
+
+phase6: $(BIN_DIR)/phase6_resilience
+
+test-phase6: phase6
+	@echo "\n=== Phase 6: Targeted Software Resilience Evaluation ==="
+	./$(BIN_DIR)/phase6_resilience
+
+.PHONY: all clean test phase5 test-phase5 phase6 test-phase6

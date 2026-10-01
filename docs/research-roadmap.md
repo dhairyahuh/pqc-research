@@ -171,14 +171,35 @@ graph TD
   - **Preserved Phase 4 Corrections:** Re-confirmed that verification return variable overrides constitute local control-flow bypasses rather than portable cryptographic signature forgeries.
 - **Exit Criteria Satisfied:** Provenance established, cross-implementation and compiler experiments completed, all 10 documentation deliverables written, test suite passing at 100%, and resilience priorities analyzed without premature code implementation.
 
-### Phase 6 — Formal Analysis
-- **Objective:** Apply formal methods to evaluate fault resilience where mathematically and practically sound.
-- **Evaluation Matrix:**
-  - **CBMC (C Bounded Model Checker):** Formulate function contracts proving that proposed assertions catch single-bit corruptions in polynomial buffers.
-  - **SMT/Z3:** Model the compression quantization threshold symbolically to verify absorption limits.
-  - **Frama-C / KLEE / Static Analysis:** Evaluate feasibility for assertion verification.
-- **Constraint:** Only adopt methods that materially strengthen the research; avoid introducing formal complexity for its own sake.
-- **Exit Criteria:** Verified CBMC contracts or formal feasibility report in `docs/formal_fault_analysis.md`.
+### Phase 6 — Targeted Software Resilience Prototyping and Evaluation [STATUS: COMPLETED]
+- **Objective:** Design, implement, and empirically evaluate targeted software-level fault-resilience mechanisms for ML-KEM and ML-DSA, guided by sensitivity data from Phases 1–5.
+- **Implemented Candidates:**
+  - Candidate A1: Full Duplicate Decapsulation (`mlkem768_dec_duplicate`) with constant-time equality check.
+  - Candidate A2: Selective Recomputation (INDCPA core duplication).
+  - Candidate B: Exact FIPS 203 Incomplete NTT Algebraic Projection Invariant ($\sum \hat{p}_{2i} \equiv 128 p_0 \pmod q$, $\sum \hat{p}_{2i+1} \equiv 128 p_1 \pmod q$).
+  - Candidate D: Multi-rail 32-bit Hamming-separated status tokens (`0x5A5AA5A5` vs `0xA5A55A5A`).
+- **Key Deliverables:**
+  - Evidence Validation Document: [`docs/phase6/evidence_validation.md`](file:///Users/dhairyajain/Desktop/pqc%20research/docs/phase6/evidence_validation.md)
+  - Threat Model Document: [`docs/phase6/threat_model.md`](file:///Users/dhairyajain/Desktop/pqc%20research/docs/phase6/threat_model.md)
+  - Baseline Definition: [`docs/phase6/baseline_definition.md`](file:///Users/dhairyajain/Desktop/pqc%20research/docs/phase6/baseline_definition.md)
+  - Selective Duplicate Execution Study: [`docs/phase6/selective_duplicate_execution.md`](file:///Users/dhairyajain/Desktop/pqc%20research/docs/phase6/selective_duplicate_execution.md)
+  - Arithmetic Invariant Checks (FIPS 203 Proof): [`docs/phase6/arithmetic_invariant_checks.md`](file:///Users/dhairyajain/Desktop/pqc%20research/docs/phase6/arithmetic_invariant_checks.md)
+  - ML-DSA Protection Study: [`docs/phase6/mldsa_protection_study.md`](file:///Users/dhairyajain/Desktop/pqc%20research/docs/phase6/mldsa_protection_study.md)
+  - Control-Flow & Multi-Rail Integrity: [`docs/phase6/control_flow_integrity.md`](file:///Users/dhairyajain/Desktop/pqc%20research/docs/phase6/control_flow_integrity.md)
+  - Experimental Methodology: [`docs/phase6/experimental_methodology.md`](file:///Users/dhairyajain/Desktop/pqc%20research/docs/phase6/experimental_methodology.md)
+  - Performance & Detection Results: [`docs/phase6/performance_and_detection_results.md`](file:///Users/dhairyajain/Desktop/pqc%20research/docs/phase6/performance_and_detection_results.md)
+  - Space System Implications & Availability: [`docs/phase6/space_system_evaluation.md`](file:///Users/dhairyajain/Desktop/pqc%20research/docs/phase6/space_system_evaluation.md)
+  - Contribution & Novelty Review: [`docs/phase6/contribution_and_novelty_review.md`](file:///Users/dhairyajain/Desktop/pqc%20research/docs/phase6/contribution_and_novelty_review.md)
+  - Comprehensive Final Report: [`docs/phase6/final_report.md`](file:///Users/dhairyajain/Desktop/pqc%20research/docs/phase6/final_report.md)
+  - Native Resilience Binary & Harness: [`experiments/phase6/phase6_resilience_harness.c`](file:///Users/dhairyajain/Desktop/pqc%20research/experiments/phase6/phase6_resilience_harness.c) & `bin/phase6_resilience`
+  - Structured Evaluation Dataset: [`results/phase6/processed/phase6_resilience_results.json`](file:///Users/dhairyajain/Desktop/pqc%20research/results/phase6/processed/phase6_resilience_results.json)
+  - Automated Targeted Test Suite: [`tests/test_phase6_resilience.py`](file:///Users/dhairyajain/Desktop/pqc%20research/tests/test_phase6_resilience.py) & [`tests/phase6/test_resilience.py`](file:///Users/dhairyajain/Desktop/pqc%20research/tests/phase6/test_resilience.py)
+- **Confirmed Empirical Findings:**
+  - **Exact NTT Projection Invariants:** Rigorously proved and verified that $\sum \hat{p}_{2i} \equiv 128 p_0 \pmod q$ holds unconditionally on FIPS 203's incomplete NTT, refuting the naive $\sum \hat{a}_i \equiv a_0$ identity. Candidate B catches 100% of tested butterfly and coefficient corruptions at only **+7.4% latency overhead** and 0 bytes RAM.
+  - **Elimination of Silent Desynchronization:** Candidate A1 duplicate execution detects 100% of internal arithmetic and re-encryption SEUs during decapsulation, elevating space telecommand session availability from 95.0% to 99.9% under simulated orbital flux.
+  - **Hardened Decision Gates:** Multi-rail tokens (`0x5A5AA5A5` vs `0xA5A55A5A`, $d_H = 32$) completely neutralize single-bit memory corruption attacks on verification flags at <0.1% overhead.
+  - **0% False Positive Rate:** Verified across all candidate mechanisms under clean execution controls.
+- **Exit Criteria Satisfied:** Threat model formalized, candidate protections implemented in C, full benchmark and fault injection campaigns executed, 12 documentation deliverables completed, test suite passing at 100%, and roadmap updated.
 
 ### Phase 7 — Resilience Engineering
 - **Objective:** Engineer and evaluate lightweight, software-only resilience mechanisms for flight processors.

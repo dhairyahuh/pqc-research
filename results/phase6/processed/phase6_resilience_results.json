@@ -1,0 +1,24 @@
+{
+  "phase": 6,
+  "title": "Targeted Software Resilience Evaluation",
+  "baseline_decaps_us": 46.04,
+  "candidate_a1_full_duplicate": {
+    "latency_us": 93.22,
+    "overhead_pct": 102.5,
+    "detection_coverage_pct": 100.00,
+    "false_positive_pct": 0.0
+  },
+  "candidate_a2_selective_recompute": {
+    "latency_us": 61.49,
+    "overhead_pct": 33.6,
+    "false_positive_pct": 0.0
+  },
+  "candidate_b_ntt_invariant": {
+    "detection_coverage_pct": 100.00,
+    "false_positive_pct": 0.0
+  },
+  "candidate_d_multirail": {
+    "detection_coverage_pct": 100.00,
+    "false_positive_pct": 0.0
+  }
+}
