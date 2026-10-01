@@ -1,0 +1,511 @@
+{
+  "phase": "7K_audit",
+  "phase_7i": {
+    "file": "phase7i_e2e_trials.json",
+    "total_trials": 1400,
+    "expected_count": 1400,
+    "duplicate_ids": 0,
+    "missing_ids": 0,
+    "num_classes": 14,
+    "aggregate_outcomes": {
+      "RECOVERED": 700,
+      "SAFE_REJECT": 583,
+      "BENIGN_EQUIV": 117
+    },
+    "classes": {
+      "C01: Fwd Intermediate T (Transient)": {
+        "n": 100,
+        "recovered": 100,
+        "safe_rejected": 0,
+        "benign_equiv": 0,
+        "undetected_corrupt": 0,
+        "recovery_ci95": [
+          96.3,
+          100.0
+        ],
+        "undetected_ci95": [
+          0.0,
+          3.7
+        ]
+      },
+      "C02: Fwd Twiddle Factor Zeta (Transient)": {
+        "n": 100,
+        "recovered": 0,
+        "safe_rejected": 95,
+        "benign_equiv": 5,
+        "undetected_corrupt": 0,
+        "recovery_ci95": [
+          0.0,
+          3.7
+        ],
+        "undetected_ci95": [
+          0.0,
+          3.7
+        ]
+      },
+      "C03: Fwd Output Register (Transient)": {
+        "n": 100,
+        "recovered": 100,
+        "safe_rejected": 0,
+        "benign_equiv": 0,
+        "undetected_corrupt": 0,
+        "recovery_ci95": [
+          96.3,
+          100.0
+        ],
+        "undetected_ci95": [
+          0.0,
+          3.7
+        ]
+      },
+      "C04: Inv Intermediate Diff (Transient)": {
+        "n": 100,
+        "recovered": 100,
+        "safe_rejected": 0,
+        "benign_equiv": 0,
+        "undetected_corrupt": 0,
+        "recovery_ci95": [
+          96.3,
+          100.0
+        ],
+        "undetected_ci95": [
+          0.0,
+          3.7
+        ]
+      },
+      "C05: Inv Twiddle Factor Zeta (Transient)": {
+        "n": 100,
+        "recovered": 0,
+        "safe_rejected": 88,
+        "benign_equiv": 12,
+        "undetected_corrupt": 0,
+        "recovery_ci95": [
+          0.0,
+          3.7
+        ],
+        "undetected_ci95": [
+          0.0,
+          3.7
+        ]
+      },
+      "C06: Inv Adder Output U' (Transient)": {
+        "n": 100,
+        "recovered": 100,
+        "safe_rejected": 0,
+        "benign_equiv": 0,
+        "undetected_corrupt": 0,
+        "recovery_ci95": [
+          96.3,
+          100.0
+        ],
+        "undetected_ci95": [
+          0.0,
+          3.7
+        ]
+      },
+      "C07: Inv Multiplier Output V' (Transient)": {
+        "n": 100,
+        "recovered": 100,
+        "safe_rejected": 0,
+        "benign_equiv": 0,
+        "undetected_corrupt": 0,
+        "recovery_ci95": [
+          96.3,
+          100.0
+        ],
+        "undetected_ci95": [
+          0.0,
+          3.7
+        ]
+      },
+      "C08: Inv Symmetric Output Perturbation": {
+        "n": 100,
+        "recovered": 100,
+        "safe_rejected": 0,
+        "benign_equiv": 0,
+        "undetected_corrupt": 0,
+        "recovery_ci95": [
+          96.3,
+          100.0
+        ],
+        "undetected_ci95": [
+          0.0,
+          3.7
+        ]
+      },
+      "C09: Inv Anti-Symmetric Output Perturbation": {
+        "n": 100,
+        "recovered": 100,
+        "safe_rejected": 0,
+        "benign_equiv": 0,
+        "undetected_corrupt": 0,
+        "recovery_ci95": [
+          96.3,
+          100.0
+        ],
+        "undetected_ci95": [
+          0.0,
+          3.7
+        ]
+      },
+      "C10: Pre-NTT Ciphertext Input Corruption": {
+        "n": 100,
+        "recovered": 0,
+        "safe_rejected": 100,
+        "benign_equiv": 0,
+        "undetected_corrupt": 0,
+        "recovery_ci95": [
+          0.0,
+          3.7
+        ],
+        "undetected_ci95": [
+          0.0,
+          3.7
+        ]
+      },
+      "C11: Persistent Stuck-at Fault (Forward NTT)": {
+        "n": 100,
+        "recovered": 0,
+        "safe_rejected": 100,
+        "benign_equiv": 0,
+        "undetected_corrupt": 0,
+        "recovery_ci95": [
+          0.0,
+          3.7
+        ],
+        "undetected_ci95": [
+          0.0,
+          3.7
+        ]
+      },
+      "C12: Persistent Stuck-at Fault (Inverse NTT)": {
+        "n": 100,
+        "recovered": 0,
+        "safe_rejected": 100,
+        "benign_equiv": 0,
+        "undetected_corrupt": 0,
+        "recovery_ci95": [
+          0.0,
+          3.7
+        ],
+        "undetected_ci95": [
+          0.0,
+          3.7
+        ]
+      },
+      "C13: FO Control Decision Gate Perturbation": {
+        "n": 100,
+        "recovered": 0,
+        "safe_rejected": 100,
+        "benign_equiv": 0,
+        "undetected_corrupt": 0,
+        "recovery_ci95": [
+          0.0,
+          3.7
+        ],
+        "undetected_ci95": [
+          0.0,
+          3.7
+        ]
+      },
+      "C14: Uncorrupted Negative Control": {
+        "n": 100,
+        "recovered": 0,
+        "safe_rejected": 0,
+        "benign_equiv": 100,
+        "undetected_corrupt": 0,
+        "recovery_ci95": [
+          0.0,
+          3.7
+        ],
+        "undetected_ci95": [
+          0.0,
+          3.7
+        ]
+      }
+    }
+  },
+  "phase_7j": {
+    "file": "phase7j_extended_trials.json",
+    "total_trials": 1600,
+    "expected_count": 1600,
+    "duplicate_ids": 0,
+    "missing_ids": 0,
+    "num_classes": 16,
+    "aggregate_outcomes": {
+      "RECOVERED": 799,
+      "SAFE_REJECT": 689,
+      "BENIGN_EQUIV": 112
+    },
+    "classes": {
+      "J01: Multi-Layer Forward Transient (L1-7)": {
+        "n": 100,
+        "recovered": 100,
+        "safe_rejected": 0,
+        "benign_equiv": 0,
+        "undetected_corrupt": 0,
+        "recovery_ci95": [
+          96.3,
+          100.0
+        ],
+        "undetected_ci95": [
+          0.0,
+          3.7
+        ]
+      },
+      "J02: Multi-Layer Inverse Transient (L1-7)": {
+        "n": 100,
+        "recovered": 100,
+        "safe_rejected": 0,
+        "benign_equiv": 0,
+        "undetected_corrupt": 0,
+        "recovery_ci95": [
+          96.3,
+          100.0
+        ],
+        "undetected_ci95": [
+          0.0,
+          3.7
+        ]
+      },
+      "J03: Multi-Bit Forward Arithmetic Perturbation": {
+        "n": 100,
+        "recovered": 100,
+        "safe_rejected": 0,
+        "benign_equiv": 0,
+        "undetected_corrupt": 0,
+        "recovery_ci95": [
+          96.3,
+          100.0
+        ],
+        "undetected_ci95": [
+          0.0,
+          3.7
+        ]
+      },
+      "J04: Multi-Bit Inverse Arithmetic Perturbation": {
+        "n": 100,
+        "recovered": 100,
+        "safe_rejected": 0,
+        "benign_equiv": 0,
+        "undetected_corrupt": 0,
+        "recovery_ci95": [
+          96.3,
+          100.0
+        ],
+        "undetected_ci95": [
+          0.0,
+          3.7
+        ]
+      },
+      "J05: Saved-Operand Shadow Register Corruption": {
+        "n": 100,
+        "recovered": 0,
+        "safe_rejected": 100,
+        "benign_equiv": 0,
+        "undetected_corrupt": 0,
+        "recovery_ci95": [
+          0.0,
+          3.7
+        ],
+        "undetected_ci95": [
+          0.0,
+          3.7
+        ]
+      },
+      "J06: Checker Recomputation Input Perturbation": {
+        "n": 100,
+        "recovered": 100,
+        "safe_rejected": 0,
+        "benign_equiv": 0,
+        "undetected_corrupt": 0,
+        "recovery_ci95": [
+          96.3,
+          100.0
+        ],
+        "undetected_ci95": [
+          0.0,
+          3.7
+        ]
+      },
+      "J07: Twiddle Table Direct Bit Perturbation": {
+        "n": 100,
+        "recovered": 0,
+        "safe_rejected": 89,
+        "benign_equiv": 11,
+        "undetected_corrupt": 0,
+        "recovery_ci95": [
+          0.0,
+          3.7
+        ],
+        "undetected_ci95": [
+          0.0,
+          3.7
+        ]
+      },
+      "J08: Modular Reduction Arithmetic Fault": {
+        "n": 100,
+        "recovered": 99,
+        "safe_rejected": 0,
+        "benign_equiv": 1,
+        "undetected_corrupt": 0,
+        "recovery_ci95": [
+          94.55,
+          99.82
+        ],
+        "undetected_ci95": [
+          0.0,
+          3.7
+        ]
+      },
+      "J09: Rollback-State / Retry-Path Fault": {
+        "n": 100,
+        "recovered": 0,
+        "safe_rejected": 100,
+        "benign_equiv": 0,
+        "undetected_corrupt": 0,
+        "recovery_ci95": [
+          0.0,
+          3.7
+        ],
+        "undetected_ci95": [
+          0.0,
+          3.7
+        ]
+      },
+      "J10: Correlated Arithmetic + Checker Fault": {
+        "n": 100,
+        "recovered": 100,
+        "safe_rejected": 0,
+        "benign_equiv": 0,
+        "undetected_corrupt": 0,
+        "recovery_ci95": [
+          96.3,
+          100.0
+        ],
+        "undetected_ci95": [
+          0.0,
+          3.7
+        ]
+      },
+      "J11: Combined Concurrent Forward + Inverse Fault": {
+        "n": 100,
+        "recovered": 100,
+        "safe_rejected": 0,
+        "benign_equiv": 0,
+        "undetected_corrupt": 0,
+        "recovery_ci95": [
+          96.3,
+          100.0
+        ],
+        "undetected_ci95": [
+          0.0,
+          3.7
+        ]
+      },
+      "J12: Persistent Stuck-at Fault (Early Layer 1 Fwd)": {
+        "n": 100,
+        "recovered": 0,
+        "safe_rejected": 100,
+        "benign_equiv": 0,
+        "undetected_corrupt": 0,
+        "recovery_ci95": [
+          0.0,
+          3.7
+        ],
+        "undetected_ci95": [
+          0.0,
+          3.7
+        ]
+      },
+      "J13: Persistent Stuck-at Fault (Late Layer 7 Inv)": {
+        "n": 100,
+        "recovered": 0,
+        "safe_rejected": 100,
+        "benign_equiv": 0,
+        "undetected_corrupt": 0,
+        "recovery_ci95": [
+          0.0,
+          3.7
+        ],
+        "undetected_ci95": [
+          0.0,
+          3.7
+        ]
+      },
+      "J14: Public API Decapsulation NULL Status": {
+        "n": 100,
+        "recovered": 0,
+        "safe_rejected": 100,
+        "benign_equiv": 0,
+        "undetected_corrupt": 0,
+        "recovery_ci95": [
+          0.0,
+          3.7
+        ],
+        "undetected_ci95": [
+          0.0,
+          3.7
+        ]
+      },
+      "J15: Corrupted Ciphertext Pre-NTT": {
+        "n": 100,
+        "recovered": 0,
+        "safe_rejected": 100,
+        "benign_equiv": 0,
+        "undetected_corrupt": 0,
+        "recovery_ci95": [
+          0.0,
+          3.7
+        ],
+        "undetected_ci95": [
+          0.0,
+          3.7
+        ]
+      },
+      "J16: Clean Execution Negative Control": {
+        "n": 100,
+        "recovered": 0,
+        "safe_rejected": 0,
+        "benign_equiv": 100,
+        "undetected_corrupt": 0,
+        "recovery_ci95": [
+          0.0,
+          3.7
+        ],
+        "undetected_ci95": [
+          0.0,
+          3.7
+        ]
+      }
+    }
+  },
+  "seed_collisions": 0,
+  "cumulative_3000_trials": {
+    "total_trials": 3000,
+    "recovered": 1499,
+    "recovered_pct": 49.97,
+    "recovered_ci95": [
+      48.18,
+      51.75
+    ],
+    "safe_rejected": 1272,
+    "safe_rejected_pct": 42.4,
+    "safe_rejected_ci95": [
+      40.64,
+      44.18
+    ],
+    "benign_equiv": 229,
+    "benign_equiv_pct": 7.63,
+    "benign_equiv_ci95": [
+      6.74,
+      8.64
+    ],
+    "undetected_corrupt": 0,
+    "undetected_corrupt_pct": 0.0,
+    "undetected_ci95": [
+      0.0,
+      0.1279
+    ]
+  }
+}

@@ -282,5 +282,17 @@ test-phase7j: phase7j
 	@echo "\n=== Phase 7J: Python Unit & Audit Regression Tests ==="
 	python3 -m unittest discover -s tests/phase7j -v
 
-.PHONY: all clean test phase5 test-phase5 phase6 test-phase6 phase6b test-phase6b phase7 test-phase7 phase7b test-phase7b phase7c test-phase7c phase7d test-phase7d phase7e test-phase7e phase7f test-phase7f phase7g test-phase7g phase7h test-phase7h phase7i test-phase7i phase7j test-phase7j
+# Phase 7K Clean-Room Reproducibility, Independent Evidence Audit, and Publication Readiness
+phase7k: phase7j
+	@echo "\n=== Phase 7K: Mathematical Verification ==="
+	python3 experiments/phase7k/symbolic_math_verification.py
+	@echo "\n=== Phase 7K: Statistical Audit of Cumulative 3,000 Trials ==="
+	python3 experiments/phase7k/statistical_audit.py
+
+test-phase7k: phase7k test-phase7j
+	@echo "\n=== Phase 7K: Publication Readiness & Reproducibility Tests ==="
+	python3 -m unittest discover -s tests/phase7k -v
+
+.PHONY: all clean test phase5 test-phase5 phase6 test-phase6 phase6b test-phase6b phase7 test-phase7 phase7b test-phase7b phase7c test-phase7c phase7d test-phase7d phase7e test-phase7e phase7f test-phase7f phase7g test-phase7g phase7h test-phase7h phase7i test-phase7i phase7j test-phase7j phase7k test-phase7k
+
 
