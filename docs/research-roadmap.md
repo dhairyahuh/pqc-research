@@ -201,6 +201,29 @@ graph TD
   - **0% False Positive Rate:** Verified across all candidate mechanisms under clean execution controls.
 - **Exit Criteria Satisfied:** Threat model formalized, candidate protections implemented in C, full benchmark and fault injection campaigns executed, 12 documentation deliverables completed, test suite passing at 100%, and roadmap updated.
 
+### Phase 6B — Independent Validation and Robustness Audit [STATUS: COMPLETED]
+- **Objective:** Conduct an adversarial scientific audit of Phase 6 resilience claims, evaluate edge cases, construct blind-spot error kernels, audit compiler optimization effects, and reassess novelty against established ABFT literature.
+- **Key Deliverables:**
+  - Independent Audit Master Report: [`docs/phase6b/independent_audit.md`](file:///Users/dhairyajain/Desktop/pqc%20research/docs/phase6b/independent_audit.md)
+  - NTT Invariant Coverage & Blind Spot Audit: [`docs/phase6b/ntt_invariant_coverage.md`](file:///Users/dhairyajain/Desktop/pqc%20research/docs/phase6b/ntt_invariant_coverage.md)
+  - Duplicate Execution Robustness & Common Mode: [`docs/phase6b/duplicate_execution_robustness.md`](file:///Users/dhairyajain/Desktop/pqc%20research/docs/phase6b/duplicate_execution_robustness.md)
+  - Multi-Rail Robustness & Compiler Collapse Audit: [`docs/phase6b/multi_rail_robustness.md`](file:///Users/dhairyajain/Desktop/pqc%20research/docs/phase6b/multi_rail_robustness.md)
+  - Statistical Reanalysis & Measurement Verification: [`docs/phase6b/statistical_reanalysis.md`](file:///Users/dhairyajain/Desktop/pqc%20research/docs/phase6b/statistical_reanalysis.md)
+  - Spacecraft Protocol Sensitivity & Markov Model: [`docs/phase6b/spacecraft_model_sensitivity.md`](file:///Users/dhairyajain/Desktop/pqc%20research/docs/phase6b/spacecraft_model_sensitivity.md)
+  - ML-DSA Implementation Status Audit: [`docs/phase6b/mldsa_claim_audit.md`](file:///Users/dhairyajain/Desktop/pqc%20research/docs/phase6b/mldsa_claim_audit.md)
+  - Novelty Reassessment & Literature Demarcation: [`docs/phase6b/novelty_reassessment.md`](file:///Users/dhairyajain/Desktop/pqc%20research/docs/phase6b/novelty_reassessment.md)
+  - Phase 6B Final Decision Gate Report: [`docs/phase6b/phase6b_final_report.md`](file:///Users/dhairyajain/Desktop/pqc%20research/docs/phase6b/phase6b_final_report.md)
+  - Native Audit Binary & Harness: [`experiments/phase6b/phase6b_adversarial_audit.c`](file:///Users/dhairyajain/Desktop/pqc%20research/experiments/phase6b/phase6b_adversarial_audit.c) & `bin/phase6b_audit`
+  - Structured Audit Dataset: [`results/phase6b/processed/phase6b_audit_results.json`](file:///Users/dhairyajain/Desktop/pqc%20research/results/phase6b/processed/phase6b_audit_results.json)
+  - Automated Audit Test Suite: [`tests/phase6b/test_phase6b_audit.py`](file:///Users/dhairyajain/Desktop/pqc%20research/tests/phase6b/test_phase6b_audit.py)
+- **Confirmed Audit Findings & Critical Scope Refinements:**
+  - **Universal Parity Cancellation (NTT Invariant Blind Spot):** Proved mathematically and empirically that because butterfly block length is always even ($\{128, 64, \dots, 2\}$), symmetric intermediate multiplier faults (`INTERMEDIATE_T`) and twiddle factor faults ($\zeta$) produce $+t$ and $-t$ on coefficients of identical parity, canceling out identically ($\Delta S \equiv 0 \pmod q$). Detection rate for intermediate multiplier faults is **0.0%**. Detection rate is 100.0% **strictly** for asymmetric single-register faults (`OUTPUT_ADD`) or post-NTT memory flips.
+  - **Compiler Optimization Collapse on Multi-Rail Gate:** Disassembly under Apple clang `-O3` proved that algebraic optimization completely eliminated the dual-rail status representation and cross-checks, collapsing runtime code to a single conditional instruction (`cinv`). Preservation requires explicit `volatile` memory barriers.
+  - **Common-Mode Failures in Duplicate Execution:** Proved that Candidate A1 provides 100% detection for independent transient single-execution SEUs, but has **0.0% detection** against persistent stuck-at faults, pre-invocation input buffer corruptions, or comparison logic bypasses.
+  - **ML-DSA Status Demarcation:** Clarified that dual-rail hash checking was a documentation design; only the generic multi-rail token abstraction was executed in C.
+  - **Novelty Clarification:** Categorized the FIPS 203 projection invariant as an application of classical ABFT Fourier projection principles (Jou & Abraham 1986) rather than foundational novelty.
+- **Exit Criteria Satisfied:** All 9 audit deliverables completed, adversarial test harness executed, mathematical blind spots proved, compiler assembly audited, and claim-by-claim decision gate established.
+
 ### Phase 7 — Resilience Engineering
 - **Objective:** Engineer and evaluate lightweight, software-only resilience mechanisms for flight processors.
 - **Mechanisms:**
