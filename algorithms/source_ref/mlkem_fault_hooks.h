@@ -82,6 +82,7 @@ typedef struct {
     int fo_direction;           // 0: valid CT (0->1), 1: corrupted CT (1->0), 2: always toggle
     
     uint64_t trigger_count;
+    bool persistent;            // true if fault remains active across retries (stuck-at)
     
     // Multi-layer diffusion tracking
     bool track_layer_diff;
@@ -186,6 +187,40 @@ void hook_decaps_verify_flag(int *fail_flag);
 void hook_post_ntt_coefficient(int16_t *coeffs, size_t count);
 void hook_post_polymul_coefficient(int16_t *coeffs, size_t count);
 void hook_post_sampling_coefficient(int16_t *coeffs, size_t count);
+
+/* =========================================================================
+ * Phase 7G: Native NTT Monitor and In-Place Recovery Configuration
+ * ========================================================================= */
+typedef enum {
+    NTT_NATIVE_MONITOR_DISABLED = 0,
+    NTT_NATIVE_MONITOR_REUSED_T = 1,       /* Difference + Sum invariant reusing intermediate t */
+    NTT_NATIVE_MONITOR_RECOMPUTED_T = 2    /* Difference + Sum invariant with independent t recomputation */
+} ntt_native_monitor_mode_t;
+
+typedef struct {
+    ntt_native_monitor_mode_t mode;
+    bool allow_retry;
+    uint32_t layer_mask;           /* Bitmask of layers monitored (0x7F = all 7) */
+    uint32_t executed_count;       /* Total butterflies passed through monitor */
+    uint32_t mismatch_count;       /* Detected invariant violations */
+    uint32_t retry_attempt_count;  /* Butterflies where rollback/retry was attempted */
+    uint32_t recovered_count;      /* Butterflies successfully verified after retry */
+    uint32_t persistent_count;     /* Butterflies that remained corrupted after retry */
+    int last_failed_layer;
+    int last_failed_butterfly;
+} ntt_native_monitor_state_t;
+
+extern ntt_native_monitor_state_t g_ntt_native_monitor;
+
+void ntt_native_monitor_reset(void);
+void ntt_native_monitor_configure(ntt_native_monitor_mode_t mode, bool allow_retry, uint32_t layer_mask);
+uint32_t ntt_native_monitor_get_persistent_count(void);
+
+void native_ntt_monitor_butterfly(
+    unsigned layer, unsigned butterfly_idx, int16_t zeta,
+    int16_t u_saved, int16_t v_saved, int16_t t_used,
+    int16_t *r_j, int16_t *r_j_len
+);
 
 #ifdef __cplusplus
 }

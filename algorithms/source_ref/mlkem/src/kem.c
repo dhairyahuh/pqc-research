@@ -482,6 +482,15 @@ int mlk_kem_dec_monitored(uint8_t ss[MLKEM_SSBYTES],
 
   if (internal_status != NULL)
   {
+#if defined(MLKEM_RESEARCH_FAULT_HOOKS)
+    extern uint32_t ntt_native_monitor_get_persistent_count(void);
+    if (ntt_native_monitor_get_persistent_count() > 0)
+    {
+      *internal_status = MLK_DECAPS_STATUS_FAULT;
+      fail = 0xFF; /* Force implicit rejection to ensure candidate key is never leaked */
+    }
+    else
+#endif
     /* If the primary comparison flag and the reverse check disagree,
      * a control-flow / register corruption occurred on the FO predicate */
     if (fail != fail_chk)

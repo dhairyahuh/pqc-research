@@ -208,7 +208,7 @@ void hook_mid_ntt_pre_butterfly(
         return;
     }
 
-    if (g_mlkem_fault.trigger_count == 0 &&
+    if ((g_mlkem_fault.trigger_count == 0 || g_mlkem_fault.persistent) &&
         g_mlkem_fault.target_stage == layer &&
         g_mlkem_fault.target_butterfly == butterfly_idx) {
 
@@ -255,7 +255,7 @@ void hook_mid_ntt_post_mul(
         return;
     }
 
-    if (g_mlkem_fault.trigger_count == 0 &&
+    if ((g_mlkem_fault.trigger_count == 0 || g_mlkem_fault.persistent) &&
         g_mlkem_fault.target_stage == layer &&
         g_mlkem_fault.target_butterfly == butterfly_idx &&
         g_mlkem_fault.ntt_locus == NTT_LOCUS_INTERMEDIATE_T) {
@@ -293,7 +293,7 @@ void hook_mid_ntt_butterfly(
         return;
     }
 
-    if (g_mlkem_fault.trigger_count == 0 &&
+    if ((g_mlkem_fault.trigger_count == 0 || g_mlkem_fault.persistent) &&
         g_mlkem_fault.target_stage == layer &&
         g_mlkem_fault.target_butterfly == butterfly_idx) {
 
@@ -533,5 +533,132 @@ void hook_post_sampling_coefficient(int16_t *coeffs, size_t count) {
                  idx, (int)g_mlkem_fault.orig_value, (int)g_mlkem_fault.faulted_value);
         g_mlkem_fault.trace_recorded = true;
         g_mlkem_fault.trigger_count++;
+    }
+}
+
+/* =========================================================================
+ * Phase 7G: Native NTT Monitor and In-Place Recovery Implementation
+ * ========================================================================= */
+ntt_native_monitor_state_t g_ntt_native_monitor = {
+    .mode = NTT_NATIVE_MONITOR_DISABLED,
+    .allow_retry = false,
+    .layer_mask = 0x7F,
+    .executed_count = 0,
+    .mismatch_count = 0,
+    .retry_attempt_count = 0,
+    .recovered_count = 0,
+    .persistent_count = 0,
+    .last_failed_layer = -1,
+    .last_failed_butterfly = -1
+};
+
+static const int16_t g_trusted_zetas[128] = {
+    -1044, -758,  -359,  -1517, 1493,  1422,  287,   202,  -171,  622,   1577,
+    182,   962,   -1202, -1474, 1468,  573,   -1325, 264,  383,   -829,  1458,
+    -1602, -130,  -681,  1017,  732,   608,   -1542, 411,  -205,  -1571, 1223,
+    652,   -552,  1015,  -1293, 1491,  -282,  -1544, 516,  -8,    -320,  -666,
+    -1618, -1162, 126,   1469,  -853,  -90,   -271,  830,  107,   -1421, -247,
+    -951,  -398,  961,   -1508, -725,  448,   -1065, 677,  -1275, -1103, 430,
+    555,   843,   -1251, 871,   1550,  105,   422,   587,  177,   -235,  -291,
+    -460,  1574,  1653,  -246,  778,   1159,  -147,  -777, 1483,  -602,  1119,
+    -1590, 644,   -872,  349,   418,   329,   -156,  -75,  817,   1097,  603,
+    610,   1322,  -1285, -1465, 384,   -1215, -136,  1218, -1335, -874,  220,
+    -1187, -1659, -1185, -1530, -1278, 794,   -1510, -854, -870,  478,   -108,
+    -308,  996,   991,   958,   -1460, 1522,  1628
+};
+
+static inline int16_t monitor_fqmul(int16_t a, int16_t b) {
+    int32_t prod = (int32_t)a * (int32_t)b;
+    int16_t u = (int16_t)((int32_t)((int16_t)prod) * (-3327));
+    int32_t t = (int32_t)u * 3329;
+    t = prod - t;
+    t >>= 16;
+    return (int16_t)t;
+}
+
+void ntt_native_monitor_reset(void) {
+    g_ntt_native_monitor.executed_count = 0;
+    g_ntt_native_monitor.mismatch_count = 0;
+    g_ntt_native_monitor.retry_attempt_count = 0;
+    g_ntt_native_monitor.recovered_count = 0;
+    g_ntt_native_monitor.persistent_count = 0;
+    g_ntt_native_monitor.last_failed_layer = -1;
+    g_ntt_native_monitor.last_failed_butterfly = -1;
+}
+
+void ntt_native_monitor_configure(ntt_native_monitor_mode_t mode, bool allow_retry, uint32_t layer_mask) {
+    ntt_native_monitor_reset();
+    g_ntt_native_monitor.mode = mode;
+    g_ntt_native_monitor.allow_retry = allow_retry;
+    g_ntt_native_monitor.layer_mask = layer_mask;
+}
+
+uint32_t ntt_native_monitor_get_persistent_count(void) {
+    return g_ntt_native_monitor.persistent_count;
+}
+
+void native_ntt_monitor_butterfly(
+    unsigned layer, unsigned butterfly_idx, int16_t zeta,
+    int16_t u_saved, int16_t v_saved, int16_t t_used,
+    int16_t *r_j, int16_t *r_j_len
+) {
+    if (g_ntt_native_monitor.mode == NTT_NATIVE_MONITOR_DISABLED) {
+        return;
+    }
+    if (layer < 1 || layer > 7 || !((g_ntt_native_monitor.layer_mask >> (layer - 1)) & 1u)) {
+        return;
+    }
+
+    g_ntt_native_monitor.executed_count++;
+
+    int32_t diff_c, sum_c;
+    int16_t t_check;
+
+    if (g_ntt_native_monitor.mode == NTT_NATIVE_MONITOR_RECOMPUTED_T) {
+        t_check = monitor_fqmul(v_saved, zeta);
+    } else {
+        t_check = t_used;
+    }
+
+    diff_c = ((int32_t)(*r_j) - (int32_t)(*r_j_len) - 2 * (int32_t)t_check) % 3329;
+    sum_c  = ((int32_t)(*r_j) + (int32_t)(*r_j_len) - 2 * (int32_t)u_saved) % 3329;
+
+    if (diff_c != 0 || sum_c != 0) {
+        g_ntt_native_monitor.mismatch_count++;
+        g_ntt_native_monitor.last_failed_layer = (int)layer;
+        g_ntt_native_monitor.last_failed_butterfly = (int)butterfly_idx;
+
+        if (g_ntt_native_monitor.allow_retry) {
+            g_ntt_native_monitor.retry_attempt_count++;
+
+            /* In-place rollback using saved pre-butterfly operands */
+            *r_j = u_saved;
+            *r_j_len = v_saved;
+
+            int16_t t_retry = monitor_fqmul(v_saved, zeta);
+            int16_t u_new = (int16_t)(u_saved + t_retry);
+            int16_t v_new = (int16_t)(u_saved - t_retry);
+
+            if (g_mlkem_fault.persistent && g_mlkem_fault.enabled &&
+                g_mlkem_fault.target == HOOK_TARGET_MID_NTT_BUTTERFLY &&
+                g_mlkem_fault.target_stage == layer &&
+                g_mlkem_fault.target_butterfly == butterfly_idx) {
+                u_new ^= (1u << (g_mlkem_fault.bit_to_flip % 16));
+            }
+
+            *r_j = u_new;
+            *r_j_len = v_new;
+
+            int32_t diff_retry = ((int32_t)u_new - (int32_t)v_new - 2 * (int32_t)t_retry) % 3329;
+            int32_t sum_retry  = ((int32_t)u_new + (int32_t)v_new - 2 * (int32_t)u_saved) % 3329;
+
+            if (diff_retry == 0 && sum_retry == 0) {
+                g_ntt_native_monitor.recovered_count++;
+            } else {
+                g_ntt_native_monitor.persistent_count++;
+            }
+        } else {
+            g_ntt_native_monitor.persistent_count++;
+        }
     }
 }

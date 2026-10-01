@@ -1,0 +1,91 @@
+{
+  "phase": "7G",
+  "title": "Native ML-KEM NTT Monitor Integration and End-to-End Validation",
+  "benchmark": {
+    "iterations": 2000,
+    "warmup_iterations": 5000,
+    "mean_baseline_us": 46.68,
+    "mean_dmr_us": 93.36,
+    "overhead_dmr_pct": 99.99,
+    "mean_reused_t_us": 52.34,
+    "overhead_reused_t_pct": 12.12,
+    "mean_recomputed_t_us": 53.80,
+    "overhead_recomputed_t_pct": 15.25,
+    "invalid_ct_ratio": 1.00
+  },
+  "threat_classes": {
+    "trials_per_class": 150,
+    "class_1": {
+      "name": "Class 1: Intermediate Product T (Transient)",
+      "rec_unmon_pct": 2.67,
+      "rej_unmon_pct": 97.33,
+      "rec_reused_t_pct": 4.00,
+      "rej_reused_t_pct": 93.33,
+      "rec_recomputed_t_pct": 100.00,
+      "rej_recomputed_t_pct": 0.00
+    },
+    "class_2": {
+      "name": "Class 2: Twiddle Factor Zeta (Transient)",
+      "rec_unmon_pct": 2.00,
+      "rej_unmon_pct": 98.00,
+      "rec_reused_t_pct": 0.00,
+      "rej_reused_t_pct": 98.00,
+      "rec_recomputed_t_pct": 0.00,
+      "rej_recomputed_t_pct": 98.00
+    },
+    "class_3": {
+      "name": "Class 3: Butterfly Output Register (Transient)",
+      "rec_unmon_pct": 2.00,
+      "rej_unmon_pct": 98.00,
+      "rec_reused_t_pct": 100.00,
+      "rej_reused_t_pct": 0.00,
+      "rec_recomputed_t_pct": 100.00,
+      "rej_recomputed_t_pct": 0.00
+    },
+    "class_4": {
+      "name": "Class 4: Symmetric Output Perturbation",
+      "rec_unmon_pct": 1.33,
+      "rej_unmon_pct": 98.67,
+      "rec_reused_t_pct": 100.00,
+      "rej_reused_t_pct": 0.00,
+      "rec_recomputed_t_pct": 100.00,
+      "rej_recomputed_t_pct": 0.00
+    },
+    "class_5": {
+      "name": "Class 5: Pre-NTT Input Corruption",
+      "rec_unmon_pct": 0.00,
+      "rej_unmon_pct": 100.00,
+      "rec_reused_t_pct": 0.00,
+      "rej_reused_t_pct": 100.00,
+      "rec_recomputed_t_pct": 0.00,
+      "rej_recomputed_t_pct": 100.00
+    },
+    "class_6": {
+      "name": "Class 6: Persistent Stuck-at Butterfly Fault",
+      "rec_unmon_pct": 0.00,
+      "rej_unmon_pct": 100.00,
+      "rec_reused_t_pct": 0.00,
+      "rej_reused_t_pct": 100.00,
+      "rec_recomputed_t_pct": 0.00,
+      "rej_recomputed_t_pct": 100.00
+    },
+    "class_7": {
+      "name": "Class 7: FO Control Decision Gate Perturbation",
+      "rec_unmon_pct": 0.00,
+      "rej_unmon_pct": 100.00,
+      "rec_reused_t_pct": 0.00,
+      "rej_reused_t_pct": 100.00,
+      "rec_recomputed_t_pct": 0.00,
+      "rej_recomputed_t_pct": 100.00
+    },
+    "class_8": {
+      "name": "Class 8: Uncorrupted Negative Control",
+      "rec_unmon_pct": 100.00,
+      "rej_unmon_pct": 0.00,
+      "rec_reused_t_pct": 100.00,
+      "rej_reused_t_pct": 0.00,
+      "rec_recomputed_t_pct": 100.00,
+      "rej_recomputed_t_pct": 0.00
+    }
+  }
+}

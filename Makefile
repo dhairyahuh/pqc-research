@@ -230,4 +230,16 @@ test-phase7f: phase7f
 	@echo "\n=== Phase 7F: Python Unit & Regression Audit Tests ==="
 	python3 -m unittest discover -s tests/phase7f -v
 
-.PHONY: all clean test phase5 test-phase5 phase6 test-phase6 phase6b test-phase6b phase7 test-phase7 phase7b test-phase7b phase7c test-phase7c phase7d test-phase7d phase7e test-phase7e phase7f test-phase7f
+# Phase 7G Native ML-KEM NTT Monitor Integration and End-to-End Validation
+$(BIN_DIR)/phase7g_native_validation: experiments/phase7g/phase7g_native_validation_harness.c $(OBJ_DIR)/mlkem768_inst.o $(OBJ_DIR)/mlkem_fault_hooks.o | $(BIN_DIR)
+	$(CC) $(CFLAGS) -I . -I algorithms/source_ref/mlkem $^ -o $@ $(LDFLAGS)
+
+phase7g: $(BIN_DIR)/phase7g_native_validation
+
+test-phase7g: phase7g
+	@echo "\n=== Phase 7G: Native ML-KEM NTT Monitor Integration & End-to-End Validation ==="
+	./$(BIN_DIR)/phase7g_native_validation
+	@echo "\n=== Phase 7G: Python Unit & Regression Tests ==="
+	python3 -m unittest discover -s tests/phase7g -v
+
+.PHONY: all clean test phase5 test-phase5 phase6 test-phase6 phase6b test-phase6b phase7 test-phase7 phase7b test-phase7b phase7c test-phase7c phase7d test-phase7d phase7e test-phase7e phase7f test-phase7f phase7g test-phase7g

@@ -379,6 +379,8 @@ __contract__(
 #if defined(MLKEM_RESEARCH_FAULT_HOOKS)
     unsigned b_idx = (start / (2 * len)) * len + (j - start);
     int16_t zeta_val = zeta;
+    int16_t u_saved = r[j];
+    int16_t v_saved = r[j + len];
     extern void hook_mid_ntt_pre_butterfly(
         unsigned layer, unsigned butterfly_idx, int16_t *zeta_ptr,
         int16_t *r_j, int16_t *r_j_len, size_t idx0, size_t idx1
@@ -396,6 +398,14 @@ __contract__(
         int16_t *r_j, int16_t *r_j_len, int16_t t, size_t idx0, size_t idx1
     );
     hook_mid_ntt_butterfly(layer, b_idx, zeta_val, &r[j], &r[j + len], t, j, j + len);
+
+    /* Phase 7G: Native NTT Butterfly Invariant Monitor & In-Place Retry */
+    extern void native_ntt_monitor_butterfly(
+        unsigned layer, unsigned butterfly_idx, int16_t zeta,
+        int16_t u_saved, int16_t v_saved, int16_t t_used,
+        int16_t *r_j, int16_t *r_j_len
+    );
+    native_ntt_monitor_butterfly(layer, b_idx, zeta_val, u_saved, v_saved, t, &r[j], &r[j + len]);
 #else
     int16_t t;
     t = mlk_fqmul(r[j + len], zeta);
