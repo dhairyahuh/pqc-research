@@ -109,12 +109,34 @@ graph TD
   - Detailed SMT-based analysis of the exact verification decision gate in Phase 6.
 - **Exit Criteria Satisfied:** Clean baseline controls verified, 8-layer NTT diffusion validated, rejection sampling firewall characterized, verification decision boundary mapped, and full test suite passing.
 
-### Phase 4 — Mathematical + Empirical Correlation
-- **Objective:** Systematically connect theoretical error equations with observed implementation-level outcomes.
+### Phase 4 — Mathematical + Empirical Correlation & Claim Audit [STATUS: COMPLETED]
+- **Objective:** Systematically connect theoretical error equations with observed implementation-level outcomes, conduct an independent scientific audit of Phase 0–3 claims, establish a common cross-algorithm fault framework, and perform statistical reanalysis with 95% Wilson confidence intervals.
 - **Key Pipeline:**
-  $$\text{Mathematical Fault } (a \to a + \delta) \longrightarrow \text{Implementation Location } (\text{Line, Register, Buffer}) \longrightarrow \text{Fault Propagation } (\text{Diffusion / Reduction}) \longrightarrow \text{Observable Outcome } (\text{Correct, Rejection, Mismatch, Hang, Crash})$$
-- **Deliverables:** Empirical validation of the Phase 1 closed-form bounds; proof of error absorption limits; sensitivity matrix mapping every intermediate stage to its categorical outcome distribution.
-- **Exit Criteria:** Correlation report in `docs/mathematics_implementation_correlation.md`.
+  $$\text{Operation } (\mathcal{O}) \longrightarrow \text{State } (\mathcal{S}) \longrightarrow \text{Fault } (\mathcal{F}) \longrightarrow \text{Perturbation } (\Delta) \longrightarrow \text{Propagation } (\mathcal{P}) \longrightarrow \text{Detection/Rejection } (\mathcal{D}) \longrightarrow \text{Outcome } (\mathcal{Y}) \longrightarrow \text{Security Impact } (\mathcal{X})$$
+- **Key Deliverables:**
+  - Independent Scientific Claim Audit: [`docs/phase4-claim-audit.md`](file:///Users/dhairyajain/Desktop/pqc%20research/docs/phase4-claim-audit.md)
+  - Common Mathematical Fault Framework: [`docs/mathematics/common_fault_framework.md`](file:///Users/dhairyajain/Desktop/pqc%20research/docs/mathematics/common_fault_framework.md)
+  - Cross-Algorithm Comparison & Comparability Analysis: [`docs/phase4-cross-algorithm-comparison.md`](file:///Users/dhairyajain/Desktop/pqc%20research/docs/phase4-cross-algorithm-comparison.md)
+  - Statistical Reanalysis & Methodological Evaluation: [`docs/phase4-statistical-reanalysis.md`](file:///Users/dhairyajain/Desktop/pqc%20research/docs/phase4-statistical-reanalysis.md)
+  - Space-System Implications & Protocol Mapping: [`docs/phase4-space-system-implications.md`](file:///Users/dhairyajain/Desktop/pqc%20research/docs/phase4-space-system-implications.md)
+  - Research Contribution & Novelty Review: [`docs/phase4-research-contribution-review.md`](file:///Users/dhairyajain/Desktop/pqc%20research/docs/phase4-research-contribution-review.md)
+  - Processed Datasets & Comparability Matrices: [`results/phase4/processed/`](file:///Users/dhairyajain/Desktop/pqc%20research/results/phase4/processed/)
+    - `normalized_campaign_matrix.csv` (239 campaign configurations, >230,000 trials)
+    - `cross_algorithm_comparability_matrix.csv` (4-tier comparability classification)
+    - `mathematical_prediction_vs_empirical.csv` (prediction vs. observation reconciliation)
+    - `statistical_reanalysis_summary.json` (aggregate statistics and Wilson intervals)
+  - Reproducible Scripts:
+    - Mathematical Claim Validator: [`experiments/phase4/validate_mathematical_claims.py`](file:///Users/dhairyajain/Desktop/pqc%20research/experiments/phase4/validate_mathematical_claims.py)
+    - Normalization Pipeline: [`experiments/phase4/process_and_correlate.py`](file:///Users/dhairyajain/Desktop/pqc%20research/experiments/phase4/process_and_correlate.py)
+  - Automated Targeted Test Suite: [`tests/test_phase4_audit.py`](file:///Users/dhairyajain/Desktop/pqc%20research/tests/test_phase4_audit.py)
+- **Confirmed Empirical Findings & Essential Audit Corrections:**
+  - **NTT Diffusion Tree Precision:** Confirmed $2^{8-L} / 2^{7-L}$ in ML-KEM and $2^{9-L} / 2^{8-L}$ in ML-DSA. Explicitly separated *structural graph dependency* (strict binary tree of depth $L_{\text{max}} - L$) from *non-zero error propagation* (which holds $\forall \Delta \not\equiv 0 \pmod q$, and vanishes when $\Delta \equiv 0 \pmod q$).
+  - **Correction on Decapsulation Decoding Slack ($q/4$):** Refuted the earlier claim of unconditional Layer 1 single register masking. Formally proved that peak time-domain error scales with $|\Delta|$; faults are masked *if and only if* $|\Delta| \le 12$. For $|\Delta| \ge 13$, errors exceed $\lfloor q/4 \rfloor = 832.25$, flipping message bits and triggering implicit rejection.
+  - **Vector Quantization Joint Absorption:** Proved that while single-coefficient absorption for $d=10$ is $\approx 69\%$, joint absorption across a multi-coefficient error vector decays exponentially ($P_{\text{joint}} \approx P_{\text{single}}^W \to 0$), rendering full ciphertext error absorption practically impossible.
+  - **Correction on ML-DSA Verification Decision Gate:** Reclassified State 4 (`INVALID -> ACCEPT`) from a "cryptographic forgery attack" to a "generic software Boolean decision-variable override." Verification math itself has zero arithmetic slack (any $\Delta \ge 1$ causes hash mismatch).
+  - **Correction on Rejection Sampling Containment:** Confirmed that nominal execution fails closed via attempt budget exhaustion (`MLD_ERR_SIGN_ATTEMPTS_EXHAUSTED`), but noted that norm check bypasses emit out-of-bounds candidates that create potential side-channel leakage.
+  - **Cross-Algorithm Comparability Partitioning:** Prohibited direct raw metric pooling between KEM and DSA, establishing a 4-tier comparability classification.
+- **Exit Criteria Satisfied:** Independent audit complete, common mathematical framework formalized, 239 campaigns normalized with Wilson confidence intervals, all 6 deliverables created, and all test suites passing with 100% success rate.
 
 ### Phase 5 — Cross-Implementation Study
 - **Objective:** Determine whether fault sensitivity is algorithm-invariant or implementation-dependent.

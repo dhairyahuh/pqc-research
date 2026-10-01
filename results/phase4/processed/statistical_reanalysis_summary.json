@@ -1,0 +1,36 @@
+{
+  "metadata": {
+    "title": "Phase 4 Statistical Reanalysis & Dataset Cross-Correlation",
+    "total_campaigns_analyzed": 239,
+    "mlkem_campaigns": 117,
+    "mldsa_campaigns": 122,
+    "mlkem_total_trials": 171000,
+    "mldsa_total_trials": 101650,
+    "total_evaluated_trials": 272650
+  },
+  "outcome_distribution_by_campaign": {
+    "CORRECT_OUTPUT": 35,
+    "IMPLICIT_REJECTION": 94,
+    "INPUT_VALIDATION_ERROR": 6,
+    "GARBLED_PAYLOAD_MISMATCH": 3,
+    "ATTEMPT_EXHAUSTION_DOS": 21,
+    "EXPLICIT_REJECTION": 74,
+    "DECISION_OVERRIDE": 6
+  },
+  "comparability_classification": {
+    "DIRECTLY_COMPARABLE": 167,
+    "QUALITATIVELY_COMPARABLE": 45,
+    "COMPARABLE_WITH_NORMALIZATION": 24,
+    "NOT_COMPARABLE": 3
+  },
+  "statistical_methodology": {
+    "confidence_intervals": "Wilson Score Method with z = 1.96 (95% coverage)",
+    "zero_event_handling": "A zero observed count (k=0, n=1000) corresponds to 95% CI [0.00%, 0.38%]. It is NOT interpreted as impossibility.",
+    "sample_independence": "Each campaign was executed under independent deterministic PRNG seeds.",
+    "potential_biases": [
+      "Selection bias toward internal butterfly and predicate hooks rather than exhaustive memory-bus sweeps.",
+      "Configuration imbalance: screening campaigns used N=1000 whereas focused campaigns used N=5000.",
+      "Deterministic signing mode tests (rnd=0) produce bit-exact reproducible failures, whereas hedged mode introduces attempt variation."
+    ]
+  }
+}
