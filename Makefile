@@ -204,4 +204,16 @@ test-phase7d: phase7d
 	@echo "\n=== Phase 7D: Adversarial Validation & Reproducibility Audit ==="
 	./$(BIN_DIR)/phase7d_adversarial
 
-.PHONY: all clean test phase5 test-phase5 phase6 test-phase6 phase6b test-phase6b phase7 test-phase7 phase7b test-phase7b phase7c test-phase7c phase7d test-phase7d
+# Phase 7E Early-Stage NTT Fault Recovery
+$(BIN_DIR)/phase7e_stage_recovery: experiments/phase7e/phase7e_stage_recovery_harness.c $(OBJ_DIR)/mlkem768_inst.o $(OBJ_DIR)/mlkem_fault_hooks.o | $(BIN_DIR)
+	$(CC) $(CFLAGS) -I . -I algorithms/source_ref/mlkem $^ -o $@ $(LDFLAGS)
+
+phase7e: $(BIN_DIR)/phase7e_stage_recovery
+
+test-phase7e: phase7e
+	@echo "\n=== Phase 7E: Early-Stage NTT Butterfly Invariants & Fault Recovery ==="
+	./$(BIN_DIR)/phase7e_stage_recovery
+	@echo "\n=== Phase 7E: Python Unit & Mathematical Reference Tests ==="
+	python3 -m unittest discover -s tests/phase7e -v
+
+.PHONY: all clean test phase5 test-phase5 phase6 test-phase6 phase6b test-phase6b phase7 test-phase7 phase7b test-phase7b phase7c test-phase7c phase7d test-phase7d phase7e test-phase7e

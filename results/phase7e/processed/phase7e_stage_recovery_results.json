@@ -1,0 +1,79 @@
+{
+  "phase": "7E",
+  "title": "Mathematical Derivation and Early-Stage NTT Fault Recovery",
+  "benchmark": {
+    "iterations": 2000,
+    "warmup_iterations": 5000,
+    "mean_baseline_us": 42.90,
+    "mean_dmr_us": 85.77,
+    "overhead_dmr_pct": 99.93,
+    "mean_config_a_phase7d_us": 51.57,
+    "overhead_config_a_pct": 20.20,
+    "mean_config_b_l1_us": 51.65,
+    "overhead_config_b_pct": 20.39,
+    "mean_config_d_l1_4_7_us": 51.55,
+    "overhead_config_d_pct": 20.15,
+    "mean_config_e_all_layers_us": 51.59,
+    "overhead_config_e_pct": 20.25,
+    "invalid_ct_ratio_config_e": 1.00
+  },
+  "layer_recovery_rates": {
+    "trials_per_layer": 150,
+    "layer_1": {
+      "recovery_cfg_a_pct": 0.00,
+      "recovery_cfg_b_pct": 100.00,
+      "recovery_cfg_d_pct": 100.00,
+      "recovery_cfg_e_pct": 100.00,
+      "wilson_95_ci_low": 97.50,
+      "wilson_95_ci_high": 100.00
+    },
+    "layer_2": {
+      "recovery_cfg_a_pct": 0.00,
+      "recovery_cfg_b_pct": 0.00,
+      "recovery_cfg_d_pct": 0.00,
+      "recovery_cfg_e_pct": 100.00,
+      "wilson_95_ci_low": 97.50,
+      "wilson_95_ci_high": 100.00
+    },
+    "layer_3": {
+      "recovery_cfg_a_pct": 0.00,
+      "recovery_cfg_b_pct": 0.00,
+      "recovery_cfg_d_pct": 0.00,
+      "recovery_cfg_e_pct": 100.00,
+      "wilson_95_ci_low": 97.50,
+      "wilson_95_ci_high": 100.00
+    },
+    "layer_4": {
+      "recovery_cfg_a_pct": 0.00,
+      "recovery_cfg_b_pct": 0.00,
+      "recovery_cfg_d_pct": 100.00,
+      "recovery_cfg_e_pct": 100.00,
+      "wilson_95_ci_low": 97.50,
+      "wilson_95_ci_high": 100.00
+    },
+    "layer_5": {
+      "recovery_cfg_a_pct": 0.00,
+      "recovery_cfg_b_pct": 0.00,
+      "recovery_cfg_d_pct": 0.00,
+      "recovery_cfg_e_pct": 100.00,
+      "wilson_95_ci_low": 97.50,
+      "wilson_95_ci_high": 100.00
+    },
+    "layer_6": {
+      "recovery_cfg_a_pct": 0.00,
+      "recovery_cfg_b_pct": 0.00,
+      "recovery_cfg_d_pct": 0.00,
+      "recovery_cfg_e_pct": 100.00,
+      "wilson_95_ci_low": 97.50,
+      "wilson_95_ci_high": 100.00
+    },
+    "layer_7": {
+      "recovery_cfg_a_pct": 100.00,
+      "recovery_cfg_b_pct": 100.00,
+      "recovery_cfg_d_pct": 100.00,
+      "recovery_cfg_e_pct": 100.00,
+      "wilson_95_ci_low": 97.50,
+      "wilson_95_ci_high": 100.00
+    }
+  }
+}
