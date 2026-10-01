@@ -194,4 +194,14 @@ test-phase7c: phase7c
 	@echo "\n=== Phase 7C: Oracle-Free Native Decapsulation Monitoring ==="
 	./$(BIN_DIR)/phase7c_oracle_free
 
-.PHONY: all clean test phase5 test-phase5 phase6 test-phase6 phase6b test-phase6b phase7 test-phase7 phase7b test-phase7b phase7c test-phase7c
+# Phase 7D Adversarial Validation and Common-Mode Fault Analysis
+$(BIN_DIR)/phase7d_adversarial: experiments/phase7d/phase7d_adversarial_harness.c $(OBJ_DIR)/mlkem768_inst.o $(OBJ_DIR)/mlkem_fault_hooks.o | $(BIN_DIR)
+	$(CC) $(CFLAGS) -I . -I algorithms/source_ref/mlkem $^ -o $@ $(LDFLAGS)
+
+phase7d: $(BIN_DIR)/phase7d_adversarial
+
+test-phase7d: phase7d
+	@echo "\n=== Phase 7D: Adversarial Validation & Reproducibility Audit ==="
+	./$(BIN_DIR)/phase7d_adversarial
+
+.PHONY: all clean test phase5 test-phase5 phase6 test-phase6 phase6b test-phase6b phase7 test-phase7 phase7b test-phase7b phase7c test-phase7c phase7d test-phase7d

@@ -1,0 +1,105 @@
+{
+  "phase": "7D",
+  "title": "Adversarial Validation, Common-Mode Fault Analysis, and Reproducibility Audit",
+  "benchmark": {
+    "iterations": 2000,
+    "warmup_iterations": 5000,
+    "mean_baseline_us": 44.12,
+    "median_baseline_us": 43.00,
+    "mean_dmr_us": 88.29,
+    "overhead_dmr_pct": 100.10,
+    "mean_phase7c_unpatched_us": 52.93,
+    "overhead_phase7c_pct": 19.97,
+    "mean_phase7d_remediated_us": 53.28,
+    "overhead_phase7d_pct": 20.75,
+    "timing_oracle_audit": {
+      "mean_invalid_ct_phase7c_us": 97.02,
+      "ratio_invalid_to_valid_phase7c": 1.83,
+      "mean_invalid_ct_phase7d_us": 53.05,
+      "ratio_invalid_to_valid_phase7d": 1.00
+    }
+  },
+  "coverage": {
+    "trials_per_class": 150,
+    "class_1": {
+      "name": "Class 1 (Intermediate T)",
+      "detected_dmr_pct": 100.00,
+      "detected_phase7c_pct": 100.00,
+      "detected_phase7d_pct": 100.00,
+      "recovered_phase7d_pct": 0.00,
+      "safe_rejected_phase7d_pct": 100.00,
+      "wilson_95_ci_low": 97.50,
+      "wilson_95_ci_high": 100.00
+    },
+    "class_2": {
+      "name": "Class 2 (Twiddle Zeta)",
+      "detected_dmr_pct": 85.33,
+      "detected_phase7c_pct": 85.33,
+      "detected_phase7d_pct": 85.33,
+      "recovered_phase7d_pct": 0.00,
+      "safe_rejected_phase7d_pct": 85.33,
+      "wilson_95_ci_low": 78.79,
+      "wilson_95_ci_high": 90.11
+    },
+    "class_3": {
+      "name": "Class 3 (Output Add Reg)",
+      "detected_dmr_pct": 98.67,
+      "detected_phase7c_pct": 100.00,
+      "detected_phase7d_pct": 100.00,
+      "recovered_phase7d_pct": 0.00,
+      "safe_rejected_phase7d_pct": 100.00,
+      "wilson_95_ci_low": 97.50,
+      "wilson_95_ci_high": 100.00
+    },
+    "class_4": {
+      "name": "Class 4 (Correlated Mult)",
+      "detected_dmr_pct": 100.00,
+      "detected_phase7c_pct": 100.00,
+      "detected_phase7d_pct": 100.00,
+      "recovered_phase7d_pct": 0.00,
+      "safe_rejected_phase7d_pct": 100.00,
+      "wilson_95_ci_low": 97.50,
+      "wilson_95_ci_high": 100.00
+    },
+    "class_5": {
+      "name": "Class 5 (Pre-Invoc Input)",
+      "detected_dmr_pct": 0.00,
+      "detected_phase7c_pct": 80.00,
+      "detected_phase7d_pct": 100.00,
+      "recovered_phase7d_pct": 0.00,
+      "safe_rejected_phase7d_pct": 100.00,
+      "wilson_95_ci_low": 97.50,
+      "wilson_95_ci_high": 100.00
+    },
+    "class_6": {
+      "name": "Class 6 (Checker Perturb)",
+      "detected_dmr_pct": 0.00,
+      "detected_phase7c_pct": 100.00,
+      "detected_phase7d_pct": 100.00,
+      "recovered_phase7d_pct": 0.00,
+      "safe_rejected_phase7d_pct": 100.00,
+      "wilson_95_ci_low": 97.50,
+      "wilson_95_ci_high": 100.00
+    },
+    "class_7": {
+      "name": "Class 7 (Control FO Gate)",
+      "detected_dmr_pct": 0.00,
+      "detected_phase7c_pct": 100.00,
+      "detected_phase7d_pct": 100.00,
+      "recovered_phase7d_pct": 0.00,
+      "safe_rejected_phase7d_pct": 100.00,
+      "wilson_95_ci_low": 97.50,
+      "wilson_95_ci_high": 100.00
+    },
+    "class_8": {
+      "name": "Class 8 (Persistent Stuck)",
+      "detected_dmr_pct": 100.00,
+      "detected_phase7c_pct": 100.00,
+      "detected_phase7d_pct": 100.00,
+      "recovered_phase7d_pct": 0.00,
+      "safe_rejected_phase7d_pct": 100.00,
+      "wilson_95_ci_low": 97.50,
+      "wilson_95_ci_high": 100.00
+    }
+  }
+}
