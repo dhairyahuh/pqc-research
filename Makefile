@@ -256,4 +256,16 @@ test-phase7h: phase7h
 	@echo "\n=== Phase 7H: Python Unit & Adversarial Tests ==="
 	python3 -m unittest discover -s tests/phase7h -v
 
-.PHONY: all clean test phase5 test-phase5 phase6 test-phase6 phase6b test-phase6b phase7 test-phase7 phase7b test-phase7b phase7c test-phase7c phase7d test-phase7d phase7e test-phase7e phase7f test-phase7f phase7g test-phase7g phase7h test-phase7h
+# Phase 7I Inverse NTT Monitoring, Public API Fail-Stop Validation, and End-to-End Fault Coverage
+$(BIN_DIR)/phase7i_e2e_validation: experiments/phase7i/phase7i_e2e_validation_harness.c $(OBJ_DIR)/mlkem768_inst.o $(OBJ_DIR)/mlkem_fault_hooks.o | $(BIN_DIR)
+	$(CC) $(CFLAGS) -I . -I algorithms/source_ref/mlkem $^ -o $@ $(LDFLAGS)
+
+phase7i: $(BIN_DIR)/phase7i_e2e_validation
+
+test-phase7i: phase7i
+	@echo "\n=== Phase 7I: End-to-End Validation & Inverse NTT Campaign ==="
+	./$(BIN_DIR)/phase7i_e2e_validation
+	@echo "\n=== Phase 7I: Python Unit & Full Decapsulation Regression Tests ==="
+	python3 -m unittest discover -s tests/phase7i -v
+
+.PHONY: all clean test phase5 test-phase5 phase6 test-phase6 phase6b test-phase6b phase7 test-phase7 phase7b test-phase7b phase7c test-phase7c phase7d test-phase7d phase7e test-phase7e phase7f test-phase7f phase7g test-phase7g phase7h test-phase7h phase7i test-phase7i

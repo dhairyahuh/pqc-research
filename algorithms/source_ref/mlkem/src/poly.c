@@ -551,11 +551,49 @@ __contract__(
       invariant(array_abs_bound(r, 0, MLKEM_N, MLKEM_Q))
       decreases(start + len - j))
     {
+#if defined(MLKEM_RESEARCH_FAULT_HOOKS)
+      unsigned b_idx = (start / (2 * len)) * len + (j - start);
+      int16_t zeta_val = zeta;
+      int16_t u_saved = r[j];
+      int16_t v_saved = r[j + len];
+
+      extern void hook_mid_invntt_pre_butterfly(
+          unsigned layer, unsigned butterfly_idx, int16_t *zeta_ptr,
+          int16_t *r_j, int16_t *r_j_len, size_t idx0, size_t idx1
+      );
+      hook_mid_invntt_pre_butterfly(layer, b_idx, &zeta_val, &r[j], &r[j + len], j, j + len);
+
+      int16_t t = r[j];
+      r[j] = mlk_barrett_reduce((int16_t)(t + r[j + len]));
+      int16_t diff = (int16_t)(r[j + len] - t);
+
+      extern void hook_mid_invntt_post_diff(
+          unsigned layer, unsigned butterfly_idx, int16_t *diff_ptr, size_t idx0, size_t idx1
+      );
+      hook_mid_invntt_post_diff(layer, b_idx, &diff, j, j + len);
+
+      r[j + len] = mlk_fqmul(diff, zeta_val);
+
+      extern void hook_mid_invntt_butterfly(
+          unsigned layer, unsigned butterfly_idx, int16_t zeta,
+          int16_t *r_j, int16_t *r_j_len, size_t idx0, size_t idx1
+      );
+      hook_mid_invntt_butterfly(layer, b_idx, zeta_val, &r[j], &r[j + len], j, j + len);
+
+      /* Native Inverse NTT Butterfly Monitor & In-Place Retry */
+      extern void native_invntt_monitor_butterfly(
+          unsigned layer, unsigned butterfly_idx, int16_t zeta,
+          int16_t u_saved, int16_t v_saved,
+          int16_t *r_j, int16_t *r_j_len
+      );
+      native_invntt_monitor_butterfly(layer, b_idx, zeta_val, u_saved, v_saved, &r[j], &r[j + len]);
+#else
       int16_t t = r[j];
       /* The preconditions imply that the arithmetic does not overflow. */
       r[j] = mlk_barrett_reduce((int16_t)(t + r[j + len]));
       r[j + len] = (int16_t)(r[j + len] - t);
       r[j + len] = mlk_fqmul(r[j + len], zeta);
+#endif
     }
   }
 }

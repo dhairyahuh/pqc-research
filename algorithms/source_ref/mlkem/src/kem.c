@@ -480,30 +480,33 @@ int mlk_kem_dec_monitored(uint8_t ss[MLKEM_SSBYTES],
   }
   fail_chk = mlk_ct_cmask_nonzero_u8(fail_chk);
 
-  if (internal_status != NULL)
-  {
 #if defined(MLKEM_RESEARCH_FAULT_HOOKS)
-    extern uint32_t ntt_native_monitor_get_persistent_count(void);
-    if (ntt_native_monitor_get_persistent_count() > 0)
+  extern uint32_t ntt_native_monitor_get_persistent_count(void);
+  extern uint32_t invntt_native_monitor_get_persistent_count(void);
+  if (ntt_native_monitor_get_persistent_count() > 0 ||
+      invntt_native_monitor_get_persistent_count() > 0)
+  {
+    fail = 0xFF; /* Force implicit rejection regardless of internal_status pointer */
+    if (internal_status != NULL)
     {
       *internal_status = MLK_DECAPS_STATUS_FAULT;
-      fail = 0xFF; /* Force implicit rejection to ensure candidate key is never leaked */
     }
-    else
+  }
+  else
 #endif
-    /* If the primary comparison flag and the reverse check disagree,
-     * a control-flow / register corruption occurred on the FO predicate */
-    if (fail != fail_chk)
+  if (fail != fail_chk)
+  {
+    fail = 0xFF; /* Reverse dual-rail predicate mismatch forces implicit rejection */
+    if (internal_status != NULL)
     {
       *internal_status = MLK_DECAPS_STATUS_FAULT;
-      fail = 0xFF; /* Force implicit rejection to ensure candidate key is never leaked */
     }
-    else
-    {
-      uint32_t is_fail = ((uint32_t)fail | (0 - (uint32_t)fail)) >> 31;
-      *internal_status = (1 - is_fail) * MLK_DECAPS_STATUS_SUCCESS +
-                         is_fail * MLK_DECAPS_STATUS_REJECT;
-    }
+  }
+  else if (internal_status != NULL)
+  {
+    uint32_t is_fail = ((uint32_t)fail | (0 - (uint32_t)fail)) >> 31;
+    *internal_status = (1 - is_fail) * MLK_DECAPS_STATUS_SUCCESS +
+                       is_fail * MLK_DECAPS_STATUS_REJECT;
   }
 
   /* Compute rejection key */

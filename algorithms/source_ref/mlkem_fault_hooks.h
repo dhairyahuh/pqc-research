@@ -33,7 +33,9 @@ typedef enum {
     // Post-operation baseline hooks (for taxonomy comparison)
     HOOK_TARGET_POST_NTT = 6,
     HOOK_TARGET_POST_POLYMUL = 7,
-    HOOK_TARGET_POST_CBD = 8
+    HOOK_TARGET_POST_CBD = 8,
+    // Mid-operation Inverse NTT hook (Gentleman-Sande butterfly)
+    HOOK_TARGET_MID_INVNTT_BUTTERFLY = 9
 } mlkem_hook_target_t;
 
 typedef enum {
@@ -50,7 +52,17 @@ typedef enum {
     NTT_LOCUS_TWIDDLE_ZETA = 2,        // zeta before fqmul
     NTT_LOCUS_INTERMEDIATE_T = 3,      // t after fqmul, before add/sub
     NTT_LOCUS_OUTPUT_ADD = 4,          // r[j] after addition
-    NTT_LOCUS_OUTPUT_SUB = 5           // r[j+len] after subtraction
+    NTT_LOCUS_OUTPUT_SUB = 5,          // r[j+len] after subtraction
+
+    // Inverse NTT (Gentleman-Sande) specific loci:
+    INVNTT_LOCUS_INPUT_U = 10,         // r[j] before addition/subtraction
+    INVNTT_LOCUS_INPUT_V = 11,         // r[j+len] before addition/subtraction
+    INVNTT_LOCUS_TWIDDLE_ZETA = 12,    // zeta before fqmul
+    INVNTT_LOCUS_INTERMEDIATE_DIFF = 13,// (r[j+len] - r[j]) before fqmul
+    INVNTT_LOCUS_OUTPUT_ADD = 14,      // r[j] after barrett_reduce(u + v)
+    INVNTT_LOCUS_OUTPUT_MUL = 15,      // r[j+len] after fqmul(v - u, zeta)
+    INVNTT_LOCUS_SYMMETRIC = 16,       // (u' + delta, v' + delta)
+    INVNTT_LOCUS_ANTISYMMETRIC = 17    // (u' + delta, v' - delta)
 } mlkem_ntt_locus_t;
 
 typedef struct {
@@ -220,6 +232,54 @@ void native_ntt_monitor_butterfly(
     unsigned layer, unsigned butterfly_idx, int16_t zeta,
     int16_t u_saved, int16_t v_saved, int16_t t_used,
     int16_t *r_j, int16_t *r_j_len
+);
+
+/* =========================================================================
+ * Phase 7I: Inverse NTT Native Monitor and In-Place Recovery Configuration
+ * ========================================================================= */
+typedef enum {
+    INVNTT_NATIVE_MONITOR_DISABLED = 0,
+    INVNTT_NATIVE_MONITOR_SUM_ONLY = 1,       /* Adder output invariant only (zero multiplication cost) */
+    INVNTT_NATIVE_MONITOR_RECOMPUTED = 2      /* Dual invariant: Adder sum check + Multiplier recomputation */
+} invntt_native_monitor_mode_t;
+
+typedef struct {
+    invntt_native_monitor_mode_t mode;
+    bool allow_retry;
+    uint32_t layer_mask;           /* Bitmask of layers monitored (0x7F = all 7) */
+    uint32_t executed_count;       /* Total inverse butterflies passed through monitor */
+    uint32_t mismatch_count;       /* Detected invariant violations */
+    uint32_t retry_attempt_count;  /* Butterflies where rollback/retry was attempted */
+    uint32_t recovered_count;      /* Butterflies successfully verified after retry */
+    uint32_t persistent_count;     /* Butterflies that remained corrupted after retry */
+    int last_failed_layer;
+    int last_failed_butterfly;
+} invntt_native_monitor_state_t;
+
+extern invntt_native_monitor_state_t g_invntt_native_monitor;
+
+void invntt_native_monitor_reset(void);
+void invntt_native_monitor_configure(invntt_native_monitor_mode_t mode, bool allow_retry, uint32_t layer_mask);
+uint32_t invntt_native_monitor_get_persistent_count(void);
+
+void native_invntt_monitor_butterfly(
+    unsigned layer, unsigned butterfly_idx, int16_t zeta,
+    int16_t u_saved, int16_t v_saved,
+    int16_t *r_j, int16_t *r_j_len
+);
+
+void hook_mid_invntt_pre_butterfly(
+    unsigned layer, unsigned butterfly_idx, int16_t *zeta_ptr,
+    int16_t *r_j, int16_t *r_j_len, size_t idx0, size_t idx1
+);
+
+void hook_mid_invntt_post_diff(
+    unsigned layer, unsigned butterfly_idx, int16_t *diff_ptr, size_t idx0, size_t idx1
+);
+
+void hook_mid_invntt_butterfly(
+    unsigned layer, unsigned butterfly_idx, int16_t zeta,
+    int16_t *r_j, int16_t *r_j_len, size_t idx0, size_t idx1
 );
 
 #ifdef __cplusplus

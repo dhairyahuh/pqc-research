@@ -662,3 +662,213 @@ void native_ntt_monitor_butterfly(
         }
     }
 }
+
+/* =========================================================================
+ * Phase 7I: Inverse NTT Native Monitor and In-Place Recovery Implementation
+ * ========================================================================= */
+invntt_native_monitor_state_t g_invntt_native_monitor = {
+    .mode = INVNTT_NATIVE_MONITOR_DISABLED,
+    .allow_retry = false,
+    .layer_mask = 0x7F,
+    .executed_count = 0,
+    .mismatch_count = 0,
+    .retry_attempt_count = 0,
+    .recovered_count = 0,
+    .persistent_count = 0,
+    .last_failed_layer = -1,
+    .last_failed_butterfly = -1
+};
+
+static inline int16_t monitor_barrett_reduce(int16_t a) {
+    const int32_t magic = 20159;
+    const int32_t t = (magic * (int32_t)a + ((int32_t)1 << 25)) >> 26;
+    return (int16_t)(a - t * 3329);
+}
+
+void invntt_native_monitor_reset(void) {
+    g_invntt_native_monitor.executed_count = 0;
+    g_invntt_native_monitor.mismatch_count = 0;
+    g_invntt_native_monitor.retry_attempt_count = 0;
+    g_invntt_native_monitor.recovered_count = 0;
+    g_invntt_native_monitor.persistent_count = 0;
+    g_invntt_native_monitor.last_failed_layer = -1;
+    g_invntt_native_monitor.last_failed_butterfly = -1;
+}
+
+void invntt_native_monitor_configure(invntt_native_monitor_mode_t mode, bool allow_retry, uint32_t layer_mask) {
+    invntt_native_monitor_reset();
+    g_invntt_native_monitor.mode = mode;
+    g_invntt_native_monitor.allow_retry = allow_retry;
+    g_invntt_native_monitor.layer_mask = layer_mask;
+}
+
+uint32_t invntt_native_monitor_get_persistent_count(void) {
+    return g_invntt_native_monitor.persistent_count;
+}
+
+void hook_mid_invntt_pre_butterfly(
+    unsigned layer, unsigned butterfly_idx, int16_t *zeta_ptr,
+    int16_t *r_j, int16_t *r_j_len, size_t idx0, size_t idx1
+) {
+    (void)idx0; (void)idx1;
+    if (!g_mlkem_fault.enabled || g_mlkem_fault.target != HOOK_TARGET_MID_INVNTT_BUTTERFLY) {
+        return;
+    }
+
+    if ((g_mlkem_fault.trigger_count == 0 || g_mlkem_fault.persistent) &&
+        g_mlkem_fault.target_stage == layer &&
+        g_mlkem_fault.target_butterfly == butterfly_idx) {
+
+        if (g_mlkem_fault.ntt_locus == INVNTT_LOCUS_INPUT_U) {
+            g_mlkem_fault.orig_value = *r_j;
+            *r_j = (int16_t)apply_fault(*r_j, g_mlkem_fault.fault_type, g_mlkem_fault.bit_to_flip,
+                                        g_mlkem_fault.additive_glitch, g_mlkem_fault.forced_value, -3328, 3328);
+            g_mlkem_fault.faulted_value = *r_j;
+            g_mlkem_fault.trigger_count++;
+        } else if (g_mlkem_fault.ntt_locus == INVNTT_LOCUS_INPUT_V) {
+            g_mlkem_fault.orig_value = *r_j_len;
+            *r_j_len = (int16_t)apply_fault(*r_j_len, g_mlkem_fault.fault_type, g_mlkem_fault.bit_to_flip,
+                                            g_mlkem_fault.additive_glitch, g_mlkem_fault.forced_value, -3328, 3328);
+            g_mlkem_fault.faulted_value = *r_j_len;
+            g_mlkem_fault.trigger_count++;
+        } else if (g_mlkem_fault.ntt_locus == INVNTT_LOCUS_TWIDDLE_ZETA) {
+            g_mlkem_fault.orig_value = *zeta_ptr;
+            *zeta_ptr = (int16_t)apply_fault(*zeta_ptr, g_mlkem_fault.fault_type, g_mlkem_fault.bit_to_flip,
+                                             g_mlkem_fault.additive_glitch, g_mlkem_fault.forced_value, -3328, 3328);
+            g_mlkem_fault.faulted_value = *zeta_ptr;
+            g_mlkem_fault.trigger_count++;
+        }
+    }
+}
+
+void hook_mid_invntt_post_diff(
+    unsigned layer, unsigned butterfly_idx, int16_t *diff_ptr, size_t idx0, size_t idx1
+) {
+    (void)idx0; (void)idx1;
+    if (!g_mlkem_fault.enabled || g_mlkem_fault.target != HOOK_TARGET_MID_INVNTT_BUTTERFLY) {
+        return;
+    }
+
+    if ((g_mlkem_fault.trigger_count == 0 || g_mlkem_fault.persistent) &&
+        g_mlkem_fault.target_stage == layer &&
+        g_mlkem_fault.target_butterfly == butterfly_idx &&
+        g_mlkem_fault.ntt_locus == INVNTT_LOCUS_INTERMEDIATE_DIFF) {
+
+        g_mlkem_fault.orig_value = *diff_ptr;
+        *diff_ptr = (int16_t)apply_fault(*diff_ptr, g_mlkem_fault.fault_type, g_mlkem_fault.bit_to_flip,
+                                         g_mlkem_fault.additive_glitch, g_mlkem_fault.forced_value, -3328, 3328);
+        g_mlkem_fault.faulted_value = *diff_ptr;
+        g_mlkem_fault.trigger_count++;
+    }
+}
+
+void hook_mid_invntt_butterfly(
+    unsigned layer, unsigned butterfly_idx, int16_t zeta,
+    int16_t *r_j, int16_t *r_j_len, size_t idx0, size_t idx1
+) {
+    (void)zeta; (void)idx0; (void)idx1;
+    if (!g_mlkem_fault.enabled || g_mlkem_fault.target != HOOK_TARGET_MID_INVNTT_BUTTERFLY) {
+        return;
+    }
+
+    if ((g_mlkem_fault.trigger_count == 0 || g_mlkem_fault.persistent) &&
+        g_mlkem_fault.target_stage == layer &&
+        g_mlkem_fault.target_butterfly == butterfly_idx) {
+
+        if (g_mlkem_fault.ntt_locus == INVNTT_LOCUS_OUTPUT_ADD) {
+            g_mlkem_fault.orig_value = *r_j;
+            *r_j = (int16_t)apply_fault(*r_j, g_mlkem_fault.fault_type, g_mlkem_fault.bit_to_flip,
+                                        g_mlkem_fault.additive_glitch, g_mlkem_fault.forced_value, -3328, 3328);
+            g_mlkem_fault.faulted_value = *r_j;
+            g_mlkem_fault.trigger_count++;
+        } else if (g_mlkem_fault.ntt_locus == INVNTT_LOCUS_OUTPUT_MUL) {
+            g_mlkem_fault.orig_value = *r_j_len;
+            *r_j_len = (int16_t)apply_fault(*r_j_len, g_mlkem_fault.fault_type, g_mlkem_fault.bit_to_flip,
+                                            g_mlkem_fault.additive_glitch, g_mlkem_fault.forced_value, -3328, 3328);
+            g_mlkem_fault.faulted_value = *r_j_len;
+            g_mlkem_fault.trigger_count++;
+        } else if (g_mlkem_fault.ntt_locus == INVNTT_LOCUS_SYMMETRIC) {
+            int32_t delta = g_mlkem_fault.additive_glitch;
+            *r_j = (int16_t)((*r_j) + delta);
+            *r_j_len = (int16_t)((*r_j_len) + delta);
+            g_mlkem_fault.trigger_count++;
+        } else if (g_mlkem_fault.ntt_locus == INVNTT_LOCUS_ANTISYMMETRIC) {
+            int32_t delta = g_mlkem_fault.additive_glitch;
+            *r_j = (int16_t)((*r_j) + delta);
+            *r_j_len = (int16_t)((*r_j_len) - delta);
+            g_mlkem_fault.trigger_count++;
+        }
+    }
+}
+
+void native_invntt_monitor_butterfly(
+    unsigned layer, unsigned butterfly_idx, int16_t zeta,
+    int16_t u_saved, int16_t v_saved,
+    int16_t *r_j, int16_t *r_j_len
+) {
+    if (g_invntt_native_monitor.mode == INVNTT_NATIVE_MONITOR_DISABLED) {
+        return;
+    }
+    if (layer < 1 || layer > 7 || !((g_invntt_native_monitor.layer_mask >> (layer - 1)) & 1u)) {
+        return;
+    }
+
+    g_invntt_native_monitor.executed_count++;
+
+    /* Invariant 1: Adder sum check modulo 3329 */
+    int32_t sum_c = ((int32_t)(*r_j) - (int32_t)(u_saved + v_saved)) % 3329;
+
+    /* Invariant 2: Multiplier check (recomputed difference product) */
+    int32_t diff_c = 0;
+    if (g_invntt_native_monitor.mode == INVNTT_NATIVE_MONITOR_RECOMPUTED) {
+        int16_t d_check = (int16_t)(v_saved - u_saved);
+        int16_t v_expected = monitor_fqmul(d_check, zeta);
+        diff_c = ((int32_t)(*r_j_len) - (int32_t)v_expected) % 3329;
+    }
+
+    if (sum_c != 0 || diff_c != 0) {
+        g_invntt_native_monitor.mismatch_count++;
+        g_invntt_native_monitor.last_failed_layer = (int)layer;
+        g_invntt_native_monitor.last_failed_butterfly = (int)butterfly_idx;
+
+        if (g_invntt_native_monitor.allow_retry) {
+            g_invntt_native_monitor.retry_attempt_count++;
+
+            /* In-place rollback using saved inputs */
+            *r_j = u_saved;
+            *r_j_len = v_saved;
+
+            /* In-place recomputation of Gentleman-Sande butterfly */
+            int16_t t_retry = u_saved;
+            int16_t u_new = monitor_barrett_reduce((int16_t)(t_retry + v_saved));
+            int16_t d_retry = (int16_t)(v_saved - t_retry);
+            int16_t v_new = monitor_fqmul(d_retry, zeta);
+
+            if (g_mlkem_fault.persistent && g_mlkem_fault.enabled &&
+                g_mlkem_fault.target == HOOK_TARGET_MID_INVNTT_BUTTERFLY &&
+                g_mlkem_fault.target_stage == layer &&
+                g_mlkem_fault.target_butterfly == butterfly_idx) {
+                u_new ^= (1u << (g_mlkem_fault.bit_to_flip % 16));
+            }
+
+            *r_j = u_new;
+            *r_j_len = v_new;
+
+            int32_t sum_retry = ((int32_t)u_new - (int32_t)(u_saved + v_saved)) % 3329;
+            int32_t diff_retry = 0;
+            if (g_invntt_native_monitor.mode == INVNTT_NATIVE_MONITOR_RECOMPUTED) {
+                int16_t d_verify = (int16_t)(v_saved - u_saved);
+                int16_t v_verify = monitor_fqmul(d_verify, zeta);
+                diff_retry = ((int32_t)v_new - (int32_t)v_verify) % 3329;
+            }
+
+            if (sum_retry == 0 && diff_retry == 0) {
+                g_invntt_native_monitor.recovered_count++;
+            } else {
+                g_invntt_native_monitor.persistent_count++;
+            }
+        } else {
+            g_invntt_native_monitor.persistent_count++;
+        }
+    }
+}
