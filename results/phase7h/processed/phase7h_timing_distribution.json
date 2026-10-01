@@ -1,0 +1,9 @@
+{
+  "phase": "7H",
+  "sample_count": 2000,
+  "baseline": {"mean_us": 46.65, "median_us": 46.00, "stddev_us": 14.32, "p95_us": 47.00, "p99_us": 49.00},
+  "dmr": {"mean_us": 92.98, "median_us": 92.00, "stddev_us": 12.97, "p95_us": 95.00, "overhead_pct": 99.33},
+  "reused_t": {"mean_us": 52.74, "median_us": 52.00, "stddev_us": 1.39, "p95_us": 55.00, "overhead_pct": 13.06},
+  "recomputed_t": {"mean_us": 55.59, "median_us": 55.00, "stddev_us": 3.50, "p95_us": 58.00, "overhead_pct": 19.18},
+  "timing_assessment": {"valid_mean_us": 55.59, "invalid_mean_us": 55.83, "ratio": 1.0043}
+}

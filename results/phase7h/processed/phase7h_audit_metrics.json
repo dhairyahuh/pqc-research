@@ -1,0 +1,237 @@
+{
+  "phase": "7H",
+  "target": "Phase 7G Raw Trial Verification & Serialization Audit",
+  "total_records": 1200,
+  "duplicate_ids": 0,
+  "missing_ids": [],
+  "total_uncontained_faults": 0,
+  "uncontained_rate_pct": 0.0,
+  "uncontained_wilson_ci_95": [
+    0.0,
+    0.1066
+  ],
+  "findings": [
+    "FINDING 1 (Harness Serialization Bug): In experiments/phase7g/phase7g_native_validation_harness.c line 282, cfg2_reused_t 'recovered' JSON flag was evaluated using g_ntt_native_monitor.recovered_count AFTER cfg3 had executed, creating stale counter cross-contamination.",
+    "FINDING 2 (Negative Control Flag Artifact): For Class 8 (unfaulted control), authentic status 0x5A5A5A5A was logged as 'recovered: false' in cfg2 and cfg3 because recovered_count was 0 (no retry needed).",
+    "FINDING 3 (Strict Cryptographic Safety): Across all 3,600 decapsulations (1,200 trials x 3 configurations), exactly 0 uncontained or corrupted keys were released (0.00%, Wilson 95% CI: [0.00%, 0.10%]).",
+    "FINDING 4 (Class 4 Asymmetric Injection): Class 4 was labeled 'Symmetric Output Perturbation' but the injection hook armed NTT_LOCUS_OUTPUT_ADD (asymmetric glitch on r[j] only). Dual invariants were not subjected to simultaneous dual-output perturbation in Phase 7G."
+  ],
+  "recomputed_classes": {
+    "class_1": {
+      "name": "Class 1: Intermediate Product T (Transient)",
+      "sample_size": 150,
+      "unmonitored": {
+        "authentic_or_recovered": 4,
+        "rejected": 146,
+        "uncontained": 0,
+        "rec_pct": 2.67
+      },
+      "reused_t": {
+        "authentic_or_recovered": 10,
+        "rejected": 140,
+        "uncontained": 0,
+        "rec_pct": 6.67
+      },
+      "recomputed_t": {
+        "authentic_or_recovered": 150,
+        "rejected": 0,
+        "uncontained": 0,
+        "rec_pct": 100.0,
+        "wilson_ci_95": [
+          97.5,
+          100.0
+        ]
+      },
+      "serialization_anomaly_count": 0
+    },
+    "class_2": {
+      "name": "Class 2: Twiddle Factor Zeta (Transient)",
+      "sample_size": 150,
+      "unmonitored": {
+        "authentic_or_recovered": 3,
+        "rejected": 147,
+        "uncontained": 0,
+        "rec_pct": 2.0
+      },
+      "reused_t": {
+        "authentic_or_recovered": 3,
+        "rejected": 147,
+        "uncontained": 0,
+        "rec_pct": 2.0
+      },
+      "recomputed_t": {
+        "authentic_or_recovered": 3,
+        "rejected": 147,
+        "uncontained": 0,
+        "rec_pct": 2.0,
+        "wilson_ci_95": [
+          0.68,
+          5.71
+        ]
+      },
+      "serialization_anomaly_count": 3
+    },
+    "class_3": {
+      "name": "Class 3: Butterfly Output Register (Transient)",
+      "sample_size": 150,
+      "unmonitored": {
+        "authentic_or_recovered": 3,
+        "rejected": 147,
+        "uncontained": 0,
+        "rec_pct": 2.0
+      },
+      "reused_t": {
+        "authentic_or_recovered": 150,
+        "rejected": 0,
+        "uncontained": 0,
+        "rec_pct": 100.0
+      },
+      "recomputed_t": {
+        "authentic_or_recovered": 150,
+        "rejected": 0,
+        "uncontained": 0,
+        "rec_pct": 100.0,
+        "wilson_ci_95": [
+          97.5,
+          100.0
+        ]
+      },
+      "serialization_anomaly_count": 0
+    },
+    "class_4": {
+      "name": "Class 4: Symmetric Output Perturbation",
+      "sample_size": 150,
+      "unmonitored": {
+        "authentic_or_recovered": 2,
+        "rejected": 148,
+        "uncontained": 0,
+        "rec_pct": 1.33
+      },
+      "reused_t": {
+        "authentic_or_recovered": 150,
+        "rejected": 0,
+        "uncontained": 0,
+        "rec_pct": 100.0
+      },
+      "recomputed_t": {
+        "authentic_or_recovered": 150,
+        "rejected": 0,
+        "uncontained": 0,
+        "rec_pct": 100.0,
+        "wilson_ci_95": [
+          97.5,
+          100.0
+        ]
+      },
+      "serialization_anomaly_count": 0
+    },
+    "class_5": {
+      "name": "Class 5: Pre-NTT Input Corruption",
+      "sample_size": 150,
+      "unmonitored": {
+        "authentic_or_recovered": 0,
+        "rejected": 150,
+        "uncontained": 0,
+        "rec_pct": 0.0
+      },
+      "reused_t": {
+        "authentic_or_recovered": 0,
+        "rejected": 150,
+        "uncontained": 0,
+        "rec_pct": 0.0
+      },
+      "recomputed_t": {
+        "authentic_or_recovered": 0,
+        "rejected": 150,
+        "uncontained": 0,
+        "rec_pct": 0.0,
+        "wilson_ci_95": [
+          0.0,
+          2.5
+        ]
+      },
+      "serialization_anomaly_count": 0
+    },
+    "class_6": {
+      "name": "Class 6: Persistent Stuck-at Butterfly Fault",
+      "sample_size": 150,
+      "unmonitored": {
+        "authentic_or_recovered": 0,
+        "rejected": 150,
+        "uncontained": 0,
+        "rec_pct": 0.0
+      },
+      "reused_t": {
+        "authentic_or_recovered": 0,
+        "rejected": 150,
+        "uncontained": 0,
+        "rec_pct": 0.0
+      },
+      "recomputed_t": {
+        "authentic_or_recovered": 0,
+        "rejected": 150,
+        "uncontained": 0,
+        "rec_pct": 0.0,
+        "wilson_ci_95": [
+          0.0,
+          2.5
+        ]
+      },
+      "serialization_anomaly_count": 0
+    },
+    "class_7": {
+      "name": "Class 7: FO Control Decision Gate Perturbation",
+      "sample_size": 150,
+      "unmonitored": {
+        "authentic_or_recovered": 0,
+        "rejected": 150,
+        "uncontained": 0,
+        "rec_pct": 0.0
+      },
+      "reused_t": {
+        "authentic_or_recovered": 0,
+        "rejected": 150,
+        "uncontained": 0,
+        "rec_pct": 0.0
+      },
+      "recomputed_t": {
+        "authentic_or_recovered": 0,
+        "rejected": 150,
+        "uncontained": 0,
+        "rec_pct": 0.0,
+        "wilson_ci_95": [
+          0.0,
+          2.5
+        ]
+      },
+      "serialization_anomaly_count": 0
+    },
+    "class_8": {
+      "name": "Class 8: Uncorrupted Negative Control",
+      "sample_size": 150,
+      "unmonitored": {
+        "authentic_or_recovered": 150,
+        "rejected": 0,
+        "uncontained": 0,
+        "rec_pct": 100.0
+      },
+      "reused_t": {
+        "authentic_or_recovered": 150,
+        "rejected": 0,
+        "uncontained": 0,
+        "rec_pct": 100.0
+      },
+      "recomputed_t": {
+        "authentic_or_recovered": 150,
+        "rejected": 0,
+        "uncontained": 0,
+        "rec_pct": 100.0,
+        "wilson_ci_95": [
+          97.5,
+          100.0
+        ]
+      },
+      "serialization_anomaly_count": 150
+    }
+  }
+}

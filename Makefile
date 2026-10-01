@@ -242,4 +242,18 @@ test-phase7g: phase7g
 	@echo "\n=== Phase 7G: Python Unit & Regression Tests ==="
 	python3 -m unittest discover -s tests/phase7g -v
 
-.PHONY: all clean test phase5 test-phase5 phase6 test-phase6 phase6b test-phase6b phase7 test-phase7 phase7b test-phase7b phase7c test-phase7c phase7d test-phase7d phase7e test-phase7e phase7f test-phase7f phase7g test-phase7g
+# Phase 7H Independent Native Fault-Injection Audit, Reproducibility, and Claim Validation
+$(BIN_DIR)/phase7h_independent_reproducer: experiments/phase7h/phase7h_independent_reproducer.c $(OBJ_DIR)/mlkem768_inst.o $(OBJ_DIR)/mlkem_fault_hooks.o | $(BIN_DIR)
+	$(CC) $(CFLAGS) -I . -I algorithms/source_ref/mlkem $^ -o $@ $(LDFLAGS)
+
+phase7h: $(BIN_DIR)/phase7h_independent_reproducer
+
+test-phase7h: phase7h
+	@echo "\n=== Phase 7H: Independent Native Fault-Injection Audit & Reproducer ==="
+	./$(BIN_DIR)/phase7h_independent_reproducer
+	@echo "\n=== Phase 7H: Python Independent Audit & Discrepancy Analysis ==="
+	python3 experiments/phase7h/audit_analysis.py
+	@echo "\n=== Phase 7H: Python Unit & Adversarial Tests ==="
+	python3 -m unittest discover -s tests/phase7h -v
+
+.PHONY: all clean test phase5 test-phase5 phase6 test-phase6 phase6b test-phase6b phase7 test-phase7 phase7b test-phase7b phase7c test-phase7c phase7d test-phase7d phase7e test-phase7e phase7f test-phase7f phase7g test-phase7g phase7h test-phase7h
