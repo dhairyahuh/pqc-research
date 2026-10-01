@@ -346,6 +346,7 @@ void mlk_poly_mulcache_compute(mlk_poly_mulcache *x, const mlk_poly *a)
 /* Reference: Embedded in `ntt()` in the reference implementation @[REF]. */
 static void mlk_ntt_butterfly_block(int16_t r[MLKEM_N], int16_t zeta,
                                     unsigned start, unsigned len,
+                                    unsigned layer,
                                     unsigned bound)
 __contract__(
   requires(start < MLKEM_N)
@@ -375,11 +376,33 @@ __contract__(
     invariant(array_abs_bound(r, j + len,     MLKEM_N,     bound))
     decreases(start + len - j))
   {
+#if defined(MLKEM_RESEARCH_FAULT_HOOKS)
+    unsigned b_idx = (start / (2 * len)) * len + (j - start);
+    int16_t zeta_val = zeta;
+    extern void hook_mid_ntt_pre_butterfly(
+        unsigned layer, unsigned butterfly_idx, int16_t *zeta_ptr,
+        int16_t *r_j, int16_t *r_j_len, size_t idx0, size_t idx1
+    );
+    hook_mid_ntt_pre_butterfly(layer, b_idx, &zeta_val, &r[j], &r[j + len], j, j + len);
+    int16_t t = mlk_fqmul(r[j + len], zeta_val);
+    extern void hook_mid_ntt_post_mul(
+        unsigned layer, unsigned butterfly_idx, int16_t *t_ptr, size_t idx0, size_t idx1
+    );
+    hook_mid_ntt_post_mul(layer, b_idx, &t, j, j + len);
+    r[j + len] = (int16_t)(r[j] - t);
+    r[j] = (int16_t)(r[j] + t);
+    extern void hook_mid_ntt_butterfly(
+        unsigned layer, unsigned butterfly_idx, int16_t zeta,
+        int16_t *r_j, int16_t *r_j_len, int16_t t, size_t idx0, size_t idx1
+    );
+    hook_mid_ntt_butterfly(layer, b_idx, zeta_val, &r[j], &r[j + len], t, j, j + len);
+#else
     int16_t t;
     t = mlk_fqmul(r[j + len], zeta);
     /* The precondition implies that the arithmetic does not overflow. */
     r[j + len] = (int16_t)(r[j] - t);
     r[j] = (int16_t)(r[j] + t);
+#endif
   }
 }
 
@@ -412,7 +435,7 @@ __contract__(
     decreases(MLKEM_N - start))
   {
     int16_t zeta = mlk_zetas[k++];
-    mlk_ntt_butterfly_block(r, zeta, start, len, layer * MLKEM_Q);
+    mlk_ntt_butterfly_block(r, zeta, start, len, layer, layer * MLKEM_Q);
   }
 }
 
@@ -450,6 +473,12 @@ __contract__(
     decreases(8 - layer))
   {
     mlk_ntt_layer(r, layer);
+#if defined(MLKEM_RESEARCH_FAULT_HOOKS)
+    {
+      extern void hook_mid_ntt_layer_end(unsigned layer, int16_t *coeffs);
+      hook_mid_ntt_layer_end(layer, r);
+    }
+#endif
   }
 
   /* Check the stronger bound */
@@ -473,8 +502,8 @@ void mlk_poly_ntt(mlk_poly *r)
   mlk_poly_ntt_c(r);
 #if defined(MLKEM_RESEARCH_FAULT_HOOKS)
   {
-    extern void hook_ntt_coefficient(int16_t *coeffs, size_t count);
-    hook_ntt_coefficient(r->coeffs, MLKEM_N);
+    extern void hook_post_ntt_coefficient(int16_t *coeffs, size_t count);
+    hook_post_ntt_coefficient(r->coeffs, MLKEM_N);
   }
 #endif
 }
@@ -580,8 +609,8 @@ void mlk_poly_invntt_tomont(mlk_poly *r)
   mlk_poly_invntt_tomont_c(r);
 #if defined(MLKEM_RESEARCH_FAULT_HOOKS)
   {
-    extern void hook_ntt_coefficient(int16_t *coeffs, size_t count);
-    hook_ntt_coefficient(r->coeffs, MLKEM_N);
+    extern void hook_post_ntt_coefficient(int16_t *coeffs, size_t count);
+    hook_post_ntt_coefficient(r->coeffs, MLKEM_N);
   }
 #endif
 }

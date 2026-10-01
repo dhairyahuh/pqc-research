@@ -188,13 +188,29 @@ __contract__(
          t[1] >= - ((int32_t) k * 2 * MLKEM_UINT12_LIMIT * 32768))
       decreases(MLKEM_K - k))
     {
+      int32_t prod0 = (int32_t)a->vec[k].coeffs[2 * i] * b->vec[k].coeffs[2 * i];
       t[0] += (int32_t)a->vec[k].coeffs[2 * i + 1] * b_cache->vec[k].coeffs[i];
-      t[0] += (int32_t)a->vec[k].coeffs[2 * i] * b->vec[k].coeffs[2 * i];
+      t[0] += prod0;
       t[1] += (int32_t)a->vec[k].coeffs[2 * i] * b->vec[k].coeffs[2 * i + 1];
       t[1] += (int32_t)a->vec[k].coeffs[2 * i + 1] * b->vec[k].coeffs[2 * i];
+#if defined(MLKEM_RESEARCH_FAULT_HOOKS)
+      {
+        extern void hook_mid_polymul_accumulator(
+            unsigned poly_idx, unsigned acc_idx, int32_t t[2],
+            int16_t op_a, int16_t op_b, int32_t prod
+        );
+        hook_mid_polymul_accumulator(i, k, t, a->vec[k].coeffs[2 * i], b->vec[k].coeffs[2 * i], prod0);
+      }
+#endif
     }
     r->coeffs[2 * i + 0] = mlk_montgomery_reduce(t[0]);
     r->coeffs[2 * i + 1] = mlk_montgomery_reduce(t[1]);
+#if defined(MLKEM_RESEARCH_FAULT_HOOKS)
+    {
+      extern void hook_mid_polymul_post_reduce(unsigned poly_idx, int16_t r0, int16_t r1);
+      hook_mid_polymul_post_reduce(i, r->coeffs[2 * i + 0], r->coeffs[2 * i + 1]);
+    }
+#endif
   }
 }
 
@@ -230,8 +246,8 @@ void mlk_polyvec_basemul_acc_montgomery_cached(
   mlk_polyvec_basemul_acc_montgomery_cached_c(r, a, b, b_cache);
 #if defined(MLKEM_RESEARCH_FAULT_HOOKS)
   {
-    extern void hook_polymul_accumulator(int16_t *coeffs, size_t count);
-    hook_polymul_accumulator(r->coeffs, MLKEM_N);
+    extern void hook_post_polymul_coefficient(int16_t *coeffs, size_t count);
+    hook_post_polymul_coefficient(r->coeffs, MLKEM_N);
   }
 #endif
 }

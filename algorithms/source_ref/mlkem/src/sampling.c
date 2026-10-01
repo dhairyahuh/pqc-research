@@ -287,6 +287,12 @@ void mlk_poly_cbd2(mlk_poly *r, const uint8_t buf[2 * MLKEM_N / 4])
     uint32_t t = mlk_load32_littleendian(buf + 4 * i);
     uint32_t d = t & 0x55555555;
     d += (t >> 1) & 0x55555555;
+#if defined(MLKEM_RESEARCH_FAULT_HOOKS)
+    {
+      extern void hook_mid_cbd_popcount(unsigned word_idx, uint32_t *d_ptr);
+      hook_mid_cbd_popcount(i, &d);
+    }
+#endif
 
     for (j = 0; j < 8; j++)
     __loop__(
@@ -298,13 +304,20 @@ void mlk_poly_cbd2(mlk_poly *r, const uint8_t buf[2 * MLKEM_N / 4])
        * truncation and subsequent subtraction in int16_t is lossless. */
       const int16_t a = (int16_t)((d >> (4 * j + 0)) & 0x3);
       const int16_t b = (int16_t)((d >> (4 * j + 2)) & 0x3);
-      r->coeffs[8 * i + j] = (int16_t)(a - b);
+      int16_t sampled = (int16_t)(a - b);
+#if defined(MLKEM_RESEARCH_FAULT_HOOKS)
+      {
+        extern void hook_mid_cbd_sample(size_t coeff_idx, int16_t a, int16_t b, int16_t *sampled_ptr);
+        hook_mid_cbd_sample(8 * i + j, a, b, &sampled);
+      }
+#endif
+      r->coeffs[8 * i + j] = sampled;
     }
   }
 #if defined(MLKEM_RESEARCH_FAULT_HOOKS)
   {
-    extern void hook_sampling_coefficient(int16_t *coeffs, size_t count);
-    hook_sampling_coefficient(r->coeffs, MLKEM_N);
+    extern void hook_post_sampling_coefficient(int16_t *coeffs, size_t count);
+    hook_post_sampling_coefficient(r->coeffs, MLKEM_N);
   }
 #endif
 }

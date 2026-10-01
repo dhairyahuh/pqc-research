@@ -1,0 +1,20 @@
+========================================================================================
+ FIGURE 1: NTT LAYER & OPERAND LOCUS SENSITIVITY MAP (ML-KEM-768)
+ Outcome Distribution: [C] = Correct (Slack Masked) | [R] = Implicit Rejection
+========================================================================================
+
+ Layer | INTERMEDIATE_T (Shared)        | OUTPUT_ADD (Single)            | TWIDDLE_ZETA (Twiddle)
+-------+--------------------------------+--------------------------------+--------------------------------
+   L1  | 100% [R] (Rejection)           | 100% [C] (Correct/Masked)      | 100% [R] (Rejection)          
+   L2  | 100% [R] (Rejection)           | 100% [R] (Rejection)           | 100% [R] (Rejection)          
+   L3  | 100% [R] (Rejection)           | 100% [R] (Rejection)           | 100% [R] (Rejection)          
+   L4  | 100% [R] (Rejection)           | 100% [R] (Rejection)           | 100% [R] (Rejection)          
+   L5  | 100% [R] (Rejection)           | 100% [R] (Rejection)           | 100% [R] (Rejection)          
+   L6  | 100% [R] (Rejection)           | 100% [R] (Rejection)           | 100% [R] (Rejection)          
+   L7  | 100% [R] (Rejection)           | 100% [R] (Rejection)           | 100% [R] (Rejection)          
+-------+--------------------------------+--------------------------------+--------------------------------
+Key Discovery:
+  - Single register faults (`OUTPUT_ADD`) in ML-KEM-768 remain within the decapsulation slack budget
+    (||e_time||_inf = 524 < 832.25 = floor(q/4)) across ALL 7 LAYERS, resulting in 100% CORRECT recovery.
+  - Shared intermediate faults (`INTERMEDIATE_T`) perturb both +/- branches, doubling time-domain error
+    (||e_time||_inf = 1048 > 832.25), causing 100% IMPLICIT_REJECTION across all layers.

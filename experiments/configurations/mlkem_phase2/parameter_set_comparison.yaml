@@ -1,0 +1,19 @@
+# Experiment Configuration: Parameter Set Comparison
+experiment_id: EXP-PARAM-COMPARE-07
+purpose: "Systematic cross-parameter-set comparison across ML-KEM-512, ML-KEM-768, and ML-KEM-1024"
+standards: ["NIST FIPS 203"]
+algorithms: ["ML-KEM-512", "ML-KEM-768", "ML-KEM-1024"]
+implementation: "mlkem-native (fc269bc2d106)"
+seed: 4455667788
+trials: 1000
+comparisons:
+  - locus: "INTERMEDIATE_T"
+    stage: 4
+    delta: 8
+  - locus: "OUTPUT_ADD"
+    stage: 4
+    delta: 8
+  - locus: "POLYMUL_ACCUM"
+    vector_index: 0
+    delta: 8
+output_path: "results/phase2/raw/parameter_set_comparison.json"

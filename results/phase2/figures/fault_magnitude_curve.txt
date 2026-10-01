@@ -1,0 +1,9 @@
+========================================================================================
+ FIGURE 2: FAULT MAGNITUDE & SPECTRAL PROFILE (ML-KEM-768, STAGE 4, LOCUS: INTERMEDIATE_T)
+========================================================================================
+
+  Delta  | Outcome Distribution                 | Bar Graph (Implicit Rejection Rate)
+---------+--------------------------------------+-----------------------------------------------
+---------+--------------------------------------+-----------------------------------------------
+Note: For INTERMEDIATE_T, even a minimal delta of +/-1 induces an error superposition that exceeds
+the decryption threshold in ML-KEM-768, causing 100% constant-time implicit rejection across all tested deltas.

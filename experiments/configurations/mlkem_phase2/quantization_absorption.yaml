@@ -1,0 +1,12 @@
+# Experiment Configuration: Quantization Absorption & Slack Model Validation
+experiment_id: EXP-QUANT-ABSORPTION-08
+purpose: "Empirical validation of Phase 1 dynamic absorption tolerance T(x, d, q) = min(M+(x), M-(x)) and decompression survival"
+standards: ["NIST FIPS 203"]
+algorithms: ["ML-KEM-512", "ML-KEM-768", "ML-KEM-1024"]
+implementation: "mlkem-native (fc269bc2d106)"
+compression_parameters:
+  d_u: [10, 11]
+  d_v: [4, 5]
+sample_size: 100000
+fault_magnitudes: [1, 2, 4, 8, 16, 32, 64, 128, 256, 512]
+output_path: "results/phase2/raw/quantization_absorption.json"

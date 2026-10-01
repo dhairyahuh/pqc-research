@@ -1,0 +1,14 @@
+# Experiment Configuration: Baseline Verification & Controls
+experiment_id: EXP-BASELINE-01
+purpose: "Verify fault-free cryptographic operation and evaluate injector controls A and B"
+standards: ["NIST FIPS 203"]
+algorithms: ["ML-KEM-512", "ML-KEM-768", "ML-KEM-1024"]
+implementation: "mlkem-native (fc269bc2d106)"
+seed: 123456789
+trials: 1000
+fault_models:
+  - control: "NO_FAULT"
+    expected: "CORRECT"
+  - control: "ZERO_GLITCH"
+    expected: "CORRECT"
+output_path: "results/phase2/raw/baseline_verification.json"

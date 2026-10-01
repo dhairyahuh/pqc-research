@@ -472,6 +472,19 @@ We establish six mathematically precise claims governing fault behavior in ML-KE
 
 ---
 
+### 12.1 Phase 2 Empirical Validation of Mathematical Claims
+
+The mathematical predictions established in Phase 1 were subjected to comprehensive empirical validation in Phase 2 across $N \ge 1,000$ to $5,000$ trials per configuration on `mlkem-native` (fc269bc2d106):
+
+| Mathematical Claim | Phase 1 Analytical Prediction | Phase 2 Empirical Observation | Correlation Status | Scientific Interpretation |
+|:---|:---|:---|:---:|:---|
+| **Claim 1 (NTT Diffusion Tree)** | $N_{\text{diffused}}^{\text{shared}}(L) = 2^{8-L}$<br>$N_{\text{diffused}}^{\text{single}}(L) = 2^{7-L}$ | Exact count across all layers 1..7: Shared: 128, 64, 32, 16, 8, 4, 2; Single: 64, 32, 16, 8, 4, 2, 1. | **CONFIRMED (EXACT)** | Difference is identically zero. Complete binary tree model holds exactly in concrete implementation. |
+| **Claim 3 & Theorem 7.2 (Quantization Tolerance)** | Universal non-zero worst-case margin does not exist: $T_{\text{worst}}(d, q) \le 1$. Dynamic tolerance $T(x, d, q) = \min(M^+, M^-)$. | Exhaustive evaluation of all $x \in \mathbb{Z}_q$ for $d \in \{4, 5, 10, 11\}$ confirmed $T_{\text{worst}} = 1$. Delta=1 flips bin for boundary elements. | **CONFIRMED (EXACT)** | Proves that guaranteed absorption does not exist; boundary proximity strictly governs absorption. |
+| **Section 8 (Decapsulation Slack & Locus Divergence)** | Peak time-domain error $\|e_{\text{time}}\|_\infty < \lfloor q/4 \rfloor = 832.25$ preserves message ($m'=m$). | Single register fault (`OUTPUT_ADD`) in ML-KEM-768/1024 yields $\|e\|_\infty = 524 < 832.25 \implies$ 100% `CORRECT`. Shared $t$ (`INTERMEDIATE_T`) yields $\|e\|_\infty = 1048 > 832.25 \implies$ 100% `IMPLICIT_REJECTION`. | **REFINED & CONFIRMED** | Resolves locus sensitivity: single-branch vs dual-branch perturbation determines whether slack threshold is crossed. |
+| **Table 11 (Parameter-Set Generalization)** | ML-KEM-512 uses $\eta_1 = 3$ (vs $\eta_1 = 2$ in 768/1024); NTT diffusion structure is invariant. | ML-KEM-512 experiences 100% `IMPLICIT_REJECTION` on both `OUTPUT_ADD` and `INTERMEDIATE_T` due to $1.5\times$ base noise consuming the slack margin. | **CONFIRMED** | Higher secret noise $\eta_1 = 3$ renders ML-KEM-512 strictly more sensitive to decapsulation register faults. |
+
+---
+
 ## 13. Mathematical Assumptions, Limitations & Open Questions
 
 ### 13.1 Mathematical Assumptions

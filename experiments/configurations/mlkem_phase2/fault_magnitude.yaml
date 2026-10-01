@@ -1,0 +1,18 @@
+# Experiment Configuration: Fault Magnitude & Arithmetic Spectrum
+experiment_id: EXP-FAULT-MAGNITUDE-03
+purpose: "Evaluate outcome probabilities as additive delta, bit position, or fault class varies"
+standards: ["NIST FIPS 203"]
+algorithm: "ML-KEM-768"
+implementation: "mlkem-native (fc269bc2d106)"
+seed: 9988776655
+trials: 1000
+target_stage: 4
+target_butterfly: 31
+deltas: [1, 2, 4, 8, 16, 32, 64, 128, 512, 1000]
+bit_positions: [0, 1, 2, 3, 4, 7, 8, 11, 15]
+fault_classes:
+  - "ADDITIVE_GLITCH"
+  - "BIT_FLIP"
+  - "ZEROING"
+  - "RANDOM_REPLACEMENT"
+output_path: "results/phase2/raw/fault_magnitude.json"

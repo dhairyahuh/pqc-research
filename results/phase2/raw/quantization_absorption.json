@@ -1,0 +1,3504 @@
+{
+  "metadata": {
+    "experiment": "EXP-QUANT-ABSORPTION-08",
+    "q": 3329,
+    "d_values": [
+      4,
+      5,
+      10,
+      11
+    ],
+    "deltas": [
+      1,
+      2,
+      4,
+      8,
+      16,
+      32,
+      64,
+      128,
+      256,
+      512
+    ],
+    "num_coefficients_evaluated": 3329
+  },
+  "worst_case_tolerance": {
+    "4": 1,
+    "5": 1,
+    "10": 1,
+    "11": 1
+  },
+  "distance_distribution": {},
+  "absorption_by_delta": {
+    "4": {
+      "1": {
+        "absorption_probability": 0.9951937518774406,
+        "absorbed_count": 3313,
+        "total": 3329
+      },
+      "2": {
+        "absorption_probability": 0.9903875037548814,
+        "absorbed_count": 3297,
+        "total": 3329
+      },
+      "4": {
+        "absorption_probability": 0.9807750075097627,
+        "absorbed_count": 3265,
+        "total": 3329
+      },
+      "8": {
+        "absorption_probability": 0.9615500150195254,
+        "absorbed_count": 3201,
+        "total": 3329
+      },
+      "16": {
+        "absorption_probability": 0.9231000300390507,
+        "absorbed_count": 3073,
+        "total": 3329
+      },
+      "32": {
+        "absorption_probability": 0.8462000600781016,
+        "absorbed_count": 2817,
+        "total": 3329
+      },
+      "64": {
+        "absorption_probability": 0.6924001201562031,
+        "absorbed_count": 2305,
+        "total": 3329
+      },
+      "128": {
+        "absorption_probability": 0.3848002403124061,
+        "absorbed_count": 1281,
+        "total": 3329
+      },
+      "256": {
+        "absorption_probability": 0.0,
+        "absorbed_count": 0,
+        "total": 3329
+      },
+      "512": {
+        "absorption_probability": 0.0,
+        "absorbed_count": 0,
+        "total": 3329
+      }
+    },
+    "5": {
+      "1": {
+        "absorption_probability": 0.9903875037548814,
+        "absorbed_count": 3297,
+        "total": 3329
+      },
+      "2": {
+        "absorption_probability": 0.9807750075097627,
+        "absorbed_count": 3265,
+        "total": 3329
+      },
+      "4": {
+        "absorption_probability": 0.9615500150195254,
+        "absorbed_count": 3201,
+        "total": 3329
+      },
+      "8": {
+        "absorption_probability": 0.9231000300390507,
+        "absorbed_count": 3073,
+        "total": 3329
+      },
+      "16": {
+        "absorption_probability": 0.8462000600781016,
+        "absorbed_count": 2817,
+        "total": 3329
+      },
+      "32": {
+        "absorption_probability": 0.6924001201562031,
+        "absorbed_count": 2305,
+        "total": 3329
+      },
+      "64": {
+        "absorption_probability": 0.3848002403124061,
+        "absorbed_count": 1281,
+        "total": 3329
+      },
+      "128": {
+        "absorption_probability": 0.0,
+        "absorbed_count": 0,
+        "total": 3329
+      },
+      "256": {
+        "absorption_probability": 0.0,
+        "absorbed_count": 0,
+        "total": 3329
+      },
+      "512": {
+        "absorption_probability": 0.0,
+        "absorbed_count": 0,
+        "total": 3329
+      }
+    },
+    "10": {
+      "1": {
+        "absorption_probability": 0.6924001201562031,
+        "absorbed_count": 2305,
+        "total": 3329
+      },
+      "2": {
+        "absorption_probability": 0.3848002403124061,
+        "absorbed_count": 1281,
+        "total": 3329
+      },
+      "4": {
+        "absorption_probability": 0.0,
+        "absorbed_count": 0,
+        "total": 3329
+      },
+      "8": {
+        "absorption_probability": 0.0,
+        "absorbed_count": 0,
+        "total": 3329
+      },
+      "16": {
+        "absorption_probability": 0.0,
+        "absorbed_count": 0,
+        "total": 3329
+      },
+      "32": {
+        "absorption_probability": 0.0,
+        "absorbed_count": 0,
+        "total": 3329
+      },
+      "64": {
+        "absorption_probability": 0.0,
+        "absorbed_count": 0,
+        "total": 3329
+      },
+      "128": {
+        "absorption_probability": 0.0,
+        "absorbed_count": 0,
+        "total": 3329
+      },
+      "256": {
+        "absorption_probability": 0.0,
+        "absorbed_count": 0,
+        "total": 3329
+      },
+      "512": {
+        "absorption_probability": 0.0,
+        "absorbed_count": 0,
+        "total": 3329
+      }
+    },
+    "11": {
+      "1": {
+        "absorption_probability": 0.3848002403124061,
+        "absorbed_count": 1281,
+        "total": 3329
+      },
+      "2": {
+        "absorption_probability": 0.0,
+        "absorbed_count": 0,
+        "total": 3329
+      },
+      "4": {
+        "absorption_probability": 0.0,
+        "absorbed_count": 0,
+        "total": 3329
+      },
+      "8": {
+        "absorption_probability": 0.0,
+        "absorbed_count": 0,
+        "total": 3329
+      },
+      "16": {
+        "absorption_probability": 0.0,
+        "absorbed_count": 0,
+        "total": 3329
+      },
+      "32": {
+        "absorption_probability": 0.0,
+        "absorbed_count": 0,
+        "total": 3329
+      },
+      "64": {
+        "absorption_probability": 0.0,
+        "absorbed_count": 0,
+        "total": 3329
+      },
+      "128": {
+        "absorption_probability": 0.0,
+        "absorbed_count": 0,
+        "total": 3329
+      },
+      "256": {
+        "absorption_probability": 0.0,
+        "absorbed_count": 0,
+        "total": 3329
+      },
+      "512": {
+        "absorption_probability": 0.0,
+        "absorbed_count": 0,
+        "total": 3329
+      }
+    }
+  },
+  "boundary_conditioned_absorption": {
+    "4": {
+      "1": {
+        "1": {
+          "total_xs": 32,
+          "absorbed": 16,
+          "prob": 0.5
+        },
+        "2": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "3": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "4": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "5": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "6": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "7": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "8": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "9": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "10": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "11": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "12": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "13": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "14": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "15": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "16": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "17": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "18": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "19": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "20": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "21": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "22": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "23": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "24": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "25": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "26": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "27": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "28": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "29": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "30": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "31": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "32": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "33": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "34": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "35": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "36": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "37": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "38": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "39": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "40": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "41": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "42": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "43": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "44": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "45": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "46": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "47": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "48": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "49": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "50": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "51": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "52": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "53": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "54": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "55": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "56": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "57": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "58": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "59": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "60": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "61": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "62": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "63": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "64": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "65": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "66": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "67": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "68": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "69": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "70": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "71": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "72": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "73": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "74": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "75": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "76": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "77": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "78": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "79": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "80": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "81": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "82": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "83": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "84": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "85": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "86": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "87": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "88": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "89": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "90": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "91": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "92": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "93": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "94": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "95": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "96": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "97": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "98": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "99": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "100": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "101": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "102": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "103": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "104": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "105": {
+          "total_xs": 1,
+          "absorbed": 1,
+          "prob": 1.0
+        }
+      },
+      "2": {
+        "1": {
+          "total_xs": 32,
+          "absorbed": 16,
+          "prob": 0.5
+        },
+        "2": {
+          "total_xs": 32,
+          "absorbed": 16,
+          "prob": 0.5
+        },
+        "3": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "4": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "5": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "6": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "7": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "8": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "9": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "10": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "11": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "12": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "13": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "14": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "15": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "16": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "17": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "18": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "19": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "20": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "21": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "22": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "23": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "24": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "25": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "26": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "27": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "28": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "29": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "30": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "31": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "32": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "33": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "34": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "35": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "36": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "37": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "38": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "39": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "40": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "41": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "42": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "43": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "44": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "45": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "46": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "47": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "48": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "49": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "50": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "51": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "52": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "53": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "54": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "55": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "56": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "57": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "58": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "59": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "60": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "61": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "62": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "63": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "64": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "65": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "66": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "67": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "68": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "69": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "70": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "71": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "72": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "73": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "74": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "75": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "76": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "77": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "78": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "79": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "80": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "81": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "82": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "83": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "84": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "85": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "86": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "87": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "88": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "89": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "90": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "91": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "92": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "93": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "94": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "95": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "96": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "97": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "98": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "99": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "100": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "101": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "102": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "103": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "104": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "105": {
+          "total_xs": 1,
+          "absorbed": 1,
+          "prob": 1.0
+        }
+      },
+      "4": {
+        "1": {
+          "total_xs": 32,
+          "absorbed": 16,
+          "prob": 0.5
+        },
+        "2": {
+          "total_xs": 32,
+          "absorbed": 16,
+          "prob": 0.5
+        },
+        "3": {
+          "total_xs": 32,
+          "absorbed": 16,
+          "prob": 0.5
+        },
+        "4": {
+          "total_xs": 32,
+          "absorbed": 16,
+          "prob": 0.5
+        },
+        "5": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "6": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "7": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "8": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "9": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "10": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "11": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "12": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "13": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "14": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "15": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "16": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "17": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "18": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "19": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "20": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "21": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "22": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "23": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "24": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "25": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "26": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "27": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "28": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "29": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "30": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "31": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "32": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "33": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "34": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "35": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "36": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "37": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "38": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "39": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "40": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "41": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "42": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "43": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "44": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "45": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "46": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "47": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "48": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "49": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "50": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "51": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "52": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "53": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "54": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "55": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "56": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "57": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "58": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "59": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "60": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "61": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "62": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "63": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "64": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "65": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "66": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "67": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "68": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "69": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "70": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "71": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "72": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "73": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "74": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "75": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "76": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "77": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "78": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "79": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "80": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "81": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "82": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "83": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "84": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "85": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "86": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "87": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "88": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "89": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "90": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "91": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "92": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "93": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "94": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "95": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "96": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "97": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "98": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "99": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "100": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "101": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "102": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "103": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "104": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "105": {
+          "total_xs": 1,
+          "absorbed": 1,
+          "prob": 1.0
+        }
+      },
+      "8": {
+        "1": {
+          "total_xs": 32,
+          "absorbed": 16,
+          "prob": 0.5
+        },
+        "2": {
+          "total_xs": 32,
+          "absorbed": 16,
+          "prob": 0.5
+        },
+        "3": {
+          "total_xs": 32,
+          "absorbed": 16,
+          "prob": 0.5
+        },
+        "4": {
+          "total_xs": 32,
+          "absorbed": 16,
+          "prob": 0.5
+        },
+        "5": {
+          "total_xs": 32,
+          "absorbed": 16,
+          "prob": 0.5
+        },
+        "6": {
+          "total_xs": 32,
+          "absorbed": 16,
+          "prob": 0.5
+        },
+        "7": {
+          "total_xs": 32,
+          "absorbed": 16,
+          "prob": 0.5
+        },
+        "8": {
+          "total_xs": 32,
+          "absorbed": 16,
+          "prob": 0.5
+        },
+        "9": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "10": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "11": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "12": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "13": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "14": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "15": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "16": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "17": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "18": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "19": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "20": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "21": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "22": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "23": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "24": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "25": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "26": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "27": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "28": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "29": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "30": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "31": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "32": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "33": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "34": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "35": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "36": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "37": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "38": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "39": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "40": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "41": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "42": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "43": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "44": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "45": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "46": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "47": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "48": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "49": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "50": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "51": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "52": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "53": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "54": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "55": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "56": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "57": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "58": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "59": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "60": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "61": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "62": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "63": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "64": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "65": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "66": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "67": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "68": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "69": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "70": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "71": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "72": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "73": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "74": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "75": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "76": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "77": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "78": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "79": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "80": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "81": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "82": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "83": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "84": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "85": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "86": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "87": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "88": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "89": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "90": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "91": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "92": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "93": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "94": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "95": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "96": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "97": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "98": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "99": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "100": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "101": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "102": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "103": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "104": {
+          "total_xs": 32,
+          "absorbed": 32,
+          "prob": 1.0
+        },
+        "105": {
+          "total_xs": 1,
+          "absorbed": 1,
+          "prob": 1.0
+        }
+      }
+    },
+    "5": {
+      "1": {
+        "1": {
+          "total_xs": 64,
+          "absorbed": 32,
+          "prob": 0.5
+        },
+        "2": {
+          "total_xs": 64,
+          "absorbed": 64,
+          "prob": 1.0
+        },
+        "3": {
+          "total_xs": 64,
+          "absorbed": 64,
+          "prob": 1.0
+        },
+        "4": {
+          "total_xs": 64,
+          "absorbed": 64,
+          "prob": 1.0
+        },
+        "5": {
+          "total_xs": 64,
+          "absorbed": 64,
+          "prob": 1.0
+        },
+        "6": {
+          "total_xs": 64,
+          "absorbed": 64,
+          "prob": 1.0
+        },
+        "7": {
+          "total_xs": 64,
+          "absorbed": 64,
+          "prob": 1.0
+        },
+        "8": {
+          "total_xs": 64,
+          "absorbed": 64,
+          "prob": 1.0
+        },
+        "9": {
+          "total_xs": 64,
+          "absorbed": 64,
+          "prob": 1.0
+        },
+        "10": {
+          "total_xs": 64,
+          "absorbed": 64,
+          "prob": 1.0
+        },
+        "11": {
+          "total_xs": 64,
+          "absorbed": 64,
+          "prob": 1.0
+        },
+        "12": {
+          "total_xs": 64,
+          "absorbed": 64,
+          "prob": 1.0
+        },
+        "13": {
+          "total_xs": 64,
+          "absorbed": 64,
+          "prob": 1.0
+        },
+        "14": {
+          "total_xs": 64,
+          "absorbed": 64,
+          "prob": 1.0
+        },
+        "15": {
+          "total_xs": 64,
+          "absorbed": 64,
+          "prob": 1.0
+        },
+        "16": {
+          "total_xs": 64,
+          "absorbed": 64,
+          "prob": 1.0
+        },
+        "17": {
+          "total_xs": 64,
+          "absorbed": 64,
+          "prob": 1.0
+        },
+        "18": {
+          "total_xs": 64,
+          "absorbed": 64,
+          "prob": 1.0
+        },
+        "19": {
+          "total_xs": 64,
+          "absorbed": 64,
+          "prob": 1.0
+        },
+        "20": {
+          "total_xs": 64,
+          "absorbed": 64,
+          "prob": 1.0
+        },
+        "21": {
+          "total_xs": 64,
+          "absorbed": 64,
+          "prob": 1.0
+        },
+        "22": {
+          "total_xs": 64,
+          "absorbed": 64,
+          "prob": 1.0
+        },
+        "23": {
+          "total_xs": 64,
+          "absorbed": 64,
+          "prob": 1.0
+        },
+        "24": {
+          "total_xs": 64,
+          "absorbed": 64,
+          "prob": 1.0
+        },
+        "25": {
+          "total_xs": 64,
+          "absorbed": 64,
+          "prob": 1.0
+        },
+        "26": {
+          "total_xs": 64,
+          "absorbed": 64,
+          "prob": 1.0
+        },
+        "27": {
+          "total_xs": 64,
+          "absorbed": 64,
+          "prob": 1.0
+        },
+        "28": {
+          "total_xs": 64,
+          "absorbed": 64,
+          "prob": 1.0
+        },
+        "29": {
+          "total_xs": 64,
+          "absorbed": 64,
+          "prob": 1.0
+        },
+        "30": {
+          "total_xs": 64,
+          "absorbed": 64,
+          "prob": 1.0
+        },
+        "31": {
+          "total_xs": 64,
+          "absorbed": 64,
+          "prob": 1.0
+        },
+        "32": {
+          "total_xs": 64,
+          "absorbed": 64,
+          "prob": 1.0
+        },
+        "33": {
+          "total_xs": 64,
+          "absorbed": 64,
+          "prob": 1.0
+        },
+        "34": {
+          "total_xs": 64,
+          "absorbed": 64,
+          "prob": 1.0
+        },
+        "35": {
+          "total_xs": 64,
+          "absorbed": 64,
+          "prob": 1.0
+        },
+        "36": {
+          "total_xs": 64,
+          "absorbed": 64,
+          "prob": 1.0
+        },
+        "37": {
+          "total_xs": 64,
+          "absorbed": 64,
+          "prob": 1.0
+        },
+        "38": {
+          "total_xs": 64,
+          "absorbed": 64,
+          "prob": 1.0
+        },
+        "39": {
+          "total_xs": 64,
+          "absorbed": 64,
+          "prob": 1.0
+        },
+        "40": {
+          "total_xs": 64,
+          "absorbed": 64,
+          "prob": 1.0
+        },
+        "41": {
+          "total_xs": 64,
+          "absorbed": 64,
+          "prob": 1.0
+        },
+        "42": {
+          "total_xs": 64,
+          "absorbed": 64,
+          "prob": 1.0
+        },
+        "43": {
+          "total_xs": 64,
+          "absorbed": 64,
+          "prob": 1.0
+        },
+        "44": {
+          "total_xs": 64,
+          "absorbed": 64,
+          "prob": 1.0
+        },
+        "45": {
+          "total_xs": 64,
+          "absorbed": 64,
+          "prob": 1.0
+        },
+        "46": {
+          "total_xs": 64,
+          "absorbed": 64,
+          "prob": 1.0
+        },
+        "47": {
+          "total_xs": 64,
+          "absorbed": 64,
+          "prob": 1.0
+        },
+        "48": {
+          "total_xs": 64,
+          "absorbed": 64,
+          "prob": 1.0
+        },
+        "49": {
+          "total_xs": 64,
+          "absorbed": 64,
+          "prob": 1.0
+        },
+        "50": {
+          "total_xs": 64,
+          "absorbed": 64,
+          "prob": 1.0
+        },
+        "51": {
+          "total_xs": 64,
+          "absorbed": 64,
+          "prob": 1.0
+        },
+        "52": {
+          "total_xs": 64,
+          "absorbed": 64,
+          "prob": 1.0
+        },
+        "53": {
+          "total_xs": 1,
+          "absorbed": 1,
+          "prob": 1.0
+        }
+      },
+      "2": {
+        "1": {
+          "total_xs": 64,
+          "absorbed": 32,
+          "prob": 0.5
+        },
+        "2": {
+          "total_xs": 64,
+          "absorbed": 32,
+          "prob": 0.5
+        },
+        "3": {
+          "total_xs": 64,
+          "absorbed": 64,
+          "prob": 1.0
+        },
+        "4": {
+          "total_xs": 64,
+          "absorbed": 64,
+          "prob": 1.0
+        },
+        "5": {
+          "total_xs": 64,
+          "absorbed": 64,
+          "prob": 1.0
+        },
+        "6": {
+          "total_xs": 64,
+          "absorbed": 64,
+          "prob": 1.0
+        },
+        "7": {
+          "total_xs": 64,
+          "absorbed": 64,
+          "prob": 1.0
+        },
+        "8": {
+          "total_xs": 64,
+          "absorbed": 64,
+          "prob": 1.0
+        },
+        "9": {
+          "total_xs": 64,
+          "absorbed": 64,
+          "prob": 1.0
+        },
+        "10": {
+          "total_xs": 64,
+          "absorbed": 64,
+          "prob": 1.0
+        },
+        "11": {
+          "total_xs": 64,
+          "absorbed": 64,
+          "prob": 1.0
+        },
+        "12": {
+          "total_xs": 64,
+          "absorbed": 64,
+          "prob": 1.0
+        },
+        "13": {
+          "total_xs": 64,
+          "absorbed": 64,
+          "prob": 1.0
+        },
+        "14": {
+          "total_xs": 64,
+          "absorbed": 64,
+          "prob": 1.0
+        },
+        "15": {
+          "total_xs": 64,
+          "absorbed": 64,
+          "prob": 1.0
+        },
+        "16": {
+          "total_xs": 64,
+          "absorbed": 64,
+          "prob": 1.0
+        },
+        "17": {
+          "total_xs": 64,
+          "absorbed": 64,
+          "prob": 1.0
+        },
+        "18": {
+          "total_xs": 64,
+          "absorbed": 64,
+          "prob": 1.0
+        },
+        "19": {
+          "total_xs": 64,
+          "absorbed": 64,
+          "prob": 1.0
+        },
+        "20": {
+          "total_xs": 64,
+          "absorbed": 64,
+          "prob": 1.0
+        },
+        "21": {
+          "total_xs": 64,
+          "absorbed": 64,
+          "prob": 1.0
+        },
+        "22": {
+          "total_xs": 64,
+          "absorbed": 64,
+          "prob": 1.0
+        },
+        "23": {
+          "total_xs": 64,
+          "absorbed": 64,
+          "prob": 1.0
+        },
+        "24": {
+          "total_xs": 64,
+          "absorbed": 64,
+          "prob": 1.0
+        },
+        "25": {
+          "total_xs": 64,
+          "absorbed": 64,
+          "prob": 1.0
+        },
+        "26": {
+          "total_xs": 64,
+          "absorbed": 64,
+          "prob": 1.0
+        },
+        "27": {
+          "total_xs": 64,
+          "absorbed": 64,
+          "prob": 1.0
+        },
+        "28": {
+          "total_xs": 64,
+          "absorbed": 64,
+          "prob": 1.0
+        },
+        "29": {
+          "total_xs": 64,
+          "absorbed": 64,
+          "prob": 1.0
+        },
+        "30": {
+          "total_xs": 64,
+          "absorbed": 64,
+          "prob": 1.0
+        },
+        "31": {
+          "total_xs": 64,
+          "absorbed": 64,
+          "prob": 1.0
+        },
+        "32": {
+          "total_xs": 64,
+          "absorbed": 64,
+          "prob": 1.0
+        },
+        "33": {
+          "total_xs": 64,
+          "absorbed": 64,
+          "prob": 1.0
+        },
+        "34": {
+          "total_xs": 64,
+          "absorbed": 64,
+          "prob": 1.0
+        },
+        "35": {
+          "total_xs": 64,
+          "absorbed": 64,
+          "prob": 1.0
+        },
+        "36": {
+          "total_xs": 64,
+          "absorbed": 64,
+          "prob": 1.0
+        },
+        "37": {
+          "total_xs": 64,
+          "absorbed": 64,
+          "prob": 1.0
+        },
+        "38": {
+          "total_xs": 64,
+          "absorbed": 64,
+          "prob": 1.0
+        },
+        "39": {
+          "total_xs": 64,
+          "absorbed": 64,
+          "prob": 1.0
+        },
+        "40": {
+          "total_xs": 64,
+          "absorbed": 64,
+          "prob": 1.0
+        },
+        "41": {
+          "total_xs": 64,
+          "absorbed": 64,
+          "prob": 1.0
+        },
+        "42": {
+          "total_xs": 64,
+          "absorbed": 64,
+          "prob": 1.0
+        },
+        "43": {
+          "total_xs": 64,
+          "absorbed": 64,
+          "prob": 1.0
+        },
+        "44": {
+          "total_xs": 64,
+          "absorbed": 64,
+          "prob": 1.0
+        },
+        "45": {
+          "total_xs": 64,
+          "absorbed": 64,
+          "prob": 1.0
+        },
+        "46": {
+          "total_xs": 64,
+          "absorbed": 64,
+          "prob": 1.0
+        },
+        "47": {
+          "total_xs": 64,
+          "absorbed": 64,
+          "prob": 1.0
+        },
+        "48": {
+          "total_xs": 64,
+          "absorbed": 64,
+          "prob": 1.0
+        },
+        "49": {
+          "total_xs": 64,
+          "absorbed": 64,
+          "prob": 1.0
+        },
+        "50": {
+          "total_xs": 64,
+          "absorbed": 64,
+          "prob": 1.0
+        },
+        "51": {
+          "total_xs": 64,
+          "absorbed": 64,
+          "prob": 1.0
+        },
+        "52": {
+          "total_xs": 64,
+          "absorbed": 64,
+          "prob": 1.0
+        },
+        "53": {
+          "total_xs": 1,
+          "absorbed": 1,
+          "prob": 1.0
+        }
+      },
+      "4": {
+        "1": {
+          "total_xs": 64,
+          "absorbed": 32,
+          "prob": 0.5
+        },
+        "2": {
+          "total_xs": 64,
+          "absorbed": 32,
+          "prob": 0.5
+        },
+        "3": {
+          "total_xs": 64,
+          "absorbed": 32,
+          "prob": 0.5
+        },
+        "4": {
+          "total_xs": 64,
+          "absorbed": 32,
+          "prob": 0.5
+        },
+        "5": {
+          "total_xs": 64,
+          "absorbed": 64,
+          "prob": 1.0
+        },
+        "6": {
+          "total_xs": 64,
+          "absorbed": 64,
+          "prob": 1.0
+        },
+        "7": {
+          "total_xs": 64,
+          "absorbed": 64,
+          "prob": 1.0
+        },
+        "8": {
+          "total_xs": 64,
+          "absorbed": 64,
+          "prob": 1.0
+        },
+        "9": {
+          "total_xs": 64,
+          "absorbed": 64,
+          "prob": 1.0
+        },
+        "10": {
+          "total_xs": 64,
+          "absorbed": 64,
+          "prob": 1.0
+        },
+        "11": {
+          "total_xs": 64,
+          "absorbed": 64,
+          "prob": 1.0
+        },
+        "12": {
+          "total_xs": 64,
+          "absorbed": 64,
+          "prob": 1.0
+        },
+        "13": {
+          "total_xs": 64,
+          "absorbed": 64,
+          "prob": 1.0
+        },
+        "14": {
+          "total_xs": 64,
+          "absorbed": 64,
+          "prob": 1.0
+        },
+        "15": {
+          "total_xs": 64,
+          "absorbed": 64,
+          "prob": 1.0
+        },
+        "16": {
+          "total_xs": 64,
+          "absorbed": 64,
+          "prob": 1.0
+        },
+        "17": {
+          "total_xs": 64,
+          "absorbed": 64,
+          "prob": 1.0
+        },
+        "18": {
+          "total_xs": 64,
+          "absorbed": 64,
+          "prob": 1.0
+        },
+        "19": {
+          "total_xs": 64,
+          "absorbed": 64,
+          "prob": 1.0
+        },
+        "20": {
+          "total_xs": 64,
+          "absorbed": 64,
+          "prob": 1.0
+        },
+        "21": {
+          "total_xs": 64,
+          "absorbed": 64,
+          "prob": 1.0
+        },
+        "22": {
+          "total_xs": 64,
+          "absorbed": 64,
+          "prob": 1.0
+        },
+        "23": {
+          "total_xs": 64,
+          "absorbed": 64,
+          "prob": 1.0
+        },
+        "24": {
+          "total_xs": 64,
+          "absorbed": 64,
+          "prob": 1.0
+        },
+        "25": {
+          "total_xs": 64,
+          "absorbed": 64,
+          "prob": 1.0
+        },
+        "26": {
+          "total_xs": 64,
+          "absorbed": 64,
+          "prob": 1.0
+        },
+        "27": {
+          "total_xs": 64,
+          "absorbed": 64,
+          "prob": 1.0
+        },
+        "28": {
+          "total_xs": 64,
+          "absorbed": 64,
+          "prob": 1.0
+        },
+        "29": {
+          "total_xs": 64,
+          "absorbed": 64,
+          "prob": 1.0
+        },
+        "30": {
+          "total_xs": 64,
+          "absorbed": 64,
+          "prob": 1.0
+        },
+        "31": {
+          "total_xs": 64,
+          "absorbed": 64,
+          "prob": 1.0
+        },
+        "32": {
+          "total_xs": 64,
+          "absorbed": 64,
+          "prob": 1.0
+        },
+        "33": {
+          "total_xs": 64,
+          "absorbed": 64,
+          "prob": 1.0
+        },
+        "34": {
+          "total_xs": 64,
+          "absorbed": 64,
+          "prob": 1.0
+        },
+        "35": {
+          "total_xs": 64,
+          "absorbed": 64,
+          "prob": 1.0
+        },
+        "36": {
+          "total_xs": 64,
+          "absorbed": 64,
+          "prob": 1.0
+        },
+        "37": {
+          "total_xs": 64,
+          "absorbed": 64,
+          "prob": 1.0
+        },
+        "38": {
+          "total_xs": 64,
+          "absorbed": 64,
+          "prob": 1.0
+        },
+        "39": {
+          "total_xs": 64,
+          "absorbed": 64,
+          "prob": 1.0
+        },
+        "40": {
+          "total_xs": 64,
+          "absorbed": 64,
+          "prob": 1.0
+        },
+        "41": {
+          "total_xs": 64,
+          "absorbed": 64,
+          "prob": 1.0
+        },
+        "42": {
+          "total_xs": 64,
+          "absorbed": 64,
+          "prob": 1.0
+        },
+        "43": {
+          "total_xs": 64,
+          "absorbed": 64,
+          "prob": 1.0
+        },
+        "44": {
+          "total_xs": 64,
+          "absorbed": 64,
+          "prob": 1.0
+        },
+        "45": {
+          "total_xs": 64,
+          "absorbed": 64,
+          "prob": 1.0
+        },
+        "46": {
+          "total_xs": 64,
+          "absorbed": 64,
+          "prob": 1.0
+        },
+        "47": {
+          "total_xs": 64,
+          "absorbed": 64,
+          "prob": 1.0
+        },
+        "48": {
+          "total_xs": 64,
+          "absorbed": 64,
+          "prob": 1.0
+        },
+        "49": {
+          "total_xs": 64,
+          "absorbed": 64,
+          "prob": 1.0
+        },
+        "50": {
+          "total_xs": 64,
+          "absorbed": 64,
+          "prob": 1.0
+        },
+        "51": {
+          "total_xs": 64,
+          "absorbed": 64,
+          "prob": 1.0
+        },
+        "52": {
+          "total_xs": 64,
+          "absorbed": 64,
+          "prob": 1.0
+        },
+        "53": {
+          "total_xs": 1,
+          "absorbed": 1,
+          "prob": 1.0
+        }
+      },
+      "8": {
+        "1": {
+          "total_xs": 64,
+          "absorbed": 32,
+          "prob": 0.5
+        },
+        "2": {
+          "total_xs": 64,
+          "absorbed": 32,
+          "prob": 0.5
+        },
+        "3": {
+          "total_xs": 64,
+          "absorbed": 32,
+          "prob": 0.5
+        },
+        "4": {
+          "total_xs": 64,
+          "absorbed": 32,
+          "prob": 0.5
+        },
+        "5": {
+          "total_xs": 64,
+          "absorbed": 32,
+          "prob": 0.5
+        },
+        "6": {
+          "total_xs": 64,
+          "absorbed": 32,
+          "prob": 0.5
+        },
+        "7": {
+          "total_xs": 64,
+          "absorbed": 32,
+          "prob": 0.5
+        },
+        "8": {
+          "total_xs": 64,
+          "absorbed": 32,
+          "prob": 0.5
+        },
+        "9": {
+          "total_xs": 64,
+          "absorbed": 64,
+          "prob": 1.0
+        },
+        "10": {
+          "total_xs": 64,
+          "absorbed": 64,
+          "prob": 1.0
+        },
+        "11": {
+          "total_xs": 64,
+          "absorbed": 64,
+          "prob": 1.0
+        },
+        "12": {
+          "total_xs": 64,
+          "absorbed": 64,
+          "prob": 1.0
+        },
+        "13": {
+          "total_xs": 64,
+          "absorbed": 64,
+          "prob": 1.0
+        },
+        "14": {
+          "total_xs": 64,
+          "absorbed": 64,
+          "prob": 1.0
+        },
+        "15": {
+          "total_xs": 64,
+          "absorbed": 64,
+          "prob": 1.0
+        },
+        "16": {
+          "total_xs": 64,
+          "absorbed": 64,
+          "prob": 1.0
+        },
+        "17": {
+          "total_xs": 64,
+          "absorbed": 64,
+          "prob": 1.0
+        },
+        "18": {
+          "total_xs": 64,
+          "absorbed": 64,
+          "prob": 1.0
+        },
+        "19": {
+          "total_xs": 64,
+          "absorbed": 64,
+          "prob": 1.0
+        },
+        "20": {
+          "total_xs": 64,
+          "absorbed": 64,
+          "prob": 1.0
+        },
+        "21": {
+          "total_xs": 64,
+          "absorbed": 64,
+          "prob": 1.0
+        },
+        "22": {
+          "total_xs": 64,
+          "absorbed": 64,
+          "prob": 1.0
+        },
+        "23": {
+          "total_xs": 64,
+          "absorbed": 64,
+          "prob": 1.0
+        },
+        "24": {
+          "total_xs": 64,
+          "absorbed": 64,
+          "prob": 1.0
+        },
+        "25": {
+          "total_xs": 64,
+          "absorbed": 64,
+          "prob": 1.0
+        },
+        "26": {
+          "total_xs": 64,
+          "absorbed": 64,
+          "prob": 1.0
+        },
+        "27": {
+          "total_xs": 64,
+          "absorbed": 64,
+          "prob": 1.0
+        },
+        "28": {
+          "total_xs": 64,
+          "absorbed": 64,
+          "prob": 1.0
+        },
+        "29": {
+          "total_xs": 64,
+          "absorbed": 64,
+          "prob": 1.0
+        },
+        "30": {
+          "total_xs": 64,
+          "absorbed": 64,
+          "prob": 1.0
+        },
+        "31": {
+          "total_xs": 64,
+          "absorbed": 64,
+          "prob": 1.0
+        },
+        "32": {
+          "total_xs": 64,
+          "absorbed": 64,
+          "prob": 1.0
+        },
+        "33": {
+          "total_xs": 64,
+          "absorbed": 64,
+          "prob": 1.0
+        },
+        "34": {
+          "total_xs": 64,
+          "absorbed": 64,
+          "prob": 1.0
+        },
+        "35": {
+          "total_xs": 64,
+          "absorbed": 64,
+          "prob": 1.0
+        },
+        "36": {
+          "total_xs": 64,
+          "absorbed": 64,
+          "prob": 1.0
+        },
+        "37": {
+          "total_xs": 64,
+          "absorbed": 64,
+          "prob": 1.0
+        },
+        "38": {
+          "total_xs": 64,
+          "absorbed": 64,
+          "prob": 1.0
+        },
+        "39": {
+          "total_xs": 64,
+          "absorbed": 64,
+          "prob": 1.0
+        },
+        "40": {
+          "total_xs": 64,
+          "absorbed": 64,
+          "prob": 1.0
+        },
+        "41": {
+          "total_xs": 64,
+          "absorbed": 64,
+          "prob": 1.0
+        },
+        "42": {
+          "total_xs": 64,
+          "absorbed": 64,
+          "prob": 1.0
+        },
+        "43": {
+          "total_xs": 64,
+          "absorbed": 64,
+          "prob": 1.0
+        },
+        "44": {
+          "total_xs": 64,
+          "absorbed": 64,
+          "prob": 1.0
+        },
+        "45": {
+          "total_xs": 64,
+          "absorbed": 64,
+          "prob": 1.0
+        },
+        "46": {
+          "total_xs": 64,
+          "absorbed": 64,
+          "prob": 1.0
+        },
+        "47": {
+          "total_xs": 64,
+          "absorbed": 64,
+          "prob": 1.0
+        },
+        "48": {
+          "total_xs": 64,
+          "absorbed": 64,
+          "prob": 1.0
+        },
+        "49": {
+          "total_xs": 64,
+          "absorbed": 64,
+          "prob": 1.0
+        },
+        "50": {
+          "total_xs": 64,
+          "absorbed": 64,
+          "prob": 1.0
+        },
+        "51": {
+          "total_xs": 64,
+          "absorbed": 64,
+          "prob": 1.0
+        },
+        "52": {
+          "total_xs": 64,
+          "absorbed": 64,
+          "prob": 1.0
+        },
+        "53": {
+          "total_xs": 1,
+          "absorbed": 1,
+          "prob": 1.0
+        }
+      }
+    },
+    "10": {
+      "1": {
+        "1": {
+          "total_xs": 2048,
+          "absorbed": 1024,
+          "prob": 0.5
+        },
+        "2": {
+          "total_xs": 1281,
+          "absorbed": 1281,
+          "prob": 1.0
+        }
+      },
+      "2": {
+        "1": {
+          "total_xs": 2048,
+          "absorbed": 1024,
+          "prob": 0.5
+        },
+        "2": {
+          "total_xs": 1281,
+          "absorbed": 257,
+          "prob": 0.20062451209992194
+        }
+      },
+      "4": {
+        "1": {
+          "total_xs": 2048,
+          "absorbed": 0,
+          "prob": 0.0
+        },
+        "2": {
+          "total_xs": 1281,
+          "absorbed": 0,
+          "prob": 0.0
+        }
+      },
+      "8": {
+        "1": {
+          "total_xs": 2048,
+          "absorbed": 0,
+          "prob": 0.0
+        },
+        "2": {
+          "total_xs": 1281,
+          "absorbed": 0,
+          "prob": 0.0
+        }
+      }
+    },
+    "11": {
+      "1": {
+        "1": {
+          "total_xs": 3329,
+          "absorbed": 1281,
+          "prob": 0.3848002403124061
+        }
+      },
+      "2": {
+        "1": {
+          "total_xs": 3329,
+          "absorbed": 0,
+          "prob": 0.0
+        }
+      },
+      "4": {
+        "1": {
+          "total_xs": 3329,
+          "absorbed": 0,
+          "prob": 0.0
+        }
+      },
+      "8": {
+        "1": {
+          "total_xs": 3329,
+          "absorbed": 0,
+          "prob": 0.0
+        }
+      }
+    }
+  }
+}

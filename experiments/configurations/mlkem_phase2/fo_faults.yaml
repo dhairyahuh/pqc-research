@@ -1,0 +1,19 @@
+# Experiment Configuration: Fujisaki-Okamoto Equality Predicate & Ciphertext Corruptions
+experiment_id: EXP-FO-FAULTS-05
+purpose: "Evaluate Fujisaki-Okamoto transform verification bypass, legitimate rejection, and corrupted ciphertext handling"
+standards: ["NIST FIPS 203"]
+algorithms: ["ML-KEM-512", "ML-KEM-768", "ML-KEM-1024"]
+implementation: "mlkem-native (fc269bc2d106)"
+seed: 7788990011
+trials: 1000
+test_cases:
+  - case_id: "CASE_A_VALID_CT_FORCED_FAIL"
+    description: "Valid ciphertext decapsulation with FO equality predicate forced to failure (fail=1)"
+    expected_outcome: "IMPLICIT_REJECTION"
+  - case_id: "CASE_B1_SLACK_CT_FORCED_PASS"
+    description: "Perturbed ciphertext within decryption slack with FO equality predicate forced to pass (fail=0)"
+    expected_outcome: "CORRECT"
+  - case_id: "CASE_B2_SEVERED_CT_FORCED_PASS"
+    description: "Severely corrupted ciphertext beyond decryption slack with FO equality predicate forced to pass (fail=0)"
+    expected_outcome: "CANDIDATE_KEY_MISMATCH"
+output_path: "results/phase2/raw/fo_faults.json"
