@@ -1,0 +1,26 @@
+# Experiment Configuration: ML-DSA Verification Decision Predicate Bifurcation
+experiment_id: EXP-MLDSA-VERIFY-07
+purpose: "Evaluate the 4 fundamental verification decision states: VALID->ACCEPT, VALID->REJECT, INVALID->REJECT, INVALID->ACCEPT"
+standards: ["NIST FIPS 204"]
+algorithms: ["ML-DSA-44", "ML-DSA-65", "ML-DSA-87"]
+implementation: "mldsa-native (14d195a82dd2)"
+seed: 3322110099
+trials: 1000
+states:
+  - state_id: "VALID_ACCEPT"
+    input_signature: "VALID"
+    injected_fault: "NONE"
+    expected_outcome: "VERIFICATION_ACCEPT"
+  - state_id: "VALID_REJECT"
+    input_signature: "VALID"
+    injected_fault: "VERIFY_CMP_FORCED_FAIL"
+    expected_outcome: "VERIFICATION_REJECT"
+  - state_id: "INVALID_REJECT"
+    input_signature: "CORRUPTED"
+    injected_fault: "NONE"
+    expected_outcome: "VERIFICATION_REJECT"
+  - state_id: "INVALID_ACCEPT"
+    input_signature: "CORRUPTED"
+    injected_fault: "VERIFY_CMP_FORCED_PASS"
+    expected_outcome: "VERIFICATION_ACCEPT"
+output_path: "results/phase3/raw/verification_faults.json"

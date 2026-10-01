@@ -78,19 +78,36 @@ graph TD
   - SMT/Z3 formal boundary verification of multi-bit glitch injection across adjacent Montgomery reduction steps.
 - **Exit Criteria Satisfied:** All 117 campaigns executed, cross-validated with liboqs 0.16.0, verified with 95% Wilson confidence intervals, and documented in comprehensive audit.
 
-### Phase 3 — ML-DSA Fault Campaign
-- **Objective:** Instrument and execute comprehensive mid-operation fault campaigns on NIST FIPS 204.
-- **Key Modules:**
-  - Parameter sets: ML-DSA-44, ML-DSA-65, ML-DSA-87.
-  - Targets:
-    - Fiat-Shamir with Aborts rejection sampling loops (loop counter tampering, premature aborts).
-    - Infinity-norm bounding checks ($\|z\|_\infty < \gamma_1 - \beta$ and $\|r_0\|_\infty < \gamma_2 - \beta$).
-    - HighBits and LowBits decomposition (`Power2Round`, `Decompose`).
-    - Hint bit generation and signature encoding.
-    - Number Theoretic Transform (NTT) for $q=8380417$.
-    - Deterministic vs. hedged (randomized) signing modes under identical faults.
-  - Failure modes evaluated: signature invalidity, verification failure, rejection loop hang (SEFI), and potential bias leakage.
-- **Exit Criteria:** Raw JSON output in `results/mldsa_campaign_results.json` and loop termination bounds.
+### Phase 3 — ML-DSA Fault Campaign [STATUS: COMPLETED]
+- **Objective:** Instrument and execute comprehensive mid-operation fault campaigns across all FIPS 204 parameter sets (ML-DSA-44, ML-DSA-65, ML-DSA-87).
+- **Key Deliverables:**
+  - Implementation Mapping Document: [`docs/mldsa-implementation-map.md`](file:///Users/dhairyajain/Desktop/pqc%20research/docs/mldsa-implementation-map.md)
+  - Native Multi-Level Instrumented Objects: `bin/obj/mldsa44_inst.o`, `bin/obj/mldsa65_inst.o`, `bin/obj/mldsa87_inst.o`
+  - Fault Injection Hook Subsystem: [`algorithms/source_ref/mldsa_fault_hooks.h`](file:///Users/dhairyajain/Desktop/pqc%20research/algorithms/source_ref/mldsa_fault_hooks.h) & [`algorithms/source_ref/mldsa_fault_hooks.c`](file:///Users/dhairyajain/Desktop/pqc%20research/algorithms/source_ref/mldsa_fault_hooks.c)
+  - Automated Native Campaign Runner: [`experiments/mldsa/mldsa_campaign_runner.c`](file:///Users/dhairyajain/Desktop/pqc%20research/experiments/mldsa/mldsa_campaign_runner.c) & [`bin/mldsa_campaign_runner`](file:///Users/dhairyajain/Desktop/pqc%20research/bin/mldsa_campaign_runner)
+  - Python Campaign Orchestrator CLI: [`experiments/mldsa/run_campaign.py`](file:///Users/dhairyajain/Desktop/pqc%20research/experiments/mldsa/run_campaign.py)
+  - Campaign Result Analyzer: [`experiments/mldsa/analyze_campaign_results.py`](file:///Users/dhairyajain/Desktop/pqc%20research/experiments/mldsa/analyze_campaign_results.py)
+  - Experiment Configurations: [`experiments/configurations/mldsa_phase3/*.yaml`](file:///Users/dhairyajain/Desktop/pqc%20research/experiments/configurations/mldsa_phase3/) (7 YAML configurations)
+  - Raw Experimental Datasets: [`results/phase3/raw/mldsa_campaign_raw_results.json`](file:///Users/dhairyajain/Desktop/pqc%20research/results/phase3/raw/mldsa_campaign_raw_results.json) (>80,000 injected trials)
+  - Processed Sensitivity Matrix: [`results/phase3/processed/sensitivity_matrix.csv`](file:///Users/dhairyajain/Desktop/pqc%20research/results/phase3/processed/sensitivity_matrix.csv)
+  - Summary Markdown Reports: [`results/phase3/summaries/`](file:///Users/dhairyajain/Desktop/pqc%20research/results/phase3/summaries/)
+  - ASCII Visualizations & Figures: [`results/phase3/figures/`](file:///Users/dhairyajain/Desktop/pqc%20research/results/phase3/figures/)
+  - Formal Phase 3 Audit Report: [`docs/phase3-mldsa-fault-campaign-audit.md`](file:///Users/dhairyajain/Desktop/pqc%20research/docs/phase3-mldsa-fault-campaign-audit.md)
+  - Campaign Verification Test Suite: [`tests/test_phase3_campaign.py`](file:///Users/dhairyajain/Desktop/pqc%20research/tests/test_phase3_campaign.py)
+- **Confirmed Empirical Findings:**
+  - **NTT 8-Layer Diffusion Law:** Forward NTT decomposes fully into 8 radix-2 layers for modulus $q=8,380,417$. Empirical diffusion matches closed-form laws $N_\text{diffused}^\text{shared}(L) = 2^{9-L}$ and $N_\text{diffused}^\text{single}(L) = 2^{8-L}$ across all 8 layers with zero discrepancy.
+  - **Rejection Sampling Firewall & Attempt Exhaustion:** In signing, arithmetic faults on secret key NTTs or candidate responses are trapped by infinity-norm bounds ($\|z\|_\infty < \gamma_1 - \beta$, $\|w_0\|_\infty < \gamma_2 - \beta$). Transient faults trigger clean retries; persistent faults result in 100% attempt budget exhaustion (`MLD_ERR_SIGN_ATTEMPTS_EXHAUSTED`), preventing private-key leakage by failing closed.
+  - **Critical Verification Gate Bypass (`INVALID -> ACCEPT`):** In `mld_sign_verify_internal`, flipping the result of constant-time memory comparison `cmp` turns an invalid/tampered signature into `VERIFICATION_ACCEPT` with **100.0% probability (95% CI: [99.63%, 100.0%])**, representing a single-point-of-failure vulnerable to clock or voltage glitches.
+  - **Zero Verification Slack:** Unlike ML-KEM, ML-DSA has zero arithmetic slack during verification; any fault $\Delta \ge 1$ in the verification NTT alters reconstructed commitment $w_1$, resulting in 100% verification rejection.
+  - **Secret Key Memory Region Decomposition:** Memory corruption in $\rho$, $tr$, and $t_0$ causes invalid signatures; corruption in $s_1$ and $s_2$ triggers 100% attempt budget exhaustion; corruption in seed $K$ alters nonce derivation in hedged signing mode.
+- **Unresolved Questions:**
+  - Multi-fault interaction across simultaneous rejection check and hint generation gates.
+  - Fault tolerance of non-uniform polynomial sampling vs deterministic Keccak stream expansion under single-event transients.
+- **Implications for Phase 4 (Cross-Algorithm Correlation):**
+  - Synthesize a unified mathematical and empirical comparison framework contrasting ML-KEM's continuous algebraic slack budget with ML-DSA's discrete rejection sampling firewall and Boolean verification decision boundary.
+- **Experiments Requiring Follow-Up:**
+  - Detailed SMT-based analysis of the exact verification decision gate in Phase 6.
+- **Exit Criteria Satisfied:** Clean baseline controls verified, 8-layer NTT diffusion validated, rejection sampling firewall characterized, verification decision boundary mapped, and full test suite passing.
 
 ### Phase 4 — Mathematical + Empirical Correlation
 - **Objective:** Systematically connect theoretical error equations with observed implementation-level outcomes.

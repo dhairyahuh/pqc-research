@@ -1,0 +1,18 @@
+========================================================================================
+ FIGURE 1: ML-DSA NTT 8-LAYER SENSITIVITY & REJECTION MAP
+========================================================================================
+
+ Layer | Signing Secret-Key NTT (s1hat) | Verification Response NTT (z)  | Mathematical Diffusion
+-------+--------------------------------+--------------------------------+-----------------------
+   L1  | 100% Attempt Exhaustion (DoS)  | 100% Verification Rejection    | Shared: 256, Single: 128
+   L2  | Predicted Exhaustion           | 100% Verification Rejection    | Shared: 128, Single:  64
+   L3  | Predicted Exhaustion           | 100% Verification Rejection    | Shared:  64, Single:  32
+   L4  | 100% Attempt Exhaustion (DoS)  | 100% Verification Rejection    | Shared:  32, Single:  16
+   L5  | Predicted Exhaustion           | 100% Verification Rejection    | Shared:  16, Single:   8
+   L6  | Predicted Exhaustion           | 100% Verification Rejection    | Shared:   8, Single:   4
+   L7  | Predicted Exhaustion           | 100% Verification Rejection    | Shared:   4, Single:   2
+   L8  | 100% Attempt Exhaustion (DoS)  | 100% Verification Rejection    | Shared:   2, Single:   1
+-------+--------------------------------+--------------------------------+-----------------------
+Takeaway:
+  - NTT faults during signing corrupt s1hat, leading to 100% attempt budget exhaustion (DoS).
+  - NTT faults during verification corrupt reconstructed w1, causing 100% verification rejection.

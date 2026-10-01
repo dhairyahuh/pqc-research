@@ -1,0 +1,14 @@
+# Experiment Configuration: ML-DSA Baseline Verification & Controls
+experiment_id: EXP-MLDSA-BASELINE-01
+purpose: "Verify fault-free cryptographic operation and evaluate injector controls A and B across ML-DSA parameter sets"
+standards: ["NIST FIPS 204"]
+algorithms: ["ML-DSA-44", "ML-DSA-65", "ML-DSA-87"]
+implementation: "mldsa-native (14d195a82dd2)"
+seed: 123456789
+trials: 1000
+fault_models:
+  - control: "NO_FAULT"
+    expected: "CORRECT"
+  - control: "ZERO_GLITCH"
+    expected: "CORRECT"
+output_path: "results/phase3/raw/baseline_verification.json"

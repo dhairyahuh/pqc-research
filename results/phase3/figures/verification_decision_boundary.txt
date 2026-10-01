@@ -1,0 +1,26 @@
+========================================================================================
+ FIGURE 3: VERIFICATION DECISION BOUNDARY BIFURCATION (4 STATES)
+========================================================================================
+
+                   +---------------------------+
+                   | Input Signature Candidate |
+                   +---------------------------+
+                                 |
+                +----------------+----------------+
+                |                                 |
+        [VALID SIGNATURE]                [INVALID SIGNATURE]
+                |                                 |
+        +-------+-------+                 +-------+-------+
+        |               |                 |               |
+   [No Fault]       [Glitch]          [No Fault]      [Glitch: cmp=0]
+        |               |                 |               |
+        v               v                 v               v
+   +---------+     +---------+       +---------+     +---------+
+   | STATE 1 |     | STATE 3 |       | STATE 2 |     | STATE 4 |
+   | ACCEPT  |     | REJECT  |       | REJECT  |     | ACCEPT  |
+   | (100%)  |     | (100%)  |       | (100%)  |     | (100%)  |
+   +---------+     +---------+       +---------+     +---------+
+    Nominal         Denial of         Nominal         CRITICAL
+    Passing         Service           Security        FORGERY
+    Traffic         (DoS)             Firewall        BYPASS
+

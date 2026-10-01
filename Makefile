@@ -79,6 +79,23 @@ $(OBJ_DIR)/mlkem1024_inst.o: algorithms/source_ref/mlkem/mlkem_native.c | $(OBJ_
 $(BIN_DIR)/mlkem_campaign_runner: experiments/mlkem/mlkem_campaign_runner.c $(OBJ_DIR)/mlkem512_inst.o $(OBJ_DIR)/mlkem768_inst.o $(OBJ_DIR)/mlkem1024_inst.o $(OBJ_DIR)/mlkem_fault_hooks.o | $(BIN_DIR)
 	$(CC) $(CFLAGS) -I . -I algorithms/source_ref/mlkem $^ -o $@ $(LDFLAGS)
 
+# Phase 3 Multi-Level Instrumented Objects (ML-DSA-44, ML-DSA-65, ML-DSA-87)
+$(OBJ_DIR)/mldsa_fault_hooks.o: algorithms/source_ref/mldsa_fault_hooks.c | $(OBJ_DIR)
+	$(CC) -O3 -std=c99 -I algorithms/source_ref/mldsa -DMLDSA_RESEARCH_FAULT_HOOKS -c $< -o $@
+
+$(OBJ_DIR)/mldsa44_inst.o: algorithms/source_ref/mldsa/mldsa_native.c algorithms/source_ref/mldsa/src/poly.c algorithms/source_ref/mldsa/src/sign.c | $(OBJ_DIR)
+	$(CC) -O3 -std=c99 -I algorithms/source_ref/mldsa -DMLD_CONFIG_NAMESPACE_PREFIX=mldsa44 -DMLD_CONFIG_PARAMETER_SET=44 -DMLDSA_RESEARCH_FAULT_HOOKS -c $< -o $@
+
+$(OBJ_DIR)/mldsa65_inst.o: algorithms/source_ref/mldsa/mldsa_native.c algorithms/source_ref/mldsa/src/poly.c algorithms/source_ref/mldsa/src/sign.c | $(OBJ_DIR)
+	$(CC) -O3 -std=c99 -I algorithms/source_ref/mldsa -DMLD_CONFIG_NAMESPACE_PREFIX=mldsa65 -DMLD_CONFIG_PARAMETER_SET=65 -DMLDSA_RESEARCH_FAULT_HOOKS -c $< -o $@
+
+$(OBJ_DIR)/mldsa87_inst.o: algorithms/source_ref/mldsa/mldsa_native.c algorithms/source_ref/mldsa/src/poly.c algorithms/source_ref/mldsa/src/sign.c | $(OBJ_DIR)
+	$(CC) -O3 -std=c99 -I algorithms/source_ref/mldsa -DMLD_CONFIG_NAMESPACE_PREFIX=mldsa87 -DMLD_CONFIG_PARAMETER_SET=87 -DMLDSA_RESEARCH_FAULT_HOOKS -c $< -o $@
+
+# Phase 3 Comprehensive Campaign Runner Binary
+$(BIN_DIR)/mldsa_campaign_runner: experiments/mldsa/mldsa_campaign_runner.c $(OBJ_DIR)/mldsa44_inst.o $(OBJ_DIR)/mldsa65_inst.o $(OBJ_DIR)/mldsa87_inst.o $(OBJ_DIR)/mldsa_fault_hooks.o | $(BIN_DIR)
+	$(CC) $(CFLAGS) -I . -I algorithms/source_ref/mldsa $^ -o $@ $(LDFLAGS)
+
 clean:
 	rm -rf $(BIN_DIR)
 

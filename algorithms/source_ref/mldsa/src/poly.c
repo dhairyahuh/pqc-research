@@ -247,9 +247,22 @@ __contract__(
     decreases(start + len - j))
   {
     int32_t t;
-    t = mld_fqmul(r[j + len], zeta);
+    int32_t z = zeta;
+#if defined(MLDSA_RESEARCH_FAULT_HOOKS)
+    extern void hook_mid_mldsa_ntt_pre_butterfly(unsigned layer, unsigned butterfly_idx, int32_t *r_j, int32_t *r_jlen, int32_t *zeta_ptr);
+    hook_mid_mldsa_ntt_pre_butterfly(bound ? (unsigned)(bound / MLD_FQMUL_BOUND) : 1, j, &r[j], &r[j + len], &z);
+#endif
+    t = mld_fqmul(r[j + len], z);
+#if defined(MLDSA_RESEARCH_FAULT_HOOKS)
+    extern void hook_mid_mldsa_ntt_post_mul(unsigned layer, unsigned butterfly_idx, int32_t *t_ptr, int32_t zeta);
+    hook_mid_mldsa_ntt_post_mul(bound ? (unsigned)(bound / MLD_FQMUL_BOUND) : 1, j, &t, z);
+#endif
     r[j + len] = r[j] - t;
     r[j] = r[j] + t;
+#if defined(MLDSA_RESEARCH_FAULT_HOOKS)
+    extern void hook_mid_mldsa_ntt_output(unsigned layer, unsigned butterfly_idx, int32_t *r_j, int32_t *r_jlen);
+    hook_mid_mldsa_ntt_output(bound ? (unsigned)(bound / MLD_FQMUL_BOUND) : 1, j, &r[j], &r[j + len]);
+#endif
   }
 }
 
@@ -312,6 +325,10 @@ __contract__(
   )
   {
     mld_ntt_layer(r, layer);
+#if defined(MLDSA_RESEARCH_FAULT_HOOKS)
+    extern void hook_mid_mldsa_ntt_layer_end(unsigned layer, int32_t r[256]);
+    hook_mid_mldsa_ntt_layer_end(layer, r);
+#endif
   }
 
   mld_assert_abs_bound(a->coeffs, MLDSA_N, MLD_NTT_BOUND);

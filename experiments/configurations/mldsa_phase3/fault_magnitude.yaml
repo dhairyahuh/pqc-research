@@ -1,0 +1,17 @@
+# Experiment Configuration: ML-DSA Fault Magnitude & Arithmetic Spectrum
+experiment_id: EXP-MLDSA-FAULT-MAGNITUDE-03
+purpose: "Evaluate outcome probabilities as additive delta, bit position, or fault class varies in ML-DSA"
+standards: ["NIST FIPS 204"]
+algorithm: "ML-DSA-65"
+implementation: "mldsa-native (14d195a82dd2)"
+seed: 9988776655
+trials: 1000
+target_stage: 4
+target_butterfly: 15
+deltas: [1, 2, 4, 8, 16, 32, 64, 128, 512, 1000]
+fault_classes:
+  - "ADDITIVE_GLITCH"
+  - "BIT_FLIP"
+  - "ZEROING"
+  - "RANDOM_REPLACEMENT"
+output_path: "results/phase3/raw/fault_magnitude.json"

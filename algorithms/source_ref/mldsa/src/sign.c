@@ -780,6 +780,10 @@ __contract__(
    * lambda/4). */
   mld_H(challenge_bytes, MLDSA_CTILDEBYTES, mu, MLDSA_CRHBYTES, w1_packed,
         MLDSA_K * MLDSA_POLYW1_PACKEDBYTES, NULL, 0);
+#if defined(MLDSA_RESEARCH_FAULT_HOOKS)
+  extern void hook_mid_mldsa_challenge(uint8_t *challenge_bytes, size_t len);
+  hook_mid_mldsa_challenge(challenge_bytes, MLDSA_CTILDEBYTES);
+#endif
   /* Constant time: Leaking challenge_bytes does not reveal any information
    * about the secret key as H() is modelled as random oracle.
    * This also applies to challenges for rejected signatures.
@@ -795,6 +799,10 @@ __contract__(
    * BETA. mld_compute_pack_z fuses all three per polynomial and, on success,
    * packs z into sig; it returns MLD_ERR_FAIL if the norm check rejects z. */
   ret = mld_compute_pack_z(sig, cp, s1hat, y, t, scratch_w);
+#if defined(MLDSA_RESEARCH_FAULT_HOOKS)
+  extern void hook_mid_mldsa_norm_check_z(int *ret_ptr);
+  hook_mid_mldsa_norm_check_z(&ret);
+#endif
   if (ret != 0)
   {
     goto cleanup;
@@ -858,6 +866,10 @@ __contract__(
     /* Low-bits norm check (see block comment above): the line-23 check on
      * r0 = LowBits(w - cs2) holds via ||w0 - cs2||_inf < GAMMA2 - BETA. */
     w0_invalid = mld_poly_chknorm(&w0->vec[k], MLDSA_GAMMA2 - MLDSA_BETA);
+#if defined(MLDSA_RESEARCH_FAULT_HOOKS)
+    extern void hook_mid_mldsa_norm_check_w0(uint32_t *w0_invalid_ptr, unsigned k);
+    hook_mid_mldsa_norm_check_w0(&w0_invalid, k);
+#endif
     /* Constant time: w0_invalid may be leaked - see comment for z_invalid. */
     MLD_CT_TESTING_DECLASSIFY(&w0_invalid, sizeof(uint32_t));
     if (w0_invalid)
@@ -875,6 +887,10 @@ __contract__(
     /* @[FIPS204, Algorithm 7, line 28] reject when ||ct0||_inf >= GAMMA2 (the
      * second part, the OMEGA weight bound, is enforced by mld_pack_sig_h). */
     h_invalid = mld_poly_chknorm(scratch_w, MLDSA_GAMMA2);
+#if defined(MLDSA_RESEARCH_FAULT_HOOKS)
+    extern void hook_mid_mldsa_norm_check_ct0(uint32_t *h_invalid_ptr, unsigned k);
+    hook_mid_mldsa_norm_check_ct0(&h_invalid, k);
+#endif
     /* Constant time: h_invalid may be leaked - see comment for z_invalid. */
     MLD_CT_TESTING_DECLASSIFY(&h_invalid, sizeof(uint32_t));
     if (h_invalid)
@@ -1233,7 +1249,12 @@ int mld_sign_verify_internal(const uint8_t sig[MLDSA_CRYPTO_BYTES],
   /* mld_polyvecl_chknorm signals failure through a single non-zero error code
    * that's not yet aligned with MLD_ERR_XXX. A norm-check failure here means
    * the signature is invalid, so map it to MLD_ERR_INVALID_SIGNATURE. */
-  if (mld_polyvecl_chknorm(z, MLDSA_GAMMA1 - MLDSA_BETA))
+  int norm_z_failed = (mld_polyvecl_chknorm(z, MLDSA_GAMMA1 - MLDSA_BETA) != 0);
+#if defined(MLDSA_RESEARCH_FAULT_HOOKS)
+  extern void hook_mid_mldsa_verify_norm_z(int *norm_failed_ptr);
+  hook_mid_mldsa_verify_norm_z(&norm_z_failed);
+#endif
+  if (norm_z_failed)
   {
     ret = MLD_ERR_INVALID_SIGNATURE;
     goto cleanup;
@@ -1307,6 +1328,10 @@ int mld_sign_verify_internal(const uint8_t sig[MLDSA_CRYPTO_BYTES],
         MLDSA_K * MLDSA_POLYW1_PACKEDBYTES, NULL, 0);
 
   cmp = mld_ct_memcmp(c, c2, MLDSA_CTILDEBYTES);
+#if defined(MLDSA_RESEARCH_FAULT_HOOKS)
+  extern void hook_mid_mldsa_verify_cmp(int *cmp_ptr, const uint8_t *c, const uint8_t *c2);
+  hook_mid_mldsa_verify_cmp(&cmp, c, c2);
+#endif
 
   /* Declassify the result of the verification. */
   MLD_CT_TESTING_DECLASSIFY(&cmp, sizeof(cmp));
