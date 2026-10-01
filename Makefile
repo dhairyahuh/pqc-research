@@ -164,4 +164,14 @@ test-phase6b: phase6b
 	@echo "\n=== Phase 6B: Independent Adversarial Validation & Robustness Audit ==="
 	./$(BIN_DIR)/phase6b_audit
 
-.PHONY: all clean test phase5 test-phase5 phase6 test-phase6 phase6b test-phase6b
+# Phase 7 Targeted Layered Resilience Engineering
+$(BIN_DIR)/phase7_layered: experiments/phase7/phase7_layered_resilience.c $(OBJ_DIR)/mlkem768_inst.o $(OBJ_DIR)/mlkem_fault_hooks.o | $(BIN_DIR)
+	$(CC) $(CFLAGS) -I . -I algorithms/source_ref/mlkem $^ -o $@ $(LDFLAGS)
+
+phase7: $(BIN_DIR)/phase7_layered
+
+test-phase7: phase7
+	@echo "\n=== Phase 7: Targeted Layered Fault-Resilience Evaluation ==="
+	./$(BIN_DIR)/phase7_layered
+
+.PHONY: all clean test phase5 test-phase5 phase6 test-phase6 phase6b test-phase6b phase7 test-phase7

@@ -224,17 +224,28 @@ graph TD
   - **Novelty Clarification:** Categorized the FIPS 203 projection invariant as an application of classical ABFT Fourier projection principles (Jou & Abraham 1986) rather than foundational novelty.
 - **Exit Criteria Satisfied:** All 9 audit deliverables completed, adversarial test harness executed, mathematical blind spots proved, compiler assembly audited, and claim-by-claim decision gate established.
 
-### Phase 7 — Resilience Engineering
-- **Objective:** Engineer and evaluate lightweight, software-only resilience mechanisms for flight processors.
-- **Mechanisms:**
-  - Intermediate norm boundary assertions.
-  - Modular polynomial checksums and NTT invariant checking.
-  - Selective redundancy: protecting only sensitive stages (NTT Layers 4–7, accumulators, norm checks).
-  - Rejection loop timeout watchdogs.
-  - Autonomous retry and checkpoint recovery routines.
-- **Metrics:**
-  $$\text{Overhead} = \frac{T_{\text{protected}} - T_{\text{baseline}}}{T_{\text{baseline}}} \le 25\%, \quad \text{Fault Coverage} = \frac{\text{Detected Faults}}{\text{Total Faults}} \ge 95\%$$
-- **Exit Criteria:** Functional C implementation in `resilience/` with zero empty stubs and complete benchmark suite.
+### Phase 7 — Targeted Layered Fault-Resilience Engineering [STATUS: COMPLETED]
+- **Objective:** Engineer and evaluate lightweight, software-only layered resilience mechanisms for ML-KEM-768 to achieve comprehensive coverage without duplicate execution.
+- **Key Deliverables:**
+  - Scope & Threat Model: [`docs/phase7/phase7_scope_and_threat_model.md`](file:///Users/dhairyajain/Desktop/pqc%20research/docs/phase7/phase7_scope_and_threat_model.md)
+  - Complementary NTT Check Analysis: [`docs/phase7/ntt_complementary_check_analysis.md`](file:///Users/dhairyajain/Desktop/pqc%20research/docs/phase7/ntt_complementary_check_analysis.md)
+  - Selected Protection Design: [`docs/phase7/selected_protection_design.md`](file:///Users/dhairyajain/Desktop/pqc%20research/docs/phase7/selected_protection_design.md)
+  - Input Integrity & Duplication Analysis: [`docs/phase7/input_integrity_and_duplication.md`](file:///Users/dhairyajain/Desktop/pqc%20research/docs/phase7/input_integrity_and_duplication.md)
+  - Compiled Control-Flow Disassembly Audit: [`docs/phase7/compiled_control_flow_analysis.md`](file:///Users/dhairyajain/Desktop/pqc%20research/docs/phase7/compiled_control_flow_analysis.md)
+  - Experimental Methodology: [`docs/phase7/experimental_methodology.md`](file:///Users/dhairyajain/Desktop/pqc%20research/docs/phase7/experimental_methodology.md)
+  - Fault Coverage Results: [`docs/phase7/fault_coverage_results.md`](file:///Users/dhairyajain/Desktop/pqc%20research/docs/phase7/fault_coverage_results.md)
+  - Performance & Implementation Cost Results: [`docs/phase7/performance_and_cost_results.md`](file:///Users/dhairyajain/Desktop/pqc%20research/docs/phase7/performance_and_cost_results.md)
+  - System-Level Protocol Implications: [`docs/phase7/system_level_implications.md`](file:///Users/dhairyajain/Desktop/pqc%20research/docs/phase7/system_level_implications.md)
+  - Novelty & Contribution Review: [`docs/phase7/novelty_and_contribution_review.md`](file:///Users/dhairyajain/Desktop/pqc%20research/docs/phase7/novelty_and_contribution_review.md)
+  - Phase 7 Final Report: [`docs/phase7/phase7_final_report.md`](file:///Users/dhairyajain/Desktop/pqc%20research/docs/phase7/phase7_final_report.md)
+  - Native Comparative Harness: [`experiments/phase7/phase7_layered_resilience.c`](file:///Users/dhairyajain/Desktop/pqc%20research/experiments/phase7/phase7_layered_resilience.c)
+  - Automated Test Suite: [`tests/phase7/test_phase7_resilience.py`](file:///Users/dhairyajain/Desktop/pqc%20research/tests/phase7/test_phase7_resilience.py)
+  - Experimental Datasets: [`results/phase7/processed/phase7_resilience_results.json`](file:///Users/dhairyajain/Desktop/pqc%20research/results/phase7/processed/phase7_resilience_results.json) & [`results/phase7/raw/phase7_raw_trials.json`](file:///Users/dhairyajain/Desktop/pqc%20research/results/phase7/raw/phase7_raw_trials.json)
+- **Key Quantitative Findings:**
+  - **Overhead:** Baseline ML-KEM-768 decapsulation: 42.77 µs. Layered Architecture: 52.42 µs (**+22.6% overhead**), meeting the $\le 25\%$ roadmap target. Full Duplicate DMR: 86.81 µs (+103.0% overhead).
+  - **Fault Coverage:** Layered Architecture achieved **$\ge 96.7\%$ detection** across all 8 threat classes (average 99.6%), meeting the $\ge 95\%$ target.
+  - **Breakthrough Remedies:** Weighted inverse-zeta projection closed the parity cancellation loophole at Layer 7; pre-invocation CRC32 closed DMR's 0% common-mode input corruption blind spot; inline assembly barriers preserved multi-rail execution in compiled machine code.
+- **Exit Criteria Satisfied:** Functional C implementation, zero empty stubs, 1,200 trials completed, automated Python test harness passing 100%, and comprehensive documentation package completed.
 
 ### Phase 8 — Space-System Protocol Model
 - **Objective:** Ground the cryptographic fault outcomes in an explicitly abstract spacecraft communication protocol.

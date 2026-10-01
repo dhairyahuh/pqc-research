@@ -1,0 +1,84 @@
+{
+  "phase": 7,
+  "title": "Targeted Layered Fault-Resilience for ML-KEM-768",
+  "benchmarks": {
+    "iterations": 2000,
+    "config1_baseline_us": 42.55,
+    "config2_unweighted_ntt_us": 43.13,
+    "config2_overhead_pct": 1.37,
+    "config3_complementary_ntt_us": 43.63,
+    "config3_overhead_pct": 2.54,
+    "config4_duplicate_dmr_us": 84.65,
+    "config4_overhead_pct": 98.94,
+    "config5_layered_architecture_us": 52.30,
+    "config5_overhead_pct": 22.91
+  },
+  "fault_coverage": {
+    "trials_per_class": 150,
+    "class_1": {
+      "name": "Class 1 (Intermediate T)",
+      "config1_baseline_pct": 0.00,
+      "config2_unweighted_ntt_pct": 0.00,
+      "config3_complementary_ntt_pct": 14.00,
+      "config4_duplicate_dmr_pct": 96.67,
+      "config5_layered_pct": 96.67
+    },
+    "class_2": {
+      "name": "Class 2 (Twiddle Zeta)",
+      "config1_baseline_pct": 0.00,
+      "config2_unweighted_ntt_pct": 0.00,
+      "config3_complementary_ntt_pct": 14.00,
+      "config4_duplicate_dmr_pct": 100.00,
+      "config5_layered_pct": 100.00
+    },
+    "class_3": {
+      "name": "Class 3 (Output Add Reg)",
+      "config1_baseline_pct": 0.00,
+      "config2_unweighted_ntt_pct": 100.00,
+      "config3_complementary_ntt_pct": 100.00,
+      "config4_duplicate_dmr_pct": 98.67,
+      "config5_layered_pct": 100.00
+    },
+    "class_4": {
+      "name": "Class 4 (Correlated Mult)",
+      "config1_baseline_pct": 0.00,
+      "config2_unweighted_ntt_pct": 0.00,
+      "config3_complementary_ntt_pct": 0.00,
+      "config4_duplicate_dmr_pct": 100.00,
+      "config5_layered_pct": 100.00
+    },
+    "class_5": {
+      "name": "Class 5 (Pre-Invoc Input)",
+      "config1_baseline_pct": 0.00,
+      "config2_unweighted_ntt_pct": 0.00,
+      "config3_complementary_ntt_pct": 0.00,
+      "config4_duplicate_dmr_pct": 0.00,
+      "config5_layered_pct": 100.00
+    },
+    "class_6": {
+      "name": "Class 6 (Checker Perturb)",
+      "config1_baseline_pct": 0.00,
+      "config2_unweighted_ntt_pct": 0.00,
+      "config3_complementary_ntt_pct": 0.00,
+      "config4_duplicate_dmr_pct": 0.00,
+      "config5_layered_pct": 100.00
+    },
+    "class_7": {
+      "name": "Class 7 (Control FO Gate)",
+      "config1_baseline_pct": 0.00,
+      "config2_unweighted_ntt_pct": 0.00,
+      "config3_complementary_ntt_pct": 0.00,
+      "config4_duplicate_dmr_pct": 0.00,
+      "config5_layered_pct": 100.00
+    },
+    "class_8": {
+      "name": "Class 8 (Persistent Stuck)",
+      "config1_baseline_pct": 0.00,
+      "config2_unweighted_ntt_pct": 0.00,
+      "config3_complementary_ntt_pct": 0.00,
+      "config4_duplicate_dmr_pct": 0.00,
+      "config5_layered_pct": 100.00
+    }
+  },
+  "layered_retries_recovered": 124
+}
