@@ -249,7 +249,7 @@ static void test_7_simultaneous_common_mode(void) {
     bool ss_mismatch = (memcmp(ss_out, ss_exp, SS_BYTES) != 0);
     bool sdc = (!rej_match && ss_mismatch);
 
-    report("Test 7: Simultaneous common-mode fault confirms local checker blind spot (0% det) but 100% FO containment",
+    report("Test 7: Paired software mutations demonstrate local checker blindness; no SDC observed in this test",
            fault_act && local_blind && no_recovery && rej_match && !sdc);
 }
 
