@@ -15,7 +15,7 @@ The objective of Phase 2 Step 2C-A is to systematically test the resilience of t
 ### Core Scientific Questions
 1. Does the countermeasure maintain detection independence when faults affect the checker itself rather than the computation?
 2. How does the system respond when an identical fault strikes both computation and verification state (common-mode failure)?
-3. Does failure of the local countermeasure compromise the end-to-end security of ML-KEM-768, or does the Fujisaki-Okamoto transform provide a foolproof outer safety net?
+3. Does failure of the local countermeasure compromise the end-to-end security of ML-KEM-768, or does the Fujisaki-Okamoto transform provide a robust cryptographic outer safety net?
 
 ```
                                       +------------------------------------+
@@ -77,7 +77,7 @@ Five controlled experiment families are designed to isolate each fault interacti
   - *Recovery:* $ss == ss_{\text{expected}} \land \text{status} == 0\text{x}5A5A5A5A \land \text{recovered\_count} > 0$
   - *Safe Fail-Stop:* $ss == ss_{\text{rej\_expected}} \land (\text{status} == 0\text{xFFFFFFFF} \lor \text{status} == 0\text{xA5A5A5A5})$
   - *SDC:* $ss \neq ss_{\text{expected}} \land ss \neq ss_{\text{rej\_expected}}$
-- **Trial Count & Rationale:** 50 transient + 50 persistent trials across each configuration (300 total). Sample size $N=50$ gives statistical power to detect any defect rate exceeding $5.8\%$ at $95\%$ confidence (rule of three: upper bound $\approx 3/50 = 6\%$).
+- **Trial Count & Rationale:** 50 transient + 50 persistent trials across each configuration (300 total). Sample size $N=50$ per suite provides an exact one-sided 95% binomial upper confidence bound of $1 - 0.05^{1/50} \approx 5.82\%$ for zero observed defect events (the rule-of-three approximation yields $3/50 = 6.00\%$; across all $N_{\text{act}}=750$ fault-activated trials, zero observed events yields an exact one-sided 95% upper bound of $1 - 0.05^{1/750} \approx 0.399\%$, with rule-of-three approximation $3/750 = 0.400\%$).
 
 ---
 
@@ -110,29 +110,31 @@ Five controlled experiment families are designed to isolate each fault interacti
 
 ---
 
-### Experiment 4: Fault Affects Both Through Simultaneous Corruption (`SIMULTANEOUS`)
-- **Hypothesis:** When an identical bit-flip $\delta$ is applied simultaneously to both $\zeta_{\text{op}}$ and $\zeta_{\text{ref}}$, the local checker will evaluate:
+### Experiment 4: Fault Affects Both Through Paired Software Mutation (`SIMULTANEOUS`)
+- **Hypothesis:** When an identical bit-flip $\delta$ is applied to both $\zeta_{\text{op}}$ and $\zeta_{\text{ref}}$ via paired sequential software mutations, the local checker will evaluate:
   $$\zeta_{\text{op}} \oplus \delta = \zeta_{\text{ref}} \oplus \delta \implies \text{twiddle\_mismatch} = \text{false}$$
   $$t_{\text{check}} = \text{fqmul}(v_{\text{saved}}, \zeta_{\text{ref}} \oplus \delta) = t_{\text{used}} \implies \Delta_{\text{diff}} \equiv 0 \pmod q$$
-  Local detection will be completely blinded (0% detection rate). However, because the corrupted twiddle distorts the NTT result, IND-CPA decryption yields an incorrect plaintext $m' \neq m$. Re-encryption yields $c' \neq c$, causing constant-time FO comparison to fail and decapsulation to output canonical $K_{\text{rej}}$.
-  **Outcome:** Local monitor fails silently, but outer Fujisaki-Okamoto transform guarantees 100% safe rejection ($SDC = 0$).
+  Local monitor detection is 0% under this paired mutation. When the corrupted twiddle alters the decrypted plaintext $m' \neq m$, re-encryption yields $c' \neq c$, causing constant-time FO comparison to fail and decapsulation to output canonical $K_{\text{rej}}$. If the intermediate polynomial perturbation falls within decoding error-tolerance ($m' = m$), decapsulation returns $K_{\text{expected}}$ cleanly. Under both outcomes, zero SDC occurs.
+  **Software Proxy Caveat:** This experiment evaluates checker blindness under the specific coordinated software mutations tested; it does not prove physical common-mode fault behavior, shared silicon vulnerability, or general hardware susceptibility.
+  **Outcome:** Local monitor detection is 0% under tested mutations. 98% of trials trigger active FO rejection ($ss = ss_{\text{rej}}$); 2% preserve the final message due to decoding error-tolerance ($ss = ss_{\text{expected}}$). Zero SDC is observed under this model (exact one-sided 95% binomial upper bound $p_{\text{SDC}} \le 5.82\%$ on the $N_{\text{simul}}=50$ paired-mutation suite).
 - **Injection Point:** `hook_mid_ntt_pre_butterfly` (perturbs $\zeta_{\text{op}}$) + `tfib_ref.c:55-61` (perturbs $\zeta_{\text{ref}}$ with identical bit mask).
-- **Mechanism:** `zeta_op ^= mask; zeta_ref ^= mask;`.
+- **Mechanism:** `zeta_op ^= mask; zeta_ref ^= mask;` (coordinated software bit-flips).
 - **Duration / Persistence:** Transient simultaneous fault.
 - **Decision Criteria:**
   - *Local Blindness:* `tfib_get_total_mismatches() == 0`.
-  - *FO Containment:* $ss == ss_{\text{rej\_expected}} \land \text{status} \in \{0\text{xFFFFFFFF}, 0\text{xA5A5A5A5}\}$.
-  - *Classification:* `LOCAL_BLIND_FO_CONTAINED`.
+  - *Active FO Containment:* $ss == ss_{\text{rej\_expected}} \land \text{status} \in \{0\text{xFFFFFFFF}, 0\text{xA5A5A5A5}\}$.
+  - *Decoding Slack Preservation:* $ss == ss_{\text{expected}} \land \text{status} == 0\text{x}5A5A5A5A$.
+  - *Classification:* `LOCAL_BLIND_FO_CONTAINED` or `INEFFECTIVE`.
   - *SDC:* $ss \notin \{ss_{\text{expected}}, ss_{\text{rej\_expected}}\}$.
 - **Trial Count:** 50 trials.
 
 ---
 
 ### Experiment 5: Fault Bypasses Detection but is Contained by End-to-End Behavior
-- **Hypothesis:** Evaluating the baseline configuration (original unhardened monitor) under operational twiddle faults demonstrates the Theorem 1 blind spot ($0\%$ detection). The experiment proves that all faults evading local detection are partitioned cleanly into two safe sets:
-  1. *Ineffective Faults:* The polynomial perturbation falls within the decoding error-tolerance (slack) of ML-KEM-768; the message $m$ decodes cleanly, producing valid $ss = ss_{\text{expected}}$ (`INEFFECTIVE_FAULT_VALID`).
-  2. *Contained Corruptions:* The perturbation causes decoding error; FO re-encryption detects $c' \neq c$ and forces canonical implicit rejection $ss = ss_{\text{rej}}$ (`LOCAL_BLIND_FO_CONTAINED`).
-  Under no condition does an undetected fault escape to cause SDC.
+- **Hypothesis:** Evaluating the baseline configuration (original unhardened monitor) under operational twiddle faults demonstrates the Theorem 1 blind spot ($0\%$ detection). The experiment evaluates whether faults evading local detection partition into two distinct safe outcomes:
+  1. *Decoding Slack Preservation (Ineffective):* The intermediate polynomial perturbation falls within the error-correcting tolerance of ML-KEM-768 centered binomial decoding; the final message $m$ is preserved, producing valid $ss = ss_{\text{expected}}$ (`INEFFECTIVE`). These trials reflect algorithmic decoding tolerance rather than active FO rejection.
+  2. *Active FO Rejection:* The perturbation causes a decoding error ($m' \neq m$); FO re-encryption detects $c' \neq c$ and forces canonical implicit rejection $ss = ss_{\text{rej}}$ (`LOCAL_BLIND_FO_CONTAINED`).
+  Under all tested conditions, zero SDC was observed (exact one-sided 95% binomial upper bound $p_{\text{SDC}} \le 0.399\%$ across all $N_{\text{act}} = 750$ fault-activated trials; rule-of-three approximation yields $0.400\%$).
 - **Injection Point:** Baseline monitor with `TFIB_FAULT_OP_TWIDDLE` (Transient and Persistent).
 - **Trial Count:** 50 transient + 50 persistent trials (100 total).
 
@@ -150,7 +152,7 @@ Five controlled experiment families are designed to isolate each fault interacti
 | **TFIB_REF** | `OP_TWIDDLE_PERSISTENT` | `TFIB_FAULT_OP_TWIDDLE` | True | 50 | 100% (50/50) | `SAFE_FAIL_STOP` (100%) |
 | **TFIB_REF** | `REF_TWIDDLE_TRANSIENT` | `TFIB_FAULT_REF_TWIDDLE` | False | 50 | 100% (50/50) | `GENUINE_RECOVERY` (100%) |
 | **TFIB_REF** | `REF_TWIDDLE_PERSISTENT` | `TFIB_FAULT_REF_TWIDDLE` | True | 50 | 100% (50/50) | `SAFE_FAIL_STOP` (100%) |
-| **TFIB_REF** | `SIMULTANEOUS_COMMON_MODE` | `TFIB_FAULT_SIMULTANEOUS` | False | 50 | 0% (0/50) | `LOCAL_BLIND_FO_CONTAINED` (100%) |
+| **TFIB_REF** | `SIMULTANEOUS_COMMON_MODE` | `TFIB_FAULT_SIMULTANEOUS` | False | 50 | 0% (0/50) | `LOCAL_BLIND_FO_CONTAINED` (98%) / `INEFFECTIVE` (2%) |
 | **TFIB_REF** | `CHECKER_LOGIC_TRANSIENT` | `TFIB_FAULT_CHECKER_LOGIC` | False | 50 | 100% (50/50) | `GENUINE_RECOVERY` (100%) |
 | **TFIB_REF** | `CHECKER_LOGIC_PERSISTENT` | `TFIB_FAULT_CHECKER_LOGIC` | True | 50 | 100% (50/50) | `SAFE_FAIL_STOP` (100%) |
 | **TFIB_META** | `CLEAN_CONTROL` | `TFIB_FAULT_NONE` | False | 50 | 0% (0/50) | `CLEAN_SUCCESS` (100%) |
@@ -167,7 +169,7 @@ Five controlled experiment families are designed to isolate each fault interacti
 
 ## 4. Negative Test Plan (Adversarial Verification)
 
-To prove that the validation harness itself does not pass vacuously, the following negative assertions are mandatory:
+To verify that the validation harness does not pass vacuously, the following negative assertions are enforced:
 1. **Deliberate Corrupted Reference Key Injection:** Verify that if the oracle expected valid secret is corrupted, the clean-path test immediately fails with exit code 1.
 2. **Corrupted Rejection Key Injection:** Verify that if decapsulation produces a bogus secret that matches neither $ss_{\text{expected}}$ nor $ss_{\text{rej}}$, it is flagged as SDC.
 3. **Simultaneous Bypass Detection:** Assert that when `SIMULTANEOUS_COMMON_MODE` is executed, local detection is strictly 0, and that if any test harness attempted to label it as `GENUINE_RECOVERY`, the assertion triggers a failure.
