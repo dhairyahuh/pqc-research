@@ -1,0 +1,7 @@
+Phase,Operation,Polynomial_or_Vector,Algorithm,Domain_In,Domain_Out,Transforms,Butterflies_per_Transform,Total_Butterflies,Source_Reference
+Decapsulation,Forward NTT,Ciphertext Vector b (u),Cooley-Tukey,Time,Frequency,3,896,2688,indcpa.c:609
+Decapsulation,Inverse NTT,Recovered Message (mp),Gentleman-Sande,Frequency,Time,1,896,896,indcpa.c:621
+Re-encryption,Forward NTT,Ephemeral Seed Vector (sp),Cooley-Tukey,Time,Frequency,3,896,2688,indcpa.c:560
+Re-encryption,Inverse NTT,Candidate Ciphertext bp (u'),Gentleman-Sande,Frequency,Time,3,896,2688,indcpa.c:568
+Re-encryption,Inverse NTT,Candidate Scalar (v),Gentleman-Sande,Frequency,Time,1,896,896,indcpa.c:580
+Total,All Transforms,Decapsulation + FO Re-encryption,Dual CT/GS,-,-,11,896,9856,poly.c:174;218

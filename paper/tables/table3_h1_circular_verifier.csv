@@ -1,0 +1,8 @@
+Target_ID,Target_Description,Trials_N,False_Passes,True_Catches,False_Pass_Rate,Wilson_95_CI,Mechanism_of_Failure
+T1,CT Multiplier Output Live Overwrite,100,98,2,98.0%,[93.0% 99.5%],Checker reads corrupted live register
+T2,CT Subtractor Live Register Overwrite,100,94,6,94.0%,[87.5% 97.2%],Incomplete algebraic cancellation
+T3,GS Adder Output Shared Variable,100,100,0,100.0%,[96.3% 100.0%],Checker uses faulted sum in both rails
+T4,GS Multiplier Output Live Overwrite,100,100,0,100.0%,[96.3% 100.0%],Circular reference in re-multiplication
+T5,Twiddle Scale Register Overwrite,100,99,1,99.0%,[94.6% 99.8%],Checker consumes mutated twiddle scalar
+T6,In-Place Coefficient Array Mutation,100,100,0,100.0%,[96.3% 100.0%],Destructive memory write before check
+Total,Aggregate Circular Harness Vulnerability,600,591,9,98.5%,[97.1% 99.2%],Data-Source Common-Mode Blindness

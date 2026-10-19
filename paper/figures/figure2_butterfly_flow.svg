@@ -1,0 +1,48 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 480" width="100%" height="100%" style="background:#ffffff; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;">
+  <text x="450" y="32" text-anchor="middle" font-size="19" font-weight="bold" fill="#0f172a">Forward CT and Inverse GS Monitored Butterfly Arithmetic</text>
+  <text x="450" y="54" text-anchor="middle" font-size="12" fill="#64748b">Decoupled Software Invariant Verification without Modular Inversions</text>
+
+  <!-- Left: Cooley-Tukey Box -->
+  <rect x="40" y="80" width="395" height="370" rx="8" fill="#f8fafc" stroke="#3b82f6" stroke-width="1.5"/>
+  <rect x="40" y="80" width="395" height="36" rx="8" fill="#eff6ff"/>
+  <text x="237" y="104" text-anchor="middle" font-size="13" font-weight="bold" fill="#1d4ed8">Forward Cooley-Tukey (CT) Butterfly</text>
+
+  <!-- CT Math -->
+  <rect x="60" y="130" width="355" height="110" rx="6" fill="#ffffff" stroke="#cbd5e1"/>
+  <text x="75" y="155" font-size="12" font-weight="bold" fill="#0f172a">Operational Equations:</text>
+  <text x="90" y="180" font-size="12" fill="#334155">t = v · ζ (mod q)</text>
+  <text x="90" y="202" font-size="12" fill="#334155">r0 = u + t (mod q)</text>
+  <text x="90" y="224" font-size="12" fill="#334155">r1 = u - t (mod q)</text>
+
+  <rect x="60" y="255" width="355" height="115" rx="6" fill="#ffffff" stroke="#cbd5e1"/>
+  <text x="75" y="280" font-size="12" font-weight="bold" fill="#047857">Algebraic Invariant Verification:</text>
+  <text x="90" y="305" font-size="12" fill="#065f46">r0 + r1 = (u + t) + (u - t) ≡ 2u (mod q)</text>
+  <text x="90" y="328" font-size="11" fill="#475569">Check: (r0 + r1 - 2·u_saved) mod q == 0</text>
+  <text x="90" y="350" font-size="11" fill="#475569">Directly verifies multiplier product t and addition</text>
+
+  <rect x="60" y="385" width="355" height="50" rx="4" fill="#f1f5f9"/>
+  <text x="237" y="405" text-anchor="middle" font-size="11" font-weight="bold" fill="#334155">Decapsulation Scope: 6 Transforms (5,376 Butterflies)</text>
+  <text x="237" y="423" text-anchor="middle" font-size="10" fill="#64748b">3 on Ciphertext Vector u + 3 on Re-encryption Sample r</text>
+
+  <!-- Right: Gentleman-Sande Box -->
+  <rect x="465" y="80" width="395" height="370" rx="8" fill="#f8fafc" stroke="#10b981" stroke-width="1.5"/>
+  <rect x="465" y="80" width="395" height="36" rx="8" fill="#ecfdf5"/>
+  <text x="662" y="104" text-anchor="middle" font-size="13" font-weight="bold" fill="#065f46">Inverse Gentleman-Sande (GS) Butterfly</text>
+
+  <!-- GS Math -->
+  <rect x="485" y="130" width="355" height="110" rx="6" fill="#ffffff" stroke="#cbd5e1"/>
+  <text x="500" y="155" font-size="12" font-weight="bold" fill="#0f172a">Operational Equations:</text>
+  <text x="515" y="180" font-size="12" fill="#334155">r0 = u + v (mod q)</text>
+  <text x="515" y="202" font-size="12" fill="#334155">d = v - u (mod q)</text>
+  <text x="515" y="224" font-size="12" fill="#334155">r1 = d · ζ (mod q)</text>
+
+  <rect x="485" y="255" width="355" height="115" rx="6" fill="#ffffff" stroke="#cbd5e1"/>
+  <text x="500" y="280" font-size="12" font-weight="bold" fill="#047857">Decoupled Software Verification:</text>
+  <text x="515" y="305" font-size="12" fill="#065f46">Check 1: (r0 - (u_saved + v_saved)) mod q == 0</text>
+  <text x="515" y="328" font-size="12" fill="#065f46">Check 2: (r1 - (v_saved - u_saved)·ζ) mod q == 0</text>
+  <text x="515" y="350" font-size="11" fill="#475569">Circumvents costly modular inversion ζ⁻¹ in software</text>
+
+  <rect x="485" y="385" width="355" height="50" rx="4" fill="#f1f5f9"/>
+  <text x="662" y="405" text-anchor="middle" font-size="11" font-weight="bold" fill="#334155">Decapsulation Scope: 5 Transforms (4,480 Butterflies)</text>
+  <text x="662" y="423" text-anchor="middle" font-size="10" fill="#64748b">1 on Decrypted mp + 3 on Candidate u' + 1 on Candidate v'</text>
+</svg>

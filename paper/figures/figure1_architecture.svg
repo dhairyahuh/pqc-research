@@ -1,0 +1,120 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 520" width="100%" height="100%" style="background:#ffffff; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;">
+  <defs>
+    <linearGradient id="blueGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1e3a8a"/>
+      <stop offset="100%" stop-color="#3b82f6"/>
+    </linearGradient>
+    <linearGradient id="emeraldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#064e3b"/>
+      <stop offset="100%" stop-color="#10b981"/>
+    </linearGradient>
+    <linearGradient id="amberGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#78350f"/>
+      <stop offset="100%" stop-color="#f59e0b"/>
+    </linearGradient>
+    <linearGradient id="purpleGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#4c1d95"/>
+      <stop offset="100%" stop-color="#8b5cf6"/>
+    </linearGradient>
+    <filter id="shadow" x="-5%" y="-5%" width="110%" height="110%">
+      <feDropShadow dx="2" dy="3" stdDeviation="3" flood-opacity="0.1"/>
+    </filter>
+  </defs>
+
+  <!-- Title -->
+  <text x="450" y="35" text-anchor="middle" font-size="20" font-weight="bold" fill="#0f172a">ML-KEM-768 Two-Tier Fault Resilience Architecture</text>
+  <text x="450" y="58" text-anchor="middle" font-size="13" fill="#64748b">Tier 1: In-Place Butterfly Monitoring &amp; Local Rollback | Tier 2: Outer Fujisaki-Okamoto Containment</text>
+
+  <!-- Tier 1: Localized Butterfly Resilience Box -->
+  <rect x="40" y="85" width="820" height="235" rx="8" fill="#f8fafc" stroke="#cbd5e1" stroke-width="2" filter="url(#shadow)"/>
+  <rect x="40" y="85" width="820" height="32" rx="8" fill="#e2e8f0"/>
+  <text x="55" y="106" font-size="13" font-weight="bold" fill="#1e293b">TIER 1: LOCALIZED IN-PLACE BUTTERFLY ARITHMETIC MONITORING (9,856 BUTTERFLIES)</text>
+
+  <!-- Butterfly Sub-steps -->
+  <!-- 1. Snapshot -->
+  <rect x="65" y="135" width="160" height="95" rx="6" fill="#ffffff" stroke="#94a3b8" stroke-width="1.5"/>
+  <text x="145" y="160" text-anchor="middle" font-size="13" font-weight="bold" fill="#0f172a">1. Register Snapshot</text>
+  <text x="145" y="182" text-anchor="middle" font-size="11" fill="#475569">u_saved ← Live Reg A</text>
+  <text x="145" y="200" text-anchor="middle" font-size="11" fill="#475569">v_saved ← Live Reg B</text>
+  <text x="145" y="218" text-anchor="middle" font-size="11" fill="#475569">zeta_saved ← Twiddle</text>
+
+  <!-- Arrow -->
+  <path d="M 225 182 L 255 182" stroke="#64748b" stroke-width="2" fill="none" marker-end="url(#arrow)"/>
+  <polygon points="255,182 247,177 247,187" fill="#64748b"/>
+
+  <!-- 2. Execution -->
+  <rect x="260" y="135" width="170" height="95" rx="6" fill="#eff6ff" stroke="#3b82f6" stroke-width="1.5"/>
+  <text x="345" y="160" text-anchor="middle" font-size="13" font-weight="bold" fill="#1d4ed8">2. Butterfly Core</text>
+  <text x="345" y="182" text-anchor="middle" font-size="11" fill="#1e40af">Cooley-Tukey (CT) or</text>
+  <text x="345" y="200" text-anchor="middle" font-size="11" fill="#1e40af">Gentleman-Sande (GS)</text>
+  <text x="345" y="218" text-anchor="middle" font-size="10" fill="#dc2626">Target of Transient SEU</text>
+
+  <!-- Arrow -->
+  <polygon points="460,182 452,177 452,187" fill="#64748b"/>
+  <path d="M 430 182 L 460 182" stroke="#64748b" stroke-width="2" fill="none"/>
+
+  <!-- 3. Invariant Checker -->
+  <rect x="465" y="135" width="190" height="95" rx="6" fill="#fdf4ff" stroke="#a855f7" stroke-width="1.5"/>
+  <text x="560" y="160" text-anchor="middle" font-size="13" font-weight="bold" fill="#7e22ce">3. Algebraic Invariant</text>
+  <text x="560" y="180" text-anchor="middle" font-size="11" fill="#6b21a8">CT: r0 + r1 ≡ 2u (mod q)</text>
+  <text x="560" y="198" text-anchor="middle" font-size="11" fill="#6b21a8">GS: r0 ≡ u+v, r1 ≡ (v-u)ζ</text>
+  <text x="560" y="216" text-anchor="middle" font-size="10" fill="#047857">Independent Verification</text>
+
+  <!-- Decision Branch -->
+  <polygon points="725,182 770,150 815,182 770,214" fill="#fef3c7" stroke="#d97706" stroke-width="1.5"/>
+  <text x="770" y="180" text-anchor="middle" font-size="11" font-weight="bold" fill="#92400e">Invariant</text>
+  <text x="770" y="195" text-anchor="middle" font-size="11" font-weight="bold" fill="#92400e">Holds?</text>
+
+  <path d="M 655 182 L 725 182" stroke="#64748b" stroke-width="2" fill="none"/>
+
+  <!-- Pass Branch -->
+  <path d="M 815 182 L 845 182 L 845 270 L 690 270" stroke="#059669" stroke-width="2" fill="none"/>
+  <polygon points="690,270 698,265 698,275" fill="#059669"/>
+  <text x="825" y="172" font-size="11" font-weight="bold" fill="#059669">YES</text>
+  <rect x="520" y="250" width="165" height="42" rx="4" fill="#ecfdf5" stroke="#059669" stroke-width="1.5"/>
+  <text x="602" y="275" text-anchor="middle" font-size="11" font-weight="bold" fill="#065f46">Commit Butterfly Output</text>
+
+  <!-- Fail Branch (Rollback & Retry) -->
+  <path d="M 770 214 L 770 250 L 345 250 L 345 235" stroke="#dc2626" stroke-width="2" fill="none"/>
+  <polygon points="345,235 340,243 350,243" fill="#dc2626"/>
+  <text x="778" y="235" font-size="11" font-weight="bold" fill="#dc2626">NO (Retry &lt; 2)</text>
+  <rect x="250" y="270" width="190" height="42" rx="4" fill="#fef2f2" stroke="#dc2626" stroke-width="1.5"/>
+  <text x="345" y="287" text-anchor="middle" font-size="11" font-weight="bold" fill="#991b1b">Rollback Regs from Snapshot</text>
+  <text x="345" y="302" text-anchor="middle" font-size="10" fill="#b91c1c">Increment Retry (Max 2)</text>
+
+  <!-- Tier 2: Outer FO Containment Box -->
+  <rect x="40" y="340" width="820" height="155" rx="8" fill="#f8fafc" stroke="#cbd5e1" stroke-width="2" filter="url(#shadow)"/>
+  <rect x="40" y="340" width="820" height="32" rx="8" fill="#e2e8f0"/>
+  <text x="55" y="361" font-size="13" font-weight="bold" fill="#1e293b">TIER 2: OUTER FUJISAKI-OKAMOTO RE-ENCRYPTION &amp; IMPLICIT REJECTION CONTAINMENT</text>
+
+  <!-- FO Components -->
+  <rect x="65" y="390" width="190" height="85" rx="6" fill="#ffffff" stroke="#94a3b8" stroke-width="1.5"/>
+  <text x="160" y="415" text-anchor="middle" font-size="12" font-weight="bold" fill="#0f172a">Re-encryption Core</text>
+  <text x="160" y="435" text-anchor="middle" font-size="11" fill="#475569">c' ← mlk_indcpa_enc(m', r)</text>
+  <text x="160" y="455" text-anchor="middle" font-size="11" fill="#475569">Catches Twiddle Table Faults</text>
+
+  <path d="M 255 432 L 295 432" stroke="#64748b" stroke-width="2" fill="none"/>
+  <polygon points="295,432 287,427 287,437" fill="#64748b"/>
+
+  <rect x="300" y="390" width="220" height="85" rx="6" fill="#eff6ff" stroke="#3b82f6" stroke-width="1.5"/>
+  <text x="410" y="415" text-anchor="middle" font-size="12" font-weight="bold" fill="#1d4ed8">Dual-Rail Ciphertext Check</text>
+  <text x="410" y="435" text-anchor="middle" font-size="11" fill="#1e40af">cmp1 ← mlk_ct_memcmp(c, c')</text>
+  <text x="410" y="455" text-anchor="middle" font-size="11" fill="#1e40af">cmp2 ← mlk_ct_memcmp_rev(c, c')</text>
+
+  <path d="M 520 432 L 560 432" stroke="#64748b" stroke-width="2" fill="none"/>
+  <polygon points="560,432 552,427 552,437" fill="#64748b"/>
+
+  <!-- Decision Fork -->
+  <rect x="565" y="385" width="135" height="42" rx="4" fill="#ecfdf5" stroke="#059669" stroke-width="1.5"/>
+  <text x="632" y="403" text-anchor="middle" font-size="11" font-weight="bold" fill="#065f46">Match &amp; fail == 0</text>
+  <text x="632" y="418" text-anchor="middle" font-size="10" fill="#047857">Emit K_valid = H(K̄ || c)</text>
+
+  <rect x="565" y="438" width="135" height="42" rx="4" fill="#fef2f2" stroke="#dc2626" stroke-width="1.5"/>
+  <text x="632" y="456" text-anchor="middle" font-size="11" font-weight="bold" fill="#991b1b">Mismatch or fail != 0</text>
+  <text x="632" y="471" text-anchor="middle" font-size="10" fill="#b91c1c">Emit K_rej = SHAKE256(z||c)</text>
+
+  <rect x="730" y="390" width="115" height="85" rx="6" fill="#f8fafc" stroke="#475569" stroke-width="1.5"/>
+  <text x="787" y="420" text-anchor="middle" font-size="11" font-weight="bold" fill="#0f172a">FIPS 203 §7.3</text>
+  <text x="787" y="440" text-anchor="middle" font-size="11" fill="#475569">Implicit</text>
+  <text x="787" y="458" text-anchor="middle" font-size="11" fill="#475569">Rejection</text>
+</svg>

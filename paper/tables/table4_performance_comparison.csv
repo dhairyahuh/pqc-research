@@ -1,0 +1,7 @@
+Implementation_Configuration,Compiler_Flags,Decapsulation_Mean_us,Standard_Deviation_us,Latency_Overhead_pct,Slowdown_Factor,Fault_Detection_Scope,Fault_Recovery_Capability,Heap_Allocations_Bytes,Stack_Footprint_Bytes
+Native Baseline ML-KEM-768,-O3,110.77,4.82,0.0%,1.00x,None (Silent Corruption Vulnerable),None,0,1216
+Invariant Monitored + Rollback (This Work),-O3,129.51,5.14,+16.9%,1.17x,9856 Butterflies + Outer FO,In-Place 1-Butterfly Rollback,0,1408
+Software Sequential DMR,-O3,260.68,8.92,+135.3%,2.35x,Algorithm-Level Duplication,Whole-Decapsulation Re-execution,0,2432
+Native Baseline ML-KEM-768,-O2,124.30,5.60,0.0%,1.00x,None (Silent Corruption Vulnerable),None,0,1216
+Invariant Monitored + Rollback (This Work),-O2,155.75,6.10,+25.3%,1.25x,9856 Butterflies + Outer FO,In-Place 1-Butterfly Rollback,0,1408
+Software Sequential DMR,-O2,309.51,10.40,+149.0%,2.49x,Algorithm-Level Duplication,Whole-Decapsulation Re-execution,0,2432

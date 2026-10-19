@@ -1,0 +1,363 @@
+# Software-Level Fault Resilience for ML-KEM-768: Dual-Transform NTT Invariant Monitoring, Localized Register Rollback, and Containment
+
+**Dhairya Jain**  
+*Department of Computer Science and Engineering*  
+October 2026
+
+---
+
+## Abstract
+
+Module-Lattice-Based Key-Encapsulation Mechanisms, standardized in NIST FIPS 203 (ML-KEM), rely heavily on the Number Theoretic Transform (NTT) for polynomial multiplication over the ring $R_q = \mathbb{Z}_q[X]/(X^{256} + 1)$ with modulus $q = 3329$. In resource-constrained and high-reliability environments, such as aerospace avionics, terrestrial edge controllers, and safety-critical embedded systems, computational hardware is exposed to transient and persistent faults caused by environmental disturbances, voltage fluctuations, and thermal stress. In this work, we investigate architectural fault resilience against transient and persistent register perturbations. Unmitigated computational faults during decapsulation risk inducing Silent Data Corruption (SDC) or triggering unnecessary algorithm aborts that degrade communication availability. 
+
+In this paper, we design, implement, and empirically validate an end-to-end software-level fault-resilience architecture for ML-KEM-768. Our scheme continuously monitors all 11 polynomial transforms (6 Forward Cooley-Tukey and 5 Inverse Gentleman-Sande, totaling exactly $9{,}856$ butterflies) executed during decapsulation and Fujisaki-Okamoto (FO) re-encryption. By combining localized single-butterfly register snapshotting with decoupled algebraic invariant checking, transient arithmetic errors are detected and corrected in-place via bounded local rollback, requiring only a single-butterfly recomputation ($0.01\%$ execution overhead per fault) rather than full decapsulation restarts. Persistent faults safely escalate to fail-stop containment, forcing FIPS 203 Section 7.3 implicit rejection. 
+
+We conduct extensive fault-injection experiments directly on compiled production binaries:
+1. Under transient multiplier upsets ($F4$), the system achieves a $100.0\%$ recovery rate ($100/100$, $95\%$ Wilson score CI: $[96.30\%, 100.00\%]$), successfully emitting the authentic shared secret key $K_{\text{valid}}$.
+2. Under persistent faults ($F5A$) and software force-value zeroing ($F5B$), the system achieves $100.0\%$ safe fail-stop containment ($200/200$, $95\%$ CI: $[98.14\%, 100.00\%]$), deterministically escalating to implicit rejection $K_{\text{rej}} = \text{SHAKE256}(z \parallel c)$.
+3. Across 300 active production fault trials on compiled binaries, zero Silent Data Corruption (SDC) events were observed ($0.00\%$, $95\%$ Wilson score CI: $[0.00\%, 1.26\%]$), consistent with the $0/750$ SDC rate (one-sided $97.5\%$ Clopper-Pearson upper bound: $0.49\%$) observed across the broader 900-trial canonical campaign.
+4. We evaluate common-mode failure boundaries: while circular verifiers that consume unshielded live outputs exhibit a $98.5\%$ false-pass rate ($591/600$, with individual test configurations spanning $94.0\%$ to $100.0\%$), snapshot-isolated checking maintains full detection. Furthermore, we mathematically prove that local arithmetic invariants are intrinsically blind to twiddle factor memory corruption ($0.0\%$ local detection), while an exploratory 11-trial active mutation pilot confirms that downstream FO ciphertext re-encryption comparison catches the resulting polynomial corruption, deterministically returning the implicit rejection key on the evaluated reference vector.
+
+Decapsulation performance benchmarks on an Apple Silicon ARM64 processor (Apple M3 Pro, macOS Darwin 25.1.0, Apple Clang 17.0.0) demonstrate an empirical latency overhead of $+16.9\%$ under `-O3` ($129.51\,\mu\text{s}$ vs. $110.77\,\mu\text{s}$, $N = 2{,}000$)—substantially lower than sequential software dual modular redundancy (DMR), which conceptually requires at least $+100.0\%$ ($2.0\times T_0$) latency overhead plus comparison costs. The monitoring implementation requires zero dynamic heap allocations and preserves constant-time execution during fault-free operation.
+
+**Keywords:** Post-Quantum Cryptography, ML-KEM-768, FIPS 203, Number Theoretic Transform (NTT), Fault Injection, Algebraic Invariants, Localized Rollback, Implicit Rejection, Space Systems.
+
+---
+
+## 1. Introduction
+
+The transition to Post-Quantum Cryptography (PQC) represents a fundamental paradigm shift in digital security. In August 2024, the National Institute of Standards and Technology (NIST) published FIPS 203, standardizing the Module-Lattice-Based Key-Encapsulation Mechanism (ML-KEM) [P18]. ML-KEM's security relies on the hardness of the Module Learning With Errors (M-LWE) problem over polynomial rings. At the core of ML-KEM's high computational performance lies the Number Theoretic Transform (NTT), which transforms polynomial multiplications from $O(n^2)$ schoolbook complexity to $O(n \log n)$ quasi-linear coefficient-wise multiplications.
+
+However, physical deployment environments present hostile operating conditions. In high-altitude aerospace applications, satellite communications, and edge cyber-physical infrastructure, microelectronic devices are exposed to single-event upsets (SEUs) induced by atmospheric neutrons, heavy ions, and electromagnetic interference [P01, P02, P08]. When an upset flips a bit in an unhardened register or ALU datapath, it induces transient computational divergence. In cryptographic primitives, such upsets can result in two catastrophic failure modes:
+1. **Silent Data Corruption (SDC):** An undetected arithmetic fault corrupts intermediate polynomial coefficients, resulting in an erroneous or partially predictable shared key. If an uncontained fault leaks secret-key information or circumvents protocol-level rejection, it exposes the system to fault-enabled key recovery attacks [P05, P06, P07].
+2. **Denial of Service / Unavailability:** Classical fault-tolerant approaches either abort immediately upon detecting any irregularity or execute full-algorithm restarts [P12]. In space links characterized by high latency and intermittent line-of-sight (e.g., deep space relays [P10]), frequent full-algorithm recomputations waste tight energy budgets and severely degrade availability.
+
+Importantly, as established by Dodd & Massengill [P01], physical radiation involves complex semiconductor charge transport, multi-cell upsets, and analog transients. In this work, we focus on the architectural manifestation of such disturbances—evaluating algorithmic tolerance against discrete register and arithmetic perturbations in software rather than demonstrating physical radiation qualification or measured in-beam SEU cross-sections.
+
+### 1.1 Limitations of Existing Defenses
+
+Prior research on lattice cryptography fault tolerance suffers from three major limitations:
+- **Hardware Exclusivity:** The predominant body of literature focuses on custom FPGA or ASIC arithmetic accelerators [P03, P04, P13]. For instance, Paul et al. [P03] demonstrated algebraic invariant checking on FPGA pipelines. However, commercial-off-the-shelf (COTS) space processors and general-purpose microcontrollers cannot leverage custom hardware pipelines, creating an acute need for pure software-level fault resilience.
+- **Coarse Recovery Granularity:** Generic software defenses, such as Software Implemented Fault Tolerance (SWIFT) [P12] or sequential Dual Modular Redundancy (DMR), execute whole-operation duplicate recomputation. In software ML-KEM, executing redundant decapsulation incurs a severe performance penalty (conceptually $\ge +100\%$ latency overhead for duplicate execution, with earlier isolated benchmarks measuring $+99.33\%$), exceeding the thermal and execution constraints of small satellite platforms [P08].
+- **Unverified Common-Mode Assumptions:** Verification schemes often assume that checkers execute in isolated fault domains. As we demonstrate, if a fault checker reads from corrupted live state or if shared constant tables (such as NTT twiddle factors [P05]) are corrupted, local invariants suffer complete detection blindness.
+
+### 1.2 Our Contributions
+
+This paper presents the design, formal derivation, implementation, and empirical validation of an end-to-end software-level fault-resilience architecture for ML-KEM-768. The specific contributions are:
+
+1. **Dual-Transform Software Invariant Framework:** We formulate and integrate forward and inverse transform monitoring in software, covering all 11 polynomial transforms ($5{,}376$ Forward Cooley-Tukey and $4{,}480$ Inverse Gentleman-Sande butterflies, totaling $9{,}856$ operations). To circumvent expensive modular divisions in software inverse NTTs, we derive a decoupled verification scheme that evaluates pre-reduction adders and forward re-multiplications in $\mathbb{Z}_q$.
+2. **Microsecond Localized Register Rollback:** We introduce a single-butterfly snapshot and rollback mechanism. When a transient arithmetic fault occurs, the live state is restored from local register snapshots, executing an in-place retry. Across 100 transient fault trials ($F4$), the system achieves a $100.0\%$ recovery rate, resolving errors within $1.0$ retry iteration ($0.01\%$ execution penalty per fault) and emitting authentic keys $K_{\text{valid}}$ without restarting decapsulation.
+3. **Deterministic Fail-Stop Containment:** For persistent hardware faults ($F5A$) and software force-value faults ($F5B$), the monitor enforces a strict 2-retry limit, zeroes live polynomial buffers, and escalates to top-level implicit rejection. In 200/200 trials, the implementation deterministically emitted the standard FIPS 203 Section 7.3 rejection key $K_{\text{rej}} = \text{SHAKE256}(z \parallel c)$, yielding zero observed SDC across 300 active production trials ($95\%$ Wilson score CI: $[0.00\%, 1.26\%]$) and zero SDC across 750 active campaign trials (one-sided $97.5\%$ Clopper-Pearson upper bound: $0.49\%$).
+4. **Formal Separation of Local Invariants and Outer FO Containment:** We prove that while local arithmetic invariants achieve near-perfect detection of datapath faults, they are intrinsically blind to twiddle factor memory corruption ($0.0\%$ detection probability). We demonstrate via an exploratory 11-trial active mutation pilot on a reference test vector that downstream Fujisaki-Okamoto re-encryption comparison (`mlk_ct_memcmp`) catches twiddle mutations and guarantees implicit rejection for the evaluated cases.
+5. **Rigorous Experimental Validation & Benchmark Profiling:** We evaluate decapsulation benchmarks from historical Apple Silicon ARM64 records (Apple M3 Pro, Darwin 25.1.0, Apple Clang 17.0.0) alongside binary reproductions on macOS Darwin 27.0.0. The monitored implementation incurs $+16.9\%$ latency overhead under `-O3` ($129.51\,\mu\text{s}$ vs $110.77\,\mu\text{s}$, $N=2{,}000$), substantially lower than the conceptual $\ge +100\%$ penalty of sequential duplicate execution. The monitoring routines allocate zero dynamic heap memory.
+
+---
+
+## 2. Background and Threat Model
+
+### 2.1 ML-KEM-768 Mathematical Foundation
+
+ML-KEM operates over the cyclotomic quotient ring:
+$$R_q = \mathbb{Z}_q[X] / (X^{256} + 1)$$
+where $q = 3329$. Because $X^{256} + 1$ factors into 128 quadratic polynomials over $\mathbb{Z}_q$, polynomials are represented in the NTT domain. For ML-KEM-768, the module rank is $k = 3$.
+
+During decapsulation (`crypto_kem_dec`), the receiver processes a ciphertext $c = (c_1, c_2)$, unpacks polynomial vector $\mathbf{u} \in R_q^3$ and polynomial $v \in R_q$, and computes the decrypted message:
+$$m' = \text{Decode}(\text{InvNTT}(\hat{\mathbf{s}}^T \cdot \text{NTT}(\mathbf{u}) - v))$$
+Here, the secret key $\hat{\mathbf{s}} \in R_q^3$ is stored pre-transformed in the NTT domain within the decapsulation key. Crucially, the received vector $\mathbf{u}$ undergoes Forward NTT, while the inner-product difference undergoes Inverse NTT.
+
+To achieve IND-CCA2 security, ML-KEM employs the Fujisaki-Okamoto (FO) transform: the candidate message $m'$ is re-encrypted using deterministic coins $(\bar{K}', r') = G(m' \parallel H(c))$. The candidate ciphertext $c' = \text{K-PKE.Encrypt}(\text{pk}, m', r')$ is generated by transforming ephemeral vector $\mathbf{r}$ via Forward NTT, computing matrix products, and transforming candidate vectors $\mathbf{u}'$ and $v'$ back via Inverse NTT. If $c' == c$, the shared key $K_{\text{valid}} = H(\bar{K}' \parallel H(c))$ is returned; otherwise, an implicit rejection key $K_{\text{rej}} = \text{SHAKE256}(z \parallel c)$ is emitted.
+
+### 2.2 Threat and Fault Model
+
+We define a realistic, non-adversarial physical fault model motivated by radiation environments and terrestrial reliability:
+1. **Fault Nature:** Architectural single-event transients (SETs) and single-event upsets (SEUs) [P01]. Transient faults alter ALU arithmetic operations (e.g., multiplier products or modular reductions) for a single butterfly operation. Persistent faults model multi-cycle latch corruption or repeated arithmetic defects. We explicitly note that software bit-flip injection abstracts the architectural consequence of an upset latched into CPU registers; it does not simulate physical semiconductor charge collection, multi-cell upsets (MCUs), or analog voltage transients [P01]. Physical cyclotron beam testing is beyond the scope of this software study.
+2. **Target Scope:** Faults strike general-purpose processor registers, arithmetic pipelines, and twiddle constant memory during polynomial evaluation.
+3. **Non-Adversarial Focus:** We focus on functional resilience, availability, and error containment under random physical faults. We do not claim certified resistance against active, high-order statistical fault attacks (such as SIFA [P11]) or microarchitectural cache side-channels [P14].
+4. **Security Goal:** Guarantee that under any single or persistent arithmetic fault, the decapsulation procedure either:
+   - Recovers authentic execution, emitting $K_{\text{valid}}$ matching the clean-room specification, OR
+   - Safe fail-stops, emitting the deterministic FIPS 203 Section 7.3 implicit rejection key $K_{\text{rej}}$, with zero Silent Data Corruption ($SDC = 0$).
+
+---
+
+## 3. Mathematical Derivations and Invariant Architecture
+
+ML-KEM executes two distinct butterfly algorithms across its 11 polynomial transforms: the Cooley-Tukey (CT) butterfly for forward transforms, and the Gentleman-Sande (GS) butterfly for inverse transforms.
+
+### 3.1 Forward Cooley-Tukey (CT) Invariant
+
+The forward NTT maps a polynomial $a(X) \in R_q$ into the NTT domain via 7 stages of butterfly operations. In each butterfly, given input coefficients $u, v \in \mathbb{Z}_q$ and twiddle factor $\zeta \in \mathbb{Z}_q$, the operational Cooley-Tukey equations compute:
+$$t = v \cdot \zeta \pmod q$$
+$$r_0 = u + t \pmod q$$
+$$r_1 = u - t \pmod q$$
+
+#### Invariant Derivation
+Summing the output coefficients $r_0$ and $r_1$ in $\mathbb{Z}_q$:
+$$r_0 + r_1 = (u + t) + (u - t) = 2u \pmod q$$
+
+The sum $r_0 + r_1$ is algebraically invariant with respect to both the multiplier output $t$ and the twiddle factor $\zeta$. 
+
+#### Error Detection Analysis
+Let an arithmetic fault corrupt the intermediate multiplier output such that $\tilde{t} = t + e_t \pmod q$, where $e_t \not\equiv 0 \pmod q$. The corrupted outputs become $\tilde{r}_0 = u + \tilde{t}$ and $\tilde{r}_1 = u - \tilde{t}$. The invariant evaluation computes:
+$$\tilde{r}_0 + \tilde{r}_1 - 2u = (u + \tilde{t}) + (u - \tilde{t}) - 2u = 0 \pmod q$$
+Notice that if both additions evaluate symmetrically over $\tilde{t}$, the sum cancels $e_t$. Therefore, in software implementations, checking only the sum would be blind to symmetric multiplier errors if the live computation and checker share the same sum!
+
+To guarantee complete detection, our architecture decouples verification: the monitor preserves snapshot inputs $u_{\text{saved}}, v_{\text{saved}}$ in registers and verifies both the sum invariant and multiplier consistency:
+$$\Delta_{\text{sum}} = (r_0 + r_1 - 2u_{\text{saved}}) \pmod q$$
+$$\Delta_{\text{mul}} = (r_0 - r_1 - 2(v_{\text{saved}} \cdot \zeta)) \pmod q$$
+Any discrepancy ($\Delta_{\text{sum}} \neq 0$ or $\Delta_{\text{mul}} \neq 0$) flags an immediate detection event.
+
+### 3.2 Inverse Gentleman-Sande (GS) Invariant
+
+The inverse NTT maps frequency-domain polynomials back to standard representation via 7 stages of Gentleman-Sande butterflies. Given inputs $u, v \in \mathbb{Z}_q$ and twiddle factor $\zeta$, the operational GS equations compute:
+$$r_0 = u + v \pmod q$$
+$$d = v - u \pmod q$$
+$$r_1 = d \cdot \zeta \pmod q$$
+
+#### Classical Derivation
+Multiplying $r_1$ by $\zeta^{-1} \pmod q$:
+$$\zeta^{-1} r_1 = v - u \pmod q$$
+Adding this to $r_0$:
+$$r_0 - \zeta^{-1} r_1 = (u + v) - (v - u) = 2u \pmod q$$
+Alternatively:
+$$r_0 + \zeta r_1 \equiv 2u \pmod q \quad \text{(when scaled)}$$
+
+#### Decoupled Software Implementation
+In hardware, modular inversion or fixed-coefficient multipliers are readily parallelized [P03]. In general-purpose software, computing $\zeta^{-1} \pmod q$ or performing division in $\mathbb{Z}_{3329}$ incurs severe latency penalties. 
+
+To eliminate division overhead, our implementation decouples the GS invariant into two forward checks using saved operands:
+$$\text{Check 1 (Adder Rail):} \quad r_0 \equiv u_{\text{saved}} + v_{\text{saved}} \pmod q$$
+$$\text{Check 2 (Multiplier Rail):} \quad r_1 \equiv (v_{\text{saved}} - u_{\text{saved}}) \cdot \zeta \pmod q$$
+This formulation requires only standard modular additions, subtractions, and Montgomery multiplications, achieving $100\%$ fault coverage over all single-rail butterfly faults with zero modular division overhead.
+
+### 3.3 Theorem 1: Twiddle Factor Blindness
+
+**Theorem 1 (Twiddle Factor Blindness).** *Let a butterfly operation and its local invariant checker execute using the identical twiddle factor scalar $\zeta_{\text{live}}$ loaded from memory. If $\zeta_{\text{live}}$ is corrupted such that $\tilde{\zeta} = \zeta \oplus \Delta_\zeta$, the local invariant holds with probability $1.0$, resulting in an invariant detection probability of exactly $0.0\%$.*
+
+*Proof.* For the Cooley-Tukey butterfly, the live computation evaluates $\tilde{t} = v \cdot \tilde{\zeta}$, $\tilde{r}_0 = u + \tilde{t}$, and $\tilde{r}_1 = u - \tilde{t}$. The invariant checker evaluates:
+$$\tilde{r}_0 + \tilde{r}_1 = (u + \tilde{t}) + (u - \tilde{t}) = 2u \pmod q$$
+Because the sum invariant is algebraically independent of $\zeta$, $\Delta_{\text{sum}} = 0$. Furthermore, when evaluating the decoupled multiplier check using $\tilde{\zeta}$:
+$$\tilde{r}_0 - \tilde{r}_1 = 2\tilde{t} = 2(v \cdot \tilde{\zeta}) \pmod q$$
+The recomputed check matches identically. An identical argument holds for the Gentleman-Sande equations. Thus, local arithmetic invariants are completely blind to twiddle factor corruption. $\blacksquare$
+
+*Architectural Implication:* Theorem 1 rigorously establishes that local butterfly invariants cannot guarantee end-to-end security in isolation against memory corruption. Downstream Fujisaki-Okamoto re-encryption comparison is mathematically necessary to catch twiddle table mutations. In Section 7, we report on an exploratory 11-trial active mutation pilot evaluating this boundary.
+
+---
+
+## 4. Implementation and Resilience Architecture
+
+### 4.1 Transform Call Graph and Butterfly Counting
+
+A rigorous audit of the FIPS 203 ML-KEM-768 reference source code reveals exactly 11 polynomial transforms executed during decapsulation and re-encryption. Each polynomial contains $n = 256$ coefficients. A 7-stage NTT executes $256/2 = 128$ butterflies per stage, yielding:
+$$B = 128 \times 7 = 896 \text{ butterflies per transform}$$
+
+Table 1 details the complete transform call graph.
+
+| Phase | Operation | Target Vector / Poly | Algorithm | Domain Flow | Transforms | Butterflies | Source Code Site |
+|:---|:---|:---|:---:|:---:|:---:|:---:|:---|
+| **Decapsulation** | Forward NTT | Ciphertext $\mathbf{u} \in R_q^3$ | Cooley-Tukey | Time $\to$ Freq | 3 | $2{,}688$ | `mlk_indcpa_dec:619` (`mlk_polyvec_ntt`) |
+| **Decapsulation** | Inverse NTT | Decrypted Message $v - \mathbf{s}^T\mathbf{u}$ | Gentleman-Sande | Freq $\to$ Time | 1 | 896 | `mlk_indcpa_dec:622` (`mlk_poly_invntt_tomont`) |
+| **Re-encryption** | Forward NTT | Ephemeral Seed $\mathbf{r} \in R_q^3$ | Cooley-Tukey | Time $\to$ Freq | 3 | $2{,}688$ | `mlk_indcpa_enc:558` (`mlk_polyvec_ntt`) |
+| **Re-encryption** | Inverse NTT | Candidate $\mathbf{u}' \in R_q^3$ | Gentleman-Sande | Freq $\to$ Time | 3 | $2{,}688$ | `mlk_indcpa_enc:564` (`mlk_polyvec_invntt_tomont`) |
+| **Re-encryption** | Inverse NTT | Candidate Scalar $v' \in R_q$ | Gentleman-Sande | Freq $\to$ Time | 1 | 896 | `mlk_indcpa_enc:565` (`mlk_poly_invntt_tomont`) |
+| **Total Scope** | **All Transforms** | **Complete KEM Decapsulation** | **Dual CT/GS** | — | **11** | **9,856** | `poly.c:510, 588` (`mlk_poly_ntt, invntt`) |
+
+*Table 1: Authoritative call graph and butterfly operations across ML-KEM-768 decapsulation.*
+
+Notice that the secret key vector $\hat{\mathbf{s}} \in R_q^3$ is stored in NTT form within the secret key blob; it is unpacked directly into the frequency domain and is **never transformed** during decapsulation.
+
+### 4.2 Localized Snapshotting and Rollback Mechanism
+
+The core resilience mechanism is implemented at each butterfly invocation in `algorithms/source_ref/mlkem/src/poly.c` via the fault hooks in `algorithms/source_ref/mlkem_fault_hooks.c`. The workflow operates as follows:
+
+```
+[Entry to Butterfly]
+        │
+        ▼
+  1. Snapshot: u_saved = *r0, v_saved = *r1, zeta_saved = zeta
+        │
+        ▼
+  2. Execute Butterfly Arithmetic (CT or GS)
+        │
+        ▼
+  3. Evaluate Decoupled Invariant Checks
+        │
+   ┌────┴────────────────────────┐
+   ▼                             ▼
+[Invariant Holds]       [Invariant Mismatch]
+   │                             │
+Commit Outputs                   ▼
+Exit Butterfly          Check Retry Counter
+                                 │
+                         ┌───────┴───────┐
+                         ▼               ▼
+                  [retry_count < 2]   [retry_count >= 2]
+                         │               │
+                  Rollback Live State    Escalate Fail-Stop:
+                  from Snapshot:         fail = 0xFF
+                  *r0 = u_saved          status = 0xFFFFFFFF
+                  *r1 = v_saved          Zero Polynomial State
+                  retry_count++          Force Implicit Rejection
+                  Re-execute Butterfly
+```
+
+By constraining snapshotting and recovery to the single-butterfly level ($u_{\text{saved}}, v_{\text{saved}}$ stored in local C registers), recovery requires zero dynamic memory allocation and negligible cycle overhead ($<15$ clock cycles).
+
+### 4.3 Outer Fujisaki-Okamoto Containment Failsafe
+
+When an unmonitored fault occurs (such as twiddle factor corruption [P05], memory rowhammer bitflips outside the ALU [P15], or persistent multi-stage errors), the corrupted intermediate polynomials propagate into the decrypted message $m'$.
+
+During re-encryption, the candidate ciphertext $c'$ is recomputed from $m'$. In `mlk_kem_dec_monitored()` (`algorithms/source_ref/mlkem/src/kem.c`, lines 466–520), ciphertext verification combines forward comparison with an independent reverse-order dual-rail loop to detect predicate corruption:
+```c
+/* Verified dual-rail ciphertext check in mlk_kem_dec_monitored() */
+fail = mlk_ct_memcmp(ct, tmp, MLKEM_INDCCA_CIPHERTEXTBYTES);
+
+uint8_t fail_chk = 0;
+for (size_t i = 0; i < MLKEM_INDCCA_CIPHERTEXTBYTES; i++) {
+  fail_chk |= (ct[MLKEM_INDCCA_CIPHERTEXTBYTES - 1 - i] ^
+               tmp[MLKEM_INDCCA_CIPHERTEXTBYTES - 1 - i]);
+}
+fail_chk = mlk_ct_cmask_nonzero_u8(fail_chk);
+
+if (ntt_native_monitor_get_persistent_count() > 0 ||
+    invntt_native_monitor_get_persistent_count() > 0 ||
+    fail != fail_chk) {
+  fail = 0xFF; /* Force implicit rejection */
+}
+mlk_ct_cmov_zero(ss, kr, MLKEM_SYMBYTES, fail);
+```
+Even if an internal fault completely evades the local butterfly checkers, any bit difference between $c$ and $c'$ (or any persistent monitor escalation) forces `fail = 0xFF`, deterministically emitting $K_{\text{rej}} = \text{SHAKE256}(z \parallel c)$.
+
+---
+
+## 5. Experimental Methodology
+
+### 5.1 Test Environment and Reproduction Harness
+
+Empirical decapsulation latency benchmarks reported in Table 4 were recorded on an Apple Silicon ARM64 processor (Apple M3 Pro, 12 CPU cores, macOS Darwin 25.1.0) using Apple Clang 17.0.0 (`-O3`) across $N = 2{,}000$ warm-stabilized iterations (`experiments/phase7i/phase7i_e2e_validation_harness.c`). Binary reproduction harnesses and functional validations were evaluated under macOS Darwin 27.0.0 using `Apple clang version 21.0.0 (clang-2100.1.1.101)`. Because per-iteration timing records were not persisted to disk, summary dispersion metrics reflect harness stdout aggregations, and we distinguish historical M3 Pro benchmark records from local M1 execution environments rather than asserting a single uniform platform. The reproduction harness is compiled directly against production object files:
+```bash
+clang -O3 -Wall -Wextra -std=c11 -I. -Ialgorithms/source_ref/mlkem \
+  phase18_audit/production_reproducer.c bin/obj/mlkem768_inst.o bin/obj/mlkem_fault_hooks.o \
+  -o phase18_audit/production_reproducer
+```
+
+### 5.2 Fault Models and Injection Mechanisms
+
+We evaluated four primary fault targets across 400 clean production trials:
+1. **$F12$ (Baseline Control):** Zero faults injected. Validates baseline algorithmic correctness and absence of false-alarm aborts ($N = 100$).
+2. **$F4$ (Transient Multiplier SEU):** A single-bit bitflip injected into the multiplier product $t$ during the execution of a randomly selected butterfly stage ($N = 100$). The fault is transient, clearing immediately on subsequent cycles.
+3. **$F5A$ (Persistent Multiplier Fault):** A multi-cycle bitmask fault injected repeatedly into multiplier outputs across consecutive butterfly invocations ($N = 100$).
+4. **$F5B$ (Software Force-Value Zeroing):** An abstract software debug hook forcing intermediate addition/subtraction outputs to zero ($*t = 0$, $N = 100$).
+5. **$H1$ (Harness Circular Verifier Evaluation):** Evaluation of verifier blindness in standalone test harnesses where checkers consume faulted live registers ($N = 600$ across 6 targets).
+6. **$H2$ (Silent Data Corruption Evaluation):** End-to-end evaluation of shared key validity across all 300 active production fault trials ($100 \text{ F4} + 100 \text{ F5A} + 100 \text{ F5B}$, excluding 100 clean baseline controls), referenced alongside the 750 active fault trials of the canonical campaign.
+
+### 5.3 Independent Correctness Oracles
+
+To prevent self-referential validation:
+- Valid decapsulations were compared against an independent clean-room ML-KEM-768 baseline ($K_{\text{valid}}$).
+- Implicit rejections were validated against a standalone FIPS 203 Section 7.3 oracle recomputing $\text{SHAKE256}(z \parallel c, 32)$ directly using Keccak-f[1600].
+- Binomial confidence intervals for production trials ($N = 300$) are reported as asymptotic 95% Wilson score confidence intervals [R03]. For the 750-trial canonical campaign, coverage is reported as an exact one-sided 97.5% Clopper-Pearson upper confidence bound.
+
+---
+
+## 6. Results and Empirical Validation
+
+### 6.1 Fault Recovery and Containment Performance
+
+Table 2 presents the empirical trial results across the authoritative production dataset (`phase18_audit/raw_production_trials.csv`).
+
+| Experiment ID | Fault Injection Model | Trials ($N$) | Detected | Recovered ($K_{\text{valid}}$) | Safe Fail-Stop ($K_{\text{rej}}$) | Silent Data Corruption (SDC) | Success / Containment Rate | 95% Wilson Score CI |
+|:---:|:---|:---:|:---:|:---:|:---:|:---:|:---:|:---:|
+| **F12** | Clean Baseline Control | 100 | 0 | 0 | 0 | 0 | 100.0% Success | $[96.30\%, 100.00\%]$ |
+| **F4** | Transient Multiplier SEU | 100 | 100 | 100 | 0 | 0 | 100.0% Recovered | $[96.30\%, 100.00\%]$ |
+| **F5A** | Persistent Multiplier Fault | 100 | 100 | 0 | 100 | 0 | 100.0% Fail-Stop | $[96.30\%, 100.00\%]$ |
+| **F5B** | Software Force-Value Zero | 100 | 100 | 0 | 100 | 0 | 100.0% Fail-Stop | $[96.30\%, 100.00\%]$ |
+| **H2** | **Production SDC (All Active)** | **300** | **300** | **100** | **200** | **0** | **0.00% SDC** | $[0.00\%, 1.26\%]$ |
+| **KAT** | Invalid Ciphertext Mutation | 100 | 100 | 0 | 100 | 0 | 100.0% Fail-Stop | $[96.30\%, 100.00\%]$ |
+
+*Table 2: Empirical fault-injection recovery, containment, and SDC results on production binaries.*  
+*(For combined persistent containment across F5A and F5B, the pooled 200/200 trials achieve a 95% Wilson score CI of $[98.14\%, 100.00\%]$, as reported in Section 1.2).*
+
+#### Key Observations:
+- **Transient Recovery ($F4$):** All 100 transient fault trials were successfully resolved on the first retry (`retry_count == 1`). The emitted shared secret matched $K_{\text{valid}}$ byte-for-byte.
+- **Fail-Stop Escalation ($F5A, F5B$):** All 200 persistent and force-value fault trials exhausted the 2-retry limit (`retry_count == 2`), set `fail = 0xFF`, and deterministically emitted $K_{\text{rej}}$ matching the independent FIPS 203 Section 7.3 SHAKE-256 oracle.
+- **Zero SDC ($H2$):** Across 300 active production trials, no trial produced an invalid uncontained shared key ($SDC = 0/300$). The empirical 95% Wilson score confidence bound establishes an upper limit of $1.26\%$ on SDC probability for this production suite. Across the broader canonical campaign of 900 trials (750 active fault injections), zero SDC events were observed ($SDC = 0/750$), establishing a Clopper-Pearson exact binomial one-sided 97.5% upper confidence bound of $0.49\%$. We report both populations independently and do not pool datasets or claim universal absence of SDC across all possible circuits.
+
+### 6.2 Common-Mode Failures and Verifier Blindness (H1)
+
+To demonstrate why snapshot-isolated registers are mandatory, we evaluated standalone circular verifiers that read live output registers rather than saved inputs (`phase16_targeted_evidence_closure/h1_activation_audit.csv`). Table 3 summarizes the results across 600 trials.
+
+| Target ID | Datapath Corruption Site | Trials ($N$) | False Passes | True Catches | False-Pass Rate | 95% Wilson Score CI |
+|:---:|:---|:---:|:---:|:---:|:---:|:---:|
+| **T1** | CT Multiplier Live Overwrite | 100 | 98 | 2 | 98.0% | $[93.0\%, 99.5\%]$ |
+| **T2** | CT Subtractor Live Overwrite | 100 | 94 | 6 | 94.0% | $[87.5\%, 97.2\%]$ |
+| **T3** | GS Adder Shared Variable Overwrite | 100 | 100 | 0 | 100.0% | $[96.3\%, 100.0\%]$ |
+| **T4** | GS Multiplier Live Overwrite | 100 | 100 | 0 | 100.0% | $[96.3\%, 100.0\%]$ |
+| **T5** | Twiddle Scale Register Overwrite | 100 | 99 | 1 | 99.0% | $[94.6\%, 99.8\%]$ |
+| **T6** | In-Place Coefficient Array Overwrite | 100 | 100 | 0 | 100.0% | $[96.3\%, 100.0\%]$ |
+| **Total** | **Aggregate Circular Verifier Vulnerability** | **600** | **591** | **9** | **98.5%** | $[97.1\%, 99.2\%]$ |
+
+*Table 3: Verifier blindness rates in circular verification architectures.*
+
+In circular verification models, the checker consumes the already-corrupted live state, resulting in an aggregate false-pass rate of $98.5\%$ ($591/600$ trials across T1–T6, with individual test configurations spanning $94.0\%$ to $100.0\%$). In contrast, our production snapshot-isolated architecture achieved $100\%$ detection across all corresponding production targets.
+
+### 6.3 Performance Benchmarking
+
+Table 4 compares the latency and memory overhead of the proposed architecture against the uninstrumented baseline across 2,000 warm-stabilized decapsulation executions.
+
+| Configuration | Flags | Mean Latency ($\mu\text{s}$) | Std. Dev. ($\mu\text{s}$)* | Latency Overhead | Slowdown | Recovery Granularity | Heap Allocations** |
+|:---|:---:|:---:|:---:|:---:|:---:|:---|:---:|
+| **Native ML-KEM-768** | `-O3` | 110.77 | 4.82 | 0.0% | $1.00\times$ | None (Vulnerable to SDC) | 0 B |
+| **Invariant + Rollback (Ours)** | `-O3` | 129.51 | 5.14 | **+16.9%** | **$1.17\times$** | **1-Butterfly In-Place** | 0 B |
+
+*Table 4: Decapsulation performance benchmarks on Apple M3 Pro ($N = 2,000$, `-O3`).*  
+*\*Standard deviations reflect stdout summary records ($4.82\,\mu\text{s}$ and $5.14\,\mu\text{s}$); an alternate run summary logged $1.42\,\mu\text{s}$ and $5.61\,\mu\text{s}$. Per-iteration raw samples were not persisted to disk.*  
+*\*\*Zero dynamic memory allocation is guaranteed across all butterfly monitoring and rollback routines.*
+
+The proposed architecture incurs $+16.9\%$ latency overhead under `-O3` ($129.51\,\mu\text{s}$ vs $110.77\,\mu\text{s}$, a $1.17\times$ slowdown) on Apple M3 Pro. We note that earlier project design blueprints modeled a $+25.3\%$ overhead under unmeasured `-O2` production settings ($1.253 \cdot T_0$), but only the `-O3` distribution is supported by compiled binary benchmark logs. In contrast, any sequential software DMR scheme executing full decapsulation twice sequentially conceptually requires at least a $+100.0\%$ latency overhead ($2.00\times T_0$) plus comparison costs. In earlier isolated benchmarking under separate baseline settings (Phase 7H), unprotected sequential DMR measured $+99.33\%$ overhead (summary metric in `results/phase7h/processed/phase7h_timing_distribution.json`; ratio of displayed rounded means is $92.98\,\mu\text{s}$ vs $46.65\,\mu\text{s}$, or $99.31\%$). Our fine-grained invariant scheme delivers substantially lower overhead ($+16.9\%$ vs theoretical $\ge +100\%$ under `-O3`) while providing localized autonomous recovery rather than unconditional abort. We note that previously reported historical measurements of $+135.3\%$ DMR overhead in Phase 7I were obtained by running duplicate execution passes with invariant monitors active; removing this harness artifact confirms that true unprotected sequential DMR requires $\approx +100\%$ overhead.
+
+---
+
+## 7. Security and Architectural Boundaries
+
+To prevent misleading claims, we formally delineate the operational security boundaries of our architecture:
+
+1. **Fault Detection vs. Fault Correction:** Local algebraic invariants detect single-event arithmetic faults within butterfly operations. Fault correction is strictly limited to transient faults via register rollback. Persistent faults cannot be corrected and are escalated to fail-stop containment.
+2. **Local Monitoring vs. Outer FO Containment:** As proven in Theorem 1, local invariants are algebraically blind to twiddle factor corruption ($0.0\%$ detection). To evaluate this boundary empirically, a dedicated controlled pilot was executed across 16 trials on a reference test vector (Phase 15Q). Among these, 11 active mutations directly altered twiddle factors consumed during decapsulation across layers 1, 2, 6, 7, and mulcache/basemul indices (`zetas[1]`, `zetas[2]`, `zetas[32]`, `zetas[63]`, `zetas[64]`, `zetas[95]`, `zetas[127]`). In all 11 active cases, the resulting polynomial perturbation triggered Fujisaki-Okamoto re-encryption mismatch, deterministically returning the FIPS 203 implicit rejection key ($K_{\text{rej}} = \text{SHAKE256}(z \parallel c)$) with zero observed SDC. We emphasize that this 11-trial pilot validates the mechanism on a single reference vector; it does not constitute a statistical multi-orbit distribution over arbitrary keys and ciphertexts.
+3. **Availability vs. Confidentiality:** Transient retry maximizes availability by avoiding unnecessary aborts. For persistent or uncorrectable faults, the system prioritizes confidentiality over availability, zeroing intermediate polynomial buffers and emitting $K_{\text{rej}}$.
+4. **Side-Channel and Constant-Time Boundaries:** In fault-free execution, the monitoring and comparison logic executes in constant time using bitwise accumulation. However, when an arithmetic fault is detected, the implementation branches into the rollback path. Therefore, we **do not claim certified constant-time security under active fault conditions**, and we recommend this design primarily for non-adversarial radiation and reliability contexts.
+5. **Physical vs. Software Fault Models:** Our software bit-flip and force-value hooks model the architectural consequence of latched single-event perturbations. As reviewed by Dodd & Massengill [P01], software injection does not capture physical charge deposition, multi-cell upsets (MCUs), or analog power transients. Physical beam qualification remains necessary for aerospace flight certification.
+
+---
+
+## 8. Limitations and Future Work
+
+1. **Unmonitored Non-NTT Stages:** While all 9,856 NTT butterflies are continuously monitored, non-NTT operations (such as hash evaluations, polynomial sampling, and serialization) rely solely on outer FO containment.
+2. **Platform Scope:** Performance benchmarks were recorded on 64-bit Apple Silicon ARM64 processors (Apple M3 Pro under macOS Darwin 25.1.0; reproduction environment under Darwin 27.0.0). Dynamic stack memory usage was not instrumented in primary benchmark runs. Future work will profile the architecture on 32-bit embedded space platforms (e.g., ARM Cortex-M4 and RISC-V RV32IM).
+3. **Physical Radiation Validation:** This study utilized software-level fault injection simulating architectural register upsets. Physical heavy-ion beam testing (e.g., at cyclotron facilities) will be required for aerospace flight qualification.
+
+---
+
+## 9. Conclusion
+
+We have presented a software-level fault-resilience architecture for ML-KEM-768 that unifies dual-transform NTT invariant monitoring, localized single-butterfly rollback, and outer Fujisaki-Okamoto implicit rejection containment. By monitoring all $9{,}856$ butterfly operations across decapsulation and re-encryption, the system achieves $100.0\%$ transient recovery and $100.0\%$ persistent fail-stop containment, with zero observed SDC ($95\%$ Wilson score CI: $[0.00\%, 1.26\%]$ on 300 active production trials, and a one-sided $97.5\%$ Clopper-Pearson upper confidence bound $\le 0.49\%$ across 750 active campaign trials). Incurring only $+16.9\%$ latency overhead under `-O3` on Apple Silicon ARM64 (significantly lower than sequential DMR's conceptual $\ge +100\%$ penalty), our approach provides a practical, high-reliability cryptographic solution for embedded and safety-critical systems.
+
+---
+
+## References
+
+- [P01] P. E. Dodd and L. W. Massengill, "Basic mechanisms and modeling of single-event upset in digital microelectronics," *IEEE Trans. Nucl. Sci.*, vol. 50, no. 3, pp. 583–602, 2003.
+- [P02] European Cooperation for Space Standardization (ECSS), *Space product assurance: Radiation hardness assurance — EEE components*, ECSS-Q-ST-60-15C, Noordwijk, 2012.
+- [P03] R. Paul, P. Baidya, S. Mandal, and K. Guha, "Efficient error detection for Number Theoretic Transform using algebraic invariants checking for post-quantum cryptography and fully homomorphic encryption on FPGA," *ACM Trans. Embed. Comput. Syst.*, vol. 25, no. 4, art. 68, 2026.
+- [P04] A. Sarker, M. Cintas Canto, M. Mozaffari Kermani, and R. Azarderakhsh, "Error detection architectures for hardware/software co-design approaches of Number Theoretic Transform," *IEEE Trans. Comput.-Aided Des. Integr. Circuits Syst.*, vol. 42, no. 7, pp. 2167–2178, 2023.
+- [P05] P. Ravi, S. Bhasin, S. S. Roy, and A. Chattopadhyay, "Fiddling the twiddle constants — Fault injection analysis of the Number Theoretic Transform," *IACR Trans. Cryptogr. Hardw. Embed. Syst.*, vol. 2023, no. 2, pp. 447–481, 2023.
+- [P06] J. Hermelink, P. Pessl, and T. Pöppelmann, "Fault-enabled chosen-ciphertext attacks on Kyber," in *Progress in Cryptology — INDOCRYPT 2021*, LNCS 13143, pp. 297–318, Springer, 2021.
+- [P07] J. Delvaux, "Roulette: A diverse family of feasible fault attacks on masked Kyber," *IACR Trans. Cryptogr. Hardw. Embed. Syst.*, vol. 2022, no. 4, pp. 637–660, 2022.
+- [P08] H. Kim, "Post-quantum cryptography for space systems: Algorithms, implementation, and design constraints — A systematic survey," *Acta Astronautica*, vol. 238, pp. 112–129, 2026.
+- [P10] D. I. Elewaily, H. A. Ali, A. I. Saleh, and M. M. Abdelsalam, "Delay/disruption-tolerant networking-based the integrated deep-space relay network: State-of-the-art," *Ad Hoc Networks*, vol. 152, art. 103307, 2024.
+- [P11] C. Dobraunig, M. Eichlseder, H. Gross, and S. Mangard, "SIFA: Exploiting ineffective fault attacks on symmetric cryptography," *IACR Trans. Cryptogr. Hardw. Embed. Syst.*, vol. 2018, no. 3, pp. 1–23, 2018.
+- [P12] G. A. Reis, J. Chang, N. Vachharajani, R. Rangan, and D. I. August, "SWIFT: Software implemented fault tolerance," in *Proc. CGO 2005*, pp. 243–254, 2005.
+- [P13] T. Fritzmann, P. Sasdrich, and T. Güneysu, "Towards reliable and secure post-quantum co-processors based on RISC-V," in *Proc. DATE 2019*, pp. 1148–1153, 2019.
+- [P14] D. J. Bernstein et al., "KyberSlash: division timings depending on secrets in Kyber software," *Technical Disclosure Advisory*, 2024.
+- [P15] S. Amer et al., "PQ-Hammer: End-to-end key recovery attacks on post-quantum cryptography using Rowhammer," in *Proc. IEEE S&P 2025*, pp. 48–65, 2025.
+- [P18] National Institute of Standards and Technology (NIST), *Module-Lattice-Based Key-Encapsulation Mechanism Standard*, FIPS PUB 203, U.S. Dept. of Commerce, 2024.
+- [R03] E. B. Wilson, "Probable inference, the law of succession, and statistical inference," *J. Am. Stat. Assoc.*, vol. 22, no. 158, pp. 209–212, 1927.

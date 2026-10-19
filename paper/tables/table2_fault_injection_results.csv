@@ -1,0 +1,7 @@
+Target_ID,Fault_Model,Datapath_Target,Trials_N,Detected,Recovered,Fail_Stop,SDC,Observed_Rate,Wilson_95_CI,Status_Transition,Key_Output_Oracle
+F12,Clean Baseline Control,None,100,0,0,0,0,100.0% Success,[96.30% 100.00%],0x5A5A5A5A,K_valid match
+F4,Transient Bitflip (1-cycle),CT/GS Multiplier Out,100,100,100,0,0,100.0% Recovered,[96.30% 100.00%],0x5A5A5A5A (retry=1),K_valid match
+F5A,Persistent Fault (multi-cycle),CT/GS Multiplier Out,100,100,0,100,0,100.0% Fail-Stop,[98.14% 100.00%],0xFFFFFFFF (retry=2),K_rej match (FIPS 203)
+F5B,Software Force-Value Zero,CT/GS Add/Sub Out,100,100,0,100,0,100.0% Fail-Stop,[98.14% 100.00%],0xFFFFFFFF (retry=2),K_rej match (FIPS 203)
+H2,Active SDC Evaluation,All Butterfly Ops,300,300,100,200,0,0.00% SDC,[0.00% 1.26%],Deterministic,Deterministic
+KAT,Ciphertext Mutation,Ciphertext Bytes,100,100,0,100,0,100.0% Implicit Rej,[96.30% 100.00%],Failsafe Branch,K_rej match (SHAKE256)
