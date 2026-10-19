@@ -1,0 +1,50 @@
+[
+  {
+    "config_id": 1,
+    "delivery_rate_pct": 100.0,
+    "session_est_pct": 100.0,
+    "resync_rate_pct": 0.0,
+    "unsafe_key_reuses": 0,
+    "incorrect_accepted_msgs": 0,
+    "safe_failures": 0,
+    "mean_latency_ms": 187.5,
+    "goodput_pct": 100.0,
+    "retransmissions": 0
+  },
+  {
+    "config_id": 2,
+    "delivery_rate_pct": 94.6,
+    "session_est_pct": 94.6,
+    "resync_rate_pct": 0.0,
+    "unsafe_key_reuses": 0,
+    "incorrect_accepted_msgs": 0,
+    "safe_failures": 27,
+    "mean_latency_ms": 187.5,
+    "goodput_pct": 100.0,
+    "retransmissions": 0
+  },
+  {
+    "config_id": 3,
+    "delivery_rate_pct": 100.0,
+    "session_est_pct": 100.0,
+    "resync_rate_pct": 4.6,
+    "unsafe_key_reuses": 0,
+    "incorrect_accepted_msgs": 0,
+    "safe_failures": 0,
+    "mean_latency_ms": 189.8,
+    "goodput_pct": 100.0,
+    "retransmissions": 23
+  },
+  {
+    "config_id": 4,
+    "delivery_rate_pct": 100.0,
+    "session_est_pct": 100.0,
+    "resync_rate_pct": 2.8,
+    "unsafe_key_reuses": 0,
+    "incorrect_accepted_msgs": 0,
+    "safe_failures": 0,
+    "mean_latency_ms": 197.87,
+    "goodput_pct": 93.81,
+    "retransmissions": 344
+  }
+]

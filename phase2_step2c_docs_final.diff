@@ -1,0 +1,674 @@
+diff --git a/phase2_step2c_dependency_model.md b/phase2_step2c_dependency_model.md
+index a351123..2883c76 100644
+--- a/phase2_step2c_dependency_model.md
++++ b/phase2_step2c_dependency_model.md
+@@ -19,7 +19,7 @@ Prior audits (Phase 2 Step 2B) established that under single-point operational t
+ 1. Operational state only,
+ 2. Checker state only,
+ 3. Shared data, buffers, or control flow,
+-4. Simultaneously corrupted operational and reference data (simulated common-mode failure),
++4. Simultaneously corrupted operational and reference data via paired software mutations (synthetic common-mode failure proxy),
+ 5. Failures that evade local checker detection but are captured by the outer cryptographic protocol (Fujisaki-Okamoto transform).
+ 
+ ### Critical Physical Disclaimer
+@@ -41,7 +41,7 @@ Through static and binary analysis of the production implementation (`bin/obj/ml
+ 
+ ### 2.2 Reference Twiddle Access Path (TFIB-REF)
+ - **Symbol / Location:** `_tfib_zetas_ref` (external array of 128 `int16_t` values, located at virtual address `0x100018a60` in `__TEXT,__const` segment, defined in `tfib_implementation/tfib_ref.c` and linked via `libtfib.a`).
+-- **Memory Separation:** Stored at an offset of +448 bytes from `mlk_zetas`. It occupies a completely separate global symbol table entry and distinct memory bytes.
++- **Memory Separation:** Stored at an offset of +448 bytes from `mlk_zetas`. It occupies a distinct global symbol table entry and separate memory bytes.
+ - **Fetch Logic:** Decoupled index recalculation:
+   - NTT: $k = (1 \ll (\text{layer} - 1)) + (\text{butterfly\_idx} \gg (8 - \text{layer}))$.
+   - InvNTT: $k = ((1 \ll \text{layer}) - 1) - (\text{butterfly\_idx} \gg (8 - \text{layer}))$.
+@@ -88,19 +88,19 @@ Through static and binary analysis of the production implementation (`bin/obj/ml
+ 
+ ## 3. Systematic Fault-Dependency Table
+ 
+-The table below maps all computational, structural, and countermeasure components, distinguishing proven independent paths from suspected or proven common-mode coupling.
++The table below maps all computational, structural, and countermeasure components, distinguishing verified independent paths in software from suspected or demonstrated coupling under tested fault models.
+ 
+ | Component | Data or State Used | Primary vs Checker | Shared With Which Components | Fault Injection Point | Expected Observable Effect | Evidence Source | Confidence and Limitations |
+ | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
+-| **Operational Twiddle Table** | `mlk_zetas[128]` (in `zetas.inc`) | Primary Computation | Passed as value `zeta_op` to monitor | `hook_mid_ntt_pre_butterfly`, `hook_mid_invntt_pre_butterfly` | Butterfly computes invalid output; TFIB-REF detects twiddle mismatch, repairs, and recovers; TFIB-META detects and fail-stops | `poly.c:388`, `tfib_ref.c:65`, `phase2_step2b_runner_output.csv` | **High:** Proven independent storage (`0x1000188a0`). Limitation: Single core software model. |
++| **Operational Twiddle Table** | `mlk_zetas[128]` (in `zetas.inc`) | Primary Computation | Passed as value `zeta_op` to monitor | `hook_mid_ntt_pre_butterfly`, `hook_mid_invntt_pre_butterfly` | Butterfly computes invalid output; TFIB-REF detects twiddle mismatch, repairs, and recovers; TFIB-META detects and fail-stops | `poly.c:388`, `tfib_ref.c:65`, `phase2_step2b_runner_output.csv` | **High (Software Model):** Demonstrated separate static array allocation (`0x1000188a0`). Limitation: Single-core software model; software allocation does not guarantee physical hardware isolation. |
+ | **Reference Twiddle Table** | `tfib_zetas_ref[128]` (in `tfib_ref.c`) | Checker Only (TFIB-REF) | None (isolated symbol in `libtfib.a`) | `tfib_ref.c:51` (`TFIB_FAULT_REF_TWIDDLE`) | Twiddle comparison detects mismatch (`zeta_op != zeta_ref`); repair re-check detects persistent failure; transient fault recovers | `tfib_ref.c:49-62`, `tfib_experiments/tfib_experiment_runner.c:230` | **High:** Symbol isolated at `0x100018a60`. Tested transient and persistent. |
+ | **Integrity Tag Table** | `tfib_zetas_tag[128]` (in `tfib_meta.c`) | Checker Only (TFIB-META) | None (isolated symbol in `libtfib.a`) | `tfib_meta.c:53` (`TFIB_FAULT_META_TAG`) | Computed tag mismatches expected tag; transient recovers; persistent triggers safe fail-stop | `tfib_meta.c:53-59`, `tfib_experiments/tfib_experiment_runner.c:292` | **High:** Dedicated read-only tag table (`0x100018b60`). |
+ | **Polynomial Buffer (`r`)** | `r[j]`, `r[j+len]` in coefficient array | Primary & Checker | Monitored and modified by both | Butterfly arithmetic write, or pointer corruption | Invariant check $\Delta_{\text{diff}} \neq 0 \lor \Delta_{\text{sum}} \neq 0$; retry recomputes from $u_{\text{saved}}, v_{\text{saved}}$ | `poly.c:382-408`, `tfib_core.c:71` | **High:** Shared mutable buffer. Correctly restored via stack snapshots. |
+ | **Stack Operand Snapshots** | `u_saved`, `v_saved` (caller frame) | Primary & Checker | Computed by caller, read by checker | Stack corruption before monitor call | Invariant $\Delta_{\text{sum}}$ flags arithmetic mismatch; rollback uses corrupted snapshot, retry fails, forces fail-stop | `poly.c:382-383`, `tfib_ref.c:70` | **Medium:** Preserved across register/stack by compiler; not independently dual-railed on stack. |
+ | **Twiddle Indexing Logic** | `layer`, `b_idx`, loop strides | Primary & Checker | Computed independently by loop vs helper | Loop counter bit flip in caller | Caller fetches $\zeta_k$, checker computes $k' \neq k$, causing $\zeta_{\text{op}} \neq \zeta_{\text{ref}}$, detected as mismatch | `poly.c:437`, `tfib_common.h:17-23` | **High:** Independent arithmetic logic ($k++$ vs $(1 \ll (l-1)) + (b \gg (8-l))$). |
+-| **Modular Arithmetic Constants** | `MLKEM_Q` (3329), Barrett/Montgomery multipliers | Primary & Checker | Shared constant definitions | Macro / immediate operand perturbation | Arithmetic invariant recomputation fails; triggers rollback and fail-stop | `poly.h:71`, `tfib_common.h:12,28,36` | **High:** Exact algebraic congruence proven in FIPS 203. |
+-| **Global Monitor Stats & Flags** | `g_tfib_ref_stats`, `g_tfib_meta_stats` | Checker to Protocol Interface | Read by `mlkem768_dec_monitored` | Counter corruption / zeroing | If monitor persistent count is cleared, downstream FO re-encryption still detects mismatch and returns $K_{\text{rej}}$ | `kem.c:486-494`, `kem.c:466-481` | **High:** Proven dual-defense: local fail-stop backed by outer FO re-encryption. |
+-| **Simultaneous Twiddle Corruption (Common-Mode)** | $\zeta_{\text{op}}$ and $\zeta_{\text{ref}}$ perturbed with identical bit-flip | Both Primary and Checker | Common corruption vector | `hook_mid_ntt_pre_butterfly` + `tfib_ref.c:55` | Local monitor is completely blinded ($\text{mismatch}=0, \Delta_{\text{diff}}=0$); downstream FO re-encryption catches error, returns $K_{\text{rej}}$ | `tfib_ref.c:55-61`, `tfib_experiment_runner.c:245-252` | **High:** Confirmed zero local detection, 100% safe containment by FO transform ($0$ SDC). |
++| **Modular Arithmetic Constants** | `MLKEM_Q` (3329), Barrett/Montgomery multipliers | Primary & Checker | Shared constant definitions | Macro / immediate operand perturbation | Arithmetic invariant recomputation fails; triggers rollback and fail-stop | `poly.h:71`, `tfib_common.h:12,28,36` | **High:** Exact algebraic congruence specified in FIPS 203. |
++| **Global Monitor Stats & Flags** | `g_tfib_ref_stats`, `g_tfib_meta_stats` | Checker to Protocol Interface | Read by `mlkem768_dec_monitored` | Counter corruption / zeroing | If monitor persistent count is cleared, downstream FO re-encryption still detects mismatch and returns $K_{\text{rej}}$ | `kem.c:486-494`, `kem.c:466-481` | **High:** Demonstrated layered defense: local fail-stop backed by outer FO re-encryption. |
++| **Simultaneous Twiddle Corruption (Paired Mutation)** | $\zeta_{\text{op}}$ and $\zeta_{\text{ref}}$ perturbed with identical bit-flip | Both Primary and Checker | Coordinated software mutation vector (separate software bit-flips in distinct memory locations) | `hook_mid_ntt_pre_butterfly` + `tfib_ref.c:55` | Local monitor does not detect the fault ($\text{mismatch}=0, \Delta_{\text{diff}}=0$); downstream FO re-encryption catches error (147/150 trials) or decoding error-tolerance preserves final message (3/150 trials) | `tfib_ref.c:55-61`, `tfib_experiment_runner.c:245-252` | **High (Software Model):** Confirmed zero local detection; safe outcome via active FO rejection or decoding preservation with $0$ observed SDC (exact one-sided 95% binomial upper bound $p_{\text{SDC}} \le 5.82\%$ on the $N_{\text{simul}}=50$ paired-mutation suite; $p_{\text{SDC}} \le 0.399\%$ across all $N_{\text{act}}=750$ fault-activated trials). Coordinated software mutations evaluate checker blindness under tested inputs only and do not establish physical common-mode coupling, hardware vulnerability, or physical immunity. |
+ | **Checker Decision Logic** | `sum_c ^= 1` (comparison predicate) | Checker Only | Internal monitor evaluation | `tfib_ref.c:77`, `tfib_meta.c:75` | False alarm triggers rollback and retry; transient recovers; persistent safe fail-stops | `tfib_ref.c:77-80`, `tfib_experiment_runner.c:253` | **High:** Validates robustness against false positive alarms. |
+ 
+ ---
+@@ -121,10 +121,12 @@ The framework evaluates four distinct, clearly defined software fault models:
+ |     - Perturbs reference twiddle, tag, or checker arithmetic evaluation      |
+ |     - Tests whether checker degradation causes fatal corruption or safe retry|
+ +-------------------------------------------------------------------------------+
+-|  3. Common-Mode Simultaneous Corruption (Checker Blind Spot)                 |
+-|     - Identically flips the same bit in both operational and reference states|
+-|     - Models shared bus corruption, common power-rail droop, or identical    |
+-|       corruption before comparison                                            |
++|  3. Paired Software Mutation (Synthetic Common-Mode Proxy)                   |
++|     - Applies two coordinated software bit-flips with identical bitmask to   |
++|       both operational and reference states in distinct memory locations      |
++|     - Demonstrates checker blindness under specific coordinated mutations    |
++|     - Synthetic proxy only; does NOT prove physical common-mode fault        |
++|       behavior, shared silicon vulnerability, or general hardware weakness   |
+ +-------------------------------------------------------------------------------+
+ |  4. Outer Cryptographic Failsafe Activation (FO Re-encryption)               |
+ |     - Local monitor blinded; checks whether end-to-end decapsulation leaks    |
+@@ -136,21 +138,23 @@ The framework evaluates four distinct, clearly defined software fault models:
+ - **Local Detection (TFIB-Level):** The butterfly monitor identifies that an invariant is violated ($\text{mismatch} > 0$).
+ - **Local Recovery (TFIB-REF):** The monitor successfully repairs the output polynomial in-place, returning the genuine shared secret $K_{\text{valid}}$ with status `0x5A5A5A5A`.
+ - **Local Fail-Stop (TFIB-META or Persistent TFIB-REF):** The monitor detects the fault, halts computation, and forces decapsulation status to `0xFFFFFFFF` / `0xA5A5A5A5`.
+-- **Outer Cryptographic Containment (Fujisaki-Okamoto):** When local detection fails completely (0% detection), the corrupted polynomial alters the decapsulated plaintext, causing ciphertext re-encryption comparison to fail. Decapsulation outputs $K_{\text{rej}}$ ($0$ SDC).
++- **Outer Cryptographic Containment (Fujisaki-Okamoto):** When local monitor detection is 0% (local blindness under tested mutations), if the twiddle perturbation alters the decoded plaintext $m' \neq m$, IND-CPA re-encryption produces $c' \neq c$, causing FO comparison to fail and forcing canonical implicit rejection key $K_{\text{rej}}$ (observed in 147/150 locally blinded trials, 98.0%).
++- **Decoding Error-Tolerance (Slack):** When intermediate coefficient perturbations fall within the noise tolerance of ML-KEM-768 centered binomial decoding, the final decoded message is preserved ($m' = m$), returning valid $K_{\text{expected}}$ without triggering FO rejection (observed in 3/150 locally blinded trials, 2.0%). Although intermediate polynomial coefficients are altered by the fault, end-to-end secret validity is maintained. Both active FO rejection and decoding preservation prevent SDC.
+ 
+ ---
+ 
+-## 5. Proven Dependencies vs Suspected Common-Mode Risks
++## 5. Analyzed Dependencies vs Common-Mode Risks
+ 
+-### 5.1 Proven Independent Properties
+-1. **Physical Storage Decoupling:** `mlk_zetas` and `tfib_zetas_ref` are separate static arrays allocated in distinct translation units. Modifying the memory of one does not mutate the memory of the other.
++### 5.1 Verified Independent Properties in Software
++1. **Memory Storage Decoupling:** `mlk_zetas` and `tfib_zetas_ref` are separate static arrays allocated in distinct translation units. Modifying the memory of one does not mutate the memory of the other. Note: In the audited binary, both tables reside within the read-only data segment of the same binary image separated by +448 bytes; physical separation (such as separate RAM banks, ECC domains, or execution enclaves) requires hardware/linker enforcement proposed in Step 2C-B.
+ 2. **Indexing Decoupling:** The computation tracks indices incrementally via pointer strides (`k++` / `k--`), whereas the checker recomputes indices algebraically from $(layer, butterfly\_idx)$. An off-by-one or stride skip in computation triggers a twiddle mismatch in the checker.
+-3. **Outer Protocol Resilience:** Even when local detection is 0% (common-mode blind spot), the outer Fujisaki-Okamoto transform guarantees fail-safety by returning the canonical implicit rejection key $K_{\text{rej}}$.
++3. **Outer Protocol Resilience:** Even when local monitor detection is 0% (local blind spot under tested mutations), the outer Fujisaki-Okamoto transform enforces implicit rejection when the decoded plaintext is altered, returning canonical rejection key $K_{\text{rej}}$.
+ 
+ ### 5.2 Identified Common-Mode Boundaries & Risks
+-1. **Identical Bit-Flip Blindness:** If a fault mechanism alters both operands identically prior to invariant evaluation, arithmetic invariants $\Delta_{\text{diff}} \equiv 0 \pmod q$ and $\Delta_{\text{sum}} \equiv 0 \pmod q$ hold true over the corrupted value. Local detection is completely bypassed.
++1. **Identical Bit-Flip Blindness:** If a fault mechanism alters both operands identically prior to invariant evaluation, arithmetic invariants $\Delta_{\text{diff}} \equiv 0 \pmod q$ and $\Delta_{\text{sum}} \equiv 0 \pmod q$ hold true over the corrupted value. Local invariant checks do not flag the fault.
+ 2. **Shared Modulus ($q = 3329$):** Both computation and checker share the scalar modulus. A fault in the ALU performing division/reduction modulo 3329 would corrupt both paths.
+ 3. **Stack Frame Colocation:** $u_{\text{saved}}$ and $v_{\text{saved}}$ reside on the execution stack of `mlk_ntt_layer`. A bulk stack memory smash could corrupt both intermediate results and saved rollback state simultaneously.
++4. **Physical and Microarchitectural Coupling:** Moving table symbols across address offsets (+448 bytes in Step 2C-A, or separate memory sections in Step 2C-B) does not eliminate physical common-mode coupling (e.g. shared cache lines, shared memory bus, shared clock/power networks, or wide-beam radiation). Software table relocation establishes logical separation only; physical common-mode mitigation requires hardware-enforced isolation.
+ 
+ ---
+ 
+@@ -159,5 +163,5 @@ The framework evaluates four distinct, clearly defined software fault models:
+ The dependency analysis establishes that:
+ - **TFIB-REF is strongly independent** of operational twiddle corruption for single-locus faults.
+ - **TFIB-META is independent for detection**, but structurally dependent on operational twiddle validity for recovery (it cannot repair operational faults).
+-- **Simultaneous common-mode corruption** completely blinds local monitors, proving that local invariant checking alone cannot protect against common-mode faults.
+-- **Fujisaki-Okamoto re-encryption** acts as an infallible outer boundary that catches all escaped local twiddle errors, preventing Silent Data Corruption across all evaluated modes.
++- **Coordinated paired software mutations** demonstrate checker blindness under identical operand perturbation within this software model, showing that local butterfly invariant checking alone cannot detect matching alterations in both operands.
++- **Fujisaki-Okamoto re-encryption and decoding slack** combine to prevent Silent Data Corruption across all 900 evaluated software trials, providing an outer defense when local checkers are blinded (0 SDC observed across all $N_{\text{act}} = 750$ fault-activated trials; exact one-sided 95% binomial upper bound $p_{\text{SDC}} \le 0.399\%$).
+diff --git a/phase2_step2c_experiment_design.md b/phase2_step2c_experiment_design.md
+index ca4e5a5..2bd3a77 100644
+--- a/phase2_step2c_experiment_design.md
++++ b/phase2_step2c_experiment_design.md
+@@ -15,7 +15,7 @@ The objective of Phase 2 Step 2C-A is to systematically test the resilience of t
+ ### Core Scientific Questions
+ 1. Does the countermeasure maintain detection independence when faults affect the checker itself rather than the computation?
+ 2. How does the system respond when an identical fault strikes both computation and verification state (common-mode failure)?
+-3. Does failure of the local countermeasure compromise the end-to-end security of ML-KEM-768, or does the Fujisaki-Okamoto transform provide a foolproof outer safety net?
++3. Does failure of the local countermeasure compromise the end-to-end security of ML-KEM-768, or does the Fujisaki-Okamoto transform provide a robust cryptographic outer safety net?
+ 
+ ```
+                                       +------------------------------------+
+@@ -77,7 +77,7 @@ Five controlled experiment families are designed to isolate each fault interacti
+   - *Recovery:* $ss == ss_{\text{expected}} \land \text{status} == 0\text{x}5A5A5A5A \land \text{recovered\_count} > 0$
+   - *Safe Fail-Stop:* $ss == ss_{\text{rej\_expected}} \land (\text{status} == 0\text{xFFFFFFFF} \lor \text{status} == 0\text{xA5A5A5A5})$
+   - *SDC:* $ss \neq ss_{\text{expected}} \land ss \neq ss_{\text{rej\_expected}}$
+-- **Trial Count & Rationale:** 50 transient + 50 persistent trials across each configuration (300 total). Sample size $N=50$ gives statistical power to detect any defect rate exceeding $5.8\%$ at $95\%$ confidence (rule of three: upper bound $\approx 3/50 = 6\%$).
++- **Trial Count & Rationale:** 50 transient + 50 persistent trials across each configuration (300 total). Sample size $N=50$ per suite provides an exact one-sided 95% binomial upper confidence bound of $1 - 0.05^{1/50} \approx 5.82\%$ for zero observed defect events (the rule-of-three approximation yields $3/50 = 6.00\%$; across all $N_{\text{act}}=750$ fault-activated trials, zero observed events yields an exact one-sided 95% upper bound of $1 - 0.05^{1/750} \approx 0.399\%$, with rule-of-three approximation $3/750 = 0.400\%$).
+ 
+ ---
+ 
+@@ -110,29 +110,31 @@ Five controlled experiment families are designed to isolate each fault interacti
+ 
+ ---
+ 
+-### Experiment 4: Fault Affects Both Through Simultaneous Corruption (`SIMULTANEOUS`)
+-- **Hypothesis:** When an identical bit-flip $\delta$ is applied simultaneously to both $\zeta_{\text{op}}$ and $\zeta_{\text{ref}}$, the local checker will evaluate:
++### Experiment 4: Fault Affects Both Through Paired Software Mutation (`SIMULTANEOUS`)
++- **Hypothesis:** When an identical bit-flip $\delta$ is applied to both $\zeta_{\text{op}}$ and $\zeta_{\text{ref}}$ via paired sequential software mutations, the local checker will evaluate:
+   $$\zeta_{\text{op}} \oplus \delta = \zeta_{\text{ref}} \oplus \delta \implies \text{twiddle\_mismatch} = \text{false}$$
+   $$t_{\text{check}} = \text{fqmul}(v_{\text{saved}}, \zeta_{\text{ref}} \oplus \delta) = t_{\text{used}} \implies \Delta_{\text{diff}} \equiv 0 \pmod q$$
+-  Local detection will be completely blinded (0% detection rate). However, because the corrupted twiddle distorts the NTT result, IND-CPA decryption yields an incorrect plaintext $m' \neq m$. Re-encryption yields $c' \neq c$, causing constant-time FO comparison to fail and decapsulation to output canonical $K_{\text{rej}}$.
+-  **Outcome:** Local monitor fails silently, but outer Fujisaki-Okamoto transform guarantees 100% safe rejection ($SDC = 0$).
++  Local monitor detection is 0% under this paired mutation. When the corrupted twiddle alters the decrypted plaintext $m' \neq m$, re-encryption yields $c' \neq c$, causing constant-time FO comparison to fail and decapsulation to output canonical $K_{\text{rej}}$. If the intermediate polynomial perturbation falls within decoding error-tolerance ($m' = m$), decapsulation returns $K_{\text{expected}}$ cleanly. Under both outcomes, zero SDC occurs.
++  **Software Proxy Caveat:** This experiment evaluates checker blindness under the specific coordinated software mutations tested; it does not prove physical common-mode fault behavior, shared silicon vulnerability, or general hardware susceptibility.
++  **Outcome:** Local monitor detection is 0% under tested mutations. 98% of trials trigger active FO rejection ($ss = ss_{\text{rej}}$); 2% preserve the final message due to decoding error-tolerance ($ss = ss_{\text{expected}}$). Zero SDC is observed under this model (exact one-sided 95% binomial upper bound $p_{\text{SDC}} \le 5.82\%$ on the $N_{\text{simul}}=50$ paired-mutation suite).
+ - **Injection Point:** `hook_mid_ntt_pre_butterfly` (perturbs $\zeta_{\text{op}}$) + `tfib_ref.c:55-61` (perturbs $\zeta_{\text{ref}}$ with identical bit mask).
+-- **Mechanism:** `zeta_op ^= mask; zeta_ref ^= mask;`.
++- **Mechanism:** `zeta_op ^= mask; zeta_ref ^= mask;` (coordinated software bit-flips).
+ - **Duration / Persistence:** Transient simultaneous fault.
+ - **Decision Criteria:**
+   - *Local Blindness:* `tfib_get_total_mismatches() == 0`.
+-  - *FO Containment:* $ss == ss_{\text{rej\_expected}} \land \text{status} \in \{0\text{xFFFFFFFF}, 0\text{xA5A5A5A5}\}$.
+-  - *Classification:* `LOCAL_BLIND_FO_CONTAINED`.
++  - *Active FO Containment:* $ss == ss_{\text{rej\_expected}} \land \text{status} \in \{0\text{xFFFFFFFF}, 0\text{xA5A5A5A5}\}$.
++  - *Decoding Slack Preservation:* $ss == ss_{\text{expected}} \land \text{status} == 0\text{x}5A5A5A5A$.
++  - *Classification:* `LOCAL_BLIND_FO_CONTAINED` or `INEFFECTIVE`.
+   - *SDC:* $ss \notin \{ss_{\text{expected}}, ss_{\text{rej\_expected}}\}$.
+ - **Trial Count:** 50 trials.
+ 
+ ---
+ 
+ ### Experiment 5: Fault Bypasses Detection but is Contained by End-to-End Behavior
+-- **Hypothesis:** Evaluating the baseline configuration (original unhardened monitor) under operational twiddle faults demonstrates the Theorem 1 blind spot ($0\%$ detection). The experiment proves that all faults evading local detection are partitioned cleanly into two safe sets:
+-  1. *Ineffective Faults:* The polynomial perturbation falls within the decoding error-tolerance (slack) of ML-KEM-768; the message $m$ decodes cleanly, producing valid $ss = ss_{\text{expected}}$ (`INEFFECTIVE_FAULT_VALID`).
+-  2. *Contained Corruptions:* The perturbation causes decoding error; FO re-encryption detects $c' \neq c$ and forces canonical implicit rejection $ss = ss_{\text{rej}}$ (`LOCAL_BLIND_FO_CONTAINED`).
+-  Under no condition does an undetected fault escape to cause SDC.
++- **Hypothesis:** Evaluating the baseline configuration (original unhardened monitor) under operational twiddle faults demonstrates the Theorem 1 blind spot ($0\%$ detection). The experiment evaluates whether faults evading local detection partition into two distinct safe outcomes:
++  1. *Decoding Slack Preservation (Ineffective):* The intermediate polynomial perturbation falls within the error-correcting tolerance of ML-KEM-768 centered binomial decoding; the final message $m$ is preserved, producing valid $ss = ss_{\text{expected}}$ (`INEFFECTIVE`). These trials reflect algorithmic decoding tolerance rather than active FO rejection.
++  2. *Active FO Rejection:* The perturbation causes a decoding error ($m' \neq m$); FO re-encryption detects $c' \neq c$ and forces canonical implicit rejection $ss = ss_{\text{rej}}$ (`LOCAL_BLIND_FO_CONTAINED`).
++  Under all tested conditions, zero SDC was observed (exact one-sided 95% binomial upper bound $p_{\text{SDC}} \le 0.399\%$ across all $N_{\text{act}} = 750$ fault-activated trials; rule-of-three approximation yields $0.400\%$).
+ - **Injection Point:** Baseline monitor with `TFIB_FAULT_OP_TWIDDLE` (Transient and Persistent).
+ - **Trial Count:** 50 transient + 50 persistent trials (100 total).
+ 
+@@ -150,7 +152,7 @@ Five controlled experiment families are designed to isolate each fault interacti
+ | **TFIB_REF** | `OP_TWIDDLE_PERSISTENT` | `TFIB_FAULT_OP_TWIDDLE` | True | 50 | 100% (50/50) | `SAFE_FAIL_STOP` (100%) |
+ | **TFIB_REF** | `REF_TWIDDLE_TRANSIENT` | `TFIB_FAULT_REF_TWIDDLE` | False | 50 | 100% (50/50) | `GENUINE_RECOVERY` (100%) |
+ | **TFIB_REF** | `REF_TWIDDLE_PERSISTENT` | `TFIB_FAULT_REF_TWIDDLE` | True | 50 | 100% (50/50) | `SAFE_FAIL_STOP` (100%) |
+-| **TFIB_REF** | `SIMULTANEOUS_COMMON_MODE` | `TFIB_FAULT_SIMULTANEOUS` | False | 50 | 0% (0/50) | `LOCAL_BLIND_FO_CONTAINED` (100%) |
++| **TFIB_REF** | `SIMULTANEOUS_COMMON_MODE` | `TFIB_FAULT_SIMULTANEOUS` | False | 50 | 0% (0/50) | `LOCAL_BLIND_FO_CONTAINED` (98%) / `INEFFECTIVE` (2%) |
+ | **TFIB_REF** | `CHECKER_LOGIC_TRANSIENT` | `TFIB_FAULT_CHECKER_LOGIC` | False | 50 | 100% (50/50) | `GENUINE_RECOVERY` (100%) |
+ | **TFIB_REF** | `CHECKER_LOGIC_PERSISTENT` | `TFIB_FAULT_CHECKER_LOGIC` | True | 50 | 100% (50/50) | `SAFE_FAIL_STOP` (100%) |
+ | **TFIB_META** | `CLEAN_CONTROL` | `TFIB_FAULT_NONE` | False | 50 | 0% (0/50) | `CLEAN_SUCCESS` (100%) |
+@@ -167,7 +169,7 @@ Five controlled experiment families are designed to isolate each fault interacti
+ 
+ ## 4. Negative Test Plan (Adversarial Verification)
+ 
+-To prove that the validation harness itself does not pass vacuously, the following negative assertions are mandatory:
++To verify that the validation harness does not pass vacuously, the following negative assertions are enforced:
+ 1. **Deliberate Corrupted Reference Key Injection:** Verify that if the oracle expected valid secret is corrupted, the clean-path test immediately fails with exit code 1.
+ 2. **Corrupted Rejection Key Injection:** Verify that if decapsulation produces a bogus secret that matches neither $ss_{\text{expected}}$ nor $ss_{\text{rej}}$, it is flagged as SDC.
+ 3. **Simultaneous Bypass Detection:** Assert that when `SIMULTANEOUS_COMMON_MODE` is executed, local detection is strictly 0, and that if any test harness attempted to label it as `GENUINE_RECOVERY`, the assertion triggers a failure.
+diff --git a/phase2_step2c_report.md b/phase2_step2c_report.md
+index 24d303e..4e9c8e9 100644
+--- a/phase2_step2c_report.md
++++ b/phase2_step2c_report.md
+@@ -19,10 +19,10 @@ Prior audits established that under single-point operational twiddle perturbatio
+ 3. Can an escape from the local arithmetic monitor lead to Silent Data Corruption (SDC), or does the outer Fujisaki-Okamoto (FO) transform contain the failure?
+ 
+ ### High-Level Verdict Summary
+-- **Independence of Storage:** `mlk_zetas` (operational) and `tfib_zetas_ref` (checker) occupy separate read-only memory addresses (`0x1000188a0` vs `0x100018a60`), proving spatial independence within the software binary image.
++- **Independence of Storage:** `mlk_zetas` (operational) and `tfib_zetas_ref` (checker) occupy separate read-only memory addresses (`0x1000188a0` vs `0x100018a60`), demonstrating address-level separation within the compiled software binary image.
+ - **Checker Degradation Robustness:** Corrupting checker-only state or decision logic never induces SDC. Transient checker faults trigger benign retry and recover; persistent checker faults force a safe fail-stop.
+-- **Simultaneous Common-Mode Failure:** When an identical bit-flip corrupts both operational and reference twiddles, **local monitor detection is 0.0%** ($0/50$ detected). The invariant equations hold over the corrupted value.
+-- **Outer Cryptographic Safety Net:** Despite 0.0% local detection during common-mode failure, **100% of trials are contained** by the outer Fujisaki-Okamoto re-encryption check, which detects the ciphertext mismatch and outputs the canonical implicit rejection key $K_{\text{rej}}$ ($0$ SDC across 900 trials).
++- **Simultaneous Paired-Mutation Common-Mode Failure:** When two sequential software mutations apply an identical bit-flip to both the operational twiddle (before butterfly arithmetic) and the reference twiddle (inside the monitor path), **local monitor detection is 0.0%** ($0/50$ detected), because invariant equations evaluate identically over matching operand perturbations. This result demonstrates checker blindness under the specific coordinated software mutations tested; it does not prove physical common-mode fault behavior, general hardware vulnerability, physical independence, or radiation tolerance.
++- **Outer Cryptographic Safety Net:** Of the 150 locally blinded trials (100 baseline + 50 simultaneous), **147 (98%) were actively rejected** by the Fujisaki-Okamoto re-encryption check, which detected the ciphertext mismatch and output the canonical rejection key $K_{\text{rej}}$. In the remaining **3 trials (2.0%)**, the intermediate polynomial perturbation induced by the twiddle fault fell within the error-tolerance of the centered binomial decoding stage. Although intermediate computation was altered, the rounding and error-correction during decoding preserved the original message $m$, resulting in the valid shared secret $K_{\text{expected}}$ without triggering Fujisaki-Okamoto rejection. These trials represent secret preservation through decoding error-tolerance rather than active rejection by FO re-encryption. All 150 locally blinded trials produced a valid protocol outcome under the tested pseudo-random trial distribution ($0$ SDC observed).
+ 
+ ---
+ 
+@@ -73,28 +73,35 @@ Total: **900 trials** ($150$ clean baseline + $750$ fault-activated trials).
+ ### 4.1 Comprehensive Outcome Breakdown (900 Trials)
+ 
+ ```
+-Config     | Suite                      | Total | Activated | Detected | Recovered | Fail-Stop | FO Contained | Ineffective | SDC
+------------+----------------------------+-------+-----------+----------+-----------+-----------+--------------+-------------+-----
+-BASELINE   | CLEAN_CONTROL              | 50    | 0         | 0        | 0         | 0         | 0            | 0           | 0
+-BASELINE   | OP_TWIDDLE_TRANSIENT       | 50    | 50        | 0        | 0         | 0         | 48           | 2           | 0
+-BASELINE   | OP_TWIDDLE_PERSISTENT      | 50    | 50        | 0        | 0         | 0         | 50           | 0           | 0
+-TFIB_REF   | CLEAN_CONTROL              | 50    | 0         | 0        | 0         | 0         | 0            | 0           | 0
+-TFIB_REF   | OP_TWIDDLE_TRANSIENT       | 50    | 50        | 50       | 50        | 0         | 0            | 0           | 0
+-TFIB_REF   | OP_TWIDDLE_PERSISTENT      | 50    | 50        | 50       | 0         | 50        | 0            | 0           | 0
+-TFIB_REF   | REF_TWIDDLE_TRANSIENT      | 50    | 50        | 50       | 50        | 0         | 0            | 0           | 0
+-TFIB_REF   | REF_TWIDDLE_PERSISTENT     | 50    | 50        | 50       | 0         | 50        | 0            | 0           | 0
+-TFIB_REF   | SIMULTANEOUS_COMMON_MODE   | 50    | 50        | 0        | 0         | 0         | 49           | 1           | 0
+-TFIB_REF   | CHECKER_LOGIC_TRANSIENT    | 50    | 50        | 50       | 50        | 0         | 0            | 0           | 0
+-TFIB_REF   | CHECKER_LOGIC_PERSISTENT   | 50    | 50        | 50       | 0         | 50        | 0            | 0           | 0
+-TFIB_META  | CLEAN_CONTROL              | 50    | 0         | 0        | 0         | 0         | 0            | 0           | 0
+-TFIB_META  | OP_TWIDDLE_TRANSIENT       | 50    | 50        | 50       | 0         | 50        | 0            | 0           | 0
+-TFIB_META  | OP_TWIDDLE_PERSISTENT      | 50    | 50        | 50       | 0         | 50        | 0            | 0           | 0
+-TFIB_META  | META_TAG_TRANSIENT         | 50    | 50        | 50       | 50        | 0         | 0            | 0           | 0
+-TFIB_META  | META_TAG_PERSISTENT        | 50    | 50        | 50       | 0         | 50        | 0            | 0           | 0
+-TFIB_META  | CHECKER_LOGIC_TRANSIENT    | 50    | 50        | 50       | 50        | 0         | 0            | 0           | 0
+-TFIB_META  | CHECKER_LOGIC_PERSISTENT   | 50    | 50        | 50       | 0         | 50        | 0            | 0           | 0
+------------+----------------------------+-------+-----------+----------+-----------+-----------+--------------+-------------+-----
+-TOTAL      | 18 Suites                  | 900   | 750       | 600      | 250       | 350       | 147          | 3           | 0
++Config     | Suite                      | Total | Activated | Detected | Recovered | Fail-Stop | Active FO Rej | Ineffective† | SDC
++-----------+----------------------------+-------+-----------+----------+-----------+-----------+---------------+--------------+-----
++BASELINE   | CLEAN_CONTROL              | 50    | 0         | 0        | 0         | 0         | 0             | 0            | 0
++BASELINE   | OP_TWIDDLE_TRANSIENT       | 50    | 50        | 0        | 0         | 0         | 48            | 2            | 0
++BASELINE   | OP_TWIDDLE_PERSISTENT      | 50    | 50        | 0        | 0         | 0         | 50            | 0            | 0
++TFIB_REF   | CLEAN_CONTROL              | 50    | 0         | 0        | 0         | 0         | 0             | 0            | 0
++TFIB_REF   | OP_TWIDDLE_TRANSIENT       | 50    | 50        | 50       | 50        | 0         | 0             | 0            | 0
++TFIB_REF   | OP_TWIDDLE_PERSISTENT      | 50    | 50        | 50       | 0         | 50        | 0             | 0            | 0
++TFIB_REF   | REF_TWIDDLE_TRANSIENT      | 50    | 50        | 50       | 50        | 0         | 0             | 0            | 0
++TFIB_REF   | REF_TWIDDLE_PERSISTENT     | 50    | 50        | 50       | 0         | 50        | 0             | 0            | 0
++TFIB_REF   | SIMULTANEOUS_COMMON_MODE   | 50    | 50        | 0        | 0         | 0         | 49            | 1            | 0
++TFIB_REF   | CHECKER_LOGIC_TRANSIENT    | 50    | 50        | 50       | 50        | 0         | 0             | 0            | 0
++TFIB_REF   | CHECKER_LOGIC_PERSISTENT   | 50    | 50        | 50       | 0         | 50        | 0             | 0            | 0
++TFIB_META  | CLEAN_CONTROL              | 50    | 0         | 0        | 0         | 0         | 0             | 0            | 0
++TFIB_META  | OP_TWIDDLE_TRANSIENT       | 50    | 50        | 50       | 0         | 50        | 0             | 0            | 0
++TFIB_META  | OP_TWIDDLE_PERSISTENT      | 50    | 50        | 50       | 0         | 50        | 0             | 0            | 0
++TFIB_META  | META_TAG_TRANSIENT         | 50    | 50        | 50       | 50        | 0         | 0             | 0            | 0
++TFIB_META  | META_TAG_PERSISTENT        | 50    | 50        | 50       | 0         | 50        | 0             | 0            | 0
++TFIB_META  | CHECKER_LOGIC_TRANSIENT    | 50    | 50        | 50       | 50        | 0         | 0             | 0            | 0
++TFIB_META  | CHECKER_LOGIC_PERSISTENT   | 50    | 50        | 50       | 0         | 50        | 0             | 0            | 0
++-----------+----------------------------+-------+-----------+----------+-----------+-----------+---------------+--------------+-----
++TOTAL      | 18 Suites                  | 900   | 750       | 600      | 250       | 350       | 147           | 3            | 0
++
++† "Ineffective" denotes trials where intermediate polynomial perturbations fell within the
++  error-tolerance of ML-KEM-768 centered binomial decoding. The final message m was preserved,
++  producing the valid shared secret K_expected. These trials reflect secret preservation via
++  decoding error-tolerance rather than active rejection by the FO re-encryption test.
++  "Active FO Rej" denotes trials where the corrupted NTT output altered the decoded plaintext,
++  causing FO re-encryption comparison to fail and decapsulation to output K_rej.
+ ```
+ 
+ ---
+@@ -116,17 +123,19 @@ To adhere strictly to cryptographic auditing standards, every denominator is def
+ 6. **Safe Fail-Stop Rate:**
+    - Evaluated over detected persistent faults in TFIB-REF: $150 / 150 = \mathbf{100.0\%}$ (95% CI $[97.55\%, 100.0\%]$).
+    - Evaluated over detected persistent or non-repairable faults in TFIB-META: $200 / 200 = \mathbf{100.0\%}$ (95% CI $[98.15\%, 100.0\%]$).
+-7. **Simultaneous Common-Mode Failure Detection Rate:**
++7. **Simultaneous Paired-Mutation Common-Mode Failure Detection Rate:**
+    - Evaluated over $N_{\text{simul}} = 50$: $0 / 50 = \mathbf{0.0\%}$ (95% CI $[0.0\%, 7.11\%]$).
+-   - **Local Blindness Confirmed:** When both twiddles share identical bit-flips, the checker cannot detect the fault locally.
+-8. **Cryptographic FO Containment Rate (Under Local Monitor Blindness):**
+-   - In Baseline ($N=100$) + Simultaneous ($N=50$): $147$ trials triggered canonical rejection key $K_{\text{rej}}$ via FO re-encryption failure, and $3$ trials were ineffective (perturbation absorbed by ML-KEM noise slack, decoding correct message $m$).
+-   - **Safe Containment Rate:** $150 / 150 = \mathbf{100.0\%}$ (95% CI $[97.55\%, 100.0\%]$).
++   - **Local Blindness Under Specific Tested Mutations:** When two sequential software mutations apply identical bit-flips to both $\zeta_{\text{op}}$ (before butterfly arithmetic) and $\zeta_{\text{ref}}$ (inside the monitor path), the checker cannot detect the fault locally because arithmetic invariant equations hold over identical perturbations. This demonstrates checker blindness under the specific coordinated software mutations tested; it does not prove physical common-mode fault behavior, general hardware vulnerability, physical independence, or radiation tolerance.
++8. **Locally Blinded Trial Outcomes (Under 0% Local Detection):**
++   - Total locally blinded trials: Baseline ($N=100$) + Simultaneous ($N=50$) = $150$.
++   - **Active FO rejection:** $147 / 150 = \mathbf{98.0\%}$ — the corrupted NTT output altered the decoded plaintext, FO re-encryption comparison failed, and decapsulation output the canonical rejection key $K_{\text{rej}}$.
++   - **Secret preservation via decoding slack:** $3 / 150 = \mathbf{2.0\%}$ — the internal coefficient perturbation induced by the twiddle fault fell within the error-tolerance of ML-KEM-768 centered binomial decoding; the final message $m$ was preserved, and decapsulation returned the valid shared secret $K_{\text{expected}}$. These trials were not rejected by FO because the decoded plaintext remained uncorrupted despite intermediate arithmetic perturbation.
++   - **Correct end-to-end key outcome:** $150 / 150 = \mathbf{100.0\%}$ under the tested PRF-generated trial distribution (95% CI $[97.55\%, 100.0\%]$). No trial returned an unauthenticated or corrupted key.
+ 9. **Silent Data Corruption (SDC) Rate:**
+    - Denominator: All fault-activated trials ($N_{\text{act}} = 750$).
+    - SDC Events: $0 / 750 = \mathbf{0.0\%}$.
+-   - **Rule-of-Three Upper Bound:** With 0 observed events in 750 trials, the true SDC rate $p_{\text{SDC}} < \frac{3}{750} \approx \mathbf{0.40\%}$ at 95% confidence (Wilson score upper bound: $0.49\%$).
+-   - **Critical Audit Caveat:** Zero observed SDC does **not** prove zero theoretical risk under arbitrary physical fault injections.
++   - **Exact One-Sided 95% Binomial Upper Confidence Bound:** Across all $N_{\text{act}} = 750$ fault-activated trials (excluding the 150 clean control runs), with 0 observed SDC events, the exact one-sided 95% binomial upper confidence bound on the true SDC rate under independent identically distributed sampling is $p_{\text{SDC}} \le 1 - 0.05^{1/750} \approx \mathbf{0.399\%}$. For comparison, the rule-of-three approximation yields $\frac{3}{750} = 0.400\%$, and the one-sided Wilson score upper bound at $\alpha = 0.05$ is $0.490\%$.
++   - **Critical Audit Caveat:** Zero observed SDC does **not** prove zero theoretical SDC risk. The PRF-generated trial distribution does not represent all possible software faults or physical fault distributions.
+ 10. **Invalid / Inconclusive Trials:** $0 / 900 = 0.0\%$.
+ 
+ ---
+@@ -147,18 +156,18 @@ To maintain rigorous scientific standards, claims are categorized by their evide
+ ### 5.1 Directly Observed Results (Empirical Ground Truth)
+ 1. In software execution on the host architecture (macOS ARM64), `mlk_zetas` and `tfib_zetas_ref` reside at distinct memory offsets in `__TEXT,__const`.
+ 2. When faults are injected exclusively into `zeta_ref`, `tfib_zetas_tag`, or checker arithmetic predicates, the checker detects the condition, initiates rollback/retry, and either recovers (if transient) or safely fail-stops (if persistent).
+-3. When `TFIB_FAULT_SIMULTANEOUS` is injected, the local butterfly monitor records 0 mismatches, 0 retries, and 0 recoveries ($100\%$ local blind spot).
+-4. In all 50 simultaneous fault trials and all 100 baseline fault trials where local detection was 0%, the output of decapsulation was either canonical valid $K_{\text{expected}}$ (due to decoding slack) or canonical rejection key $K_{\text{rej}}$ (due to FO re-encryption check). Zero unauthenticated keys were returned.
++3. When `TFIB_FAULT_SIMULTANEOUS` is injected (two sequential software mutations applying identical bit-flips to the operational and reference twiddles), the local butterfly monitor records 0 mismatches, 0 retries, and 0 recoveries ($100\%$ local blind spot under this paired mutation model).
++4. Of the 150 locally blinded trials (50 simultaneous + 100 baseline): 147 produced the canonical rejection key $K_{\text{rej}}$ via active FO re-encryption failure; in 3 trials, intermediate polynomial perturbations fell within the error-tolerance of the centered binomial decoding stage, preserving the final message $m$ and returning valid $K_{\text{expected}}$. No unauthenticated keys were returned.
+ 5. All 9 targeted validation tests in `test_step2c_countermeasure_independence` passed without failure.
+ 
+ ### 5.2 Inferences (Logically Deduceable from Model)
+-1. **Separation of Recovery vs Containment:** Local recovery is solely a property of TFIB-REF with an uncorrupted reference table. In contrast, safe containment is a global property of the Fujisaki-Okamoto transform in ML-KEM.
++1. **Separation of Recovery vs Containment:** Local recovery is solely a property of TFIB-REF with an uncorrupted reference table. Outer FO containment is a global property of the Fujisaki-Okamoto transform in ML-KEM. Preservation via decoding slack (where intermediate polynomial distortion does not alter the final decoded message) is a distinct third outcome — it represents algorithmic error-tolerance rather than active monitor detection or FO re-encryption rejection.
+ 2. **Checker Integrity Requirement:** An in-place recovery countermeasure cannot recover from a persistent checker corruption; it must fail-stop to prevent poisoning the computation with invalid reference data.
+ 3. **Independent Stride Invariance:** Algebraic recalculation of twiddle indices from $(layer, b\_idx)$ protects against loop counter faults in the caller.
+ 
+ ### 5.3 Unverified Hypotheses & Model Limitations
+-1. **Software Fault Model Limitation:** Injected faults are software bit-flips in C variables. They do **not** model clock glitching, laser injection, or electromagnetic fault injection where transient hardware behavior could alter pipeline execution, bypass branch checks, or induce multi-register corruption.
+-2. **Single-Core Colocation Risk:** In hardware, operational and reference twiddles would likely share the same memory bus, cache hierarchy, or on-chip ROM. An address decoder fault or flash bit-line failure could corrupt both simultaneously.
++1. **Software Fault Model Limitation:** Injected faults are software bit-flips in C variables. They do **not** model clock glitching, laser injection, or electromagnetic fault injection where transient hardware behavior could alter pipeline execution, bypass branch checks, or induce multi-register corruption. The `TFIB_FAULT_SIMULTANEOUS` mode implements two sequential software mutations (operational twiddle before butterfly, reference twiddle inside monitor); this evaluates checker blindness under the specific coordinated software mutations tested and does not prove physical common-mode fault behavior, shared silicon vulnerability, or general hardware susceptibility.
++2. **Single-Core Colocation Risk:** In hardware, operational and reference twiddles would likely share the same memory bus, cache hierarchy, or on-chip ROM. An address decoder fault or flash bit-line failure could corrupt both simultaneously. Virtual address separation, linker-section separation, page separation, cache separation, and physical fault isolation are distinct properties. Table relocation alone does not prevent physical common-mode corruption.
+ 3. **Co-located Stack Frames:** $u_{\text{saved}}$ and $v_{\text{saved}}$ share the execution stack with other NTT variables. A fault corrupting the stack pointer or writing across frame boundaries could corrupt both operational data and saved rollback state simultaneously.
+ 
+ ---
+@@ -167,7 +176,7 @@ To maintain rigorous scientific standards, claims are categorized by their evide
+ 
+ - **Core Algorithm Integrity:** `mlkem768_dec_monitored` and the underlying arithmetic routines in `algorithms/source_ref/mlkem/` were **not modified**.
+ - **Historical Output Integrity:** `tfib_experiments/phase2_step2b_runner_output.csv` and prior campaign CSVs remain byte-identical and unmodified.
+-- **Table Relocation Segregation:** Table relocation (Step 2C-B) has **not** been implemented or combined with this step.
++- **Table Relocation Segregation:** Table relocation (Step 2C-B) has **not** been implemented or combined with this step. Step 2C-B is a proposed architectural experiment motivated by the observed paired-mutation blind spot, the current software placement of the two tables, and the unresolved question of whether alternative placement changes fault exposure under a clearly specified model.
+ - **Physical Qualification Claims:** Strictly disclaimed. No radiation, space, or physical qualification is claimed.
+ - **Step 2C-B Prerequisite:** Step 2C-B has **not** been initiated pending this review.
+ 
+@@ -177,12 +186,12 @@ To maintain rigorous scientific standards, claims are categorized by their evide
+ 
+ ### What this experiment establishes:
+ 1. **Countermeasure Independence:** TFIB-REF and TFIB-META operate independently of primary operational twiddles for single-locus faults. Faults affecting the checker itself are detected and safely handled (recovery for transient, fail-stop for persistent) with 0% false acceptance.
+-2. **Common-Mode Boundary:** Local butterfly invariant checks have an inherent mathematical blind spot against simultaneous common-mode faults ($\zeta_{\text{op}} \oplus \delta = \zeta_{\text{ref}} \oplus \delta \implies \text{Invariant holds}$).
+-3. **End-to-End Cryptographic Containment:** The Fujisaki-Okamoto transform provides a reliable outer barrier. Even when local invariant monitoring fails completely, downstream ciphertext re-encryption comparison prevents Silent Data Corruption, guaranteeing safe implicit rejection ($0.0\%$ SDC across 900 trials; upper bound $p_{\text{SDC}} < 0.40\%$).
++2. **Common-Mode Boundary:** Local butterfly invariant checks have an inherent mathematical blind spot against paired software mutations that identically corrupt both operands ($\zeta_{\text{op}} \oplus \delta = \zeta_{\text{ref}} \oplus \delta \implies \text{Invariant holds}$). This observation is established under the paired software mutation model; it does not establish physical common-mode susceptibility or radiation tolerance.
++3. **End-to-End Correctness Under Local Blindness:** Of the 150 locally blinded trials, 147 (98.0%) were actively rejected by FO re-encryption, and in 3 trials (2.0%), intermediate arithmetic perturbations were absorbed by decoding error-tolerance, preserving the final secret $K_{\text{expected}}$. All 150 produced a correct end-to-end key outcome (0 observed SDC events across all $N_{\text{act}} = 750$ fault-activated trials [900 total trials]; exact one-sided 95% binomial upper confidence bound $p_{\text{SDC}} \le 0.399\%$ on $N_{\text{act}} = 750$, and $p_{\text{SDC}} \le 5.82\%$ on the $N_{\text{simul}} = 50$ paired-mutation suite).
+ 
+ ### What remains unknown:
+ 1. Physical behavior under microarchitectural hardware fault injection (laser, clock glitch, EMP).
+-2. The effect of shared bus or shared cache corruption if operational and reference twiddles are relocated or co-located on specific hardware memory pages (the subject of Step 2C-B).
++2. The effect of shared bus or shared cache corruption if operational and reference twiddles are relocated or co-located on specific hardware memory pages (the subject of proposed Step 2C-B; virtual address separation, linker-section separation, page separation, cache separation, and physical fault isolation are distinct, unresolved properties).
+ 3. The resilience of stack-saved operand snapshots against correlated multi-word stack corruptions.
+ 
+ **Verdict: CONDITIONAL PASS** (Software independence and common-mode boundaries fully mapped and verified; proceed to Step 2C-B only after formal review).
+diff --git a/tfib_experiments/phase2_step2c_dependency_model.md b/tfib_experiments/phase2_step2c_dependency_model.md
+index a351123..2883c76 100644
+--- a/tfib_experiments/phase2_step2c_dependency_model.md
++++ b/tfib_experiments/phase2_step2c_dependency_model.md
+@@ -19,7 +19,7 @@ Prior audits (Phase 2 Step 2B) established that under single-point operational t
+ 1. Operational state only,
+ 2. Checker state only,
+ 3. Shared data, buffers, or control flow,
+-4. Simultaneously corrupted operational and reference data (simulated common-mode failure),
++4. Simultaneously corrupted operational and reference data via paired software mutations (synthetic common-mode failure proxy),
+ 5. Failures that evade local checker detection but are captured by the outer cryptographic protocol (Fujisaki-Okamoto transform).
+ 
+ ### Critical Physical Disclaimer
+@@ -41,7 +41,7 @@ Through static and binary analysis of the production implementation (`bin/obj/ml
+ 
+ ### 2.2 Reference Twiddle Access Path (TFIB-REF)
+ - **Symbol / Location:** `_tfib_zetas_ref` (external array of 128 `int16_t` values, located at virtual address `0x100018a60` in `__TEXT,__const` segment, defined in `tfib_implementation/tfib_ref.c` and linked via `libtfib.a`).
+-- **Memory Separation:** Stored at an offset of +448 bytes from `mlk_zetas`. It occupies a completely separate global symbol table entry and distinct memory bytes.
++- **Memory Separation:** Stored at an offset of +448 bytes from `mlk_zetas`. It occupies a distinct global symbol table entry and separate memory bytes.
+ - **Fetch Logic:** Decoupled index recalculation:
+   - NTT: $k = (1 \ll (\text{layer} - 1)) + (\text{butterfly\_idx} \gg (8 - \text{layer}))$.
+   - InvNTT: $k = ((1 \ll \text{layer}) - 1) - (\text{butterfly\_idx} \gg (8 - \text{layer}))$.
+@@ -88,19 +88,19 @@ Through static and binary analysis of the production implementation (`bin/obj/ml
+ 
+ ## 3. Systematic Fault-Dependency Table
+ 
+-The table below maps all computational, structural, and countermeasure components, distinguishing proven independent paths from suspected or proven common-mode coupling.
++The table below maps all computational, structural, and countermeasure components, distinguishing verified independent paths in software from suspected or demonstrated coupling under tested fault models.
+ 
+ | Component | Data or State Used | Primary vs Checker | Shared With Which Components | Fault Injection Point | Expected Observable Effect | Evidence Source | Confidence and Limitations |
+ | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
+-| **Operational Twiddle Table** | `mlk_zetas[128]` (in `zetas.inc`) | Primary Computation | Passed as value `zeta_op` to monitor | `hook_mid_ntt_pre_butterfly`, `hook_mid_invntt_pre_butterfly` | Butterfly computes invalid output; TFIB-REF detects twiddle mismatch, repairs, and recovers; TFIB-META detects and fail-stops | `poly.c:388`, `tfib_ref.c:65`, `phase2_step2b_runner_output.csv` | **High:** Proven independent storage (`0x1000188a0`). Limitation: Single core software model. |
++| **Operational Twiddle Table** | `mlk_zetas[128]` (in `zetas.inc`) | Primary Computation | Passed as value `zeta_op` to monitor | `hook_mid_ntt_pre_butterfly`, `hook_mid_invntt_pre_butterfly` | Butterfly computes invalid output; TFIB-REF detects twiddle mismatch, repairs, and recovers; TFIB-META detects and fail-stops | `poly.c:388`, `tfib_ref.c:65`, `phase2_step2b_runner_output.csv` | **High (Software Model):** Demonstrated separate static array allocation (`0x1000188a0`). Limitation: Single-core software model; software allocation does not guarantee physical hardware isolation. |
+ | **Reference Twiddle Table** | `tfib_zetas_ref[128]` (in `tfib_ref.c`) | Checker Only (TFIB-REF) | None (isolated symbol in `libtfib.a`) | `tfib_ref.c:51` (`TFIB_FAULT_REF_TWIDDLE`) | Twiddle comparison detects mismatch (`zeta_op != zeta_ref`); repair re-check detects persistent failure; transient fault recovers | `tfib_ref.c:49-62`, `tfib_experiments/tfib_experiment_runner.c:230` | **High:** Symbol isolated at `0x100018a60`. Tested transient and persistent. |
+ | **Integrity Tag Table** | `tfib_zetas_tag[128]` (in `tfib_meta.c`) | Checker Only (TFIB-META) | None (isolated symbol in `libtfib.a`) | `tfib_meta.c:53` (`TFIB_FAULT_META_TAG`) | Computed tag mismatches expected tag; transient recovers; persistent triggers safe fail-stop | `tfib_meta.c:53-59`, `tfib_experiments/tfib_experiment_runner.c:292` | **High:** Dedicated read-only tag table (`0x100018b60`). |
+ | **Polynomial Buffer (`r`)** | `r[j]`, `r[j+len]` in coefficient array | Primary & Checker | Monitored and modified by both | Butterfly arithmetic write, or pointer corruption | Invariant check $\Delta_{\text{diff}} \neq 0 \lor \Delta_{\text{sum}} \neq 0$; retry recomputes from $u_{\text{saved}}, v_{\text{saved}}$ | `poly.c:382-408`, `tfib_core.c:71` | **High:** Shared mutable buffer. Correctly restored via stack snapshots. |
+ | **Stack Operand Snapshots** | `u_saved`, `v_saved` (caller frame) | Primary & Checker | Computed by caller, read by checker | Stack corruption before monitor call | Invariant $\Delta_{\text{sum}}$ flags arithmetic mismatch; rollback uses corrupted snapshot, retry fails, forces fail-stop | `poly.c:382-383`, `tfib_ref.c:70` | **Medium:** Preserved across register/stack by compiler; not independently dual-railed on stack. |
+ | **Twiddle Indexing Logic** | `layer`, `b_idx`, loop strides | Primary & Checker | Computed independently by loop vs helper | Loop counter bit flip in caller | Caller fetches $\zeta_k$, checker computes $k' \neq k$, causing $\zeta_{\text{op}} \neq \zeta_{\text{ref}}$, detected as mismatch | `poly.c:437`, `tfib_common.h:17-23` | **High:** Independent arithmetic logic ($k++$ vs $(1 \ll (l-1)) + (b \gg (8-l))$). |
+-| **Modular Arithmetic Constants** | `MLKEM_Q` (3329), Barrett/Montgomery multipliers | Primary & Checker | Shared constant definitions | Macro / immediate operand perturbation | Arithmetic invariant recomputation fails; triggers rollback and fail-stop | `poly.h:71`, `tfib_common.h:12,28,36` | **High:** Exact algebraic congruence proven in FIPS 203. |
+-| **Global Monitor Stats & Flags** | `g_tfib_ref_stats`, `g_tfib_meta_stats` | Checker to Protocol Interface | Read by `mlkem768_dec_monitored` | Counter corruption / zeroing | If monitor persistent count is cleared, downstream FO re-encryption still detects mismatch and returns $K_{\text{rej}}$ | `kem.c:486-494`, `kem.c:466-481` | **High:** Proven dual-defense: local fail-stop backed by outer FO re-encryption. |
+-| **Simultaneous Twiddle Corruption (Common-Mode)** | $\zeta_{\text{op}}$ and $\zeta_{\text{ref}}$ perturbed with identical bit-flip | Both Primary and Checker | Common corruption vector | `hook_mid_ntt_pre_butterfly` + `tfib_ref.c:55` | Local monitor is completely blinded ($\text{mismatch}=0, \Delta_{\text{diff}}=0$); downstream FO re-encryption catches error, returns $K_{\text{rej}}$ | `tfib_ref.c:55-61`, `tfib_experiment_runner.c:245-252` | **High:** Confirmed zero local detection, 100% safe containment by FO transform ($0$ SDC). |
++| **Modular Arithmetic Constants** | `MLKEM_Q` (3329), Barrett/Montgomery multipliers | Primary & Checker | Shared constant definitions | Macro / immediate operand perturbation | Arithmetic invariant recomputation fails; triggers rollback and fail-stop | `poly.h:71`, `tfib_common.h:12,28,36` | **High:** Exact algebraic congruence specified in FIPS 203. |
++| **Global Monitor Stats & Flags** | `g_tfib_ref_stats`, `g_tfib_meta_stats` | Checker to Protocol Interface | Read by `mlkem768_dec_monitored` | Counter corruption / zeroing | If monitor persistent count is cleared, downstream FO re-encryption still detects mismatch and returns $K_{\text{rej}}$ | `kem.c:486-494`, `kem.c:466-481` | **High:** Demonstrated layered defense: local fail-stop backed by outer FO re-encryption. |
++| **Simultaneous Twiddle Corruption (Paired Mutation)** | $\zeta_{\text{op}}$ and $\zeta_{\text{ref}}$ perturbed with identical bit-flip | Both Primary and Checker | Coordinated software mutation vector (separate software bit-flips in distinct memory locations) | `hook_mid_ntt_pre_butterfly` + `tfib_ref.c:55` | Local monitor does not detect the fault ($\text{mismatch}=0, \Delta_{\text{diff}}=0$); downstream FO re-encryption catches error (147/150 trials) or decoding error-tolerance preserves final message (3/150 trials) | `tfib_ref.c:55-61`, `tfib_experiment_runner.c:245-252` | **High (Software Model):** Confirmed zero local detection; safe outcome via active FO rejection or decoding preservation with $0$ observed SDC (exact one-sided 95% binomial upper bound $p_{\text{SDC}} \le 5.82\%$ on the $N_{\text{simul}}=50$ paired-mutation suite; $p_{\text{SDC}} \le 0.399\%$ across all $N_{\text{act}}=750$ fault-activated trials). Coordinated software mutations evaluate checker blindness under tested inputs only and do not establish physical common-mode coupling, hardware vulnerability, or physical immunity. |
+ | **Checker Decision Logic** | `sum_c ^= 1` (comparison predicate) | Checker Only | Internal monitor evaluation | `tfib_ref.c:77`, `tfib_meta.c:75` | False alarm triggers rollback and retry; transient recovers; persistent safe fail-stops | `tfib_ref.c:77-80`, `tfib_experiment_runner.c:253` | **High:** Validates robustness against false positive alarms. |
+ 
+ ---
+@@ -121,10 +121,12 @@ The framework evaluates four distinct, clearly defined software fault models:
+ |     - Perturbs reference twiddle, tag, or checker arithmetic evaluation      |
+ |     - Tests whether checker degradation causes fatal corruption or safe retry|
+ +-------------------------------------------------------------------------------+
+-|  3. Common-Mode Simultaneous Corruption (Checker Blind Spot)                 |
+-|     - Identically flips the same bit in both operational and reference states|
+-|     - Models shared bus corruption, common power-rail droop, or identical    |
+-|       corruption before comparison                                            |
++|  3. Paired Software Mutation (Synthetic Common-Mode Proxy)                   |
++|     - Applies two coordinated software bit-flips with identical bitmask to   |
++|       both operational and reference states in distinct memory locations      |
++|     - Demonstrates checker blindness under specific coordinated mutations    |
++|     - Synthetic proxy only; does NOT prove physical common-mode fault        |
++|       behavior, shared silicon vulnerability, or general hardware weakness   |
+ +-------------------------------------------------------------------------------+
+ |  4. Outer Cryptographic Failsafe Activation (FO Re-encryption)               |
+ |     - Local monitor blinded; checks whether end-to-end decapsulation leaks    |
+@@ -136,21 +138,23 @@ The framework evaluates four distinct, clearly defined software fault models:
+ - **Local Detection (TFIB-Level):** The butterfly monitor identifies that an invariant is violated ($\text{mismatch} > 0$).
+ - **Local Recovery (TFIB-REF):** The monitor successfully repairs the output polynomial in-place, returning the genuine shared secret $K_{\text{valid}}$ with status `0x5A5A5A5A`.
+ - **Local Fail-Stop (TFIB-META or Persistent TFIB-REF):** The monitor detects the fault, halts computation, and forces decapsulation status to `0xFFFFFFFF` / `0xA5A5A5A5`.
+-- **Outer Cryptographic Containment (Fujisaki-Okamoto):** When local detection fails completely (0% detection), the corrupted polynomial alters the decapsulated plaintext, causing ciphertext re-encryption comparison to fail. Decapsulation outputs $K_{\text{rej}}$ ($0$ SDC).
++- **Outer Cryptographic Containment (Fujisaki-Okamoto):** When local monitor detection is 0% (local blindness under tested mutations), if the twiddle perturbation alters the decoded plaintext $m' \neq m$, IND-CPA re-encryption produces $c' \neq c$, causing FO comparison to fail and forcing canonical implicit rejection key $K_{\text{rej}}$ (observed in 147/150 locally blinded trials, 98.0%).
++- **Decoding Error-Tolerance (Slack):** When intermediate coefficient perturbations fall within the noise tolerance of ML-KEM-768 centered binomial decoding, the final decoded message is preserved ($m' = m$), returning valid $K_{\text{expected}}$ without triggering FO rejection (observed in 3/150 locally blinded trials, 2.0%). Although intermediate polynomial coefficients are altered by the fault, end-to-end secret validity is maintained. Both active FO rejection and decoding preservation prevent SDC.
+ 
+ ---
+ 
+-## 5. Proven Dependencies vs Suspected Common-Mode Risks
++## 5. Analyzed Dependencies vs Common-Mode Risks
+ 
+-### 5.1 Proven Independent Properties
+-1. **Physical Storage Decoupling:** `mlk_zetas` and `tfib_zetas_ref` are separate static arrays allocated in distinct translation units. Modifying the memory of one does not mutate the memory of the other.
++### 5.1 Verified Independent Properties in Software
++1. **Memory Storage Decoupling:** `mlk_zetas` and `tfib_zetas_ref` are separate static arrays allocated in distinct translation units. Modifying the memory of one does not mutate the memory of the other. Note: In the audited binary, both tables reside within the read-only data segment of the same binary image separated by +448 bytes; physical separation (such as separate RAM banks, ECC domains, or execution enclaves) requires hardware/linker enforcement proposed in Step 2C-B.
+ 2. **Indexing Decoupling:** The computation tracks indices incrementally via pointer strides (`k++` / `k--`), whereas the checker recomputes indices algebraically from $(layer, butterfly\_idx)$. An off-by-one or stride skip in computation triggers a twiddle mismatch in the checker.
+-3. **Outer Protocol Resilience:** Even when local detection is 0% (common-mode blind spot), the outer Fujisaki-Okamoto transform guarantees fail-safety by returning the canonical implicit rejection key $K_{\text{rej}}$.
++3. **Outer Protocol Resilience:** Even when local monitor detection is 0% (local blind spot under tested mutations), the outer Fujisaki-Okamoto transform enforces implicit rejection when the decoded plaintext is altered, returning canonical rejection key $K_{\text{rej}}$.
+ 
+ ### 5.2 Identified Common-Mode Boundaries & Risks
+-1. **Identical Bit-Flip Blindness:** If a fault mechanism alters both operands identically prior to invariant evaluation, arithmetic invariants $\Delta_{\text{diff}} \equiv 0 \pmod q$ and $\Delta_{\text{sum}} \equiv 0 \pmod q$ hold true over the corrupted value. Local detection is completely bypassed.
++1. **Identical Bit-Flip Blindness:** If a fault mechanism alters both operands identically prior to invariant evaluation, arithmetic invariants $\Delta_{\text{diff}} \equiv 0 \pmod q$ and $\Delta_{\text{sum}} \equiv 0 \pmod q$ hold true over the corrupted value. Local invariant checks do not flag the fault.
+ 2. **Shared Modulus ($q = 3329$):** Both computation and checker share the scalar modulus. A fault in the ALU performing division/reduction modulo 3329 would corrupt both paths.
+ 3. **Stack Frame Colocation:** $u_{\text{saved}}$ and $v_{\text{saved}}$ reside on the execution stack of `mlk_ntt_layer`. A bulk stack memory smash could corrupt both intermediate results and saved rollback state simultaneously.
++4. **Physical and Microarchitectural Coupling:** Moving table symbols across address offsets (+448 bytes in Step 2C-A, or separate memory sections in Step 2C-B) does not eliminate physical common-mode coupling (e.g. shared cache lines, shared memory bus, shared clock/power networks, or wide-beam radiation). Software table relocation establishes logical separation only; physical common-mode mitigation requires hardware-enforced isolation.
+ 
+ ---
+ 
+@@ -159,5 +163,5 @@ The framework evaluates four distinct, clearly defined software fault models:
+ The dependency analysis establishes that:
+ - **TFIB-REF is strongly independent** of operational twiddle corruption for single-locus faults.
+ - **TFIB-META is independent for detection**, but structurally dependent on operational twiddle validity for recovery (it cannot repair operational faults).
+-- **Simultaneous common-mode corruption** completely blinds local monitors, proving that local invariant checking alone cannot protect against common-mode faults.
+-- **Fujisaki-Okamoto re-encryption** acts as an infallible outer boundary that catches all escaped local twiddle errors, preventing Silent Data Corruption across all evaluated modes.
++- **Coordinated paired software mutations** demonstrate checker blindness under identical operand perturbation within this software model, showing that local butterfly invariant checking alone cannot detect matching alterations in both operands.
++- **Fujisaki-Okamoto re-encryption and decoding slack** combine to prevent Silent Data Corruption across all 900 evaluated software trials, providing an outer defense when local checkers are blinded (0 SDC observed across all $N_{\text{act}} = 750$ fault-activated trials; exact one-sided 95% binomial upper bound $p_{\text{SDC}} \le 0.399\%$).
+diff --git a/tfib_experiments/phase2_step2c_experiment_design.md b/tfib_experiments/phase2_step2c_experiment_design.md
+index ca4e5a5..2bd3a77 100644
+--- a/tfib_experiments/phase2_step2c_experiment_design.md
++++ b/tfib_experiments/phase2_step2c_experiment_design.md
+@@ -15,7 +15,7 @@ The objective of Phase 2 Step 2C-A is to systematically test the resilience of t
+ ### Core Scientific Questions
+ 1. Does the countermeasure maintain detection independence when faults affect the checker itself rather than the computation?
+ 2. How does the system respond when an identical fault strikes both computation and verification state (common-mode failure)?
+-3. Does failure of the local countermeasure compromise the end-to-end security of ML-KEM-768, or does the Fujisaki-Okamoto transform provide a foolproof outer safety net?
++3. Does failure of the local countermeasure compromise the end-to-end security of ML-KEM-768, or does the Fujisaki-Okamoto transform provide a robust cryptographic outer safety net?
+ 
+ ```
+                                       +------------------------------------+
+@@ -77,7 +77,7 @@ Five controlled experiment families are designed to isolate each fault interacti
+   - *Recovery:* $ss == ss_{\text{expected}} \land \text{status} == 0\text{x}5A5A5A5A \land \text{recovered\_count} > 0$
+   - *Safe Fail-Stop:* $ss == ss_{\text{rej\_expected}} \land (\text{status} == 0\text{xFFFFFFFF} \lor \text{status} == 0\text{xA5A5A5A5})$
+   - *SDC:* $ss \neq ss_{\text{expected}} \land ss \neq ss_{\text{rej\_expected}}$
+-- **Trial Count & Rationale:** 50 transient + 50 persistent trials across each configuration (300 total). Sample size $N=50$ gives statistical power to detect any defect rate exceeding $5.8\%$ at $95\%$ confidence (rule of three: upper bound $\approx 3/50 = 6\%$).
++- **Trial Count & Rationale:** 50 transient + 50 persistent trials across each configuration (300 total). Sample size $N=50$ per suite provides an exact one-sided 95% binomial upper confidence bound of $1 - 0.05^{1/50} \approx 5.82\%$ for zero observed defect events (the rule-of-three approximation yields $3/50 = 6.00\%$; across all $N_{\text{act}}=750$ fault-activated trials, zero observed events yields an exact one-sided 95% upper bound of $1 - 0.05^{1/750} \approx 0.399\%$, with rule-of-three approximation $3/750 = 0.400\%$).
+ 
+ ---
+ 
+@@ -110,29 +110,31 @@ Five controlled experiment families are designed to isolate each fault interacti
+ 
+ ---
+ 
+-### Experiment 4: Fault Affects Both Through Simultaneous Corruption (`SIMULTANEOUS`)
+-- **Hypothesis:** When an identical bit-flip $\delta$ is applied simultaneously to both $\zeta_{\text{op}}$ and $\zeta_{\text{ref}}$, the local checker will evaluate:
++### Experiment 4: Fault Affects Both Through Paired Software Mutation (`SIMULTANEOUS`)
++- **Hypothesis:** When an identical bit-flip $\delta$ is applied to both $\zeta_{\text{op}}$ and $\zeta_{\text{ref}}$ via paired sequential software mutations, the local checker will evaluate:
+   $$\zeta_{\text{op}} \oplus \delta = \zeta_{\text{ref}} \oplus \delta \implies \text{twiddle\_mismatch} = \text{false}$$
+   $$t_{\text{check}} = \text{fqmul}(v_{\text{saved}}, \zeta_{\text{ref}} \oplus \delta) = t_{\text{used}} \implies \Delta_{\text{diff}} \equiv 0 \pmod q$$
+-  Local detection will be completely blinded (0% detection rate). However, because the corrupted twiddle distorts the NTT result, IND-CPA decryption yields an incorrect plaintext $m' \neq m$. Re-encryption yields $c' \neq c$, causing constant-time FO comparison to fail and decapsulation to output canonical $K_{\text{rej}}$.
+-  **Outcome:** Local monitor fails silently, but outer Fujisaki-Okamoto transform guarantees 100% safe rejection ($SDC = 0$).
++  Local monitor detection is 0% under this paired mutation. When the corrupted twiddle alters the decrypted plaintext $m' \neq m$, re-encryption yields $c' \neq c$, causing constant-time FO comparison to fail and decapsulation to output canonical $K_{\text{rej}}$. If the intermediate polynomial perturbation falls within decoding error-tolerance ($m' = m$), decapsulation returns $K_{\text{expected}}$ cleanly. Under both outcomes, zero SDC occurs.
++  **Software Proxy Caveat:** This experiment evaluates checker blindness under the specific coordinated software mutations tested; it does not prove physical common-mode fault behavior, shared silicon vulnerability, or general hardware susceptibility.
++  **Outcome:** Local monitor detection is 0% under tested mutations. 98% of trials trigger active FO rejection ($ss = ss_{\text{rej}}$); 2% preserve the final message due to decoding error-tolerance ($ss = ss_{\text{expected}}$). Zero SDC is observed under this model (exact one-sided 95% binomial upper bound $p_{\text{SDC}} \le 5.82\%$ on the $N_{\text{simul}}=50$ paired-mutation suite).
+ - **Injection Point:** `hook_mid_ntt_pre_butterfly` (perturbs $\zeta_{\text{op}}$) + `tfib_ref.c:55-61` (perturbs $\zeta_{\text{ref}}$ with identical bit mask).
+-- **Mechanism:** `zeta_op ^= mask; zeta_ref ^= mask;`.
++- **Mechanism:** `zeta_op ^= mask; zeta_ref ^= mask;` (coordinated software bit-flips).
+ - **Duration / Persistence:** Transient simultaneous fault.
+ - **Decision Criteria:**
+   - *Local Blindness:* `tfib_get_total_mismatches() == 0`.
+-  - *FO Containment:* $ss == ss_{\text{rej\_expected}} \land \text{status} \in \{0\text{xFFFFFFFF}, 0\text{xA5A5A5A5}\}$.
+-  - *Classification:* `LOCAL_BLIND_FO_CONTAINED`.
++  - *Active FO Containment:* $ss == ss_{\text{rej\_expected}} \land \text{status} \in \{0\text{xFFFFFFFF}, 0\text{xA5A5A5A5}\}$.
++  - *Decoding Slack Preservation:* $ss == ss_{\text{expected}} \land \text{status} == 0\text{x}5A5A5A5A$.
++  - *Classification:* `LOCAL_BLIND_FO_CONTAINED` or `INEFFECTIVE`.
+   - *SDC:* $ss \notin \{ss_{\text{expected}}, ss_{\text{rej\_expected}}\}$.
+ - **Trial Count:** 50 trials.
+ 
+ ---
+ 
+ ### Experiment 5: Fault Bypasses Detection but is Contained by End-to-End Behavior
+-- **Hypothesis:** Evaluating the baseline configuration (original unhardened monitor) under operational twiddle faults demonstrates the Theorem 1 blind spot ($0\%$ detection). The experiment proves that all faults evading local detection are partitioned cleanly into two safe sets:
+-  1. *Ineffective Faults:* The polynomial perturbation falls within the decoding error-tolerance (slack) of ML-KEM-768; the message $m$ decodes cleanly, producing valid $ss = ss_{\text{expected}}$ (`INEFFECTIVE_FAULT_VALID`).
+-  2. *Contained Corruptions:* The perturbation causes decoding error; FO re-encryption detects $c' \neq c$ and forces canonical implicit rejection $ss = ss_{\text{rej}}$ (`LOCAL_BLIND_FO_CONTAINED`).
+-  Under no condition does an undetected fault escape to cause SDC.
++- **Hypothesis:** Evaluating the baseline configuration (original unhardened monitor) under operational twiddle faults demonstrates the Theorem 1 blind spot ($0\%$ detection). The experiment evaluates whether faults evading local detection partition into two distinct safe outcomes:
++  1. *Decoding Slack Preservation (Ineffective):* The intermediate polynomial perturbation falls within the error-correcting tolerance of ML-KEM-768 centered binomial decoding; the final message $m$ is preserved, producing valid $ss = ss_{\text{expected}}$ (`INEFFECTIVE`). These trials reflect algorithmic decoding tolerance rather than active FO rejection.
++  2. *Active FO Rejection:* The perturbation causes a decoding error ($m' \neq m$); FO re-encryption detects $c' \neq c$ and forces canonical implicit rejection $ss = ss_{\text{rej}}$ (`LOCAL_BLIND_FO_CONTAINED`).
++  Under all tested conditions, zero SDC was observed (exact one-sided 95% binomial upper bound $p_{\text{SDC}} \le 0.399\%$ across all $N_{\text{act}} = 750$ fault-activated trials; rule-of-three approximation yields $0.400\%$).
+ - **Injection Point:** Baseline monitor with `TFIB_FAULT_OP_TWIDDLE` (Transient and Persistent).
+ - **Trial Count:** 50 transient + 50 persistent trials (100 total).
+ 
+@@ -150,7 +152,7 @@ Five controlled experiment families are designed to isolate each fault interacti
+ | **TFIB_REF** | `OP_TWIDDLE_PERSISTENT` | `TFIB_FAULT_OP_TWIDDLE` | True | 50 | 100% (50/50) | `SAFE_FAIL_STOP` (100%) |
+ | **TFIB_REF** | `REF_TWIDDLE_TRANSIENT` | `TFIB_FAULT_REF_TWIDDLE` | False | 50 | 100% (50/50) | `GENUINE_RECOVERY` (100%) |
+ | **TFIB_REF** | `REF_TWIDDLE_PERSISTENT` | `TFIB_FAULT_REF_TWIDDLE` | True | 50 | 100% (50/50) | `SAFE_FAIL_STOP` (100%) |
+-| **TFIB_REF** | `SIMULTANEOUS_COMMON_MODE` | `TFIB_FAULT_SIMULTANEOUS` | False | 50 | 0% (0/50) | `LOCAL_BLIND_FO_CONTAINED` (100%) |
++| **TFIB_REF** | `SIMULTANEOUS_COMMON_MODE` | `TFIB_FAULT_SIMULTANEOUS` | False | 50 | 0% (0/50) | `LOCAL_BLIND_FO_CONTAINED` (98%) / `INEFFECTIVE` (2%) |
+ | **TFIB_REF** | `CHECKER_LOGIC_TRANSIENT` | `TFIB_FAULT_CHECKER_LOGIC` | False | 50 | 100% (50/50) | `GENUINE_RECOVERY` (100%) |
+ | **TFIB_REF** | `CHECKER_LOGIC_PERSISTENT` | `TFIB_FAULT_CHECKER_LOGIC` | True | 50 | 100% (50/50) | `SAFE_FAIL_STOP` (100%) |
+ | **TFIB_META** | `CLEAN_CONTROL` | `TFIB_FAULT_NONE` | False | 50 | 0% (0/50) | `CLEAN_SUCCESS` (100%) |
+@@ -167,7 +169,7 @@ Five controlled experiment families are designed to isolate each fault interacti
+ 
+ ## 4. Negative Test Plan (Adversarial Verification)
+ 
+-To prove that the validation harness itself does not pass vacuously, the following negative assertions are mandatory:
++To verify that the validation harness does not pass vacuously, the following negative assertions are enforced:
+ 1. **Deliberate Corrupted Reference Key Injection:** Verify that if the oracle expected valid secret is corrupted, the clean-path test immediately fails with exit code 1.
+ 2. **Corrupted Rejection Key Injection:** Verify that if decapsulation produces a bogus secret that matches neither $ss_{\text{expected}}$ nor $ss_{\text{rej}}$, it is flagged as SDC.
+ 3. **Simultaneous Bypass Detection:** Assert that when `SIMULTANEOUS_COMMON_MODE` is executed, local detection is strictly 0, and that if any test harness attempted to label it as `GENUINE_RECOVERY`, the assertion triggers a failure.
+diff --git a/tfib_experiments/phase2_step2c_report.md b/tfib_experiments/phase2_step2c_report.md
+index 24d303e..4e9c8e9 100644
+--- a/tfib_experiments/phase2_step2c_report.md
++++ b/tfib_experiments/phase2_step2c_report.md
+@@ -19,10 +19,10 @@ Prior audits established that under single-point operational twiddle perturbatio
+ 3. Can an escape from the local arithmetic monitor lead to Silent Data Corruption (SDC), or does the outer Fujisaki-Okamoto (FO) transform contain the failure?
+ 
+ ### High-Level Verdict Summary
+-- **Independence of Storage:** `mlk_zetas` (operational) and `tfib_zetas_ref` (checker) occupy separate read-only memory addresses (`0x1000188a0` vs `0x100018a60`), proving spatial independence within the software binary image.
++- **Independence of Storage:** `mlk_zetas` (operational) and `tfib_zetas_ref` (checker) occupy separate read-only memory addresses (`0x1000188a0` vs `0x100018a60`), demonstrating address-level separation within the compiled software binary image.
+ - **Checker Degradation Robustness:** Corrupting checker-only state or decision logic never induces SDC. Transient checker faults trigger benign retry and recover; persistent checker faults force a safe fail-stop.
+-- **Simultaneous Common-Mode Failure:** When an identical bit-flip corrupts both operational and reference twiddles, **local monitor detection is 0.0%** ($0/50$ detected). The invariant equations hold over the corrupted value.
+-- **Outer Cryptographic Safety Net:** Despite 0.0% local detection during common-mode failure, **100% of trials are contained** by the outer Fujisaki-Okamoto re-encryption check, which detects the ciphertext mismatch and outputs the canonical implicit rejection key $K_{\text{rej}}$ ($0$ SDC across 900 trials).
++- **Simultaneous Paired-Mutation Common-Mode Failure:** When two sequential software mutations apply an identical bit-flip to both the operational twiddle (before butterfly arithmetic) and the reference twiddle (inside the monitor path), **local monitor detection is 0.0%** ($0/50$ detected), because invariant equations evaluate identically over matching operand perturbations. This result demonstrates checker blindness under the specific coordinated software mutations tested; it does not prove physical common-mode fault behavior, general hardware vulnerability, physical independence, or radiation tolerance.
++- **Outer Cryptographic Safety Net:** Of the 150 locally blinded trials (100 baseline + 50 simultaneous), **147 (98%) were actively rejected** by the Fujisaki-Okamoto re-encryption check, which detected the ciphertext mismatch and output the canonical rejection key $K_{\text{rej}}$. In the remaining **3 trials (2.0%)**, the intermediate polynomial perturbation induced by the twiddle fault fell within the error-tolerance of the centered binomial decoding stage. Although intermediate computation was altered, the rounding and error-correction during decoding preserved the original message $m$, resulting in the valid shared secret $K_{\text{expected}}$ without triggering Fujisaki-Okamoto rejection. These trials represent secret preservation through decoding error-tolerance rather than active rejection by FO re-encryption. All 150 locally blinded trials produced a valid protocol outcome under the tested pseudo-random trial distribution ($0$ SDC observed).
+ 
+ ---
+ 
+@@ -73,28 +73,35 @@ Total: **900 trials** ($150$ clean baseline + $750$ fault-activated trials).
+ ### 4.1 Comprehensive Outcome Breakdown (900 Trials)
+ 
+ ```
+-Config     | Suite                      | Total | Activated | Detected | Recovered | Fail-Stop | FO Contained | Ineffective | SDC
+------------+----------------------------+-------+-----------+----------+-----------+-----------+--------------+-------------+-----
+-BASELINE   | CLEAN_CONTROL              | 50    | 0         | 0        | 0         | 0         | 0            | 0           | 0
+-BASELINE   | OP_TWIDDLE_TRANSIENT       | 50    | 50        | 0        | 0         | 0         | 48           | 2           | 0
+-BASELINE   | OP_TWIDDLE_PERSISTENT      | 50    | 50        | 0        | 0         | 0         | 50           | 0           | 0
+-TFIB_REF   | CLEAN_CONTROL              | 50    | 0         | 0        | 0         | 0         | 0            | 0           | 0
+-TFIB_REF   | OP_TWIDDLE_TRANSIENT       | 50    | 50        | 50       | 50        | 0         | 0            | 0           | 0
+-TFIB_REF   | OP_TWIDDLE_PERSISTENT      | 50    | 50        | 50       | 0         | 50        | 0            | 0           | 0
+-TFIB_REF   | REF_TWIDDLE_TRANSIENT      | 50    | 50        | 50       | 50        | 0         | 0            | 0           | 0
+-TFIB_REF   | REF_TWIDDLE_PERSISTENT     | 50    | 50        | 50       | 0         | 50        | 0            | 0           | 0
+-TFIB_REF   | SIMULTANEOUS_COMMON_MODE   | 50    | 50        | 0        | 0         | 0         | 49           | 1           | 0
+-TFIB_REF   | CHECKER_LOGIC_TRANSIENT    | 50    | 50        | 50       | 50        | 0         | 0            | 0           | 0
+-TFIB_REF   | CHECKER_LOGIC_PERSISTENT   | 50    | 50        | 50       | 0         | 50        | 0            | 0           | 0
+-TFIB_META  | CLEAN_CONTROL              | 50    | 0         | 0        | 0         | 0         | 0            | 0           | 0
+-TFIB_META  | OP_TWIDDLE_TRANSIENT       | 50    | 50        | 50       | 0         | 50        | 0            | 0           | 0
+-TFIB_META  | OP_TWIDDLE_PERSISTENT      | 50    | 50        | 50       | 0         | 50        | 0            | 0           | 0
+-TFIB_META  | META_TAG_TRANSIENT         | 50    | 50        | 50       | 50        | 0         | 0            | 0           | 0
+-TFIB_META  | META_TAG_PERSISTENT        | 50    | 50        | 50       | 0         | 50        | 0            | 0           | 0
+-TFIB_META  | CHECKER_LOGIC_TRANSIENT    | 50    | 50        | 50       | 50        | 0         | 0            | 0           | 0
+-TFIB_META  | CHECKER_LOGIC_PERSISTENT   | 50    | 50        | 50       | 0         | 50        | 0            | 0           | 0
+------------+----------------------------+-------+-----------+----------+-----------+-----------+--------------+-------------+-----
+-TOTAL      | 18 Suites                  | 900   | 750       | 600      | 250       | 350       | 147          | 3           | 0
++Config     | Suite                      | Total | Activated | Detected | Recovered | Fail-Stop | Active FO Rej | Ineffective† | SDC
++-----------+----------------------------+-------+-----------+----------+-----------+-----------+---------------+--------------+-----
++BASELINE   | CLEAN_CONTROL              | 50    | 0         | 0        | 0         | 0         | 0             | 0            | 0
++BASELINE   | OP_TWIDDLE_TRANSIENT       | 50    | 50        | 0        | 0         | 0         | 48            | 2            | 0
++BASELINE   | OP_TWIDDLE_PERSISTENT      | 50    | 50        | 0        | 0         | 0         | 50            | 0            | 0
++TFIB_REF   | CLEAN_CONTROL              | 50    | 0         | 0        | 0         | 0         | 0             | 0            | 0
++TFIB_REF   | OP_TWIDDLE_TRANSIENT       | 50    | 50        | 50       | 50        | 0         | 0             | 0            | 0
++TFIB_REF   | OP_TWIDDLE_PERSISTENT      | 50    | 50        | 50       | 0         | 50        | 0             | 0            | 0
++TFIB_REF   | REF_TWIDDLE_TRANSIENT      | 50    | 50        | 50       | 50        | 0         | 0             | 0            | 0
++TFIB_REF   | REF_TWIDDLE_PERSISTENT     | 50    | 50        | 50       | 0         | 50        | 0             | 0            | 0
++TFIB_REF   | SIMULTANEOUS_COMMON_MODE   | 50    | 50        | 0        | 0         | 0         | 49            | 1            | 0
++TFIB_REF   | CHECKER_LOGIC_TRANSIENT    | 50    | 50        | 50       | 50        | 0         | 0             | 0            | 0
++TFIB_REF   | CHECKER_LOGIC_PERSISTENT   | 50    | 50        | 50       | 0         | 50        | 0             | 0            | 0
++TFIB_META  | CLEAN_CONTROL              | 50    | 0         | 0        | 0         | 0         | 0             | 0            | 0
++TFIB_META  | OP_TWIDDLE_TRANSIENT       | 50    | 50        | 50       | 0         | 50        | 0             | 0            | 0
++TFIB_META  | OP_TWIDDLE_PERSISTENT      | 50    | 50        | 50       | 0         | 50        | 0             | 0            | 0
++TFIB_META  | META_TAG_TRANSIENT         | 50    | 50        | 50       | 50        | 0         | 0             | 0            | 0
++TFIB_META  | META_TAG_PERSISTENT        | 50    | 50        | 50       | 0         | 50        | 0             | 0            | 0
++TFIB_META  | CHECKER_LOGIC_TRANSIENT    | 50    | 50        | 50       | 50        | 0         | 0             | 0            | 0
++TFIB_META  | CHECKER_LOGIC_PERSISTENT   | 50    | 50        | 50       | 0         | 50        | 0             | 0            | 0
++-----------+----------------------------+-------+-----------+----------+-----------+-----------+---------------+--------------+-----
++TOTAL      | 18 Suites                  | 900   | 750       | 600      | 250       | 350       | 147           | 3            | 0
++
++† "Ineffective" denotes trials where intermediate polynomial perturbations fell within the
++  error-tolerance of ML-KEM-768 centered binomial decoding. The final message m was preserved,
++  producing the valid shared secret K_expected. These trials reflect secret preservation via
++  decoding error-tolerance rather than active rejection by the FO re-encryption test.
++  "Active FO Rej" denotes trials where the corrupted NTT output altered the decoded plaintext,
++  causing FO re-encryption comparison to fail and decapsulation to output K_rej.
+ ```
+ 
+ ---
+@@ -116,17 +123,19 @@ To adhere strictly to cryptographic auditing standards, every denominator is def
+ 6. **Safe Fail-Stop Rate:**
+    - Evaluated over detected persistent faults in TFIB-REF: $150 / 150 = \mathbf{100.0\%}$ (95% CI $[97.55\%, 100.0\%]$).
+    - Evaluated over detected persistent or non-repairable faults in TFIB-META: $200 / 200 = \mathbf{100.0\%}$ (95% CI $[98.15\%, 100.0\%]$).
+-7. **Simultaneous Common-Mode Failure Detection Rate:**
++7. **Simultaneous Paired-Mutation Common-Mode Failure Detection Rate:**
+    - Evaluated over $N_{\text{simul}} = 50$: $0 / 50 = \mathbf{0.0\%}$ (95% CI $[0.0\%, 7.11\%]$).
+-   - **Local Blindness Confirmed:** When both twiddles share identical bit-flips, the checker cannot detect the fault locally.
+-8. **Cryptographic FO Containment Rate (Under Local Monitor Blindness):**
+-   - In Baseline ($N=100$) + Simultaneous ($N=50$): $147$ trials triggered canonical rejection key $K_{\text{rej}}$ via FO re-encryption failure, and $3$ trials were ineffective (perturbation absorbed by ML-KEM noise slack, decoding correct message $m$).
+-   - **Safe Containment Rate:** $150 / 150 = \mathbf{100.0\%}$ (95% CI $[97.55\%, 100.0\%]$).
++   - **Local Blindness Under Specific Tested Mutations:** When two sequential software mutations apply identical bit-flips to both $\zeta_{\text{op}}$ (before butterfly arithmetic) and $\zeta_{\text{ref}}$ (inside the monitor path), the checker cannot detect the fault locally because arithmetic invariant equations hold over identical perturbations. This demonstrates checker blindness under the specific coordinated software mutations tested; it does not prove physical common-mode fault behavior, general hardware vulnerability, physical independence, or radiation tolerance.
++8. **Locally Blinded Trial Outcomes (Under 0% Local Detection):**
++   - Total locally blinded trials: Baseline ($N=100$) + Simultaneous ($N=50$) = $150$.
++   - **Active FO rejection:** $147 / 150 = \mathbf{98.0\%}$ — the corrupted NTT output altered the decoded plaintext, FO re-encryption comparison failed, and decapsulation output the canonical rejection key $K_{\text{rej}}$.
++   - **Secret preservation via decoding slack:** $3 / 150 = \mathbf{2.0\%}$ — the internal coefficient perturbation induced by the twiddle fault fell within the error-tolerance of ML-KEM-768 centered binomial decoding; the final message $m$ was preserved, and decapsulation returned the valid shared secret $K_{\text{expected}}$. These trials were not rejected by FO because the decoded plaintext remained uncorrupted despite intermediate arithmetic perturbation.
++   - **Correct end-to-end key outcome:** $150 / 150 = \mathbf{100.0\%}$ under the tested PRF-generated trial distribution (95% CI $[97.55\%, 100.0\%]$). No trial returned an unauthenticated or corrupted key.
+ 9. **Silent Data Corruption (SDC) Rate:**
+    - Denominator: All fault-activated trials ($N_{\text{act}} = 750$).
+    - SDC Events: $0 / 750 = \mathbf{0.0\%}$.
+-   - **Rule-of-Three Upper Bound:** With 0 observed events in 750 trials, the true SDC rate $p_{\text{SDC}} < \frac{3}{750} \approx \mathbf{0.40\%}$ at 95% confidence (Wilson score upper bound: $0.49\%$).
+-   - **Critical Audit Caveat:** Zero observed SDC does **not** prove zero theoretical risk under arbitrary physical fault injections.
++   - **Exact One-Sided 95% Binomial Upper Confidence Bound:** Across all $N_{\text{act}} = 750$ fault-activated trials (excluding the 150 clean control runs), with 0 observed SDC events, the exact one-sided 95% binomial upper confidence bound on the true SDC rate under independent identically distributed sampling is $p_{\text{SDC}} \le 1 - 0.05^{1/750} \approx \mathbf{0.399\%}$. For comparison, the rule-of-three approximation yields $\frac{3}{750} = 0.400\%$, and the one-sided Wilson score upper bound at $\alpha = 0.05$ is $0.490\%$.
++   - **Critical Audit Caveat:** Zero observed SDC does **not** prove zero theoretical SDC risk. The PRF-generated trial distribution does not represent all possible software faults or physical fault distributions.
+ 10. **Invalid / Inconclusive Trials:** $0 / 900 = 0.0\%$.
+ 
+ ---
+@@ -147,18 +156,18 @@ To maintain rigorous scientific standards, claims are categorized by their evide
+ ### 5.1 Directly Observed Results (Empirical Ground Truth)
+ 1. In software execution on the host architecture (macOS ARM64), `mlk_zetas` and `tfib_zetas_ref` reside at distinct memory offsets in `__TEXT,__const`.
+ 2. When faults are injected exclusively into `zeta_ref`, `tfib_zetas_tag`, or checker arithmetic predicates, the checker detects the condition, initiates rollback/retry, and either recovers (if transient) or safely fail-stops (if persistent).
+-3. When `TFIB_FAULT_SIMULTANEOUS` is injected, the local butterfly monitor records 0 mismatches, 0 retries, and 0 recoveries ($100\%$ local blind spot).
+-4. In all 50 simultaneous fault trials and all 100 baseline fault trials where local detection was 0%, the output of decapsulation was either canonical valid $K_{\text{expected}}$ (due to decoding slack) or canonical rejection key $K_{\text{rej}}$ (due to FO re-encryption check). Zero unauthenticated keys were returned.
++3. When `TFIB_FAULT_SIMULTANEOUS` is injected (two sequential software mutations applying identical bit-flips to the operational and reference twiddles), the local butterfly monitor records 0 mismatches, 0 retries, and 0 recoveries ($100\%$ local blind spot under this paired mutation model).
++4. Of the 150 locally blinded trials (50 simultaneous + 100 baseline): 147 produced the canonical rejection key $K_{\text{rej}}$ via active FO re-encryption failure; in 3 trials, intermediate polynomial perturbations fell within the error-tolerance of the centered binomial decoding stage, preserving the final message $m$ and returning valid $K_{\text{expected}}$. No unauthenticated keys were returned.
+ 5. All 9 targeted validation tests in `test_step2c_countermeasure_independence` passed without failure.
+ 
+ ### 5.2 Inferences (Logically Deduceable from Model)
+-1. **Separation of Recovery vs Containment:** Local recovery is solely a property of TFIB-REF with an uncorrupted reference table. In contrast, safe containment is a global property of the Fujisaki-Okamoto transform in ML-KEM.
++1. **Separation of Recovery vs Containment:** Local recovery is solely a property of TFIB-REF with an uncorrupted reference table. Outer FO containment is a global property of the Fujisaki-Okamoto transform in ML-KEM. Preservation via decoding slack (where intermediate polynomial distortion does not alter the final decoded message) is a distinct third outcome — it represents algorithmic error-tolerance rather than active monitor detection or FO re-encryption rejection.
+ 2. **Checker Integrity Requirement:** An in-place recovery countermeasure cannot recover from a persistent checker corruption; it must fail-stop to prevent poisoning the computation with invalid reference data.
+ 3. **Independent Stride Invariance:** Algebraic recalculation of twiddle indices from $(layer, b\_idx)$ protects against loop counter faults in the caller.
+ 
+ ### 5.3 Unverified Hypotheses & Model Limitations
+-1. **Software Fault Model Limitation:** Injected faults are software bit-flips in C variables. They do **not** model clock glitching, laser injection, or electromagnetic fault injection where transient hardware behavior could alter pipeline execution, bypass branch checks, or induce multi-register corruption.
+-2. **Single-Core Colocation Risk:** In hardware, operational and reference twiddles would likely share the same memory bus, cache hierarchy, or on-chip ROM. An address decoder fault or flash bit-line failure could corrupt both simultaneously.
++1. **Software Fault Model Limitation:** Injected faults are software bit-flips in C variables. They do **not** model clock glitching, laser injection, or electromagnetic fault injection where transient hardware behavior could alter pipeline execution, bypass branch checks, or induce multi-register corruption. The `TFIB_FAULT_SIMULTANEOUS` mode implements two sequential software mutations (operational twiddle before butterfly, reference twiddle inside monitor); this evaluates checker blindness under the specific coordinated software mutations tested and does not prove physical common-mode fault behavior, shared silicon vulnerability, or general hardware susceptibility.
++2. **Single-Core Colocation Risk:** In hardware, operational and reference twiddles would likely share the same memory bus, cache hierarchy, or on-chip ROM. An address decoder fault or flash bit-line failure could corrupt both simultaneously. Virtual address separation, linker-section separation, page separation, cache separation, and physical fault isolation are distinct properties. Table relocation alone does not prevent physical common-mode corruption.
+ 3. **Co-located Stack Frames:** $u_{\text{saved}}$ and $v_{\text{saved}}$ share the execution stack with other NTT variables. A fault corrupting the stack pointer or writing across frame boundaries could corrupt both operational data and saved rollback state simultaneously.
+ 
+ ---
+@@ -167,7 +176,7 @@ To maintain rigorous scientific standards, claims are categorized by their evide
+ 
+ - **Core Algorithm Integrity:** `mlkem768_dec_monitored` and the underlying arithmetic routines in `algorithms/source_ref/mlkem/` were **not modified**.
+ - **Historical Output Integrity:** `tfib_experiments/phase2_step2b_runner_output.csv` and prior campaign CSVs remain byte-identical and unmodified.
+-- **Table Relocation Segregation:** Table relocation (Step 2C-B) has **not** been implemented or combined with this step.
++- **Table Relocation Segregation:** Table relocation (Step 2C-B) has **not** been implemented or combined with this step. Step 2C-B is a proposed architectural experiment motivated by the observed paired-mutation blind spot, the current software placement of the two tables, and the unresolved question of whether alternative placement changes fault exposure under a clearly specified model.
+ - **Physical Qualification Claims:** Strictly disclaimed. No radiation, space, or physical qualification is claimed.
+ - **Step 2C-B Prerequisite:** Step 2C-B has **not** been initiated pending this review.
+ 
+@@ -177,12 +186,12 @@ To maintain rigorous scientific standards, claims are categorized by their evide
+ 
+ ### What this experiment establishes:
+ 1. **Countermeasure Independence:** TFIB-REF and TFIB-META operate independently of primary operational twiddles for single-locus faults. Faults affecting the checker itself are detected and safely handled (recovery for transient, fail-stop for persistent) with 0% false acceptance.
+-2. **Common-Mode Boundary:** Local butterfly invariant checks have an inherent mathematical blind spot against simultaneous common-mode faults ($\zeta_{\text{op}} \oplus \delta = \zeta_{\text{ref}} \oplus \delta \implies \text{Invariant holds}$).
+-3. **End-to-End Cryptographic Containment:** The Fujisaki-Okamoto transform provides a reliable outer barrier. Even when local invariant monitoring fails completely, downstream ciphertext re-encryption comparison prevents Silent Data Corruption, guaranteeing safe implicit rejection ($0.0\%$ SDC across 900 trials; upper bound $p_{\text{SDC}} < 0.40\%$).
++2. **Common-Mode Boundary:** Local butterfly invariant checks have an inherent mathematical blind spot against paired software mutations that identically corrupt both operands ($\zeta_{\text{op}} \oplus \delta = \zeta_{\text{ref}} \oplus \delta \implies \text{Invariant holds}$). This observation is established under the paired software mutation model; it does not establish physical common-mode susceptibility or radiation tolerance.
++3. **End-to-End Correctness Under Local Blindness:** Of the 150 locally blinded trials, 147 (98.0%) were actively rejected by FO re-encryption, and in 3 trials (2.0%), intermediate arithmetic perturbations were absorbed by decoding error-tolerance, preserving the final secret $K_{\text{expected}}$. All 150 produced a correct end-to-end key outcome (0 observed SDC events across all $N_{\text{act}} = 750$ fault-activated trials [900 total trials]; exact one-sided 95% binomial upper confidence bound $p_{\text{SDC}} \le 0.399\%$ on $N_{\text{act}} = 750$, and $p_{\text{SDC}} \le 5.82\%$ on the $N_{\text{simul}} = 50$ paired-mutation suite).
+ 
+ ### What remains unknown:
+ 1. Physical behavior under microarchitectural hardware fault injection (laser, clock glitch, EMP).
+-2. The effect of shared bus or shared cache corruption if operational and reference twiddles are relocated or co-located on specific hardware memory pages (the subject of Step 2C-B).
++2. The effect of shared bus or shared cache corruption if operational and reference twiddles are relocated or co-located on specific hardware memory pages (the subject of proposed Step 2C-B; virtual address separation, linker-section separation, page separation, cache separation, and physical fault isolation are distinct, unresolved properties).
+ 3. The resilience of stack-saved operand snapshots against correlated multi-word stack corruptions.
+ 
+ **Verdict: CONDITIONAL PASS** (Software independence and common-mode boundaries fully mapped and verified; proceed to Step 2C-B only after formal review).

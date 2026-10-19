@@ -1,0 +1,7 @@
+source,interface,query,date,results_notes,screening
+crossref,crossref_api,"Radiation-induced soft errors advanced semiconductor technologies Baumann",2026-10-11,"Baumann 2005 TDMR 5(3):305-316 DOI 10.1109/TDMR.2005.853449",RETAIN (foundational review)
+crossref,crossref_api,"Basic mechanisms modeling single-event upset digital microelectronics Dodd Massengill",2026-10-11,"Dodd & Massengill 2003 IEEE TNS 50(3):583-602 DOI 10.1109/TNS.2003.813129",RETAIN (SEU mechanisms)
+crossref,crossref_api,"Single event upset at ground level Normand nuclear science",2026-10-11,"Normand 1996 IEEE TNS 43(6):2742-2750 DOI 10.1109/23.556861",RETAIN (ground-level SEU rates)
+web,web_search,"post-quantum cryptography Kyber ML-KEM radiation single-event upset fault tolerance FPGA space",2026-10-11,"mostly PQC-FPGA performance/SCA + error-detection; 1 nanosatellite FPGA crypto fault-tolerance (MDPI 2021); 1 Fault-Tolerant NTT (MMU eprint); NO radiation->ML-KEM-software mapping found",RETAIN 2 (application) / EXCLUDE PQC-perf+SCA
+web,web_search,"JEDEC JESD89 soft error rate standard; multiple-bit upset MBU scaling SRAM technology node radiation",2026-10-11,"JESD89A/B SER standard (jedec.org); LEON3 SDRAM MBU workload-dependent (MDPI 2025); 65nm SOI SRAM MBU; 65nm SRAM SER",RETAIN (standard + MBU evidence)
+note,-,"Mukherjee et al. AVF (MICRO-36 2003, DOI 10.1109/MICRO.2003.1253181)",2026-10-11,"carried over from Phase 9 (Crossref-verified); derating/observability",RETAIN

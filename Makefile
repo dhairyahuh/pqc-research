@@ -61,6 +61,14 @@ $(BIN_DIR)/test_interop: tests/test_interop_path_a_b.c $(OBJ_DIR)/mlkem768.o $(O
 $(BIN_DIR)/test_fips_kats: tests/test_fips_kats.c tests/kat_mlkem512.c tests/kat_mlkem768.c tests/kat_mlkem1024.c tests/kat_mldsa44.c tests/kat_mldsa65.c tests/kat_mldsa87.c $(OBJ_DIR)/mlkem512.o $(OBJ_DIR)/mlkem768_kat.o $(OBJ_DIR)/mlkem1024.o $(OBJ_DIR)/mldsa44.o $(OBJ_DIR)/mldsa65_kat.o $(OBJ_DIR)/mldsa87.o | $(BIN_DIR)
 	$(CC) $(CFLAGS) -I . -I algorithms/source_ref/mlkem -I algorithms/source_ref/mldsa $^ -o $@
 
+# Phase 15A Research Build Target: Relocated twiddle table for persistent storage fault analysis
+$(OBJ_DIR)/mlkem768_persistent_reloc.o: algorithms/source_ref/mlkem/mlkem_native.c | $(OBJ_DIR)
+	$(CC) -O3 -std=c99 -I algorithms/source_ref/mlkem -DMLK_CONFIG_NAMESPACE_PREFIX=mlkem768 -DMLK_CONFIG_PARAMETER_SET=768 -DMLKEM_RESEARCH_RELOCATE_ZETAS -c $< -o $@
+
+# Phase 15A Research Verification Binary (FIPS 203 KAT with relocated ML-KEM-768)
+$(BIN_DIR)/test_fips_kats_research: tests/test_fips_kats.c tests/kat_mlkem512.c tests/kat_mlkem768.c tests/kat_mlkem1024.c tests/kat_mldsa44.c tests/kat_mldsa65.c tests/kat_mldsa87.c $(OBJ_DIR)/mlkem512.o $(OBJ_DIR)/mlkem768_persistent_reloc.o $(OBJ_DIR)/mlkem1024.o $(OBJ_DIR)/mldsa44.o $(OBJ_DIR)/mldsa65_kat.o $(OBJ_DIR)/mldsa87.o | $(BIN_DIR)
+	$(CC) $(CFLAGS) -I . -I algorithms/source_ref/mlkem -I algorithms/source_ref/mldsa $^ -o $@
+
 # Phase 4B Internal Fault Experiment Binary
 $(BIN_DIR)/mlkem768_internal_fault_experiment: experiments/fault_injection/mlkem768_internal_fault_experiment.c $(OBJ_DIR)/mlkem768_instrumented.o $(OBJ_DIR)/mlkem_fault_hooks.o | $(BIN_DIR)
 	$(CC) $(CFLAGS) -I . -I algorithms/source_ref/mlkem $^ -o $@

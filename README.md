@@ -73,3 +73,15 @@ pqc-fault-resilience/
 
 - **Simulation Model:** All fault experiments are conducted via software-based fault simulation representing abstract fault classes (SEU, transient arithmetic disturbance, persistent memory cell degradation). We do not claim physical equivalence to in-situ orbital radiation testing.
 - **Standards Compliance:** Cryptographic operations are bound strictly to NIST FIPS 203 (ML-KEM) and NIST FIPS 204 (ML-DSA). No proprietary or non-standard cryptographic primitives are invented.
+
+---
+
+## 5. Phase 4B Internal Validation Audit Status
+
+A comprehensive validation audit of the internal fault injection framework has been completed (see [`docs/phase4b-validation-audit.md`](file:///Users/dhairyajain/Desktop/pqc%20research/docs/phase4b-validation-audit.md)):
+- **Taxonomy:** Standardized into Categories A through F (distinguishing Post-Op mutations, Mid-NTT butterfly faults, Mid-PolyMul accumulator glitches, and FO verification predicates).
+- **Diffusion & Compression Finding:** Mid-NTT faults in Layer 1 diffuse across 128 coefficients and are absorbed by ciphertext compression quantization ($d_u=10, d_v=4$), resulting in 100% valid decapsulation (`CORRECT_VALID_DECAPSULATION`), whereas Layers 4 and 7 trigger 100% implicit rejection (`EXPECTED_IMPLICIT_REJECTION`).
+- **FO Predicate Resolution:** Tested bidirectionally: valid ciphertext ($0 \to 1$) yields implicit rejection; 1-bit corrupted ciphertext ($1 \to 0$) decodes the true message $m$ via LWE error slack; severely corrupted ciphertext ($1 \to 0$) yields an invalid candidate key (`CANDIDATE_KEY_SELECTED_MISMATCH`).
+- **NIST FIPS KAT Verification:** ML-KEM-512/768/1024 and ML-DSA-44/65/87 verified with 100% bit-level reproducibility (`make test`).
+- **Spacecraft Protocol Model:** Refactored into an explicit 6-stage receiver model (`Abstract Spacecraft Communication Model`), confirming that out-of-sync session keys result in 100% `FORMAT_REJECTED` at the framing layer.
+

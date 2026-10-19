@@ -1,0 +1,94 @@
+================================================================================
+UPDATED TEST CONSOLE OUTPUT: STEP 2C-A VALIDATION
+Executable: tfib_experiments/test_step2c_countermeasure_independence
+Generated: 2026-10-04T02:50:20+05:30
+================================================================================
+
+[COMMAND 1]: ./tfib_experiments/test_step2c_countermeasure_independence
+--------------------------------------------------------------------------------
+================================================================================
+Phase 2 — Step 2C-A Validation Test Suite
+Subject: Countermeasure Independence, Checker Faults & Common-Mode Resilience
+================================================================================
+  [PASS] Test 1: TFIB-REF detects operational twiddle transient fault and achieves genuine recovery
+  [PASS] Test 2: TFIB-REF detects operational twiddle persistent fault and forces safe fail-stop
+  [PASS] Test 3: TFIB-REF checker-only transient fault triggers false-alarm retry and recovers
+  [PASS] Test 4: TFIB-REF persistent checker corruption safely forces fail-stop (refuses untrusted checker)
+  [PASS] Test 5: TFIB-META handles metadata tag faults (transient recovers, persistent fail-stops)
+  [PASS] Test 6: Checker internal logic corruption (sum_c^=1) triggers retry/safe fail-stop without SDC
+  [PASS] Test 7: Paired software mutations show local checker blindness; end-to-end outcomes: 147 active FO rejections, 3 decoding-preservation cases
+  [PASS] Test 8: Baseline monitor confirms Theorem 1 blind spot (0% det) with safe FO partitioning (0 SDC)
+  [PASS] Test 9: Negative tests verify deliberate state corruption and invalid classifications are caught
+
+================================================================================
+RESULTS: 9 passed, 0 failed
+================================================================================
+
+[COMMAND 2]: ./tfib_experiments/run_step2c_tests.sh
+--------------------------------------------------------------------------------
+================================================================================
+Running Phase 2 Step 2C-A Build, Verification & Experiment Suite
+Working Directory: /Users/dhairyajain/Desktop/pqc research
+================================================================================
+[*] Step 1: Compiling Independent Oracle Static Library...
+make: Nothing to be done for `all'.
+[*] Step 2: Compiling Step 2C-A Validation Test Suite...
+ld: warning: building for macOS-26.5, but linking with dylib '/opt/homebrew/opt/liboqs/lib/liboqs.9.dylib' which was built for newer version 27.0
+[*] Step 3: Executing Step 2C-A Validation Test Suite...
+================================================================================
+Phase 2 — Step 2C-A Validation Test Suite
+Subject: Countermeasure Independence, Checker Faults & Common-Mode Resilience
+================================================================================
+  [PASS] Test 1: TFIB-REF detects operational twiddle transient fault and achieves genuine recovery
+  [PASS] Test 2: TFIB-REF detects operational twiddle persistent fault and forces safe fail-stop
+  [PASS] Test 3: TFIB-REF checker-only transient fault triggers false-alarm retry and recovers
+  [PASS] Test 4: TFIB-REF persistent checker corruption safely forces fail-stop (refuses untrusted checker)
+  [PASS] Test 5: TFIB-META handles metadata tag faults (transient recovers, persistent fail-stops)
+  [PASS] Test 6: Checker internal logic corruption (sum_c^=1) triggers retry/safe fail-stop without SDC
+  [PASS] Test 7: Paired software mutations show local checker blindness; end-to-end outcomes: 147 active FO rejections, 3 decoding-preservation cases
+  [PASS] Test 8: Baseline monitor confirms Theorem 1 blind spot (0% det) with safe FO partitioning (0 SDC)
+  [PASS] Test 9: Negative tests verify deliberate state corruption and invalid classifications are caught
+
+================================================================================
+RESULTS: 9 passed, 0 failed
+================================================================================
+[*] Step 4: Compiling Integrated Experiment Runner...
+ld: warning: building for macOS-26.5, but linking with dylib '/opt/homebrew/opt/liboqs/lib/liboqs.9.dylib' which was built for newer version 27.0
+[*] Step 5: Executing Dedicated Step 2C-A Campaign (900 Trials)...
+================================================================================
+EXECUTING TFIB TARGETED EXPERIMENTAL SUITES ACROSS 3 CONFIGURATIONS
+================================================================================
+
+[1/3] Testing Configuration: BASELINE (Original Monitor)
+  - Clean Baseline: 50/50 Success, 0 False Alarms
+  - Op Twiddle Transient: Detected=0/50 (0.0%), Recovered=0, Blind FO Catches=48, Ineffective Valid=2, SDC=0
+  - Op Twiddle Persistent: Detected=0/50 (0.0%), Blind FO Catches=50, Ineffective Valid=0, SDC=0
+
+[2/3] Testing Configuration: TFIB-REF (Strategy 1: Dual Reference)
+  - Clean Baseline: 50/50 Success, 0 False Alarms
+  - Op Twiddle Transient: Detected=50/50 (100.0%), Recovered=50/50 (100.0%), SDC=0
+  - Op Twiddle Persistent: Detected=50/50 (100.0%), Safe Fail-Stops=50/50, SDC=0
+  - Ref Twiddle Transient: Detected=50/50 (100.0%), Recovered=50/50 (100.0%), SDC=0
+  - Ref Twiddle Persistent: Detected=50/50 (100.0%), Safe Fail-Stops=50/50, SDC=0
+  - Simultaneous Common-Mode: Detected Locally=0/50 (0.0%), Blind FO Catches=49, Ineffective Valid=1, SDC=0
+  - Checker Logic Transient: Detected=50/50 (100.0%), Recovered=50/50 (100.0%), SDC=0
+  - Checker Logic Persistent: Detected=50/50 (100.0%), Safe Fail-Stops=50/50, SDC=0
+
+[3/3] Testing Configuration: TFIB-META (Strategy 2: Metadata Tags)
+  - Clean Baseline: 50/50 Success, 0 False Alarms
+  - Op Twiddle Transient: Detected=50/50 (100.0%), Safe Fail-Stops=50/50, SDC=0
+  - Op Twiddle Persistent: Detected=50/50 (100.0%), Safe Fail-Stops=50/50, SDC=0
+  - Metadata Tag Transient: Detected=50/50 (100.0%), Recovered=50/50 (100.0%), SDC=0
+  - Metadata Tag Persistent: Detected=50/50 (100.0%), Safe Fail-Stops=50/50, SDC=0
+  - Checker Logic Transient: Detected=50/50 (100.0%), Recovered=50/50 (100.0%), SDC=0
+  - Checker Logic Persistent: Detected=50/50 (100.0%), Safe Fail-Stops=50/50, SDC=0
+
+================================================================================
+ALL AUTOMATED ASSERTIONS PASSED! Total Trials Recorded: 900
+Raw dataset successfully written to tfib_experiments/phase2_step2c_trial_results.csv
+================================================================================
+[*] Step 6: Verifying Trial Results Integrity...
+  ✓ Exactly 900 trials recorded with 0 SDC events across all configurations
+================================================================================
+PHASE 2 STEP 2C-A VALIDATION & CAMPAIGN COMPLETED SUCCESSFULLY (EXIT 0)
+================================================================================

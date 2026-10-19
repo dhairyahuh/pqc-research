@@ -1,7 +1,8 @@
 {
   "metadata": {
-    "timestamp": "2026-09-30T23:29:07Z",
-    "experiment": "Abstract Spacecraft Protocol Desynchronization",
+    "timestamp": "2026-10-01T00:26:50Z",
+    "experiment": "Abstract Spacecraft Communication Model",
+    "model_pipeline": "decrypt -> plaintext validity check -> command format check -> sequence number check -> semantic validity check -> execution",
     "iterations_per_mode": 1000
   },
   "unauthenticated_protocol": {
@@ -9,35 +10,48 @@
     "iterations": 1000,
     "counts": {
       "KEY_MATCH": 0,
-      "KEY_MISMATCH_DETECTED": 0,
-      "KEY_MISMATCH_UNDETECTED": 1000,
-      "SESSION_ABORTED": 0,
+      "AUTHENTICATION_FAILURE": 0,
+      "FORMAT_REJECTED": 1000,
+      "SEMANTIC_REJECTED": 0,
+      "GARBLED_PAYLOAD_ACCEPTED": 0,
       "SESSION_RECOVERED": 0,
-      "TIMEOUT": 0
+      "SESSION_ABORTED": 0
     },
     "statistics": {
       "KEY_MATCH": {
+        "count": 0,
         "rate_pct": 0.0,
         "ci_95": [
           0.0,
           0.38
         ]
       },
-      "KEY_MISMATCH_DETECTED": {
+      "AUTHENTICATION_FAILURE": {
+        "count": 0,
         "rate_pct": 0.0,
         "ci_95": [
           0.0,
           0.38
         ]
       },
-      "KEY_MISMATCH_UNDETECTED": {
+      "FORMAT_REJECTED": {
+        "count": 1000,
         "rate_pct": 100.0,
         "ci_95": [
           99.62,
           100.0
         ]
       },
-      "SESSION_ABORTED": {
+      "SEMANTIC_REJECTED": {
+        "count": 0,
+        "rate_pct": 0.0,
+        "ci_95": [
+          0.0,
+          0.38
+        ]
+      },
+      "GARBLED_PAYLOAD_ACCEPTED": {
+        "count": 0,
         "rate_pct": 0.0,
         "ci_95": [
           0.0,
@@ -45,13 +59,15 @@
         ]
       },
       "SESSION_RECOVERED": {
+        "count": 0,
         "rate_pct": 0.0,
         "ci_95": [
           0.0,
           0.38
         ]
       },
-      "TIMEOUT": {
+      "SESSION_ABORTED": {
+        "count": 0,
         "rate_pct": 0.0,
         "ci_95": [
           0.0,
@@ -76,12 +92,12 @@
           "duration": 1,
           "magnitude": 1
         },
-        "ground_key": "71ce24b8ea24562b...",
-        "spacecraft_key": "f04725c8f0b7c83e...",
+        "ground_key": "b000f20c5ec43e77...",
+        "spacecraft_key": "e79210abb13e9adc...",
         "keys_match": false,
-        "protocol_outcome": "KEY_MISMATCH_UNDETECTED",
-        "detection_latency_us": 30.92,
-        "details": "Retries used: 0"
+        "protocol_outcome": "FORMAT_REJECTED",
+        "detection_latency_us": 39.0,
+        "details": "Magic sync mismatch: c773d852"
       },
       {
         "fault": {
@@ -99,12 +115,12 @@
           "duration": 1,
           "magnitude": 1
         },
-        "ground_key": "d1717691483c047d...",
-        "spacecraft_key": "4145b72f40ecc130...",
+        "ground_key": "abd87279fa81c860...",
+        "spacecraft_key": "818d3c65cef967d9...",
         "keys_match": false,
-        "protocol_outcome": "KEY_MISMATCH_UNDETECTED",
-        "detection_latency_us": 25.25,
-        "details": "Retries used: 0"
+        "protocol_outcome": "FORMAT_REJECTED",
+        "detection_latency_us": 30.58,
+        "details": "Magic sync mismatch: 48d372c8"
       },
       {
         "fault": {
@@ -122,12 +138,12 @@
           "duration": 1,
           "magnitude": 1
         },
-        "ground_key": "21d1714d970fb62a...",
-        "spacecraft_key": "f12200a1163cee9f...",
+        "ground_key": "116f6f50dcc0e16a...",
+        "spacecraft_key": "d4882d8222215ec2...",
         "keys_match": false,
-        "protocol_outcome": "KEY_MISMATCH_UNDETECTED",
-        "detection_latency_us": 23.88,
-        "details": "Retries used: 0"
+        "protocol_outcome": "FORMAT_REJECTED",
+        "detection_latency_us": 29.38,
+        "details": "Magic sync mismatch: 1922474c"
       },
       {
         "fault": {
@@ -145,12 +161,12 @@
           "duration": 1,
           "magnitude": 1
         },
-        "ground_key": "1db3e43d4ed12c8c...",
-        "spacecraft_key": "96c41a05f030974a...",
+        "ground_key": "af3cd332f9a7fed5...",
+        "spacecraft_key": "44e1f4b3e3a8f812...",
         "keys_match": false,
-        "protocol_outcome": "KEY_MISMATCH_UNDETECTED",
-        "detection_latency_us": 23.54,
-        "details": "Retries used: 0"
+        "protocol_outcome": "FORMAT_REJECTED",
+        "detection_latency_us": 29.21,
+        "details": "Magic sync mismatch: 438540f2"
       },
       {
         "fault": {
@@ -168,49 +184,62 @@
           "duration": 1,
           "magnitude": 1
         },
-        "ground_key": "4464090429b00b91...",
-        "spacecraft_key": "7de663c5959f6387...",
+        "ground_key": "8604846d288bf29d...",
+        "spacecraft_key": "0003c3da260fb64f...",
         "keys_match": false,
-        "protocol_outcome": "KEY_MISMATCH_UNDETECTED",
-        "detection_latency_us": 23.67,
-        "details": "Retries used: 0"
+        "protocol_outcome": "FORMAT_REJECTED",
+        "detection_latency_us": 28.62,
+        "details": "Magic sync mismatch: c9eb22d1"
       }
     ]
   },
   "authenticated_protocol": {
-    "protocol_mode": "Authenticated (HMAC/AEAD)",
+    "protocol_mode": "Authenticated (HMAC-SHA256)",
     "iterations": 1000,
     "counts": {
       "KEY_MATCH": 0,
-      "KEY_MISMATCH_DETECTED": 0,
-      "KEY_MISMATCH_UNDETECTED": 0,
-      "SESSION_ABORTED": 0,
+      "AUTHENTICATION_FAILURE": 0,
+      "FORMAT_REJECTED": 0,
+      "SEMANTIC_REJECTED": 0,
+      "GARBLED_PAYLOAD_ACCEPTED": 0,
       "SESSION_RECOVERED": 1000,
-      "TIMEOUT": 0
+      "SESSION_ABORTED": 0
     },
     "statistics": {
       "KEY_MATCH": {
+        "count": 0,
         "rate_pct": 0.0,
         "ci_95": [
           0.0,
           0.38
         ]
       },
-      "KEY_MISMATCH_DETECTED": {
+      "AUTHENTICATION_FAILURE": {
+        "count": 0,
         "rate_pct": 0.0,
         "ci_95": [
           0.0,
           0.38
         ]
       },
-      "KEY_MISMATCH_UNDETECTED": {
+      "FORMAT_REJECTED": {
+        "count": 0,
         "rate_pct": 0.0,
         "ci_95": [
           0.0,
           0.38
         ]
       },
-      "SESSION_ABORTED": {
+      "SEMANTIC_REJECTED": {
+        "count": 0,
+        "rate_pct": 0.0,
+        "ci_95": [
+          0.0,
+          0.38
+        ]
+      },
+      "GARBLED_PAYLOAD_ACCEPTED": {
+        "count": 0,
         "rate_pct": 0.0,
         "ci_95": [
           0.0,
@@ -218,13 +247,15 @@
         ]
       },
       "SESSION_RECOVERED": {
+        "count": 1000,
         "rate_pct": 100.0,
         "ci_95": [
           99.62,
           100.0
         ]
       },
-      "TIMEOUT": {
+      "SESSION_ABORTED": {
+        "count": 0,
         "rate_pct": 0.0,
         "ci_95": [
           0.0,
@@ -249,12 +280,12 @@
           "duration": 1,
           "magnitude": 1
         },
-        "ground_key": "bf2d2a3eac5b9966...",
-        "spacecraft_key": "8b6c5954837b6419...",
+        "ground_key": "59830b7585d2e8eb...",
+        "spacecraft_key": "88826d169188302c...",
         "keys_match": false,
         "protocol_outcome": "SESSION_RECOVERED",
-        "detection_latency_us": 75.88,
-        "details": "Retries used: 1"
+        "detection_latency_us": 126.04,
+        "details": "Handshake retransmission recovered session on retry 1."
       },
       {
         "fault": {
@@ -272,12 +303,12 @@
           "duration": 1,
           "magnitude": 1
         },
-        "ground_key": "7eda408a548939e0...",
-        "spacecraft_key": "3bd7d0e54dbaa237...",
+        "ground_key": "c98ac7d3ac38c5f1...",
+        "spacecraft_key": "ae5dcedd68d3c5f5...",
         "keys_match": false,
         "protocol_outcome": "SESSION_RECOVERED",
-        "detection_latency_us": 75.42,
-        "details": "Retries used: 1"
+        "detection_latency_us": 78.62,
+        "details": "Handshake retransmission recovered session on retry 1."
       },
       {
         "fault": {
@@ -295,12 +326,12 @@
           "duration": 1,
           "magnitude": 1
         },
-        "ground_key": "098c5518b6570f26...",
-        "spacecraft_key": "9abd6e214b8ceee3...",
+        "ground_key": "e63a2d81433504c2...",
+        "spacecraft_key": "1ec53221ea7130a1...",
         "keys_match": false,
         "protocol_outcome": "SESSION_RECOVERED",
-        "detection_latency_us": 75.12,
-        "details": "Retries used: 1"
+        "detection_latency_us": 73.54,
+        "details": "Handshake retransmission recovered session on retry 1."
       },
       {
         "fault": {
@@ -318,12 +349,12 @@
           "duration": 1,
           "magnitude": 1
         },
-        "ground_key": "2d4fcc53bda5f4e4...",
-        "spacecraft_key": "f742d3d8b1867543...",
+        "ground_key": "2f5c4ef801d5d6f0...",
+        "spacecraft_key": "e8a92ffbcf0619be...",
         "keys_match": false,
         "protocol_outcome": "SESSION_RECOVERED",
-        "detection_latency_us": 74.29,
-        "details": "Retries used: 1"
+        "detection_latency_us": 72.58,
+        "details": "Handshake retransmission recovered session on retry 1."
       },
       {
         "fault": {
@@ -341,12 +372,12 @@
           "duration": 1,
           "magnitude": 1
         },
-        "ground_key": "dfdb803236cc061d...",
-        "spacecraft_key": "574111a9008e19f6...",
+        "ground_key": "47d3104f3868ad14...",
+        "spacecraft_key": "9e27a5608ea9b653...",
         "keys_match": false,
         "protocol_outcome": "SESSION_RECOVERED",
-        "detection_latency_us": 73.46,
-        "details": "Retries used: 1"
+        "detection_latency_us": 71.71,
+        "details": "Handshake retransmission recovered session on retry 1."
       }
     ]
   }

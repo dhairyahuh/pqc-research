@@ -1,0 +1,17 @@
+{
+  "phase": "3-channel-v1",
+  "date": "2026-10-10T19:19:12Z",
+  "platform": "Darwin 27.0.0 arm64",
+  "python": "Python 3.9.6",
+  "liboqs": "/opt/homebrew/lib/liboqs.0.16.0.dylib",
+  "git_branch": "space-resilience-framework",
+  "git_head": "4a2c4ebf9274a9188db3610a4f8448902caed056",
+  "working_tree_dirty": true,
+  "protocol_schema_version": 1, "retry_max": 2, "n_per_suite": 50,
+  "inputs": {
+    "research/channel_harness/channel_campaign.py": "35dfc4745ae8ff41c355df532b51c5ec22b3617f50a0260e277f9ef4bfc95d76",
+    "research/channel_harness/channel_stats.py": "94568f921e536e61e38ba305c17f47a74142090cb42767029a4d26a3b88d134d",
+    "research/PROTOCOL_FAULT_MODEL_SPEC.md": "5c715924c7334ffa5f014bc8ae81fe3611f14e7371fe08a3e0e2f906ae0a42d7"
+  },
+  "outputs": { "raw.jsonl": "2cf7c29bab0bca24986142932421925c74d9c2502fc3f0b729afdc97636c0102", "stats.md": "062f63d0431a1fcf727f98271cad219064a47cc0483db8ddc70533c8425a2e4a" }
+}

@@ -1,0 +1,220 @@
+{
+  "gate": "GATE_B",
+  "phase": "PHASE_18J",
+  "timestamp_utc": "2026-10-11T20:27:55Z",
+  "validator_script": "research/phase18_gate_b/validate_ledger.py",
+  "validator_sha256": "352f2de9db1d7866286c3e6e7917d1a11a4c9cd7517f279af3555959c6e3f463",
+  "total_tests": 11,
+  "passed_tests": 11,
+  "failed_tests": 0,
+  "overall_verdict": "PASS",
+  "test_results": [
+    {
+      "test_id": "TEST_01_VALID_COMPLETE",
+      "category": "Valid complete ledger",
+      "fixture_name": "fixture_valid_complete.jsonl",
+      "fixture_bytes": 1027015,
+      "fixture_sha256": "0aba6b9b0721e2d9dcf46b838cef163eeb517a0a961578573756c717d2c41623",
+      "description": "Full 1,680 trial campaign with valid quotas, lifecycles, and CAMPAIGN_SEAL.",
+      "expected_exit_code": 0,
+      "actual_exit_code": 0,
+      "expected_verdict": "COMPLETE",
+      "actual_verdict": "COMPLETE",
+      "expected_error_substr": null,
+      "matched_error": true,
+      "duration_sec": 0.0526,
+      "errors_reported": [],
+      "test_passed": true
+    },
+    {
+      "test_id": "TEST_02_MISSING_CONDITION",
+      "category": "Missing condition",
+      "fixture_name": "fixture_missing_condition.jsonl",
+      "fixture_bytes": 1026219,
+      "fixture_sha256": "215561d96d6bcc71fa6ae048a452957c9ea6857e2f22b46a2e7ace3d571e2f3e",
+      "description": "Scenario 45 missing condition C11 without seal; correctly identified as incomplete/aborted run.",
+      "expected_exit_code": 2,
+      "actual_exit_code": 2,
+      "expected_verdict": "PARTIAL_ABORTED",
+      "actual_verdict": "PARTIAL_ABORTED",
+      "expected_error_substr": "Scenario 45 is missing condition record 'C11'",
+      "matched_error": true,
+      "duration_sec": 0.048,
+      "errors_reported": [
+        "Scenario 45 is missing condition record 'C11'."
+      ],
+      "test_passed": true
+    },
+    {
+      "test_id": "TEST_03_DUPLICATE_KEY",
+      "category": "Duplicate key",
+      "fixture_name": "fixture_duplicate_start.jsonl",
+      "fixture_bytes": 46593,
+      "fixture_sha256": "29b28766539044a359d7aae6802b6786c27e6329622a3cb1362168084391a7ed",
+      "description": "Duplicate START record for trial (12, C11); rejected as duplicate key.",
+      "expected_exit_code": 1,
+      "actual_exit_code": 1,
+      "expected_verdict": "INVALID_LEDGER",
+      "actual_verdict": "INVALID_LEDGER",
+      "expected_error_substr": "Duplicate START record for trial (12, 'C11')",
+      "matched_error": true,
+      "duration_sec": 0.0331,
+      "errors_reported": [
+        "Line 96: Duplicate START record for trial (12, 'C11') (previous state: STARTED)."
+      ],
+      "test_passed": true
+    },
+    {
+      "test_id": "TEST_04_INVALID_LIFECYCLE",
+      "category": "Invalid lifecycle",
+      "fixture_name": "fixture_orphan_finalize.jsonl",
+      "fixture_bytes": 416,
+      "fixture_sha256": "c02e17cbbccd13d17c8bfcea12502db95b7127e052b8c76808088cead0f1595b",
+      "description": "FINALIZE record emitted without preceding START; rejected as orphan finalize.",
+      "expected_exit_code": 1,
+      "actual_exit_code": 1,
+      "expected_verdict": "INVALID_LEDGER",
+      "actual_verdict": "INVALID_LEDGER",
+      "expected_error_substr": "Orphan FINALIZE record for trial (1, 'C00') without preceding START",
+      "matched_error": true,
+      "duration_sec": 0.0322,
+      "errors_reported": [
+        "Line 1: Orphan FINALIZE record for trial (1, 'C00') without preceding START."
+      ],
+      "test_passed": true
+    },
+    {
+      "test_id": "TEST_05_QUOTA_VIOLATION",
+      "category": "Quota violation",
+      "fixture_name": "fixture_quota_violation.jsonl",
+      "fixture_bytes": 1026983,
+      "fixture_sha256": "07d2e52b624666431d10eb702fc700896a1f4cb5ccc07e1bddc0b571886803f1",
+      "description": "Scenario 300 shifted from Quota 1 to Quota 2; rejected as quota allocation mismatch.",
+      "expected_exit_code": 1,
+      "actual_exit_code": 1,
+      "expected_verdict": "INVALID_LEDGER",
+      "actual_verdict": "INVALID_LEDGER",
+      "expected_error_substr": "Quota 1 scenario count (299) != expected 300",
+      "matched_error": true,
+      "duration_sec": 0.0465,
+      "errors_reported": [
+        "Quota 1 scenario count (299) != expected 300."
+      ],
+      "test_passed": true
+    },
+    {
+      "test_id": "TEST_06_SEAL_TAMPERING_HASH",
+      "category": "Seal tampering",
+      "fixture_name": "fixture_corrupted_seal.jsonl",
+      "fixture_bytes": 1027015,
+      "fixture_sha256": "8369af59a7c38ef0e63d1c3ffc3ee550ee4f94d284542566d5cd04f78fc0ce68",
+      "description": "content_sha256 in CAMPAIGN_SEAL has 1 flipped character; rejected as seal mismatch.",
+      "expected_exit_code": 1,
+      "actual_exit_code": 1,
+      "expected_verdict": "INVALID_LEDGER",
+      "actual_verdict": "INVALID_LEDGER",
+      "expected_error_substr": "CAMPAIGN_SEAL SHA-256 hash mismatch",
+      "matched_error": true,
+      "duration_sec": 0.047,
+      "errors_reported": [
+        "CAMPAIGN_SEAL SHA-256 hash mismatch! Seal claims '7d7c06505c4a87cd613f61df8614d5e6aa9fab016f49a07ce5a7fd3eda9bb060', recomputed '7d7c06505c4a87cd613f61df8614d5e6aa9fab016f49a07ce5a7fd3eda9bb068'."
+      ],
+      "test_passed": true
+    },
+    {
+      "test_id": "TEST_07_SEAL_TAMPERING_PAYLOAD",
+      "category": "Seal tampering",
+      "fixture_name": "fixture_tampered_payload.jsonl",
+      "fixture_bytes": 1027015,
+      "fixture_sha256": "c991dc998030d1e7158b43130301e09a81edd25484ada978b42ecba9a3b43207",
+      "description": "Covered payload byte modified while seal unchanged; rejected as seal mismatch.",
+      "expected_exit_code": 1,
+      "actual_exit_code": 1,
+      "expected_verdict": "INVALID_LEDGER",
+      "actual_verdict": "INVALID_LEDGER",
+      "expected_error_substr": "CAMPAIGN_SEAL SHA-256 hash mismatch",
+      "matched_error": true,
+      "duration_sec": 0.0472,
+      "errors_reported": [
+        "CAMPAIGN_SEAL SHA-256 hash mismatch! Seal claims '7d7c06505c4a87cd613f61df8614d5e6aa9fab016f49a07ce5a7fd3eda9bb068', recomputed '3c6977c7d41367f6fa079ced85f1f4c10727993183e88a38114451626ce3084c'."
+      ],
+      "test_passed": true
+    },
+    {
+      "test_id": "TEST_08_FALSE_SUCCESS_SEMANTICS",
+      "category": "False-success semantics",
+      "fixture_name": "fixture_false_success_semantics.jsonl",
+      "fixture_bytes": 1026967,
+      "fixture_sha256": "c799c6c251e092e31979dab6d2ebb5eb954fc5e285789503bd4470303d5f35cc",
+      "description": "Aborted trial falsely claiming clean table restoration; rejected by semantic orthogonality rule.",
+      "expected_exit_code": 1,
+      "actual_exit_code": 1,
+      "expected_verdict": "INVALID_LEDGER",
+      "actual_verdict": "INVALID_LEDGER",
+      "expected_error_substr": "False-success violation: Trial (10, 'C10') aborted with 'SIGNAL_TERMINATION' but claims restoration_status 'RESTORED_AND_VERIFIED'",
+      "matched_error": true,
+      "duration_sec": 0.0332,
+      "errors_reported": [
+        "Line 76: False-success violation: Trial (10, 'C10') aborted with 'SIGNAL_TERMINATION' but claims restoration_status 'RESTORED_AND_VERIFIED'."
+      ],
+      "test_passed": true
+    },
+    {
+      "test_id": "TEST_09_MISSING_SEAL",
+      "category": "Missing or malformed seal",
+      "fixture_name": "fixture_missing_seal.jsonl",
+      "fixture_bytes": 1026836,
+      "fixture_sha256": "7d7c06505c4a87cd613f61df8614d5e6aa9fab016f49a07ce5a7fd3eda9bb068",
+      "description": "Complete 1,680 trials but missing terminal CAMPAIGN_SEAL record; rejected.",
+      "expected_exit_code": 1,
+      "actual_exit_code": 1,
+      "expected_verdict": "INVALID_LEDGER",
+      "actual_verdict": "INVALID_LEDGER",
+      "expected_error_substr": "All 1,680 trials finalized, but mandatory CAMPAIGN_SEAL is missing",
+      "matched_error": true,
+      "duration_sec": 0.0467,
+      "errors_reported": [
+        "All 1,680 trials finalized, but mandatory CAMPAIGN_SEAL is missing."
+      ],
+      "test_passed": true
+    },
+    {
+      "test_id": "TEST_10_TRUNCATED_WRITE",
+      "category": "Syntax & delimitation anomaly",
+      "fixture_name": "fixture_truncated_write.jsonl",
+      "fixture_bytes": 1026980,
+      "fixture_sha256": "f71dd43c0f9b10d4ca337e3ad6cd64928fc81f9474cac8483d050f5b4d2c26cd",
+      "description": "File abruptly cut off mid-line without trailing newline; rejected as truncated write.",
+      "expected_exit_code": 1,
+      "actual_exit_code": 1,
+      "expected_verdict": "INVALID_LEDGER",
+      "actual_verdict": "INVALID_LEDGER",
+      "expected_error_substr": "File does not terminate with a newline (\\n / 0x0A) \u2014 truncated write detected",
+      "matched_error": true,
+      "duration_sec": 0.0322,
+      "errors_reported": [
+        "File does not terminate with a newline (\\n / 0x0A) \u2014 truncated write detected."
+      ],
+      "test_passed": true
+    },
+    {
+      "test_id": "TEST_11_DANGLING_START",
+      "category": "Lifecycle crash anomaly",
+      "fixture_name": "fixture_dangling_start.jsonl",
+      "fixture_bytes": 119971,
+      "fixture_sha256": "bdae9025c529a1c60bd17e4af8dd31bdbc9edc195974fa22e3752325ba2ef285",
+      "description": "Trial started followed by immediate EOF; correctly classified as crashed/aborted run.",
+      "expected_exit_code": 2,
+      "actual_exit_code": 2,
+      "expected_verdict": "PARTIAL_ABORTED",
+      "actual_verdict": "PARTIAL_ABORTED",
+      "expected_error_substr": "Ledger ends with unfinalized trial (50, 'C00') (dangling start followed by EOF)",
+      "matched_error": true,
+      "duration_sec": 0.0338,
+      "errors_reported": [
+        "Ledger ends with unfinalized trial (50, 'C00') (dangling start followed by EOF)."
+      ],
+      "test_passed": true
+    }
+  ]
+}

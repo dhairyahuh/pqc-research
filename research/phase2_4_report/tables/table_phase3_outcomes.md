@@ -1,0 +1,8 @@
+| protocol_outcome | count |
+|---|---|
+| RECOVERED_ON_RETRY | 200 |
+| KEY_ESTABLISHED | 100 |
+| MALFORMED_MESSAGE | 100 |
+| MESSAGE_LOST | 100 |
+| PROTOCOL_ABORT | 50 |
+| TIMEOUT_RETRY_EXHAUSTED | 50 |

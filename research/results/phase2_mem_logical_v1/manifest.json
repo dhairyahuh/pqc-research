@@ -1,0 +1,26 @@
+{
+  "phase": "2-mem-logical-v1",
+  "date": "2026-10-10T19:19:12Z",
+  "platform": "Darwin 27.0.0 arm64",
+  "clang": "Apple clang version 21.0.0 (clang-2100.1.1.101)",
+  "liboqs": "/opt/homebrew/lib/liboqs.0.16.0.dylib",
+  "git_branch": "space-resilience-framework",
+  "git_head": "4a2c4ebf9274a9188db3610a4f8448902caed056",
+  "working_tree_dirty": true,
+  "build_flags": "-O3 -std=c11 -Wall -Wextra",
+  "seed_base_magic": "0x1337C0DE",
+  "n_per_suite": 50, "n_total": 900,
+  "inputs": {
+    "research/fault_contract/mem_campaign.c": "62e6ff8e3a58fe9b9caa8221b1bc474efd5dfa82d9519b9c2c2f0723f5768489",
+    "research/fault_contract/fault_contract.h": "3ac19ec169838f2e3f470054985d9e3743f640ca9eb5174811a44a4e211a964d",
+    "bin/obj/mlkem768_inst.o": "7adc428039c318eb0d71b3fc7e24da602010acf7df5e37183ccba5a22eaef65f",
+    "tfib_implementation/libtfib.a": "19d76bff64304aecfb410f3c99f52ae4d1c61313d919bd5c30713aef33175712",
+    "tfib_experiments/phase11_oracle/libindependent_oracle.a": "dfa7bddb4e0edf03c7b0cc644c5d4bcc66dfe2fb102d190f9216af85898c7ce3",
+    "tfib_experiments/campaign_prf.h": "d07d914931ab8e7a85404b1bcbe050bea3c37ca77e7d8f5d60cb033b5bee0d36",
+    "tfib_experiments/phase2_step2c_trial_results.csv": "97ec674171e365d3ffca45821f13c7da316ada00135b889fde9036a0c9cff7e9"
+  },
+  "outputs": {
+    "raw.jsonl": "55ab1f572a3e2db37c59e602d6fc8862f165d95e95f5f38f78e8b4f5821b6a60",
+    "comparison_stats.md": "57af35d92c9c30aad581609d4184eabddc7e2fcf9fbff80f7dfddb556337c4c8"
+  }
+}

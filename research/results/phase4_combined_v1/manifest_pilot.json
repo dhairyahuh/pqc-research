@@ -1,0 +1,17 @@
+{
+  "phase": "4-combined-v1-PILOT",
+  "date": "2026-10-10T19:43:48Z",
+  "platform": "Darwin 27.0.0 arm64",
+  "clang": "Apple clang version 21.0.0 (clang-2100.1.1.101)",
+  "liboqs": "/opt/homebrew/lib/liboqs.0.16.0.dylib",
+  "git_head": "4a2c4ebf9274a9188db3610a4f8448902caed056", "working_tree_dirty": true,
+  "combined_schema_version": 1, "retry_max": 2, "n_pilot_seeds": 20,
+  "confirmatory_run": false,
+  "inputs": {
+    "research/combined_harness/combined_campaign.c": "45b939768e32719b086812bd42fa493ec4f979d3a29061af6d1bc44afc39a403",
+    "research/combined_harness/combined_stats.py": "6a951db9348d6a68856049ee15bd1ec2c99a89d78a40460b5c584570f8f7cf39",
+    "research/PHASE4_PREREGISTRATION.md": "365bc102464640bf0d76274e4f5dcc7a3d92a72c3ebaa880b79fa57ab6394e05",
+    "bin/obj/mlkem768_inst.o": "7adc428039c318eb0d71b3fc7e24da602010acf7df5e37183ccba5a22eaef65f"
+  },
+  "outputs": { "pilot.jsonl": "d6fc82f57fd4e355ac0b902a19f6cbfb02b3f6249468aa64820a22010004fd71", "pilot_stats.md": "3040407ad1cd53594d8793ae06e52c033028603b3f19a01dc477136a9dc51143" }
+}

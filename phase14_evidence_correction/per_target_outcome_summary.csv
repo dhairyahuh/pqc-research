@@ -1,0 +1,14 @@
+target_id,target_name,execution_tier,total_trials,triggered_count,clean_success,genuine_recovery,h1_false_recovery,safe_fail_stop_or_rejection,downstream_fo_rejection,h2_sdc_accepted_incorrect,inconclusive,primary_observed_behavior
+F1,Saved Operand Bitflip,Harness Model,100,100,0,0,98,2,85,0,0,Severe Verifier Blindness (H1)
+F2,Snapshot Pre-Retry Diffusion,Harness Model,100,100,0,0,100,0,70,0,0,Severe Verifier Blindness (H1)
+F3,Persistent Count Zeroing,Harness Model,100,100,0,0,0,100,97,0,2,Safe Monitor Rejection
+F6,Verifier Flag Forced Pass,Harness Model,100,100,0,0,99,1,97,0,0,Severe Verifier Blindness (H1)
+F7,Retry Arithmetic Glitch,Harness Model,100,100,0,0,94,6,91,0,0,Severe Verifier Blindness (H1)
+F8,Verifier Operand Corrupt,Harness Model,100,100,0,0,0,100,0,0,0,Safe Monitor Rejection
+F9,DSPC Multi-Bit Collision,Harness Model,100,100,0,0,100,0,87,0,0,Severe Verifier Blindness (H1)
+F10,DSPC State Bypass,Harness Model,100,100,0,0,100,0,87,0,0,Severe Verifier Blindness (H1)
+F11,DSPC Single-Bit Clean,Harness Model,100,100,0,0,0,100,0,0,0,Safe Monitor Rejection
+F12,Clean Baseline Control,Production Binary,100,0,100,0,0,0,0,0,0,Clean Success Baseline
+F4,Transient Butterfly Fault,Production Binary,100,100,0,100,0,0,0,0,0,Genuine Recovery
+F5A,Recurring Bit-Inversion,Production Binary,100,100,0,0,0,100,0,0,0,Safe Fail-Stop Abort
+F5B,Software Force-Value Model,Production Binary,100,100,0,0,0,100,0,0,0,Safe Fail-Stop Abort

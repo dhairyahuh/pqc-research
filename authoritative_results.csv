@@ -1,0 +1,25 @@
+Experiment_ID,Description,Target_Location,Sample_Size_N,Metric,Authoritative_Value,Confidence_Interval_or_Dispersion,Data_Source_File,Verification_Method
+F12,Clean Baseline Control,None,100,Success Rate,100.0%,[96.30% 100.00%],phase18_audit/raw_production_trials.csv,Fresh Binary Execution
+F4,Transient Multiplier Fault,CT/GS Multiplier Output,100,Recovery Rate,100.0%,[96.30% 100.00%],phase18_audit/raw_production_trials.csv,Fresh Binary Execution
+F4_RETRIES,Transient Retry Overhead,CT/GS Multiplier Output,100,Retry Iterations,1.0 retries/fault,[1.0 1.0],phase18_audit/raw_production_trials.csv,Fresh Binary Execution
+F5A,Persistent Multiplier Fault,CT/GS Multiplier Output,100,Safe Fail-Stop Rate,100.0%,[98.14% 100.00%],phase18_audit/raw_production_trials.csv,Fresh Binary Execution
+F5A_RETRIES,Persistent Retry Count,CT/GS Multiplier Output,100,Retries Before Escalation,2.0 retries/fault,[2.0 2.0],phase18_audit/raw_production_trials.csv,Fresh Binary Execution
+F5B,Software Force-Value Zero,CT/GS Add/Sub Output,100,Safe Fail-Stop Rate,100.0%,[98.14% 100.00%],phase18_audit/raw_production_trials.csv,Fresh Binary Execution
+H2_SDC,Silent Data Corruption (Active Trials),Butterfly Operations,300,SDC Rate,0.00%,[0.00% 1.26%],phase18_audit/raw_production_trials.csv,Fresh Binary Execution
+H1_T1,Circular Verifier False-Pass,Harness Model T1,100,False-Pass Rate,98.0%,[93.0% 99.5%],phase16_targeted_evidence_closure/h1_activation_audit.csv,Raw CSV Recalculation
+H1_T2,Circular Verifier False-Pass,Harness Model T2,100,False-Pass Rate,94.0%,[87.5% 97.2%],phase16_targeted_evidence_closure/h1_activation_audit.csv,Raw CSV Recalculation
+H1_T3,Circular Verifier False-Pass,Harness Model T3,100,False-Pass Rate,100.0%,[96.3% 100.0%],phase16_targeted_evidence_closure/h1_activation_audit.csv,Raw CSV Recalculation
+H1_T4,Circular Verifier False-Pass,Harness Model T4,100,False-Pass Rate,100.0%,[96.3% 100.0%],phase16_targeted_evidence_closure/h1_activation_audit.csv,Raw CSV Recalculation
+H1_T5,Circular Verifier False-Pass,Harness Model T5,100,False-Pass Rate,99.0%,[94.6% 99.8%],phase16_targeted_evidence_closure/h1_activation_audit.csv,Raw CSV Recalculation
+H1_T6,Circular Verifier False-Pass,Harness Model T6,100,False-Pass Rate,100.0%,[96.3% 100.0%],phase16_targeted_evidence_closure/h1_activation_audit.csv,Raw CSV Recalculation
+H1_AGG,Circular Verifier Aggregated,Harness Models T1-T6,600,Aggregate False-Pass Rate,98.5%,[97.1% 99.2%],phase16_targeted_evidence_closure/h1_activation_audit.csv,Raw CSV Recalculation
+KAT_IMP_REJ,FIPS 203 Implicit Rejection,Ciphertext Mutation,100,Conformance Rate,100.0%,[96.30% 100.00%],tests/kat_mlkem768.c,KAT Conformance Harness
+BENCH_BASE,Baseline Decapsulation Latency,Native ML-KEM-768,2000,Mean Latency (us),110.77 us,StdDev: 4.82 us,results/phase7i/processed/phase7i_e2e_results.json,Fresh Binary Execution
+BENCH_MON,Monitored Decapsulation Latency,Invariant + Rollback,2000,Mean Latency (us),129.51 us,StdDev: 5.14 us,results/phase7i/processed/phase7i_e2e_results.json,Fresh Binary Execution
+BENCH_DMR,Software Sequential DMR Latency,Duplicate Recomputation,2000,Mean Latency (us),260.68 us,StdDev: 8.92 us,results/phase7i/processed/phase7i_e2e_results.json,Fresh Binary Execution
+OVERHEAD_MON,Monitoring Overhead Ratio,Normalized to Base,2000,Relative Latency Overhead,+16.9% (Range: +16.8% to +28.9%),Across O2/O3 flags,phase18_audit/performance_reproduction.md,Fresh Binary Execution
+OVERHEAD_DMR,Software DMR Overhead Ratio,Normalized to Base,2000,Relative Latency Overhead,+135.3% (Range: +135% to +160%),Across O2/O3 flags,phase18_audit/performance_reproduction.md,Fresh Binary Execution
+TRANS_FWD,Forward NTT Transforms,indcpa.c: 3 u + 3 r,6,Transform Count,6 transforms,Exact,indcpa.c:560;609,Source Code Tracing
+TRANS_INV,Inverse NTT Transforms,indcpa.c: 1 dec + 3 u' + 1 v',5,Transform Count,5 transforms,Exact,indcpa.c:568;580;621,Source Code Tracing
+TRANS_TOTAL,Total Polynomial Transforms,KEM Decapsulation + FO,11,Transform Count,11 transforms,Exact,indcpa.c & poly.c,Source Code Tracing
+BUTTERFLIES,Total Monitored Butterflies,11 transforms * 896,11,Operation Count,9856 butterflies,5376 CT + 4480 GS,poly.c:174;218,Mathematical & Source Derivation

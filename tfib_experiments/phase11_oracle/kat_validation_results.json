@@ -1,0 +1,45 @@
+{
+  "oracle_version": "Independent Reference Oracle: Open Quantum Safe (liboqs) v0.16.0 + FIPS 202 Specification Reference (TweetFIPS-202)",
+  "parameter_set": "ML-KEM-768",
+  "tests": [
+    {
+      "test_name": "NIST-FIPS203-KAT-768-KEYGEN",
+      "status": "PASS",
+      "pk_match": true,
+      "sk_match": true
+    },
+    {
+      "test_name": "NIST-FIPS203-KAT-768-ENCAPS",
+      "status": "PASS",
+      "ct_match": true,
+      "ss_match": true
+    },
+    {
+      "test_name": "NIST-FIPS203-KAT-768-DECAPS",
+      "status": "PASS",
+      "ss_match": true
+    },
+    {
+      "test_name": "FIPS203-CANONICAL-IMPLICIT-REJECTION",
+      "status": "PASS",
+      "rejection_matches_spec": true,
+      "rejection_differs_from_valid": true
+    },
+    {
+      "test_name": "NEGATIVE-TEST-FALSIFICATION",
+      "status": "PASS",
+      "ss_tamper_flagged": true,
+      "sk_tamper_flagged": true,
+      "seed_mutation_distinct": true
+    },
+    {
+      "test_name": "BOUNDARY-MALFORMED-INPUTS",
+      "status": "PASS",
+      "zeros_matches_rejection": true,
+      "zeros_differs_from_valid": true,
+      "ones_matches_rejection": true,
+      "ones_differs_from_valid": true
+    }
+  ],
+  "overall_status": "PASS"
+}

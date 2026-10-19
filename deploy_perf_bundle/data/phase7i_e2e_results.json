@@ -1,0 +1,19 @@
+{
+  "phase": "7I",
+  "total_butterflies": 9856,
+  "forward_butterflies": 5376,
+  "inverse_butterflies": 4480,
+  "benchmarks": {
+    "baseline": {"mean_us": 68.47, "median_us": 68.00, "stddev_us": 1.82, "p95_us": 72.00},
+    "forward_only": {"mean_us": 75.76, "median_us": 76.00, "overhead_pct": 10.64},
+    "inverse_only": {"mean_us": 72.57, "median_us": 73.00, "overhead_pct": 5.98},
+    "combined": {"mean_us": 80.30, "median_us": 80.00, "overhead_pct": 17.27},
+    "dmr": {"mean_us": 164.99, "median_us": 160.00, "overhead_pct": 140.95}
+  },
+  "timing_assessment": {
+    "valid_mean_us": 80.75,
+    "invalid_mean_us": 80.76,
+    "ratio_mean": 1.0002,
+    "ratio_median": 1.0000
+  }
+}

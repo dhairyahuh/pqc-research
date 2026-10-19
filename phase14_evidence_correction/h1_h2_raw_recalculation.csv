@@ -1,0 +1,14 @@
+target_id,target_name,execution_tier,raw_dataset_source,trial_count,triggered_count,h1_numerator,h1_denominator,h1_point_estimate_pct,h1_ci_lower_pct,h1_ci_upper_pct,h2_numerator,h2_denominator,h2_point_estimate_pct,h2_ci_lower_pct,h2_ci_upper_pct,discrepancy_vs_phase13_h1,audit_disposition
+F1,Saved Operand Bitflip,Harness Model,phase7_independent_claim_audit/derived_corrected_trial_results.csv,100,100,98,100,98.0,93.0,99.4,0,100,0.0,0.0,3.7,Matches Phase 13,Retain
+F2,Snapshot Pre-Retry Diffusion,Harness Model,phase7_independent_claim_audit/derived_corrected_trial_results.csv,100,100,100,100,100.0,96.3,100.0,0,100,0.0,0.0,3.7,Severe Error in Phase 13 (Reported 70 vs Raw 100),Correct to 100
+F3,Persistent Count Zeroing,Harness Model,phase7_independent_claim_audit/derived_corrected_trial_results.csv,100,100,0,100,0.0,0.0,3.7,0,100,0.0,0.0,3.7,Catastrophic Error in Phase 13 (Reported 100 vs Raw 0),Correct to 0
+F6,Verifier Flag Forced Pass,Harness Model,phase7_independent_claim_audit/derived_corrected_trial_results.csv,100,100,99,100,99.0,94.6,99.8,0,100,0.0,0.0,3.7,Minor Discrepancy (Reported 100 vs Raw 99),Correct to 99
+F7,Retry Arithmetic Glitch,Harness Model,phase7_independent_claim_audit/derived_corrected_trial_results.csv,100,100,94,100,94.0,87.5,97.2,0,100,0.0,0.0,3.7,Severe Error in Phase 13 (Reported 0 vs Raw 94),Correct to 94
+F8,Verifier Operand Corrupt,Harness Model,phase7_independent_claim_audit/derived_corrected_trial_results.csv,100,100,0,100,0.0,0.0,3.7,0,100,0.0,0.0,3.7,Matches Phase 13,Retain
+F9,DSPC Multi-Bit Collision,Harness Model,phase7_independent_claim_audit/derived_corrected_trial_results.csv,100,100,100,100,100.0,96.3,100.0,0,100,0.0,0.0,3.7,Discrepancy (Reported 93 vs Raw 100),Correct to 100
+F10,DSPC State Bypass,Harness Model,phase7_independent_claim_audit/derived_corrected_trial_results.csv,100,100,100,100,100.0,96.3,100.0,0,100,0.0,0.0,3.7,Matches Phase 13,Retain
+F11,DSPC Single-Bit Clean,Harness Model,phase7_independent_claim_audit/derived_corrected_trial_results.csv,100,100,0,100,0.0,0.0,3.7,0,100,0.0,0.0,3.7,Matches Phase 13,Retain
+F12,Clean Baseline Control,Production Binary,phase13_final_evidence_audit/production_trial_recalculation.csv,100,0,0,100,0.0,0.0,3.7,0,100,0.0,0.0,3.7,Matches Phase 13,Retain
+F4,Transient Butterfly Fault,Production Binary,phase13_final_evidence_audit/production_trial_recalculation.csv,100,100,0,100,0.0,0.0,3.7,0,100,0.0,0.0,3.7,Matches Phase 13,Retain
+F5A,Recurring Bit-Inversion,Production Binary,phase13_final_evidence_audit/production_trial_recalculation.csv,100,100,0,100,0.0,0.0,3.7,0,100,0.0,0.0,3.7,Matches Phase 13,Retain
+F5B,Software Force-Value Model,Production Binary,phase13_final_evidence_audit/production_trial_recalculation.csv,100,100,0,100,0.0,0.0,3.7,0,100,0.0,0.0,3.7,Matches Phase 13,Retain

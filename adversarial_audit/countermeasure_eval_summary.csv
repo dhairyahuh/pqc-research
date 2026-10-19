@@ -1,0 +1,25 @@
+variant,target,trials,triggered_pct,detection_pct,recovery_pct,rejection_pct,false_pos_pct,sdc_pct,median_us,p95_us
+"Baseline A: In-Tree Monitor & Tautological Retry","T1: Operational Twiddle Factor (zeta)",100,100.0,94.0,0.0,94.0,0.0,0.0,141.00,328.00
+"Baseline A: In-Tree Monitor & Tautological Retry","T2: Reference Twiddle Table Corrupt",100,100.0,94.0,0.0,94.0,0.0,0.0,139.00,145.00
+"Baseline A: In-Tree Monitor & Tautological Retry","T3: Saved Operand Snapshot Corrupt",100,100.0,100.0,100.0,0.0,0.0,0.0,139.00,161.00
+"Baseline A: In-Tree Monitor & Tautological Retry","T4: Retry Multiplier Glitch",100,100.0,100.0,100.0,0.0,0.0,0.0,139.00,148.00
+"Baseline A: In-Tree Monitor & Tautological Retry","T5: Persistent Stuck-at Fault",100,100.0,100.0,0.0,100.0,0.0,0.0,156.00,414.00
+"Baseline A: In-Tree Monitor & Tautological Retry","T6: Clean Negative Control",100,0.0,0.0,0.0,0.0,0.0,0.0,144.00,197.00
+"Variant B: Independent Twiddle Cross-Check","T1: Operational Twiddle Factor (zeta)",100,100.0,100.0,0.0,100.0,0.0,0.0,163.00,296.00
+"Variant B: Independent Twiddle Cross-Check","T2: Reference Twiddle Table Corrupt",100,100.0,94.0,0.0,94.0,0.0,0.0,157.00,174.00
+"Variant B: Independent Twiddle Cross-Check","T3: Saved Operand Snapshot Corrupt",100,100.0,100.0,100.0,0.0,0.0,0.0,157.00,168.00
+"Variant B: Independent Twiddle Cross-Check","T4: Retry Multiplier Glitch",100,100.0,100.0,100.0,0.0,0.0,0.0,158.00,209.00
+"Variant B: Independent Twiddle Cross-Check","T5: Persistent Stuck-at Fault",100,100.0,100.0,0.0,100.0,0.0,0.0,174.00,217.00
+"Variant B: Independent Twiddle Cross-Check","T6: Clean Negative Control",100,0.0,0.0,0.0,0.0,0.0,0.0,134.00,171.00
+"Variant C: Diverse Recovery Verification","T1: Operational Twiddle Factor (zeta)",100,100.0,94.0,0.0,94.0,0.0,0.0,139.00,145.00
+"Variant C: Diverse Recovery Verification","T2: Reference Twiddle Table Corrupt",100,100.0,94.0,0.0,94.0,0.0,0.0,139.00,144.00
+"Variant C: Diverse Recovery Verification","T3: Saved Operand Snapshot Corrupt",100,100.0,100.0,0.0,100.0,0.0,0.0,140.00,143.00
+"Variant C: Diverse Recovery Verification","T4: Retry Multiplier Glitch",100,100.0,100.0,100.0,0.0,0.0,0.0,139.00,144.00
+"Variant C: Diverse Recovery Verification","T5: Persistent Stuck-at Fault",100,100.0,100.0,0.0,100.0,0.0,0.0,154.00,161.00
+"Variant C: Diverse Recovery Verification","T6: Clean Negative Control",100,0.0,0.0,0.0,0.0,0.0,0.0,132.00,136.00
+"Variant D: Fail-Stop Architecture (Zero-Retry Quench)","T1: Operational Twiddle Factor (zeta)",100,100.0,100.0,0.0,100.0,0.0,0.0,141.00,186.00
+"Variant D: Fail-Stop Architecture (Zero-Retry Quench)","T2: Reference Twiddle Table Corrupt",100,100.0,94.0,0.0,94.0,0.0,0.0,139.00,142.00
+"Variant D: Fail-Stop Architecture (Zero-Retry Quench)","T3: Saved Operand Snapshot Corrupt",100,100.0,100.0,0.0,100.0,0.0,0.0,139.00,142.00
+"Variant D: Fail-Stop Architecture (Zero-Retry Quench)","T4: Retry Multiplier Glitch",100,100.0,100.0,0.0,100.0,0.0,0.0,142.00,157.00
+"Variant D: Fail-Stop Architecture (Zero-Retry Quench)","T5: Persistent Stuck-at Fault",100,100.0,100.0,0.0,100.0,0.0,0.0,155.00,192.00
+"Variant D: Fail-Stop Architecture (Zero-Retry Quench)","T6: Clean Negative Control",100,0.0,0.0,0.0,0.0,0.0,0.0,132.00,143.00

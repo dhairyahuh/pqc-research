@@ -14,3 +14,25 @@ __pycache__/
 .DS_Store
 .vscode/
 .idea/
+
+# Compiled test binaries in audit and experiment directories
+phase*/*reproducer
+phase*/*oracle*
+phase*/*tracer*
+phase*/*check*
+phase*/*trace*
+phase*/*test_comp*
+phase*/*test_diag*
+phase8_production_path_audit/test_production_link
+research/phase18_gate_a/validate_vectors
+tfib_experiments/test_oracle_integration
+tfib_experiments/test_step2a_validation
+tfib_experiments/test_step2b_validation
+tfib_experiments/test_step2c_countermeasure_independence
+tfib_experiments/tfib_benchmark
+tfib_experiments/tfib_benchmark_audit
+tfib_experiments/tfib_experiment_runner
+tfib_experiments/tfib_validity_audit_runner
+tfib_experiments/phase2_step2b_audit/test_*
+deploy_perf_bundle/bin/
+tfib_experiments/phase11_oracle/test_independent_oracle

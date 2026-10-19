@@ -1,0 +1,6 @@
+| estimand | point | ci_lo | ci_hi | n |
+|---|---|---|---|---|
+| Delta_overall | +0.2160 | +0.1800 | +0.2520 | 500 |
+| Delta_persistent | +0.4186 | +0.3605 | +0.4767 | 258 |
+| Delta_transient | +0.0000 | +0.0000 | +0.0000 | 242 |
+| Delta_P_minus_T | +0.4186 | +0.3605 | +0.4767 | 500 |

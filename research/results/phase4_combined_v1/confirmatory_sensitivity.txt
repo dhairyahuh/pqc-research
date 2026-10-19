@@ -1,0 +1,23 @@
+paired seeds n=500; Delta_hat=+0.2160  bootstrap95 [+0.1800,+0.2520]
+  C00 P(est)=100.0%
+  C10 P(est)=48.0%
+  C01 P(est)=56.4%
+  C11 P(est)=26.0%
+joint-cell coverage (seeds): {('TRANSIENT', 0): 111, ('TRANSIENT', 1): 129, ('PERSISTENT', 0): 131, ('PERSISTENT', 1): 129}
+JOINT grid Delta  [rows wm=P(mem PERSIST), cols wc=P(chan PERSIST)]:
+  wm=0.25: +0.052  +0.105  +0.157
+  wm=0.5: +0.105  +0.209  +0.314
+  wm=0.75: +0.157  +0.314  +0.471
+JOINT grid Delta range: [+0.0523, +0.4709]  sign stable>0: True
+conditional Delta by strata:
+  [channel PERSISTENT] n=258 Delta=+0.4186
+  [channel TRANSIENT] n=242 Delta=+0.0000
+  [config=BASELINE] n=176 Delta=+0.2159
+  [config=TFIB_REF] n=162 Delta=+0.2099
+  [config=TFIB_META] n=162 Delta=+0.2222
+  [channel=blocking] n=276 Delta=+0.2572
+  [channel=non-blocking] n=224 Delta=+0.1652
+MASKING (denominator = |C11| = 500): status={'ACTIVATED': 297, 'MASKED_BY_CHANNEL': 203}
+  masking rate = 203/500 = 40.6%
+  established among MASKED  = 57/203
+  established among ACTIVATED= 73/297

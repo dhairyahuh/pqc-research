@@ -1,0 +1,14 @@
+target_id,target_name,execution_path,trial_count,armed_count,triggered_count,h1_numerator,h1_denominator,h1_point_estimate_pct,h1_ci_lower_pct,h1_ci_upper_pct,h2_numerator,h2_denominator,h2_point_estimate_pct,h2_ci_lower_pct,h2_ci_upper_pct,included_in_pooled_h1,justification_for_h1_inclusion_exclusion
+F1,Saved Operand Bitflip,Harness Model,100,100,100,98,100,98.0,93.0,99.4,0,100,0.0,0.0,3.7,True,Vulnerable in-place snapshot model
+F2,Snapshot Additive Bias (+100),Harness Model,100,100,100,70,100,70.0,60.4,78.1,0,100,0.0,0.0,3.7,True,Vulnerable in-place snapshot model
+F3,Persistent Count Zeroing,Harness Model,100,100,100,100,100,100.0,96.3,100.0,0,100,0.0,0.0,3.7,True,Vulnerable in-place snapshot model
+F4,Transient Butterfly Fault,Production Binary,100,100,100,0,100,0.0,0.0,3.7,0,100,0.0,0.0,3.7,False,Genuine recovery verified
+F5A,Recurring Bit-Inversion,Production Binary,100,100,100,0,100,0.0,0.0,3.7,0,100,0.0,0.0,3.7,False,Safe fail-stop detected
+F5B,Software Force-Value Model,Production Binary,100,100,100,0,100,0.0,0.0,3.7,0,100,0.0,0.0,3.7,False,Safe fail-stop detected
+F6,Verifier Flag Forced Pass,Harness Model,100,100,100,100,100,100.0,96.3,100.0,0,100,0.0,0.0,3.7,True,Vulnerable in-place snapshot model
+F7,Retry Arithmetic Glitch,Harness Model,100,100,100,0,100,0.0,0.0,3.7,0,100,0.0,0.0,3.7,False,Safe fail-stop detected
+F8,Verifier Operand Corrupt,Harness Model,100,100,100,0,100,0.0,0.0,3.7,0,100,0.0,0.0,3.7,False,Safe fail-stop detected
+F9,DSPC Correlated Linear,Harness Model,100,100,100,93,100,93.0,86.3,96.6,0,100,0.0,0.0,3.7,True,Vulnerable in-place snapshot model
+F10,DSPC Control Bypass,Harness Model,100,100,100,100,100,100.0,96.3,100.0,0,100,0.0,0.0,3.7,True,Vulnerable in-place snapshot model
+F11,DSPC Single-Bit Flip,Harness Model,100,100,100,0,100,0.0,0.0,3.7,0,100,0.0,0.0,3.7,False,Safe fail-stop detected
+F12,Clean Baseline Control,Production Binary,100,0,0,0,100,0.0,0.0,3.7,0,100,0.0,0.0,3.7,False,Clean baseline (no recovery attempted)

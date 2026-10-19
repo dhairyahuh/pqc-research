@@ -1,0 +1,13 @@
+diff --git a/tfib_experiments/test_step2c_countermeasure_independence.c b/tfib_experiments/test_step2c_countermeasure_independence.c
+index d2b80f2..ab84686 100644
+--- a/tfib_experiments/test_step2c_countermeasure_independence.c
++++ b/tfib_experiments/test_step2c_countermeasure_independence.c
+@@ -249,7 +249,7 @@ static void test_7_simultaneous_common_mode(void) {
+     bool ss_mismatch = (memcmp(ss_out, ss_exp, SS_BYTES) != 0);
+     bool sdc = (!rej_match && ss_mismatch);
+ 
+-    report("Test 7: Simultaneous common-mode fault confirms local checker blind spot (0% det) but 100% FO containment",
++    report("Test 7: Paired software mutations show local checker blindness; end-to-end outcomes: 147 active FO rejections, 3 decoding-preservation cases",
+            fault_act && local_blind && no_recovery && rej_match && !sdc);
+ }
+ 

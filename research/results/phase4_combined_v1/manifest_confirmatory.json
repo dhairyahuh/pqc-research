@@ -1,0 +1,14 @@
+{
+  "phase": "4-combined-v1-CONFIRMATORY", "date": "2026-10-10T19:52:32Z",
+  "platform": "Darwin 27.0.0 arm64", "clang": "Apple clang version 21.0.0 (clang-2100.1.1.101)",
+  "liboqs": "/opt/homebrew/lib/liboqs.0.16.0.dylib",
+  "git_head": "4a2c4ebf9274a9188db3610a4f8448902caed056", "working_tree_dirty": true,
+  "n_seeds": 500, "conditions": 4, "retry_max": 2, "combined_schema_version": 1,
+  "frozen_inputs": {
+    "PHASE4_PREREGISTRATION.md": "365bc102464640bf0d76274e4f5dcc7a3d92a72c3ebaa880b79fa57ab6394e05", "PHASE4_PREREGISTRATION_AMENDMENT_v2.md": "ac203fb6cbef0f0de79dab6652cc0ca7243a3a7b327b13790a4a72ab74d6ae51",
+    "combined_campaign.c": "45b939768e32719b086812bd42fa493ec4f979d3a29061af6d1bc44afc39a403", "combined_stats.py": "6a951db9348d6a68856049ee15bd1ec2c99a89d78a40460b5c584570f8f7cf39",
+    "combined_sensitivity.py": "d7136885b09d77e6eb7956ce32ad597cb9c0644e51f21e77ace46be3c2082257", "mlkem768_inst.o": "7adc428039c318eb0d71b3fc7e24da602010acf7df5e37183ccba5a22eaef65f"
+  },
+  "outputs": { "raw.jsonl": "d20c0ef5adddb5df5dd9c0246239465bfe047ed0b10c2079605bdfaeb3f9d09f", "confirmatory_stats.md": "25a11701f5260ceb13d2e8c56a19c7ae75861ebb6838b40621246e14f2e89ae4",
+    "confirmatory_sensitivity.txt": "c1192c7add4a0d4fdc59da4da4ba4ffb7edd3b406db9263def85686182a43065" }
+}

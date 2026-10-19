@@ -1,0 +1,25 @@
+{
+  "gate": "GATE_A_VECTOR_PREFLIGHT_AND_ORACLE_VALIDATION",
+  "status": "PASS",
+  "parameter_set": "ML-KEM-768",
+  "sut_implementation": "mlkem-native (fc269bc2d106) C99 ref",
+  "oracle_implementation": "Independent Reference Oracle: Open Quantum Safe (liboqs) v0.16.0 + FIPS 202 Specification Reference (TweetFIPS-202)",
+  "total_evaluated": 420,
+  "official_kat_evaluated": 1,
+  "prf_derived_evaluated": 419,
+  "fully_validated": 420,
+  "failed_candidates": 0,
+  "execution_time_ms": 98.64,
+  "memory_protection_mutations_called": 0,
+  "corpus_sha256": "19678a2f4183fc8bf1c166bf40d6bb17eabd457ba4b354d4083171d1f986be13",
+  "checks": {
+    "check1_lengths_and_offsets": "420/420 PASS",
+    "check2_sut_keygen": "420/420 PASS",
+    "check3_oqs_keygen_cross": "420/420 PASS",
+    "check4_sut_encaps": "420/420 PASS",
+    "check5_oqs_encaps_cross": "420/420 PASS",
+    "check6_sut_decaps_clean": "420/420 PASS",
+    "check7_oracle_krej_distinct": "420/420 PASS",
+    "check8_tamper_rejection": "420/420 PASS"
+  }
+}

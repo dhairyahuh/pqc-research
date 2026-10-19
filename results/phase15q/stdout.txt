@@ -1,0 +1,142 @@
+=======================================================================
+ PHASE 15D: HARDENED PERSISTENT-TABLE FEASIBILITY RUNNER
+ Target: mlk_zetas_page (ML-KEM-768 relocated twiddle table)
+=======================================================================
+
+--- [ORACLE VALIDATION] Independent FIPS 202 SHAKE256 Self-Test ---
+  SHAKE256("", 32) matches NIST FIPS 202 KAT:
+  46b9dd2b0ba88d13233b3feb743eeb243fcd52ea62b81b82b50c27646ed5762f
+  Result: PASS
+
+--- [ORACLE DERIVATION] Independent FIPS 203 Rejection Key Derivation ---
+  Concatenation length: 1120 bytes (32-byte z + 1088-byte ciphertext c)
+  Derived FIPS 203 K_rej: f0f0e158ed09b1c27350a0ac9ef3b4e142e7f599688c828935f5047e50f3db03
+  Expected KAT K_rej:    f0f0e158ed09b1c27350a0ac9ef3b4e142e7f599688c828935f5047e50f3db03
+  Result: PASS (Independent Oracle Bit-Identical to Expected FIPS 203 KAT)
+
+--- [PREFLIGHT 1/5] Symbol Resolution & Section Alignment ---
+  Resolved symbol address: 0x1047b8000
+  Calculated page base:    0x1047b8000
+  Result: PASS (16KB Page-Aligned)
+
+--- [PREFLIGHT 2/5] Live VM Mapping Query via vm_region_64 ---
+  Region mapped address:   0x1047b8000
+  Region mapped size:      0x4000 (16384 bytes)
+  Current protection:      r-- (0x1)
+  Maximum protection:      rw- (0x3)
+  Result: PASS (Darwin VM confirms __DATA_CONST permissions)
+
+--- [PREFLIGHT 3/5] Initial Table Integrity & Padding Canary Check ---
+  Result: PASS (Table matches golden digest; 16,128 padding bytes clean)
+
+--- [PREFLIGHT 4/5] Dry-Run Protection Transition (Zero Write) ---
+  Result: PASS (vm_protect RW -> RO toggling verified without write)
+
+--- [PREFLIGHT 5/5] Preflight Clean Baseline Decapsulation Check ---
+  Expected KAT SS: 0b1b32be26247cbcbe0916f8b0b729699c32a96d51efa4a4cd5b289239c8207e
+  Computed KAT SS: 0b1b32be26247cbcbe0916f8b0b729699c32a96d51efa4a4cd5b289239c8207e
+  Result: PASS (Cryptographic baseline 100% matches KAT)
+
+>>> PREFLIGHT VERDICT: GO (All preflights passed; ready for hardened trials) <<<
+
+-----------------------------------------------------------------------
+--- [DIAGNOSTIC TRIAL 0/16] Trial 0: Baseline uncorrupted check ---
+  Output SS:      0b1b32be26247cbcbe0916f8b0b729699c32a96d51efa4a4cd5b289239c8207e [EXPECTED_OUTPUT]
+  Restoration:    PASS (Baseline intact)
+-----------------------------------------------------------------------
+--- [DIAGNOSTIC TRIAL 1/16] Trial 1: Index 0, LSB flip (Root/Unused twiddle) ---
+  Injected value: 0xfbed (orig: 0xfbec, mask: 0x0001)
+  Output SS:      0b1b32be26247cbcbe0916f8b0b729699c32a96d51efa4a4cd5b289239c8207e [EXPECTED_OUTPUT]
+  Restoration:    PASS (Table restored, permissions RO, padding clean, baseline reproduced)
+-----------------------------------------------------------------------
+--- [DIAGNOSTIC TRIAL 2/16] Trial 2: Sham Control (Index 0, unprotect/write-0/reprotect) ---
+  Injected value: 0xfbec (orig: 0xfbec, mask: 0x0000)
+  Output SS:      0b1b32be26247cbcbe0916f8b0b729699c32a96d51efa4a4cd5b289239c8207e [EXPECTED_OUTPUT]
+  Restoration:    PASS (Table restored, permissions RO, padding clean, baseline reproduced)
+-----------------------------------------------------------------------
+--- [DIAGNOSTIC TRIAL 3/16] Trial 3: Index 1, LSB flip (Forward NTT Layer 1) ---
+  Injected value: 0xfd0b (orig: 0xfd0a, mask: 0x0001)
+  Output SS:      f0f0e158ed09b1c27350a0ac9ef3b4e142e7f599688c828935f5047e50f3db03 [REJECTION]
+  Restoration:    PASS (Table restored, permissions RO, padding clean, baseline reproduced)
+-----------------------------------------------------------------------
+--- [DIAGNOSTIC TRIAL 4/16] Trial 4: Index 1, Mid-byte flip (Forward NTT Layer 1) ---
+  Injected value: 0xfd8a (orig: 0xfd0a, mask: 0x0080)
+  Output SS:      f0f0e158ed09b1c27350a0ac9ef3b4e142e7f599688c828935f5047e50f3db03 [REJECTION]
+  Restoration:    PASS (Table restored, permissions RO, padding clean, baseline reproduced)
+-----------------------------------------------------------------------
+--- [DIAGNOSTIC TRIAL 5/16] Trial 5: Index 1, Sign-bit flip (Forward NTT Layer 1) ---
+  Injected value: 0x7d0a (orig: 0xfd0a, mask: 0x8000)
+  Output SS:      f0f0e158ed09b1c27350a0ac9ef3b4e142e7f599688c828935f5047e50f3db03 [REJECTION]
+  Restoration:    PASS (Table restored, permissions RO, padding clean, baseline reproduced)
+-----------------------------------------------------------------------
+--- [DIAGNOSTIC TRIAL 6/16] Trial 6: Index 32, Bit 1 flip (Mid NTT Layer 6) ---
+  Injected value: 0x04c5 (orig: 0x04c7, mask: 0x0002)
+  Output SS:      f0f0e158ed09b1c27350a0ac9ef3b4e142e7f599688c828935f5047e50f3db03 [REJECTION]
+  Restoration:    PASS (Table restored, permissions RO, padding clean, baseline reproduced)
+-----------------------------------------------------------------------
+--- [DIAGNOSTIC TRIAL 7/16] Trial 7: Index 63, Bit 2 flip (Forward NTT Layer 7) ---
+  Injected value: 0xfb01 (orig: 0xfb05, mask: 0x0004)
+  Output SS:      f0f0e158ed09b1c27350a0ac9ef3b4e142e7f599688c828935f5047e50f3db03 [REJECTION]
+  Restoration:    PASS (Table restored, permissions RO, padding clean, baseline reproduced)
+-----------------------------------------------------------------------
+--- [DIAGNOSTIC TRIAL 8/16] Trial 8: Index 64, LSB flip (Mulcache Layer factor) ---
+  Injected value: 0xfbb0 (orig: 0xfbb1, mask: 0x0001)
+  Output SS:      f0f0e158ed09b1c27350a0ac9ef3b4e142e7f599688c828935f5047e50f3db03 [REJECTION]
+  Restoration:    PASS (Table restored, permissions RO, padding clean, baseline reproduced)
+-----------------------------------------------------------------------
+--- [DIAGNOSTIC TRIAL 9/16] Trial 9: Index 64, Bit 10 flip (Mulcache Layer factor) ---
+  Injected value: 0xffb1 (orig: 0xfbb1, mask: 0x0400)
+  Output SS:      f0f0e158ed09b1c27350a0ac9ef3b4e142e7f599688c828935f5047e50f3db03 [REJECTION]
+  Restoration:    PASS (Table restored, permissions RO, padding clean, baseline reproduced)
+-----------------------------------------------------------------------
+--- [DIAGNOSTIC TRIAL 10/16] Trial 10: Index 95, LSB flip (Mulcache Mid factor) ---
+  Injected value: 0xffb4 (orig: 0xffb5, mask: 0x0001)
+  Output SS:      f0f0e158ed09b1c27350a0ac9ef3b4e142e7f599688c828935f5047e50f3db03 [REJECTION]
+  Restoration:    PASS (Table restored, permissions RO, padding clean, baseline reproduced)
+-----------------------------------------------------------------------
+--- [DIAGNOSTIC TRIAL 11/16] Trial 11: Index 127, LSB flip (Basemul & InvNTT factor) ---
+  Injected value: 0x065d (orig: 0x065c, mask: 0x0001)
+  Output SS:      f0f0e158ed09b1c27350a0ac9ef3b4e142e7f599688c828935f5047e50f3db03 [REJECTION]
+  Restoration:    PASS (Table restored, permissions RO, padding clean, baseline reproduced)
+-----------------------------------------------------------------------
+--- [DIAGNOSTIC TRIAL 12/16] Trial 12: Index 127, Word inversion (Basemul & InvNTT factor) ---
+  Injected value: 0xf9a3 (orig: 0x065c, mask: 0xffff)
+  Output SS:      f0f0e158ed09b1c27350a0ac9ef3b4e142e7f599688c828935f5047e50f3db03 [REJECTION]
+  Restoration:    PASS (Table restored, permissions RO, padding clean, baseline reproduced)
+-----------------------------------------------------------------------
+--- [DIAGNOSTIC TRIAL 13/16] Trial 13: Sham Control on active index 64 ---
+  Injected value: 0xfbb1 (orig: 0xfbb1, mask: 0x0000)
+  Output SS:      0b1b32be26247cbcbe0916f8b0b729699c32a96d51efa4a4cd5b289239c8207e [EXPECTED_OUTPUT]
+  Restoration:    PASS (Table restored, permissions RO, padding clean, baseline reproduced)
+-----------------------------------------------------------------------
+--- [DIAGNOSTIC TRIAL 14/16] Trial 14: Index 2, Bit 3 flip (Forward NTT Layer 2) ---
+  Injected value: 0xfe91 (orig: 0xfe99, mask: 0x0008)
+  Output SS:      f0f0e158ed09b1c27350a0ac9ef3b4e142e7f599688c828935f5047e50f3db03 [REJECTION]
+  Restoration:    PASS (Table restored, permissions RO, padding clean, baseline reproduced)
+-----------------------------------------------------------------------
+--- [DIAGNOSTIC TRIAL 15/16] Trial 15: Post-pilot baseline uncorrupted check ---
+  Output SS:      0b1b32be26247cbcbe0916f8b0b729699c32a96d51efa4a4cd5b289239c8207e [EXPECTED_OUTPUT]
+  Restoration:    PASS (Baseline intact)
+
+=======================================================================
+ AUTHORITATIVE TRIAL LEDGER (CSV FORMAT - 9 COLUMNS)
+=======================================================================
+trial_id,target_idx,bit_mask,mutation_status,consumption_status,crypto_endpoint,restoration_status,output_ss,expected_behavior
+0,-1,0x0000,NOT_ATTEMPTED,VERIFIED_NOT_CONSUMED,EXPECTED_OUTPUT,RESTORED_AND_BASELINE_RECHECK_PASSED,0b1b32be26247cbcbe0916f8b0b729699c32a96d51efa4a4cd5b289239c8207e,Baseline golden key match
+1,0,0x0001,APPLIED,VERIFIED_NOT_CONSUMED,EXPECTED_OUTPUT,RESTORED_AND_BASELINE_RECHECK_PASSED,0b1b32be26247cbcbe0916f8b0b729699c32a96d51efa4a4cd5b289239c8207e,Mathematically unused twiddle factor (Root)
+2,0,0x0000,APPLIED,VERIFIED_NOT_CONSUMED,EXPECTED_OUTPUT,RESTORED_AND_BASELINE_RECHECK_PASSED,0b1b32be26247cbcbe0916f8b0b729699c32a96d51efa4a4cd5b289239c8207e,Sham control on index 0 (mask 0)
+3,1,0x0001,APPLIED,VERIFIED_CONSUMED,REJECTION,RESTORED_AND_BASELINE_RECHECK_PASSED,f0f0e158ed09b1c27350a0ac9ef3b4e142e7f599688c828935f5047e50f3db03,Active Layer 1 twiddle factor -> FO rejection key
+4,1,0x0080,APPLIED,VERIFIED_CONSUMED,REJECTION,RESTORED_AND_BASELINE_RECHECK_PASSED,f0f0e158ed09b1c27350a0ac9ef3b4e142e7f599688c828935f5047e50f3db03,Active Layer 1 twiddle factor -> FO rejection key
+5,1,0x8000,APPLIED,VERIFIED_CONSUMED,REJECTION,RESTORED_AND_BASELINE_RECHECK_PASSED,f0f0e158ed09b1c27350a0ac9ef3b4e142e7f599688c828935f5047e50f3db03,Active Layer 1 twiddle factor -> FO rejection key
+6,32,0x0002,APPLIED,VERIFIED_CONSUMED,REJECTION,RESTORED_AND_BASELINE_RECHECK_PASSED,f0f0e158ed09b1c27350a0ac9ef3b4e142e7f599688c828935f5047e50f3db03,Active Layer 6 twiddle factor -> FO rejection key
+7,63,0x0004,APPLIED,VERIFIED_CONSUMED,REJECTION,RESTORED_AND_BASELINE_RECHECK_PASSED,f0f0e158ed09b1c27350a0ac9ef3b4e142e7f599688c828935f5047e50f3db03,Active Layer 7 twiddle factor -> FO rejection key
+8,64,0x0001,APPLIED,VERIFIED_CONSUMED,REJECTION,RESTORED_AND_BASELINE_RECHECK_PASSED,f0f0e158ed09b1c27350a0ac9ef3b4e142e7f599688c828935f5047e50f3db03,Active Mulcache factor -> FO rejection key
+9,64,0x0400,APPLIED,VERIFIED_CONSUMED,REJECTION,RESTORED_AND_BASELINE_RECHECK_PASSED,f0f0e158ed09b1c27350a0ac9ef3b4e142e7f599688c828935f5047e50f3db03,Active Mulcache factor -> FO rejection key
+10,95,0x0001,APPLIED,VERIFIED_CONSUMED,REJECTION,RESTORED_AND_BASELINE_RECHECK_PASSED,f0f0e158ed09b1c27350a0ac9ef3b4e142e7f599688c828935f5047e50f3db03,Active Mulcache factor -> FO rejection key
+11,127,0x0001,APPLIED,VERIFIED_CONSUMED,REJECTION,RESTORED_AND_BASELINE_RECHECK_PASSED,f0f0e158ed09b1c27350a0ac9ef3b4e142e7f599688c828935f5047e50f3db03,Active InvNTT/Basemul factor -> FO rejection key
+12,127,0xffff,APPLIED,VERIFIED_CONSUMED,REJECTION,RESTORED_AND_BASELINE_RECHECK_PASSED,f0f0e158ed09b1c27350a0ac9ef3b4e142e7f599688c828935f5047e50f3db03,Active InvNTT/Basemul factor -> FO rejection key
+13,64,0x0000,APPLIED,VERIFIED_NOT_CONSUMED,EXPECTED_OUTPUT,RESTORED_AND_BASELINE_RECHECK_PASSED,0b1b32be26247cbcbe0916f8b0b729699c32a96d51efa4a4cd5b289239c8207e,Sham control on active index 64 (mask 0)
+14,2,0x0008,APPLIED,VERIFIED_CONSUMED,REJECTION,RESTORED_AND_BASELINE_RECHECK_PASSED,f0f0e158ed09b1c27350a0ac9ef3b4e142e7f599688c828935f5047e50f3db03,Active Layer 2 twiddle factor -> FO rejection key
+15,-1,0x0000,NOT_ATTEMPTED,VERIFIED_NOT_CONSUMED,EXPECTED_OUTPUT,RESTORED_AND_BASELINE_RECHECK_PASSED,0b1b32be26247cbcbe0916f8b0b729699c32a96d51efa4a4cd5b289239c8207e,Post-pilot baseline golden key match
+
+>>> PILOT RUN COMPLETE: 16/16 TRIALS PROCESSED (STATUS: SUCCESS) <<<

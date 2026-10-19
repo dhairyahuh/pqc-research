@@ -266,6 +266,17 @@ void mlk_poly_sub(mlk_poly *r, const mlk_poly *b)
 
 #include "zetas.inc"
 
+#if defined(MLKEM_RESEARCH_RELOCATE_ZETAS)
+int16_t *mlkem_research_get_zetas_mutable_ptr(void)
+{
+  return mlk_zetas_page.zetas;
+}
+const int16_t *mlkem_research_get_zetas_table(void)
+{
+  return mlk_zetas_page.zetas;
+}
+#endif
+
 /* Reference: Does not exist in the reference implementation @[REF].
  *            - The reference implementation does not use a
  *              multiplication cache ('mulcache'). This idea originates

@@ -1,0 +1,24 @@
+{
+ "dir": "research/phase2_4_report",
+ "files": {
+  "REPORT.md": "3593abf5b9a13df04c6a28d755cbf142588b11c3eda6e10bf4bff12c2193e5b2",
+  "claim_evidence_matrix.csv": "e7fe66e45fba23f592509164a75f001901926a005a36ce1e8ed854c88541ef06",
+  "make_figures.py": "a3bc4a553e1315975ec53983370f9675d173d3fca22d235daa99a3f3a5120e39",
+  "tables/table_interaction.csv": "aba6b5d2400239061f3154151fec23dbcc8311f25ea87e0ea41c66a3a63cef71",
+  "tables/table_interaction.md": "0d2e3c7a40e38d7a7ef0f5b6e00e6d95ffed169fb95f626ea97d6d9b6bbfa2e5",
+  "tables/table_phase2_outcomes.csv": "4af54a1c62420d3129d360071c6c2ff38b3182fe5ac43b7a138957c9fad425a0",
+  "tables/table_phase2_outcomes.md": "8cf6bb8a10f797ed37e932888724ed9c7d027692a982552521dd1fa7511d00b8",
+  "tables/table_phase3_outcomes.csv": "047269266b69b2cc0c8163d762e32645a86c0531d888cf5bc0268c0cb6e28075",
+  "tables/table_phase3_outcomes.md": "30f5d9a1263bf94a6aa888e33f1185b77f3e451b020eef628a95a38d776966a7",
+  "tables/table_phase4_conditions.csv": "d0619553957db52cc43bc0e8a8c895db3af27f2e30f589cee14a73673321ed22",
+  "tables/table_phase4_conditions.md": "e3dcf2e95f513fca6c55ebcdb4b7ccee20461a272740aa4600e564f27bae3d51",
+  "tables/table_sensitivity.csv": "4cf7ed347f65553e71be006cb627fc9e086361f4ef18ed02141712bb83ebb291",
+  "tables/table_sensitivity.md": "9502c23396d996106767be0a7a04caaba36a4116c7f3f7b1161dd6a0e926044d",
+  "audit/independent_audit.py": "d375dd648e92ad5a7350c5090abd46f2d322e4afb62eab16cd44944c8b0706f6",
+  "figures/fig1_completion.png": "58a5695adecca9566cac2c0b13c070b15141251b5af2fd19bcb20e3ac55e000b",
+  "figures/fig2_interaction.png": "8d23823063a483668fea8b0c45d6546dd2f85d130f7a5c3ac487fe82d45550c7",
+  "figures/fig3_sensitivity.png": "62858ed5db7dbdc1e831ec49b14a18a73714f6ed632ec822012c66608d680d8d",
+  "figures/fig4_masking.png": "4fa0092334d7b40cca116626a71be721a11d667a03c4122616988f761a320c82",
+  "figures/fig5_isolated.png": "bffc03d9c16d4a857da7a5d02471bb27e7087accd7d6aae1ec9756b113ec2b1a"
+ }
+}

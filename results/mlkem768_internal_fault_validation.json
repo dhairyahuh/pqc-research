@@ -1,0 +1,345 @@
+{
+  "metadata": {
+    "timestamp": "2026-10-01T00:00:00Z",
+    "implementation": "mlkem-native",
+    "pinned_commit": "fc269bc2d106",
+    "compiler": "Apple Clang",
+    "target_architecture": "arm64",
+    "standard": "NIST FIPS 203",
+    "parameter_set": "ML-KEM-768"
+  },
+  "campaigns": [
+    {
+      "campaign_id": "MID_NTT_STAGE1_B0_BIT3",
+      "taxonomy": "MID-OPERATION (SELECTED-STAGE)",
+      "target_description": "Stage 1 Butterfly 0, Bit 3 Flip (Early diffusion across 128 coeffs)",
+      "iterations": 100,
+      "outcomes": {
+        "CORRECT_VALID_DECAPSULATION": {"count": 100, "rate_pct": 100.00, "ci_95": [96.30, 100.00]},
+        "EXPECTED_IMPLICIT_REJECTION": {"count": 0, "rate_pct": 0.00, "ci_95": [0.00, 3.70]},
+        "CANDIDATE_KEY_SELECTED_MISMATCH": {"count": 0, "rate_pct": 0.00, "ci_95": [0.00, 3.70]},
+        "EXPLICIT_ERROR": {"count": 0, "rate_pct": 0.00, "ci_95": [0.00, 3.70]}
+      }
+    },
+    {
+      "campaign_id": "MID_NTT_STAGE1_B63_BIT3",
+      "taxonomy": "MID-OPERATION (SELECTED-STAGE)",
+      "target_description": "Stage 1 Butterfly 63, Bit 3 Flip",
+      "iterations": 100,
+      "outcomes": {
+        "CORRECT_VALID_DECAPSULATION": {"count": 100, "rate_pct": 100.00, "ci_95": [96.30, 100.00]},
+        "EXPECTED_IMPLICIT_REJECTION": {"count": 0, "rate_pct": 0.00, "ci_95": [0.00, 3.70]},
+        "CANDIDATE_KEY_SELECTED_MISMATCH": {"count": 0, "rate_pct": 0.00, "ci_95": [0.00, 3.70]},
+        "EXPLICIT_ERROR": {"count": 0, "rate_pct": 0.00, "ci_95": [0.00, 3.70]}
+      }
+    },
+    {
+      "campaign_id": "MID_NTT_STAGE4_B31_BIT3",
+      "taxonomy": "MID-OPERATION (SELECTED-STAGE)",
+      "target_description": "Stage 4 Butterfly 31, Bit 3 Flip (Mid-depth diffusion)",
+      "iterations": 100,
+      "outcomes": {
+        "CORRECT_VALID_DECAPSULATION": {"count": 0, "rate_pct": 0.00, "ci_95": [0.00, 3.70]},
+        "EXPECTED_IMPLICIT_REJECTION": {"count": 100, "rate_pct": 100.00, "ci_95": [96.30, 100.00]},
+        "CANDIDATE_KEY_SELECTED_MISMATCH": {"count": 0, "rate_pct": 0.00, "ci_95": [0.00, 3.70]},
+        "EXPLICIT_ERROR": {"count": 0, "rate_pct": 0.00, "ci_95": [0.00, 3.70]}
+      }
+    },
+    {
+      "campaign_id": "MID_NTT_STAGE7_B0_BIT3",
+      "taxonomy": "MID-OPERATION (SELECTED-STAGE)",
+      "target_description": "Stage 7 Butterfly 0, Bit 3 Flip (Late-stage localized perturbation)",
+      "iterations": 100,
+      "outcomes": {
+        "CORRECT_VALID_DECAPSULATION": {"count": 0, "rate_pct": 0.00, "ci_95": [0.00, 3.70]},
+        "EXPECTED_IMPLICIT_REJECTION": {"count": 100, "rate_pct": 100.00, "ci_95": [96.30, 100.00]},
+        "CANDIDATE_KEY_SELECTED_MISMATCH": {"count": 0, "rate_pct": 0.00, "ci_95": [0.00, 3.70]},
+        "EXPLICIT_ERROR": {"count": 0, "rate_pct": 0.00, "ci_95": [0.00, 3.70]}
+      }
+    },
+    {
+      "campaign_id": "MID_NTT_STAGE7_B127_BIT3",
+      "taxonomy": "MID-OPERATION (SELECTED-STAGE)",
+      "target_description": "Stage 7 Butterfly 127, Bit 3 Flip",
+      "iterations": 100,
+      "outcomes": {
+        "CORRECT_VALID_DECAPSULATION": {"count": 0, "rate_pct": 0.00, "ci_95": [0.00, 3.70]},
+        "EXPECTED_IMPLICIT_REJECTION": {"count": 100, "rate_pct": 100.00, "ci_95": [96.30, 100.00]},
+        "CANDIDATE_KEY_SELECTED_MISMATCH": {"count": 0, "rate_pct": 0.00, "ci_95": [0.00, 3.70]},
+        "EXPLICIT_ERROR": {"count": 0, "rate_pct": 0.00, "ci_95": [0.00, 3.70]}
+      }
+    },
+    {
+      "campaign_id": "MID_POLYMUL_P0_K0_GLITCH15",
+      "taxonomy": "MID-OPERATION (SELECTED-ACCUMULATOR)",
+      "target_description": "Poly 0 VectorCoord k=0, Accumulator t[0] Delta=+15",
+      "iterations": 100,
+      "outcomes": {
+        "CORRECT_VALID_DECAPSULATION": {"count": 0, "rate_pct": 0.00, "ci_95": [0.00, 3.70]},
+        "EXPECTED_IMPLICIT_REJECTION": {"count": 100, "rate_pct": 100.00, "ci_95": [96.30, 100.00]},
+        "CANDIDATE_KEY_SELECTED_MISMATCH": {"count": 0, "rate_pct": 0.00, "ci_95": [0.00, 3.70]},
+        "EXPLICIT_ERROR": {"count": 0, "rate_pct": 0.00, "ci_95": [0.00, 3.70]}
+      }
+    },
+    {
+      "campaign_id": "MID_POLYMUL_P42_K1_GLITCH15",
+      "taxonomy": "MID-OPERATION (SELECTED-ACCUMULATOR)",
+      "target_description": "Poly 42 VectorCoord k=1, Accumulator t[0] Delta=+15",
+      "iterations": 100,
+      "outcomes": {
+        "CORRECT_VALID_DECAPSULATION": {"count": 0, "rate_pct": 0.00, "ci_95": [0.00, 3.70]},
+        "EXPECTED_IMPLICIT_REJECTION": {"count": 100, "rate_pct": 100.00, "ci_95": [96.30, 100.00]},
+        "CANDIDATE_KEY_SELECTED_MISMATCH": {"count": 0, "rate_pct": 0.00, "ci_95": [0.00, 3.70]},
+        "EXPLICIT_ERROR": {"count": 0, "rate_pct": 0.00, "ci_95": [0.00, 3.70]}
+      }
+    },
+    {
+      "campaign_id": "MID_POLYMUL_P42_K2_GLITCH15",
+      "taxonomy": "MID-OPERATION (SELECTED-ACCUMULATOR)",
+      "target_description": "Poly 42 VectorCoord k=2, Accumulator t[0] Delta=+15",
+      "iterations": 100,
+      "outcomes": {
+        "CORRECT_VALID_DECAPSULATION": {"count": 0, "rate_pct": 0.00, "ci_95": [0.00, 3.70]},
+        "EXPECTED_IMPLICIT_REJECTION": {"count": 100, "rate_pct": 100.00, "ci_95": [96.30, 100.00]},
+        "CANDIDATE_KEY_SELECTED_MISMATCH": {"count": 0, "rate_pct": 0.00, "ci_95": [0.00, 3.70]},
+        "EXPLICIT_ERROR": {"count": 0, "rate_pct": 0.00, "ci_95": [0.00, 3.70]}
+      }
+    },
+    {
+      "campaign_id": "MID_CBD_POPCOUNT_W0_BIT1",
+      "taxonomy": "MID-OPERATION (POPCOUNT-INTERMEDIATE)",
+      "target_description": "SWAR Popcount Word 0 Bit 1 Flip (Perturbs sum of bits d)",
+      "iterations": 100,
+      "outcomes": {
+        "CORRECT_VALID_DECAPSULATION": {"count": 0, "rate_pct": 0.00, "ci_95": [0.00, 3.70]},
+        "EXPECTED_IMPLICIT_REJECTION": {"count": 100, "rate_pct": 100.00, "ci_95": [96.30, 100.00]},
+        "CANDIDATE_KEY_SELECTED_MISMATCH": {"count": 0, "rate_pct": 0.00, "ci_95": [0.00, 3.70]},
+        "EXPLICIT_ERROR": {"count": 0, "rate_pct": 0.00, "ci_95": [0.00, 3.70]}
+      }
+    },
+    {
+      "campaign_id": "MID_CBD_SAMPLE_C15_BIT2",
+      "taxonomy": "MID-OPERATION (SAMPLED-COEFFICIENT)",
+      "target_description": "Sampled Coeff 15, Bit 2 Flip (Violates support [-2, 2])",
+      "iterations": 100,
+      "outcomes": {
+        "CORRECT_VALID_DECAPSULATION": {"count": 0, "rate_pct": 0.00, "ci_95": [0.00, 3.70]},
+        "EXPECTED_IMPLICIT_REJECTION": {"count": 100, "rate_pct": 100.00, "ci_95": [96.30, 100.00]},
+        "CANDIDATE_KEY_SELECTED_MISMATCH": {"count": 0, "rate_pct": 0.00, "ci_95": [0.00, 3.70]},
+        "EXPLICIT_ERROR": {"count": 0, "rate_pct": 0.00, "ci_95": [0.00, 3.70]}
+      }
+    },
+    {
+      "campaign_id": "FO_PREDICATE_DIR_A_VALID_CT",
+      "taxonomy": "CONTROL/PREDICATE FAULT",
+      "target_description": "Valid Ciphertext: fail 0 -> 1 (Forces Implicit Rejection Krej)",
+      "iterations": 1000,
+      "outcomes": {
+        "CORRECT_VALID_DECAPSULATION": {"count": 0, "rate_pct": 0.00, "ci_95": [0.00, 0.38]},
+        "EXPECTED_IMPLICIT_REJECTION": {"count": 1000, "rate_pct": 100.00, "ci_95": [99.62, 100.00]},
+        "CANDIDATE_KEY_SELECTED_MISMATCH": {"count": 0, "rate_pct": 0.00, "ci_95": [0.00, 0.38]},
+        "EXPLICIT_ERROR": {"count": 0, "rate_pct": 0.00, "ci_95": [0.00, 0.38]}
+      }
+    },
+    {
+      "campaign_id": "FO_PREDICATE_DIR_B1_LWE_SLACK_CT",
+      "taxonomy": "CONTROL/PREDICATE FAULT",
+      "target_description": "1-Bit Corrupted CT (m'=m via LWE slack): fail 1 -> 0 (Candidate key equals Ground key)",
+      "iterations": 1000,
+      "outcomes": {
+        "CORRECT_VALID_DECAPSULATION": {"count": 1000, "rate_pct": 100.00, "ci_95": [99.62, 100.00]},
+        "EXPECTED_IMPLICIT_REJECTION": {"count": 0, "rate_pct": 0.00, "ci_95": [0.00, 0.38]},
+        "CANDIDATE_KEY_SELECTED_MISMATCH": {"count": 0, "rate_pct": 0.00, "ci_95": [0.00, 0.38]},
+        "EXPLICIT_ERROR": {"count": 0, "rate_pct": 0.00, "ci_95": [0.00, 0.38]}
+      }
+    },
+    {
+      "campaign_id": "FO_PREDICATE_DIR_B2_SEVERE_CORRUPT_CT",
+      "taxonomy": "CONTROL/PREDICATE FAULT",
+      "target_description": "Severe Corrupted CT (m'!=m): fail 1 -> 0 (Forces Kcand != Krej != Kground)",
+      "iterations": 1000,
+      "outcomes": {
+        "CORRECT_VALID_DECAPSULATION": {"count": 0, "rate_pct": 0.00, "ci_95": [0.00, 0.38]},
+        "EXPECTED_IMPLICIT_REJECTION": {"count": 0, "rate_pct": 0.00, "ci_95": [0.00, 0.38]},
+        "CANDIDATE_KEY_SELECTED_MISMATCH": {"count": 1000, "rate_pct": 100.00, "ci_95": [99.62, 100.00]},
+        "EXPLICIT_ERROR": {"count": 0, "rate_pct": 0.00, "ci_95": [0.00, 0.38]}
+      }
+    },
+    {
+      "campaign_id": "POST_OP_NTT_OUTPUT_MUTATION",
+      "taxonomy": "POST-OPERATION STATE FAULT",
+      "target_description": "Post-NTT Output Buffer Coeff 0 Bit 3 Flip (Occurs AFTER all butterflies)",
+      "iterations": 100,
+      "outcomes": {
+        "CORRECT_VALID_DECAPSULATION": {"count": 0, "rate_pct": 0.00, "ci_95": [0.00, 3.70]},
+        "EXPECTED_IMPLICIT_REJECTION": {"count": 100, "rate_pct": 100.00, "ci_95": [96.30, 100.00]},
+        "CANDIDATE_KEY_SELECTED_MISMATCH": {"count": 0, "rate_pct": 0.00, "ci_95": [0.00, 3.70]},
+        "EXPLICIT_ERROR": {"count": 0, "rate_pct": 0.00, "ci_95": [0.00, 3.70]}
+      }
+    }
+  ],
+  "representative_traces": [
+    {
+      "fault_id": "MID_NTT_STAGE1_B0_BIT3-TR0",
+      "seed": 26720103915720857,
+      "parameter_set": "ML-KEM-768",
+      "function": "mlk_ntt_butterfly_block",
+      "stage": 1,
+      "butterfly": 0,
+      "target_index": 0,
+      "pre_fault_value": 3373,
+      "fault_transformation": "BIT_FLIP(bit_3)",
+      "post_fault_value": 3365,
+      "next_operation": "CT_BUTTERFLY_ADD (r[j] = r[j] + t)",
+      "propagated_state": 3365,
+      "detection_check": "FO re-encryption c' == c",
+      "final_output": "5ca655b2..588c",
+      "baseline_output": "5ca655b2..588c",
+      "outcome_class": "CORRECT_VALID_DECAPSULATION"
+    },
+    {
+      "fault_id": "MID_NTT_STAGE4_B31_BIT3-TR0",
+      "seed": 26720103915720859,
+      "parameter_set": "ML-KEM-768",
+      "function": "mlk_ntt_butterfly_block",
+      "stage": 4,
+      "butterfly": 31,
+      "target_index": 47,
+      "pre_fault_value": 2756,
+      "fault_transformation": "BIT_FLIP(bit_3)",
+      "post_fault_value": 2764,
+      "next_operation": "CT_BUTTERFLY_ADD (r[j] = r[j] + t)",
+      "propagated_state": 2764,
+      "detection_check": "FO re-encryption c' == c",
+      "final_output": "08b89873..98b5",
+      "baseline_output": "1b23f69b..47e2",
+      "outcome_class": "EXPECTED_IMPLICIT_REJECTION"
+    },
+    {
+      "fault_id": "MID_NTT_STAGE7_B0_BIT3-TR0",
+      "seed": 26720103915720860,
+      "parameter_set": "ML-KEM-768",
+      "function": "mlk_ntt_butterfly_block",
+      "stage": 7,
+      "butterfly": 0,
+      "target_index": 0,
+      "pre_fault_value": -173,
+      "fault_transformation": "BIT_FLIP(bit_3)",
+      "post_fault_value": -165,
+      "next_operation": "CT_BUTTERFLY_ADD (r[j] = r[j] + t)",
+      "propagated_state": -165,
+      "detection_check": "FO re-encryption c' == c",
+      "final_output": "3932dd1f..ce11",
+      "baseline_output": "3b533561..7bdb",
+      "outcome_class": "EXPECTED_IMPLICIT_REJECTION"
+    },
+    {
+      "fault_id": "MID_POLYMUL_P0_K0_GLITCH15-TR0",
+      "seed": 26720103915720866,
+      "parameter_set": "ML-KEM-768",
+      "function": "mlk_polyvec_basemul_acc_montgomery_cached_c",
+      "stage": -1,
+      "butterfly": -1,
+      "target_index": 0,
+      "pre_fault_value": 9387001,
+      "fault_transformation": "ADD_DELTA(+15)",
+      "post_fault_value": 9387016,
+      "next_operation": "ACCUMULATE_DOT_PRODUCT (k=0, t[0])",
+      "propagated_state": 9387016,
+      "detection_check": "FO re-encryption c' == c",
+      "final_output": "c4860e81..7df9",
+      "baseline_output": "816503af..9eb5",
+      "outcome_class": "EXPECTED_IMPLICIT_REJECTION"
+    },
+    {
+      "fault_id": "MID_CBD_POPCOUNT_W0_BIT1-TR0",
+      "seed": 26720103915720876,
+      "parameter_set": "ML-KEM-768",
+      "function": "mlk_poly_cbd2",
+      "stage": -1,
+      "butterfly": -1,
+      "target_index": 0,
+      "pre_fault_value": -1701505434,
+      "fault_transformation": "BIT_FLIP(bit_1)",
+      "post_fault_value": -1701505436,
+      "next_operation": "CBD_SWAR_POPCOUNT_MASK",
+      "propagated_state": -1701505436,
+      "detection_check": "FO re-encryption c' == c",
+      "final_output": "caf89404..e16f",
+      "baseline_output": "60d26d93..b566",
+      "outcome_class": "EXPECTED_IMPLICIT_REJECTION"
+    },
+    {
+      "fault_id": "FO_PREDICATE_DIR_A_VALID_CT-TR0",
+      "seed": 26720103915720886,
+      "parameter_set": "ML-KEM-768",
+      "function": "mlk_kem_dec (FO transform)",
+      "stage": -1,
+      "butterfly": -1,
+      "target_index": 0,
+      "pre_fault_value": 0,
+      "fault_transformation": "BIT_FLIP(bit_0)",
+      "post_fault_value": 1,
+      "next_operation": "CT_MEMCMP_EQUALITY_PREDICATE",
+      "propagated_state": 1,
+      "detection_check": "FO re-encryption c' == c",
+      "final_output": "77d2f42b..2246",
+      "baseline_output": "c48f3252..d38a",
+      "outcome_class": "EXPECTED_IMPLICIT_REJECTION"
+    },
+    {
+      "fault_id": "FO_PREDICATE_DIR_B1_LWE_SLACK_CT-TR0",
+      "seed": 26720103915720887,
+      "parameter_set": "ML-KEM-768",
+      "function": "mlk_kem_dec (FO transform)",
+      "stage": -1,
+      "butterfly": -1,
+      "target_index": 0,
+      "pre_fault_value": 255,
+      "fault_transformation": "BIT_FLIP(bit_0)",
+      "post_fault_value": 0,
+      "next_operation": "CT_MEMCMP_EQUALITY_PREDICATE",
+      "propagated_state": 0,
+      "detection_check": "FO re-encryption c' == c",
+      "final_output": "2c6ec171..1327",
+      "baseline_output": "8b5da678..f296",
+      "outcome_class": "CORRECT_VALID_DECAPSULATION"
+    },
+    {
+      "fault_id": "FO_PREDICATE_DIR_B2_SEVERE_CORRUPT_CT-TR0",
+      "seed": 26720103915720888,
+      "parameter_set": "ML-KEM-768",
+      "function": "mlk_kem_dec (FO transform)",
+      "stage": -1,
+      "butterfly": -1,
+      "target_index": 0,
+      "pre_fault_value": 255,
+      "fault_transformation": "BIT_FLIP(bit_0)",
+      "post_fault_value": 0,
+      "next_operation": "CT_MEMCMP_EQUALITY_PREDICATE",
+      "propagated_state": 0,
+      "detection_check": "FO re-encryption c' == c",
+      "final_output": "70c0dd75..a8ed",
+      "baseline_output": "b406c7ca..eb7e",
+      "outcome_class": "CANDIDATE_KEY_SELECTED_MISMATCH"
+    },
+    {
+      "fault_id": "POST_OP_NTT_OUTPUT_MUTATION-TR0",
+      "seed": 26720103915720896,
+      "parameter_set": "ML-KEM-768",
+      "function": "",
+      "stage": -1,
+      "butterfly": -1,
+      "target_index": 0,
+      "pre_fault_value": 3147,
+      "fault_transformation": "BIT_FLIP(bit_3)",
+      "post_fault_value": 3139,
+      "next_operation": "POST_OPERATION_BUFFER_MUTATION",
+      "propagated_state": 3139,
+      "detection_check": "FO re-encryption c' == c",
+      "final_output": "60d3a5bd..66f8",
+      "baseline_output": "688a6a90..e5ce",
+      "outcome_class": "EXPECTED_IMPLICIT_REJECTION"
+    }
+  ]
+}

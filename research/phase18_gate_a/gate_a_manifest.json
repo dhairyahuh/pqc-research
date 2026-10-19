@@ -1,0 +1,3370 @@
+{
+  "schema_version": "1.0.0",
+  "generator": "validate_vectors.c",
+  "target_parameter_set": "ML-KEM-768",
+  "vector_count": 420,
+  "official_kat_count": 1,
+  "prf_derived_count": 419,
+  "vectors": [
+    {
+      "vector_id": 0,
+      "provenance": "OFFICIAL_NIST_KAT_FIPS203",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "934d60b35624d740b30a7f227af2ae7c678e4e04e13c5f509eade2b79aea77e23e2a2ea6c9c476fc4937b013c993a793d6c0ab9960695ba838f649da539ca3d0",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "934d60b35624d740b30a7f227af2ae7c678e4e04e13c5f509eade2b79aea77e2"
+    },
+    {
+      "vector_id": 1,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "c031fc67f68d687b22db6dd70f6e9a1650319914741631aa8e3cb057a104944a342e8c998c01a463fe6f47ad2b1b111439f9ba4cab0925a18404df3c77bda7a9",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "c76e7470fc7b486402397c4e1c5138ec8dd943da1e8d04fdbbb6b11ff0679a83"
+    },
+    {
+      "vector_id": 2,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "912e09022cb34f4f95293045c6fa248e8eb20a40d194e9bfb334a3164f45532c01b6cc53c9c4f76cbf2760078511f12ccf6e8c970012606224fee85db4b30f9a",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "fd92958b688b470d05c296885b92c7075f2df82e88762cf4c0e87bad302a3622"
+    },
+    {
+      "vector_id": 3,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "f64f53e1dfef220f39048368b76e35350adbcf77ca816b4715c8fa63a5d74b8d4213409ae7552928dfe7ffd44c59f4cefe76f724db6b239b2e5d8a762c16c44b",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "1d978fb9a00b024f739961788c6f6d9e415df829eada8f02900d3dca96c04152"
+    },
+    {
+      "vector_id": 4,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "8c8cc2ebd00b2de5a7ba6d7bb9b72e89cc032faa7a2e75dc865dee12bfefa5370745d2a0c497a5b12719831821ac20bb879c9de55a2deb369106d7213a2c12cf",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "8aa086735cda7a78d10cc1034cbe2ef096161c394574f6af6db1e28fbd5d7057"
+    },
+    {
+      "vector_id": 5,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "adcdcabfdb263e4e05a6f0c3f390090e63b6a90ed9133ed10674905b5436de2ebc9943f650be296fddc71a5ef7d9ac46b126c8c042a5df60aeab8bc0dbbb5985",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "da82692722c045356c312bbf290e30cce6789a64275657318d8e1bb60623995a"
+    },
+    {
+      "vector_id": 6,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "d07dbca8db2ba4be3838fbe6a6e0525bc6dc0fac785ffc5f40d0992cb66113effd4dd6f29d9083cf041273115706ff56aeb16f5dfa3db69fdc75a5cf654b3f08",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "57ff928fb7d87b7bc31efcf8b21864f37421ed8dcb17963259ed9cd44bdfa71b"
+    },
+    {
+      "vector_id": 7,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "f8d96bae182222b7146c551be97fee66b7d28d121e32249c913fabbd6e190e0d0bbf7e27adf206678f2114ccb5f801d6c3d6a3b8b2c81a5c542a2a3f124455ee",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "be3be0bd1a19cafde653b51ef6ea2153030218ac12831c660b09cc5664ea20bd"
+    },
+    {
+      "vector_id": 8,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "4ab1318bb33679367ae6879c5023d2653f6a33cd0f0102d7b6a3ac0ebc5e5f063224f0276cd355b2c3f7ba60b037cedc25c3dd287b5d9bc6f73904625d754cef",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "1b2ed0b82bcc388e7d6214dbf9cae169daa2a91c4cd57518dc01bd8753e0aeb9"
+    },
+    {
+      "vector_id": 9,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "51da03c81d82446805b1ee80d55c45318abc9d9e908e1e635a50975fe4543581f6b3c923ba57cfe5ec5dbc06d82d898a31129ea359f9da2aa315f26c6f93068c",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "944e3495370177f39f119ff1b47d89e0fbabdc666a9edac7b7db357c628f8ae3"
+    },
+    {
+      "vector_id": 10,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "85d92215dc468ec3b55e7cd0e6c0409869e67fbc8aa9d062c2e1c14a48a5574336c86b2662be859b777b5eb393b99d85611936d59cd24441ea1b3b42dbb1619c",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "827010f2dfa94313ebd73ca3615fd17fc11c5127dacd4113bb4539c23c3e5724"
+    },
+    {
+      "vector_id": 11,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "d1032a38da94352634251ad7369f527cecf1ae4be805b9ab413fd7f895ddbcd8825cc4a4bf581aab72ead1c81e5e657d0be0e790f2070d93b3b1e5878778f7fa",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "89e0183a31e766fbdb3818eed078314221e4c07ef21b74dbc97472b1395e5b82"
+    },
+    {
+      "vector_id": 12,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "9dabcbad18b3322dc1268599f3620c0ebe1c068c708f8cbe84c50f0c3d791b42c837ccd674f9f204ac47fbe48052502ba516b1051da371b2685e8c7de3d1190b",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "8cfb31580ca2316935e9b3ce784bb19104ca913a09ca01fe54e19ac52ea53bae"
+    },
+    {
+      "vector_id": 13,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "24bbae5f1105c767af5be7ec062e97de123f56c3609eedd8e0038b1b11a9c033aa498dc0638f5180d6c79bd1a70fc5a67e7f686b0601046a589427320c7843f4",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "ce5ab4471af609f3e2d7bc156de1ffccb878233ed72bfc3cce80a7889c790754"
+    },
+    {
+      "vector_id": 14,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "e61f7a87443bf9966293b3f907c2d03d87fc5b9bff30738bf471ff7d7ade63ed102dab3f13ffadec59dccf840ca0b2a3d4b3051e9fcd1f31284477c174e63da0",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "35e521fe1069ae6b862c75c6a2170fe74da3677fd9f47af36ca59004f410ec8a"
+    },
+    {
+      "vector_id": 15,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "3568f780673dabdfa7be89c2c406d689b0d1912cc4f121c72c19714df45824ef18a3e8b02eac7dac29e3f621e3c82667212fb624588f8f743ba1275c7c48fbb9",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "f4b19a164ec13431c98913a1100c799bafafa956222b920d49617faf8be381b2"
+    },
+    {
+      "vector_id": 16,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "43220f17bd3b3406d79ba468e84c398f897fe2979ab94d0c15634d513dfbf044800d1b8b69ad1abb30dc255711a979f8a589691a4de97f24242f0257c21dee93",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "f4b13fe6126b8e116778f16ca69fcd811b313299ca4dad9d30adc6bbe060394e"
+    },
+    {
+      "vector_id": 17,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "f62843af2807d2b233513b30fb03b45fc26ae527ac115620db5e002947530ddf519edd7428e136147fd2bb673845c1ed8d16df16df74272b733e8364da196cfd",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "0c3880bfa951f81a7840c6f66028b88d3a119142d3f1fd599d362233772c2a61"
+    },
+    {
+      "vector_id": 18,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "bbf27444aa03e83ab504c204fa803b4a785ff92b8a8a5bda9b4229a7124f0945027d24ced61520a1bf40687a65f60dc31acf3642362ffbb1f6707f5c71388da6",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "74aa6e4adc848f79744019536a4773ade601508a4fe384bb495e40446d18c464"
+    },
+    {
+      "vector_id": 19,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "8d06a278616d9c7c86c2f5ddb2adfee2e2dc76b2182a4153179bf14916bedfb2a8826ae845b2ca61319c93fb712c9169615bf96dacc53863588540e4ba4f11af",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "bc79decbadd0a948a9c43d77c75bee0165c8fd4a5abe9ed6885738fbf80d0962"
+    },
+    {
+      "vector_id": 20,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "8cbe4c4e02cb8507e523644e407154beece5979a74c7e4490c6711c202abad5f9689797e692d8de47d3cb665bd1bb8346d19958388174c7e32fa5c8010bf2a59",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "a5d050a1085203202b455df21a57ce562ebaeecc6a7ff758fa53a50c46295d21"
+    },
+    {
+      "vector_id": 21,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "c8d61182d86d5e6714cc84515ac4a9315be3ade92b3d50bb6e1f013f814c5d6c2ec63a8fccde55a0353aac4bf9272669716647354dece606c352bc4fb8538c20",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "836e0b7239ba87b69b06a61990a837f1caf87c5c740fadfec23c364b4b4eb65e"
+    },
+    {
+      "vector_id": 22,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "09141debb40de51de53fd10a2f8f85f52e724ad0fab9d2477fa26c7a29689d77b8e3ef0de71165c84664e948de1987bd31bc1ac2e224f87dfc8cd5965c082373",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "fa281b6c6eccc63579d341ba034fc06922eea802312c7d2d7a9db98fd8507122"
+    },
+    {
+      "vector_id": 23,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "6ddb00df210524387816e23bb6c76361ca10f36874526651441df60f7f9a5f1e8d8d2c4c615b29f6941836e3ce4fa75da3b8ea5e1316b30dfb5453fb0aed6e07",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "7d8cf2bd4cc9ab93b95b3d727221af2c2c2b4693eb89fdd90b5749a383737f51"
+    },
+    {
+      "vector_id": 24,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "663ec6663fee9d351503c7ab5b0c10809cb4a150581877b060afcab99a89ae4bbbba3bdf6e1f5a5ad4c359322b2b222e66f8e389d28aed5ad0ccaef59ac7c393",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "08588ef06c6f8ff50794acb90f3b42cb82056849af493826175b86ae9893ea3b"
+    },
+    {
+      "vector_id": 25,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "e910dfabdef0c83b1da4edeecc163281751c919efe5282a185b234ae1043f454f6ac7ed1f9e330390b704169a0433becffd4e0f29e7f3568cdb094edf15b224d",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "cd702799d26005293885c89e0f3ad23ac012c121c25ad96cedd7e4ed517a797e"
+    },
+    {
+      "vector_id": 26,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "25159e6fee2443b78879bff7591736b88826e304958a874a03efae0288498efb82c2aec1d8d6e16deb28642b562fa4b617b683f48670935b03e2367572c9a517",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "fe1fd66f8bb82c82f9fa92f2769b431fa70dc8e966806d82b5219fbf14b2f659"
+    },
+    {
+      "vector_id": 27,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "ebc54d985aa9e669a7c90f65c84e3d0ffd5e332f64a40e35828d8a5f0c7c547e27009b0b18a75ff5dd7c001e41d18d3bc74fc36ca454dd85fbb684b4ae718040",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "cea1583a22bcee08c28d1d151ff818c6e676b4adb7418a0222e9c40f2cb8d809"
+    },
+    {
+      "vector_id": 28,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "7d4045d291e18dfc79656592d0e022928394fa92e6eb217dde320d090e424a2029dc96b7726b0279850e01fb1ddeb82885348000d428cb99908036aa68514a1c",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "ebded49b319f0a696a84429642043902114a990c659cd98115226d941753d5d1"
+    },
+    {
+      "vector_id": 29,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "0b2a7cc26cad3abc461d79d68e446be98ec66e5af2efd152c4935084fd34309a0d79fba13e596419e48f9e7350386b128eee6926886db196ac28d7c9d0bfbb03",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "e1e491d8e018ce1128ab22bc3297da3ca3564a0032b943ea9f483e533ae23d34"
+    },
+    {
+      "vector_id": 30,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "991a7dfe81c783d0af6cedf86380a85292c98d38e1e00b5cbbf2df3780dce0d3acb6441c5d8cb19c7dc83ddec249313e09036668a92ba30cda02e3a3ef75c12f",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "02a9dead83e41b93922c1cc14b55a97a30d6d2daed5a415e7e6f79c0f0a81b57"
+    },
+    {
+      "vector_id": 31,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "fc5f2838da3f3d0e6adb466d1dc24a0394cd026161f76cc2b6358289756d10ff3dddfed9049766c97500736db796db66afe00b5c0f50db36ae68fd291aeb367a",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "0e690df303155dad694dcaf642e50e70474b9ad4aad99ef622f5ec7014bf60be"
+    },
+    {
+      "vector_id": 32,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "c2418462bf2c296f61aa3a536df228f48dc0b58fcc8f895cab2f1c426db43832adef3bb8621918447e4c9dc7446efa30cab2f01e59b314341e77ee94d3918186",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "69bc775235e4d9114f41bcc165dbfb2a2c90dcdfb90e58aebc8ea02bea8fbe48"
+    },
+    {
+      "vector_id": 33,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "bc914e01d1cff35f9ed1ae0a4e5ee3ba2665ffead9da518a4f2aa1772f93c0adf0e0ceebcde7376673c34b60af6ec5dbb4acdd97d7e13a9abd48b2b39094cb86",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "981f60205531baf096bba3f894d72c48e12269edc09315a6f5003e2aa21cd161"
+    },
+    {
+      "vector_id": 34,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "3473a2cb7a8280426ee0c8cd3207698df9771e0ae254ac394c372c7937f58076c9cec08b1baffb4a874cc35ec853c8688f7b9bd4c896e168693a2a38d5d6c3b5",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "2487016edec7fff8acf6e19b50d7ec6905453d5fe839253ce598693952b750f2"
+    },
+    {
+      "vector_id": 35,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "3aaee4cc62c2f654eff808e1c0945728549831c67a388d3fae1af860235d20b54ab038006ad52f956cae7592f5dc0c1985ab388115c5bc6df6bcbe725b5d60d7",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "5c14f9d10e22cf32180de036043d0c80d6e1c11700a709c109e82a8a5eb9e199"
+    },
+    {
+      "vector_id": 36,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "b80721605c8f978e1e95f0a0828d4f01407dd47f6be1fc15a45cad58b7aa0f362f1d50bac258084f6e25824e6a9db26a493e7204ccb06cd06a3cb7a6c948aef4",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "dba1c2c4e48dde1caef0cf732a985cfb57dc2084e60a1eaa8b4f7ecfd03ce3ab"
+    },
+    {
+      "vector_id": 37,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "016b5c3ad2384451555315d5b063310b09b18bcae638808502e70a21cbcd73e54de1259bec6f285567925c8ac20843cccaa9bcf946fb50468fd84dc70c0701a1",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "d458facd781a8a184e5e13dd00e28183aeeaa0dab0d2cdc97e9ff2fb2d9475ba"
+    },
+    {
+      "vector_id": 38,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "be2b02b70ca16c7b16e7e42969e88e9171e7bc47c35e3d25eecfb5f37abac12908b4997748f0e7d92fc7b556eda9b5100c429d3cf44855e861dad2378ad83fe0",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "3274198774e6b62cb8b5b7e1e59b85cee1b0f5b423c02acbbf5bb725697f5e7d"
+    },
+    {
+      "vector_id": 39,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "6374124f8ad40479fb155361e09b574ca72c62aeca65bac1151633a2440a4b5fde76af48a64ed21d0aa24970ee71a03ad8597adda51e70059f992240c5a7c53d",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "1e7b1211984e4efef2df76e1ef05c3cc77bebbe94468569359d1d941defb71c7"
+    },
+    {
+      "vector_id": 40,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "37fded22d3555b12e0a14de663c5bc204fba4941617bbad7bdc3b89a49f52cbeaabada22a702406ef1423fa61b2f43cec399bb67b407f3a98b03c8dfc4240118",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "9c4b5ccade23afa92aff33f050e15c5fe3ba7bda81d63e61eadea400b2e01879"
+    },
+    {
+      "vector_id": 41,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "db24da00d41c6154edd60b739cfedb52825242ea874288eed2298b9f6a6c4ecb2ca17938fc8b6ad33cb40b9701f0812a428c6e53fc40751f0fb56414edd8837b",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "05d162128e27d5e71443549f020cbff6b73080736055c0e775579b2aed9841a1"
+    },
+    {
+      "vector_id": 42,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "2400af6d6948e0d83ce380e98018c0a4735be7be11fd2a350d6df443a132efe637dc667e37b4def5b4b57dae6a95f5613ae016403eb25bfdb844954ed635daca",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "9b9cd7ea48bc120b124623b9c959d598a053ffe0def4d0e203bc1cf2b420254a"
+    },
+    {
+      "vector_id": 43,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "3fde44be20fee58f8bee23aa3e423db79811b6a62305ac7418079ce56e1f609105b9cc00d1991effd913ab57f90f274b2e5d63bb820af9672fa547929dc22f38",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "4742d0549335dbfac02c2788e48ab6fc45281f34160e950c31c086fc31182837"
+    },
+    {
+      "vector_id": 44,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "5cc93d380f2bf3c6571ecf62afed527821db6c50e2055c9042bea93f11439d574c29661c982b1c36387768c590f7e9ddb29051b1bd0456aef57a4e378ef6981c",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "6fbe2ca5205a93377d690142095574307545d46eac0056c8ad54b4dc0f590929"
+    },
+    {
+      "vector_id": 45,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "407621f9ff195ee6d06ca05e1c8d54b2cc70ef95896e2b0005a4c32bf4cbe69a0121e46c5b733e1a1e6e647256b426abb954aca991dbc95981b940d60f03fc52",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "e7a04a54b88e20448b32b366ba2b5b7317dac75646a898be7cd2508a22bf755d"
+    },
+    {
+      "vector_id": 46,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "e15ec47d298ff0961ae199087fc63e05084860f4578c76fdf35562d78d496d7077b338e33fed0815a077e1520768b87288a2491265e1596e08c7427df832e906",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "1492f02bbbb8c94c7c0f255993ffa50e4a15b2ec2b7b2dacb9415fe638ebf3cf"
+    },
+    {
+      "vector_id": 47,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "307fc41466bbe69f21347dc4265cef49cdbd96c40dc10fee8195522b72df295b657402ae8d55941b7898001a7156af7c65764cc23c7822561c699b44fa69c3df",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "55abe638732a89544464a01ba380206eeada4ce5f9287b7a6479632698edf899"
+    },
+    {
+      "vector_id": 48,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "9df982e6e5d0ed50ca2e736f01745212939c0ffa1e6972e7dc6c126da0c3c951b78ce40d7a836dd74cff4a05e7c180619348d9eb77d29245603276f1e3f4eaeb",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "3db7edd020ffc47f14f8837c57799af521da772e2f4da47b59b2a32e9c6688c6"
+    },
+    {
+      "vector_id": 49,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "5a24db0bab24c4b72f49a4f8f88ffadb6917f4eec2d067117812ee42e253cb08460df2a87c6092ddffe18e2b2ea799892e452b0ec2d830dbd9719eed406aa4dd",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "e3bdc3d77dc4526fbc453f684da6b9b7e51465c616d899ab06b3b29ee2f533c3"
+    },
+    {
+      "vector_id": 50,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "2a0ff9596b3bd75d23bc59eb48b4f5455fdc85a2b9aa99a57fa3b09506eba205eacb74af0a276c805ff5faa93af97cd43b377b11b172f27322cd9e4c84ce7606",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "705f19e58084972ff4695fdf90ea9613cb5cb5890375af590a168f9cbc176c33"
+    },
+    {
+      "vector_id": 51,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "6bf9ba12fcb02bade8fef3c17602e05303bf9d93b896d69727580fdb59b654823e812b303397690e8f8286e008b1d64fa69d5d448991b550fd756f966bd07a9e",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "2e9046011af46645f60a8271715f88a7497dc9715cac2960aa8685fe6c9dbc82"
+    },
+    {
+      "vector_id": 52,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "aa9130c60ad65bda357c84d443444f29d890e914ed9800bf5c7db36b13ca43fe20bfe609254ac94429ff6061efe3b303ce29b4faeb6852c57d8d9c76783845e4",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "72537062c0beaf8822f89138ae44a3ebbe8df5341ec6ce4297820587154a6080"
+    },
+    {
+      "vector_id": 53,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "922566ed354ca24894f93a0016e337d8f9a69100cc00923fb4e194ebe8edcd807c5ab207501c2a9fdcb5fb55c7064d454c3db05f3177d23907880e3a0ab53bf0",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "6e53654c3ac90bc7813f66f1716075dba3a7601b6a97633d506f7722ce26cf35"
+    },
+    {
+      "vector_id": 54,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "f8663e23e33e6ab1670fa86dd55c561deb84e104648cc110b1973434b37fb88eeb9b8809aa2a628a28bd1c7b0a3ff9070735d8a4419a1a3824210b7bd55f722a",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "7b201288ff6e04542b59f4fc8aea1b60a0ab44a3a35426d952461dd6871105ec"
+    },
+    {
+      "vector_id": 55,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "a26b0d5b1acadc867ea6a6fc980a50b1b2def6432a68455cf40c2b149650c1f07502be11459e6f808d74b347371f38cdf6f3af21b6d339b58adbd9d86ce611a3",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "3c5640b1eb75214bdccc841b1ce0a5ec17be0f80ae83b161bfd34e7fbff381ef"
+    },
+    {
+      "vector_id": 56,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "6d7aee59792830814c91343232f2b65df1e07bc16469f9756c63766f2dac7ad10a7628f87d5ae701109dee21d19da128a6fddd402acb850ab59a7bf405327330",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "d1f5edbf477137c4072aa2cffcf92cd5890403aa801e2e62a1f11329928125a2"
+    },
+    {
+      "vector_id": 57,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "23a1c6585d169553d0d1d862c5c0abc54aeac6571bfd253d0d8050033a7c6f2bf8345dbc5f3f840bc088e2f856f8a5e1e797298cfb2d0e8274732aaa293409d9",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "786edfe5fd06789d1b71f9e96003ea8a608e22daab61702a386aa53d953a6f74"
+    },
+    {
+      "vector_id": 58,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "267b89506b929d40a02fd396978e58fceb3c6206359fcb02b6b1c3ee3d3d46dfc85975c0934b9f17ccabbeedf54db72d1305db33899f5d132e22659ff01dc0ea",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "eaea157c8583128e75fbfaf87e0d432e5808f3e9277292b94b9c0dbdc7ffb2da"
+    },
+    {
+      "vector_id": 59,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "cfad048db9fb4f33653923dbc8b8e6b5c03f28b78efeadfb859cd66a9e4105580d82266dd281ee32b473ede6470f16c94b6478e7f7d65225c7b268bb47efeff2",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "9b244aa3471bef7e3be4be321e44e94c62a9f01045a360d37dd5f6723f0e3da3"
+    },
+    {
+      "vector_id": 60,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "77b1275318c46b3b6533989dc022c3490c7aa76870d5e670026aec63b9ab06f9a126e3a05874655619c31408b2179c2b5525d92e939bd860805f8dc78afbe512",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "6c5de6ebdfbf24826e625339573bdfa95ba12b7ffe700741d28fcec8538d4bb1"
+    },
+    {
+      "vector_id": 61,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "75d579877f2b7163c5c6b177c79e9672d5a2218f174b4c63e0e6653b8356fe500455ae03b68c4776e6be1fe7024c35cd89577125f0ccd3fbdf49dd1dc5b5ffb3",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "4101b6db99b287306aff7769f25bf0f52b5005259c1c170bfb42d0f7c4c806c5"
+    },
+    {
+      "vector_id": 62,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "385912cdfca7ff58291cf1575e225a10315ba7ca6b6a84b92f3713f6d914af1b707be04fb76ba4b88077c37ed5f7fc8a1d0fdcb98b6dddc109551244d91d0da8",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "f7c3adf910f0beddc6e1d0ff89b460c373e43050d943c04d851b90ca5d8616d6"
+    },
+    {
+      "vector_id": 63,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "4e95c1952801635a4026bd17234f7a9e610356da69c169ec640f7f70b924b8ee9a47006273b528be548394ff3f71c7719729ff064bc7339f83adb4ef3d805cb0",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "d27015eaee1084af021143498fcc4bc57f05cb75d8e45d4a1decbaf75fa175e6"
+    },
+    {
+      "vector_id": 64,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "2c34e8bad3f5ec761a4240c6fe02e4596a0e7def967fcef3cdb8c0e16d45dae45e56c6bb64e59ea766c72e95253b5ddbee75c6d24715713a76836f7fa5487606",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "c25fd706a5cf70fe69f589d2ba2cb6dc08bd8f60332a725a3656cdceacccc2bb"
+    },
+    {
+      "vector_id": 65,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "47a3118e747f0c37afa6ced149b244833b5145ddc1dadd5c066314d0c2123d48e10517c6293678c734bc5cc65261f53246300fd2d2fa8f559b6b2383f3e1557a",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "684675d359227690d5da343ecba2247cec043e3b6c322ab6c7e57ed1ccf93621"
+    },
+    {
+      "vector_id": 66,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "08630b56a9cb8570829baaf7191d00c7e358d8e06a6e0fb7732ab15b775c73a5586c88a9ba14e1741f79873b6ec8432998862fd37d379a4f7ea7d22789731447",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "1fd9c2689cef7ef188166e68dff2fb630a18afb495a878cdb244d1c13a81bd59"
+    },
+    {
+      "vector_id": 67,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "d4db7917f0743caac8937f61b0a82eaf0e2bd062fdd452506423a5428905d62324f93242ecef7819c0c078ae2ed281b09954785b220d0f0ba578834d8bd77187",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "5b9ea87d148073da554d1d8b2a9c8d47676657e99a82947f85c36fd144e2a845"
+    },
+    {
+      "vector_id": 68,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "7ee0893e80a14c7daadc49e95ae175aac755f56fd2c529abce097307e0a838ccd30bede0dc661c34979f5063a07c138c31129b9155e35d74d4fa8795f6a438b3",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "8419a971f1959d3ff254b5fa9f2bd17eab0d7662478dcfcb0413c2d754568e24"
+    },
+    {
+      "vector_id": 69,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "eb935a5253bc8f87932f28ee25928228ce46cac0b8d4f34d8d7b415a64285886e53204b4b2ea7c2dbf3ba7b1ee9f6c53f9293f71832f5e9300b264089f2a7ab8",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "4251bdb345d8c6dbe2fa279e1ecc667db26b4c71497405704677723abf52f859"
+    },
+    {
+      "vector_id": 70,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "7634a4cc9671d9326bd73ce6b405ae3888c7f74cf08e65bba6760c7dcbe4a9cbdbf9e56deae5e263d3332d30f9945bd21f927203c50f704c58f5e71814615918",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "5dc27161f2c44c3f14b31707329a33f42b3577beb69484337e7193f54354f4a7"
+    },
+    {
+      "vector_id": 71,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "f25f02756bec7305b93fadf0cbfc4f6e68847685adf18b1bdd9423b6bd5a23f635514ac6a161dc1f6642a283cd3dcfe3ec38c6e37dc9dd392a7c2281d067322d",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "c1018850624baf046bd732c466a4fa860c74c19ced33e96c15344cb29eea8b3d"
+    },
+    {
+      "vector_id": 72,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "490f717013ebcaab415b52a5b094b272830ec0bc87c1143b62ef85c7f0119c8ebea06b6b79a0ef207e27bd0fe81d1d4c4a1e23e916bc429a8c8a511c0a405d72",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "3cab79107731cba0f67f3b8207bda2463608739cdbb8b52afaa25452d9d69d89"
+    },
+    {
+      "vector_id": 73,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "7dd4c364f42713bf26afe6d9aa87679a5e39792874f360ec6b28553e3587dc06492fe46c1b193053c1c091a38fd67dcec935cb002c552b8f4c1e36041048b64f",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "b204cd2b0e220e8241a5d7ae5dfe5a464e4742a024093dcf1ce4d207ba41dbc6"
+    },
+    {
+      "vector_id": 74,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "9a132af8cf2e2bb63a4ebaa5b45052ad4127a1d14328c73558e8fae97715f03053ce21f5482610b62475bc69c42ee3335506201a5b3897419b81de22f946ce5f",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "444fb3160cfef26a23e2e1002b48590daa2398ef85e56b220f564fad093177ef"
+    },
+    {
+      "vector_id": 75,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "99692cad9d6ddb4fcc3cd4b24030af659bf7e5f58854fac6660acb0dd57e2cb2e49c2e08152e553734f39e269485cd93112f1f1c729e0a9085189fae7a147203",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "845f1bba1eff15607821cc3a2c48214ded6f09c69fd0c25f5be97006cb807d29"
+    },
+    {
+      "vector_id": 76,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "45296ee33ec64ca1eb8c912b59f5eca845cb6d1178348876fc94173ca1d3126a06deeb9ea84e951753c185e8191a0a6f32ec655d4a5d482cc73bc700e4395dc6",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "500973918546542f6508d932ae838f393d40f6baadee1a57ae2fc7174c2c5a4c"
+    },
+    {
+      "vector_id": 77,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "2effd3fe171457afc7e400551fab9de354b36de7bc886a221299e17c2e3ac68400139f38220220f78963f9127b30c35c2c03a2da47a0753c8fbe9838f74452eb",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "6a2262e5b910cc0458f32687c7a62a4b369c55919d8406ca387654e9c3d1ce6e"
+    },
+    {
+      "vector_id": 78,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "52604fbe205d37aac82d7786a42d2c2d0e8610c0953e6128fc40c9983121d8057cda13126b7f60dcd8c397b5b60d53090662b5a7be354f4fbaa4271f66c800f0",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "166e22331cd42bfe22dd18dc8cf0ca3966ab920dc2b264a3b47176b2895fb6ed"
+    },
+    {
+      "vector_id": 79,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "09feac153eecdb6dac6b33e873c2a425df982a8d06b999ce110ec46e7f71ec306d238c3257109300154230edb24e4057be74d269b5af9e52cc720e6ef1793c19",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "fa950b0bc78dcc9d182ba476117d28dbc5c92ab5b29a93dc9c897e50f72fc29d"
+    },
+    {
+      "vector_id": 80,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "481270b78c97b7b67c8c346c6593ec565ed9b23e92b8502ceffb06928bd03a3ab5c9473af04f939d4462ca43c8f4a2cc6f33e35aeaf1d194acb21657caa18533",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "e9f2700fdabfa4cb6a37d65353e0e74ed8b67ee8cbb06133e2c23e0aac2664c8"
+    },
+    {
+      "vector_id": 81,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "04ecc2b129f99bb5e0db1e181d1939c7784e833cc92bc9bac5b5c299d7380ae9720e874e2ee3c2ce97f8eb6d898075f7d33d0a6829968119275f72f568c1395d",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "ef96b96b4b1e0e16a1b018122e022bb08aa820df0f5189447cb9ec3db893a67a"
+    },
+    {
+      "vector_id": 82,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "b5a8172265d3ed1d91b9a23047c3d02d99950b2a70bef8fd3438df213d2301db497ec4952f57e44f26eada96bc4a4d6b9445a19ea7c287b3b7845338c952e3e7",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "b01ad28132e6cbce01b5fd0938efd54fdf8230b1a357529496598895fd323d5f"
+    },
+    {
+      "vector_id": 83,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "b9a361c87020b9d66a76753a18a42ce15e906bd3cf3c622445a006a27b0f2e7ae7906288843d0d3ff6d23bd81196a68da1470f6ea7b45bec24eb1b81a2ca49e7",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "7d5310a02f61a5ecd1dc602bb8342d86709d1af102277bd815974005dcc7acd8"
+    },
+    {
+      "vector_id": 84,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "1a4102c9034ffd8ac5b4fc572885c53a4ecf19c90bd9677f58406d83e48cc932c064d8e60f59d7484a14b6c2d2acb4da06ce17dd31a982675d8aca4aa46be561",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "b581a77cec09423c724f671c1b76cb3aa35ad39e361ee099ffdb30ad0682d50e"
+    },
+    {
+      "vector_id": 85,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "f0057b831b01f07c05b855bf487e14ef3b2c693a5ea9b0912e41ca34990bd567472325d53ebb271b5fc70de6d6949f7af7434f52eb31fa54d0438d610b8526bf",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "154fca34716694d5c997a87adbf45762b185c2349446d8277366db75576e97fd"
+    },
+    {
+      "vector_id": 86,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "2eb97623aae704c2d5ca6824d31be1126f2328f61b30f3783e3a34a2e1234efcf0cd49c11e1755c3291bcc1cea144c4ed9fd60143e0280e33a8a9ddd83a0b6d0",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "a6f7785531d1cca24781be7028ab2e32cc9343d4ed9f2e7d8e7ec18ae58d102c"
+    },
+    {
+      "vector_id": 87,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "ce84df5c8353102380370d8af011e3df47e8dfd8e9c40d2d377ebb33b10c3ec5a5ead4111277bea22560fee55936c36f165964c4b36d2f2d211404c62139b653",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "5b992612377d6fa85176010370b4613b626a5cf19b2f1eecb36393e05d7b9a55"
+    },
+    {
+      "vector_id": 88,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "48b39b2974c17bb91649b66a800c0945b7638caa7c74b92ac7b32240117be443f257477624d049fdab4fcd3397e2b153afca5312526bd54551c47910a793a168",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "b40f68dce7d6774abc3db8c665e6de6ddc4048aa6f813641ee3a4e82b8a4d4a4"
+    },
+    {
+      "vector_id": 89,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "3778e8b318dd07c801e17ee4723f2f29157bef0882e107b4c3a56891b002acd5f0a15312961eccc360833663de4ee9bcb0d7a7637f3c061d26520c1fab428693",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "a7c2d16ffc73a819a8839fb8dc97ed6ae6255336cabf95a91da70436aee188a9"
+    },
+    {
+      "vector_id": 90,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "32ae5fec5760e599b3aea98ae417d542dfd01820c5cc8a374ddabaa23cfe97e7de42658abd167855a017b68e42d5a260457b4521668118bf04816756ee9472f5",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "a9e9da783de43834d72f39b1e3bcd8bc2967c7629ac9d6f66045835beb521de5"
+    },
+    {
+      "vector_id": 91,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "725f97a2fdeaf44ef24c9f3381c81f2da5613a71c99a7b6cf548e734b1825f48ea1dad89e5f8fe8820cf5c0e4a4c6aa989c2289651f3cf7ec7dca0cd6fd6ab48",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "0cc40af7fd8fb75cd3dd020ddcf327536a9d8a33a6471b0b470c0e26f186aae7"
+    },
+    {
+      "vector_id": 92,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "acd593a56925dcf58fd4357d2a2ac7060731b19ae44c3a323e4c405d12f8228957f5d0e9a501735fb02a3d3e8ea0812ff30fc8472b426ca6d682e17bd5df21ae",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "f70afef310e360a3e3d98c8b52a447b4f732fa70a64e845f9afd0a4367356489"
+    },
+    {
+      "vector_id": 93,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "10215be648cba0230a29b6fc1f9b6432ebc81fe5b2dda8652479451fcdcd58c21b797ac6fb391e7081f0eb9d8b37e2b35ade4406ed35909d53f3b32be4684be8",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "f1433481e5f59d9ed13ef8c31d562d715b0db91c73b47c6661577bfa2c8c838a"
+    },
+    {
+      "vector_id": 94,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "5bb935d0b315ceebbae277a50e501098efb1cea75dccefcfdc2c6c7e8597babe4a857a6e45796d6be7efee936c129e0404d14313ecc7fdcdaa30d107e0506970",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "888a97bfcf73df5436ddc17192498d16e984520cd705b3764151fa100eef3ee5"
+    },
+    {
+      "vector_id": 95,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "b0eba242b0b17ea0d179c482632d3b6b6731c04245f1c9056c7e55e899143d3f46593d41f82588a126d7d878ad87cd298cbb135518b2e1ae11bb4f541ae5ff16",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "1b742d153139a524e7d985a31967883570688ea96f581d349f2832e99c4200cd"
+    },
+    {
+      "vector_id": 96,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "20cb2bb728c5d880a054aafdf15ed125e5240431f9a54beda00d7517cb9914117de737192c63a501b1e1206b990375129dd256e06414cc33f4782a92b54a3896",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "091a743306a342d454f8ac28e83b00ca4ac8bf9306aa1bdf2c8f85f5e4670bd4"
+    },
+    {
+      "vector_id": 97,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "e648c7e69ab9ca9dacaedbdc2b7babd32d50af06e93cfaed938f5678cbaef3aaf636a9dd338e7b571a9c285312234174b947d2d25ec497bed65453184797be71",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "6105b56e714c016c9caaf7a921b18aeaef81ebce0aad4b7ff82eb1b80f5ef788"
+    },
+    {
+      "vector_id": 98,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "b3b47545ee898572073aa7da4984b2020ed3d0d2ba5149354399cdace713b8ef48e95f5751419fa12fdc49b2fe2c6766666882d1808e8b5ff994431f0e24353a",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "93f1f3f449775f57b5a1b8ccdbbabce2ae17e56ab1e7944f64aa5719ad7f4836"
+    },
+    {
+      "vector_id": 99,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "f094d3ddb0fab3806280555d297cfeb4178c578872c75de245c091f087795052b0a8d959046795230b603e975f2e292c44216524f3276616bf51ee59eb79030b",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "7220fe095bc72c2504398404dc0ffa9e5c85b0229af2df61d26989c1f5a1385a"
+    },
+    {
+      "vector_id": 100,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "310b142ad5a5654f1bd0bb3ed5850ef5114aee9833ec049b29cabf3628604b848b965af3b88a24f499c3f2ab21d444e60919ebe343fd444918f556e20505c45f",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "d1fe34a6d87cd589f27d3ceda3276c628a104b293b142f3fd9a24dbadedf577e"
+    },
+    {
+      "vector_id": 101,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "58570cebbd50451ad025b7b63f259f7302ab625186889dfb9397771768c82f46bccf4bb3a5ef0945d15b81ec2d5c043f81cd308d68f945f4eee24796966777f8",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "0ecd13c03ec1bb245dc827e112753b4887ff35795d12aafeb99e6a246678e0ca"
+    },
+    {
+      "vector_id": 102,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "49f1403d9d87d8475541bc76b93b5c48d3dc1fa0851c282544368ef03636cc0f190b048338d6ba6e49cb0c8c4d6366e44cdee8bb26a1b2b03128281bce88ae07",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "bbdf39bf1249b00f43dcc2b1f5a6f2a4361c024474d2085153604d4754a281bc"
+    },
+    {
+      "vector_id": 103,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "e7174388bfddc341d33eb54f1400f5135adc60d0bfc7f95193e347020b845097f409eb5821201641e9527e8d49d657a4e80d989c4422394039042dbe53be85fe",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "cf8c47fa940f6fb23c141e18dc791c8e3fc620e1f50a664a7211e7636bd36a7b"
+    },
+    {
+      "vector_id": 104,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "540bfa144c628cd9a21718d07b683f2504fa030755f50cd74507e5f8218bf3e030cda5aa431686ac3515966db45f2483ef025534b343363a8d084939b59029d5",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "7e12ff4199c6b044a740aea537895e8c307e1ba2e79a7031f4707fbd545ce05c"
+    },
+    {
+      "vector_id": 105,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "548fac851acaa01edf5a57618d6e66c7728e6aecb1d2635c6ea1c50fdf44e868d0a1ac00f99dc6b77e008d6c2eaf8ccf43d67f29873a7f7f5323c6f4e37d299c",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "78550512ecbe00293ae27b01daebe8fb67be76028a3bbc53b1c76908d7dc2fa3"
+    },
+    {
+      "vector_id": 106,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "4726005452f71b8c6ef7c0439d8582d024d778cb03052c967a07acd7a1898f1013dcb4b2bd3ca0c06507232c81cc3100c055784f50198bb1cc43cf1bb76350d5",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "b448b0b303e7c6f145aad049bbb530a6de99bc154ef2575c3c98cc97a9cd55ba"
+    },
+    {
+      "vector_id": 107,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "7272e0432b79b600c52d8f8d06314ad00a70146916c06ac6f551db5331802a1e4b368fa612c9281f57decacb576776a0a8c3812f0df3a54bd53e56a3e95641d3",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "441377515e923b6183e5cacfb781e89c5ba9eaeb5563b3c2a761f8b942120122"
+    },
+    {
+      "vector_id": 108,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "eb8195f7dac79d84fa0688a62ab911d6269a0d772754b980d0d560ba36cb6d2bc4d92c6b5ebacce138e795556e76171dbba8aaba99ec97ec5a500d9082a91950",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "8a675f4e4aa31ba0e9f4515c3c52d325b15c54cff6bd574ed0e0ee35e2996276"
+    },
+    {
+      "vector_id": 109,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "c01789908006a989c5ef0011714f9b7285c6f903a1c98959a90a57ed3030b740cc681b76b5f2986eec1fbeb92297279e8226cf3f8d6f7c180b27522afc0277aa",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "f8d458ebcfabcb52057771ab0ac1e3a98f06d3da35b67752e7581aa2fb46e778"
+    },
+    {
+      "vector_id": 110,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "57f8509a938e9d5bc45aa73fa1646c7b2b6078885cf456b80a221e3293422c322a887daad9faa97b94d1eb35bcc89417d959788af2dadf4a8d6b51b140b12e7b",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "dc142596a4da9a87d35c036d95b45c4ee0ae647466d1b4644b51fa7e15b9ba33"
+    },
+    {
+      "vector_id": 111,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "2b7403cecce551b81782e02a808c68cb3ffdf81209fe8cf902a9e4ef9a688a27bce99df1dd597a79846a58158d6683f8caf4cd7af008df15ab8c6b33f68b43d6",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "7e12ae50a9033377288eae3d662643e3a72048f0c0a96b356f1fa705a5d81e72"
+    },
+    {
+      "vector_id": 112,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "9d82a4719d6bc7d7216427a1d61b6f6ac0c807d2c39843dc9310a5b06664074a5b06a940aba73f96ae69a20084a4f2f0fa65861f6d03c27f534328f7a53723f6",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "fdd811c934e710d03a0d6c5a296a3f39f0294b33e88dd1d6c0989e8b2d6b78c1"
+    },
+    {
+      "vector_id": 113,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "428772fb116e153ef277fe64e054f76f8d4e231e1b89b9d9fb2421250a1a154456289d04a48e7ce8681c3b21d84d2bd46ab521524cf0e21da2012bd12e76e1e5",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "0c6808e2e9a4585d91e95f4ae3f21ae05af7c9eeddc6da89b4038fa08990d786"
+    },
+    {
+      "vector_id": 114,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "84a8ff16a663358ffe64a29df8dacbd4d89d9bb8ef602bacdeaf1b313f7338ffb4f561c5429349fb752db5ae06d6b116861bfd548609af2867fbd52e17b0c9d3",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "c59450985341f253a0995de831a1cb7eb3b5bfce99245998750287cbbeca3f32"
+    },
+    {
+      "vector_id": 115,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "5cf8cfd392134e80708016a6d0389d0ef1cdcbdabce4b67d67f9aaae2e84f31aab247a6b1a59cc610bc44976a7fd53cfd08844edd4e3bd5093e585d92c61d442",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "5369fb3ed1ea540c6b0ead115dceba5dc8e0dd3121c635f454374ea737f4f970"
+    },
+    {
+      "vector_id": 116,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "4cf243cab8302e06aa5858ddcd4e19cbe901df7e1f8390f4f31ce1a2e8e421c939b62675f0a88d1ab592482a2ea567ff5981fd2672e580dd585f07b5e42c8235",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "a8f90b6e645ce820c10755bee14d0b226c136897ff0f973a68014521595f7132"
+    },
+    {
+      "vector_id": 117,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "9fedac537bdd744ffa7072a1b183205dca84f7cf4c33ba82d39adf87d7e491ae132ce9ae79caf52880ac9135ef11db3ec9387b2cbdb3c49766da4c13fdffda4c",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "02836bf7f931910788167a65151e5afc81772f28ddc16bf2e584f24e0094c7da"
+    },
+    {
+      "vector_id": 118,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "513363377194c9f017b6a031d0011175804ef6bfc93e00c858c657ec2b680eef0f31a1e8b9b5e68f720b0beb99595f02bf0a139d10c9ab6e2bf3790f1cd0ab7a",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "da74ab9935fb974a9bdbe19d635d132cb5dca67dfc2a93e43f93e5e9d6332b91"
+    },
+    {
+      "vector_id": 119,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "9439c90d5f4836b08d464d55a7bfbc1289e7475d5f57f35c6ed4c4119386f8bb97a5f55c2ac1cf0e8f68d605fa8e5aa7b0d63a679757b0efbdb0ac699ff4136e",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "be20d3649503af09a23a11417a498ac2494d16ecc05590e593b6301e33a6160f"
+    },
+    {
+      "vector_id": 120,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "debf2aa641e498dd9ff3c9f3cc9304e489e2a15810511594f299e082ab88ff0f2c7acfe7e76ab6c7aef2c2b4b7cafd730a03f33314b0e4c4f91f32945b3b4809",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "ba3333fb706dde4c4d87e5c1e738c8aa327a89cc97df17cb8e98cac44d4fb972"
+    },
+    {
+      "vector_id": 121,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "1424c2ca35a76ee43062486866c551665875be218446995462f410779d9cfd7fcab535d4dd5a285d119436755a5e9d70acace4201750710dead8fe724702db57",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "e52f045443e287f1f79385f44cd8f1d8a7ca50bb6a74438167d9d58126f45159"
+    },
+    {
+      "vector_id": 122,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "ee80028619c65aa5ac01a87b26e549dd56616b8e12ab92f7ad5c9d12a85d6422885cd9c6f070f988fd0f3a9b6897ff1dc72844c5ec3a45af6a20b5caddb8a523",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "1bb802eef5c06394da59aad28c5b2e3511814db3bb050bb1c09a1ea7f8b2035f"
+    },
+    {
+      "vector_id": 123,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "7cf3e8c8bbd7bfee4401ec90b30707c29baad8298b83b917abbcf112a0149f8f0ca48d05d7863a5711a04d06ae4994649d52ac00aa1652a5e185abc008040204",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "56e3fcb9eb3a163a95f80c59b5dcc0380347f9811c220f45c49a2b78722c275e"
+    },
+    {
+      "vector_id": 124,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "77d4d71b7ca59664e4fd231db9708de8a3aa338c58764a5b87cd41484b7da5f87830dff3c85179c3b9b15b5c7c45ec16a954e0c6bc629fde238c1cea12e5558c",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "7d192b16be0b51f981f52860c78f83cb7d1c97f22c33ed43571d5026c46d9eba"
+    },
+    {
+      "vector_id": 125,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "2aa94199e5d3447cdfa9b054d4d7e0e110b8c67871276ff9c9b4ab1e179ca871e928b8e2091cda6e215b1b19fd6921557164b795a05072455f79937238d491dd",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "f62125f61b0aba467f6379439c3d57edfe1c30aa95664e1463f46783b9c7eecd"
+    },
+    {
+      "vector_id": 126,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "6ed4f1ae9533e0087bae0641ee619c27bb43862244097abe07b899bb14df32fb7a7fae3e65daf0d8db3a633e546fc53d2ae6735fe2f0f6d9ee2e607d10eefa0a",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "4e25366727982d5af145fef8379ba8f4d56fb6e142e7c8ef04287e09d76fb41c"
+    },
+    {
+      "vector_id": 127,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "69e959744a278f2f7335ececea01841e78d695f58f73fbc5712249ad0ac5c4c374332aedaec9712ea984996e3bd6f916ac82a196033b9db9a13e1eac0b128a7d",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "b6bb9956f36c94d3b5d46ccbe67b153f86995ce37e43fed3dd3c017ca495ad89"
+    },
+    {
+      "vector_id": 128,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "de4f585a526a8a8cf7816b90dca7d4664c57ec289fa4eabde1b327b6752b12f40ffcda40437b3e14903adf4991fb120a769658e61aca17b0ba52ab532ab0fa4c",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "069874a655eb0b47be69b4bfe1d82d415c9f5555ce2050d4626299103a519b80"
+    },
+    {
+      "vector_id": 129,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "be3cebd22d10ba706de300cc589d83ae367bcd909c07109adeda90e85f04bc27c7ea5933e20dac70e7b2c3f100a0a4ca1a230e458d36834fa9139ac1d01848ff",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "b983b74505a6bfeaacdc0a4ac39cdd9b19b002bd743ffc63f09c7b6124b0bdf5"
+    },
+    {
+      "vector_id": 130,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "ce4dbef376375fbe3f3caea83be9e89b91393b7ad5aa77a2099f6f04d95550cdea70df3495545dc9e0672fdb10d73d20f23654871eb78a7235801e3034558fae",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "168201dbc7393f173729730723a4b419cb752d5677a9ed31416df6aee9c94364"
+    },
+    {
+      "vector_id": 131,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "eb161cc68ae78cd3339bb9f5ed309cdb4f43890b0cfba536edff42065fd47586a431e7a3d9c92eac55fd0a128cd80ec386a79d41f0066f1db9794894c8d5a81e",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "c76d32989ecc719ad9ce371c6b3eaa85d7edcb30b9cb9dd3257182c1562a80ad"
+    },
+    {
+      "vector_id": 132,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "d26acf0a9cfb2506f48e902d009911120c9d8a39e156818fc1bead96ac37145d50dbf6d50c20f8a02242c5fd935a1715e84fe9d09b1d5e5c0c527e0366530a5b",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "1b37628e247e3d8ce455fa95433f03fbe478b37c8ad62f222a0f5118bb041c2a"
+    },
+    {
+      "vector_id": 133,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "ae600f396dedef63e90cffd2cbf8496b8c9be3ab4a8429cd73eb3bda03b132da3a3d75c679f10cc11c7a074b8bac264fe0fbaf76a7d980a52087f11753052e23",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "3f6bcc620dc2180928d57da80b63a97d83e099bc1ab658e4719acea5f0242dd6"
+    },
+    {
+      "vector_id": 134,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "5c063b4e935b2b453e242ea62b565263c46095faf7d83c1bac818265336a1823ca07d7903a57acfc3378ad3e0dd2c60549ab6769a11412c0a50b42ddd11c4c63",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "a5f175161764d863c12cd7fcf048b1926ec657ded4ff0e2ec69198c4b5e590e2"
+    },
+    {
+      "vector_id": 135,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "86cf1b8f572c971e9242153f387d7e3382acd464ef0c4084b552da48fde9fe3b148825ef03a16176c45c3f6cf7a6da630d9ccad7629a977662794ad293bd3584",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "ab88983afd8d4117288f03f35b29ecf1732a5ebe3cd144fa0701751f6034ec62"
+    },
+    {
+      "vector_id": 136,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "bbe234389b01f9e41ae80db4ce94f09570518193b7dae3fc2c5503f07061980b93606dcfd156698c189029999f1762a165da31e0ebb3ea1386580a46098f8425",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "b1358facbbe47a26572a1a44f3416ccc07e8fa5205ab8f3a0c602d8fe61feaa3"
+    },
+    {
+      "vector_id": 137,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "13156aa31f9fb2355b38c6ff2241b1d3a1fb750988685a451c2f40eda16c8ca160c6c725cf513797bcb13d2e42c50f3be4c6371d8ad0f247e9a05a302a8d45e7",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "d65b7f7c575e83ef568880e51592874d88c67fd75a403f48cabace5f7832f244"
+    },
+    {
+      "vector_id": 138,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "759443a07af4d64a46a918081a523dbfe8081cc7a8d18ed8dfe5c1a994829bff263f59d1c3559063b075321db25d8375bd67496cc6a443738033d6ee4e2ee568",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "3089ef1c3618a36d3a37462ae8d8a8dcd57a18815b943cd0d80ae71b0b4f67f9"
+    },
+    {
+      "vector_id": 139,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "71b99c056a14ba2b391f7dc5255c153c2d308850080db6e669472be2bd06bc66dc25078257ea0bd505474618027a83cea9f5876cf3341f85f6369a41c490861c",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "7ee0cac2a7cb46938cc9a43d6330256d865e3bba05ba1fccc44a4f8faf7ecfaa"
+    },
+    {
+      "vector_id": 140,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "322dd042e8308e986f55847ebea58f6a693b99eeb406cf8e3cb55261ea1cd7311426117277f0b227da1d367286845ad3e70a0c7e28265cc52f0d6a4f76868efe",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "519257c4ab55defd19aa913d8a1eb672d86149413fc36749e4442627a8fb067c"
+    },
+    {
+      "vector_id": 141,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "7e3746882ab2b86216282ae414bc013e7725dc7f266564b2268c226d764823711bb1dd76940ebe9059bd475a5efd628709ef0bac0308769945c4ec50a514b0ba",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "1815675a80488b618ccad918fd27c47ad958d19f29f3200e12720be95750ad55"
+    },
+    {
+      "vector_id": 142,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "299c793e5bd70aab9aabce0b0431261073214107edfc72b355ad9be0d1f1053de5e04b7f740a13312a6d8e40dd00c7d0ca6e119072cfea828a15cf65357c71f5",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "693ab0eadba89d1977d723ee8d1a9b792cdd3d6763167706504b11159374b8c9"
+    },
+    {
+      "vector_id": 143,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "d61a526e36cc97acde6dafdcb842f3081527792a995e3d91ffa99f27708dd51cd9fc233ecf6fb7edfbc508e31065039588bfe110e20eef5b1fc81be3d0120842",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "17a82144aa44a4e536db2e0f1aa71d344727f58b06065a411d2055c2c9695304"
+    },
+    {
+      "vector_id": 144,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "137191589540e22713fc572a82b3272603a35408aff50696ceff0a5782de4fccd99a84e66089e263b2d0de4f0f85150107baf63738e3ba09bf7e6915526f8bb4",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "2290a5ed01fa021309d9561865623d285e219c653a559f97617ba63dc017685d"
+    },
+    {
+      "vector_id": 145,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "358cd37ed0232badf42d727914c3a05da14402db2dedd65ea50049427148c90b4419124774e37d80dbdebe53390558510c121af60dc88ad7994b5952afc8b0a2",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "79978eca26e06b460caa968f742397c11f0ee23dbde10d77276796c6a381edbb"
+    },
+    {
+      "vector_id": 146,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "a3a564cbedb1b19eccface9203d570c701a8e185032d7f5c0bbc8ece244437e2e30d7c7b71fc8acb5e22bdd0d898ab316ca8d773c9c2caaeb3bb78ca705bf8cc",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "1f1fb08ab3a9522ab897a5adef41b1516c8f3cc26820e2abb860e039b352aa51"
+    },
+    {
+      "vector_id": 147,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "68294e5d4aac6c24cf5e9066f3ccb7d75f325efcd110649e8fd7f76bfeadf4c7dc9fd85bde5b5df27704070813ffebc28add834e123c92636bbfb74d07220af6",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "f77a23b470f92cef033688d6eb4fa38d29bd1b6de49226a217cf84eae4aa85c0"
+    },
+    {
+      "vector_id": 148,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "92725981e68248300e6a9adc4767b9f8b1cb5709159216e83062ac8bac09b0db7c57bc617196eb31fdfa07fe257625be7ed82ac2a08958700dc967759ec61112",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "0765224e42f65b39917c575d0a746b904cf88441255a764644c2aa6aa84e826e"
+    },
+    {
+      "vector_id": 149,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "fcfa71ab99dd3bdc209ed5202b24f04417b0d86f2ef3a867148e8414b36ea21b35ffb7ed9578b278a56e7670939fb67dfff5976bbd32e820be60f8c6124fc4cb",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "80d79e8d60b017911d5e24265277b0404e58ab147adc7249c0fd315825e381a8"
+    },
+    {
+      "vector_id": 150,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "8aa23b54abf4d60f63ee34c2394d7bf1ed133d8b0861436044fd929279321a7f50488686dc9b6d4942132fd700cdf1679c38ae536d20588cd469c9a23846fae2",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "f7991ebce7dec29921906decf15ddd0c88f7089ef48c9fa14be5f8543087c8d6"
+    },
+    {
+      "vector_id": 151,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "672e49f90ed6e3df4cf48d1d7e29dd80072cae3b5afd2b31ce3c90991e75450df7c491e8e9b66c3d040794a1e1c0e778b478f7ce51f3c0e81c96e4fe0c26d49f",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "47bfae470c3b6e5d426384da3c388b74b1e0d8d67666d34fa40d5b5453dce6a4"
+    },
+    {
+      "vector_id": 152,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "749c4d3f94784154251cd1958ab8f30cb75eb740e4248058bbe1a2d9c7b514d315ad47b6ea718ee9975d6b2159b87478c5b6578fc0d1c94938718c9d34fedeb5",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "0e05b77b71fde8469fc93051837d8270a6b62b9639651e624c5c3dd924513efa"
+    },
+    {
+      "vector_id": 153,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "2aea2898884d3aa53fc019ded0b080560176328495091422c20ee1eb0eb471c520f9992b673b9d0e9c619faa80409f0977452fcf85b6735c5369325b80e7ee99",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "6bfaa1707ceb68a9ce3ce65b91ff3df11fb8de5dc6dde87ec70259f67aec6ec8"
+    },
+    {
+      "vector_id": 154,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "0e6c2b6942786204ca4db64c0c0df23964e42eefa1fcc4d8ab7a07f92f4696281e4792cc835f5b5a9af59805184704237e948b7afc54e29be060be87733bbd30",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "d6487852a32c430739d1ef50e0b46dfb90297ef6ef4bf8d968e15524b3ceec3f"
+    },
+    {
+      "vector_id": 155,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "bdc61239666a261d1eda19ee939d9a1bdd75d4cfe54f1f27ccd3a9512404cec9a230a5592848188a6fc74e07bcbf29b9f1fa4cc85f76dfd5d3329f7f5be1ae52",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "995dd4e5e718e847ef4832e5c7bd807ca450144e25f4ce4dd6f34d09b1c295c8"
+    },
+    {
+      "vector_id": 156,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "60061e01579356d9634d0f8c1c200b0011bf69a8393228ddb31d17c95b1c2011ead9fdd525689bd40ced7011650c825718dfd1d6d913a6064e2bb9fd7ebfa7d6",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "a418a0fe0fd2f3a684106842a32e63dffeb2540f89889bba14e1e8a238b5630d"
+    },
+    {
+      "vector_id": 157,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "4023c42e2fad4c86aae0a17e1006eb30f6cb6f0e9beccbd2f2098ec721a8575c67930d4c660a94ecf47923323a57c1f3898823dcebb5554646e7562590af9fa0",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "624a3348e1ecd37e5f1d07c0e27497fa9db0efd45e01485bcfa6fd2d26fae4e3"
+    },
+    {
+      "vector_id": 158,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "b21cf3b42c186cc7cf5d9489296f7fe62c4ed0c4ad4bfb8fc08369c21e717b2328b5fd69ea31f040fd6de7a77ac5d7ba1d8da844c32b72f082ae6904197bba33",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "51510b322072cb1d3df6e529201966d07dbf900d71649de43aee570e6a15a606"
+    },
+    {
+      "vector_id": 159,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "e025369d3dacd5e60b1fe9525071588e50582e3b61389edd4805c85daf74b85d5676c4505c6b076ab45bff2933be6d335cffb80827842b99a4b5a464e74711f0",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "86f9f2e368296643cd3baff6c3df0bcade460d9ae8d77c3afafae481ada2e2be"
+    },
+    {
+      "vector_id": 160,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "19f146393af5b07dd83b29dec7f1b93b33a464571380a8b94ecc9b768c7a94e7261f2839c0c855cdc1e6b78072a35772048f8e43768eb766e42be9fd87994f38",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "0a6da63527baa676cfe9d3a88c46aff893e034a83ade40b3a26ca1317575c34e"
+    },
+    {
+      "vector_id": 161,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "f14b6bcf748c7fc50672210b128496a870404c7a2e0a97718117fa8138e11659d21fed507f99902a18272c5c656c3d9a7d9e56d9eea37589f28925b415465577",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "59802303f62972fc50ceca929fd6cee4dab70a64ff042728931fdd58190df120"
+    },
+    {
+      "vector_id": 162,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "a876f61335988d0b3190326d8fb73ba728fe6d43189bdd26f2adf1a2882815ed3fc8c60d26510383fd898e196418509146d014c91b35193193db0009a88ffc99",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "e3afe66c5505d62cfdde590e1fd7f78339949e0b7fd266aa9854ccd6942fee26"
+    },
+    {
+      "vector_id": 163,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "eb6a278a32b401974995363c286f13ff5c4943ac0e112f2964a11ffb6e19d3978231fcf66a8992faaec96cf2331c85c74ed82df907b7c649664e388441c3ada7",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "b06e1bc4996578b13a2e1893116d400fcf653b9385d449e7f73a2294dea1a512"
+    },
+    {
+      "vector_id": 164,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "96d2be4978f2a11f40dbb1d6e266564ba1bae71adbf087e50c64a752de296587d2f00cb8a96a9807170493d5a3a0c15dc207754f6ae3a4e5eea22cb62befc928",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "8cf3aebd7b17b3cea74eb6eaf7ec01d495564e465772e502d4993c1fd8e53974"
+    },
+    {
+      "vector_id": 165,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "1d4be65edbb453486dfdcf26d3feb8f63c05c5df5cda3d215d3dbe24fa1417b75515e141a280ec8168181af1669d6be9e40b757477d2facb5e2a907c07bc0159",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "c987eb1d3f2f511bea3df2830a92fd2e85681b84b613c7b570fe20c21adf9ce6"
+    },
+    {
+      "vector_id": 166,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "0b07cedc5f46ac62302266bce78608e550193be5b8c5e4f73ee73890ef33f960e360d692fac023174fc327e21e4492a58fc1dd7d1506e6280111a4d3fa2844c6",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "8999fc4d5070fea2e3973b7012df44382ceb40980e2c6aab703d005baa71b27f"
+    },
+    {
+      "vector_id": 167,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "fb90b59e1be581904fa2a80128b45996de0451e0aa9a6184eb2c754fe7efceb62ce14fcdf124cad44aab17e3f69eb777d4cc50776654be7480c4b82b55aa1543",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "2b71427a8888260a9f187523c9b30ce712d06cbe2785f971397d544a61e1805c"
+    },
+    {
+      "vector_id": 168,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "5f57ea53fef8b1220ad54cd8177c6a5aa1c4f780b517004f0ec79b1706e8171fb76876503efc6f45792888b15bf5777011bd80b1476676f68a2582656a8dddee",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "5d6f460abf56a3edfcb6f77b92f3d418e8a424cd7062ce94c053480cf52c928e"
+    },
+    {
+      "vector_id": 169,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "34323f0714a98bc63ed70bcad722b617c5f25f5db043e0c0631bb7997848e244aefba002113d54794dda6eca8e8c2664c33f29a351ee3edd3e5470b500d242b2",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "ba68ae2df03a6e0fe26c1553ccbcba6d039d41f3006d20a971e2c6742c1e6090"
+    },
+    {
+      "vector_id": 170,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "db2b918e2f1b6a1b1ead6a3bad26096f696176668464d8a8b2a09a62c3e6a403107b41c82be5cfc997661843bad4762ffe81ddd4c074b3af570e85052b210754",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "1c44bdc8c09026139d68b3a820ed054a1b56a78a73ddd129dc71d138f736f72e"
+    },
+    {
+      "vector_id": 171,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "c8a3965830b5ced77b82478809c34238eeb015a7103cfa1171fa5c0c7151d2cd2b97c20756685ff74f3fc07779980c9a52749fe50ab6a3c6b2c757767edb8a26",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "3d88b90d4c48f806a7a8114fa50c1705cf767ca0ac48564f429a5d0b26a20ffc"
+    },
+    {
+      "vector_id": 172,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "d13c19c44ca8973726e0475c04f88dc3a8a2b5ef660a75818be6637c3075785fc1258a179cf76bc1407a90e5855ae821160cb39318cef760b1c462d5d6b53443",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "007315eed08ccda38db4813b98bbed183b715b914074c2fcd88c0b230e1e628d"
+    },
+    {
+      "vector_id": 173,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "cc39fb133b854a336e6b155114ec42b9b55f43a07bf3db9c4228e08e082ae2ae59d7bd3d8cb0bfd9631b7e69d3278a1a6dcc0c56064a56e109d80d539d8e3ea4",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "f1deadcb9a666614909c7b0759f4d48d49d5ba461da77c8018aaa43eb2aed1ab"
+    },
+    {
+      "vector_id": 174,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "11b030eefa4e0d148dbd511351848d13f22315ec35aab700de394c46e6e3079b12e25c5424f54f946bc97630925574eee1be832ed1f4ecdb2700a12d25cbd680",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "2c093a6c4b382ee614e0cf15d63cdb6906754c4a2d3e16b9f8cc30ea8717442b"
+    },
+    {
+      "vector_id": 175,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "118e269896cc1e71a853e87eeeb767bfa2b555c4a658b9679cc9d46cca09d851d229c83568012be168e1f4ee2aa5948824f5ebf36f5657da50ea7c55e04e3ba6",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "0400f34ddc6c8f3fe635d95db15d76e628343577e0d95be8f2ba5cba04239bff"
+    },
+    {
+      "vector_id": 176,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "19b1a0b90736a14ae7e874ebc3ea978547dafad4585a49f81066cff08bb064cb2280bc6f38f32376e6034510800608cbe17e78f7a52ad33cf41501cfd09a4b26",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "de854c99871e2e8e04cc7a7814245119e17e33eefe54dfb163f62aea01aba6bd"
+    },
+    {
+      "vector_id": 177,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "9723bd6890440953f4c5e729f820dd69124b80382b0a79641d7b635e1a206ee9b6403b5033e952968b043cfccbd492708fa3bb32ddeebb71f757f078dfa2545b",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "8299f516dc48ad7b97b7f14e44114b59c6738c06c20120a99c11b9a614494e1b"
+    },
+    {
+      "vector_id": 178,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "266c90d11ab6548b792aa0172242664fac0f6eec0e632ce95b6e44746419006fb78c619aed70c1ed5416bc98dc97a68bf6cc1a1d51fc82f5111e40a932d6b678",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "ca9128daf611f0b42f4220f3ccccad20cf3e24d77ac9a0f0a8017d044e76b894"
+    },
+    {
+      "vector_id": 179,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "f8b1a0876d856d63c58214171c3ad14986b89c1d89ae442d363c215c33c8cca194b5ad1269879f023cfbeac1e6d1cbbf24beca0f95f01cff4ad48052b7bc04af",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "a90d8139e32e71ae12b13a939c03656583905cbe03b661d1c4c8a7c79aca2c82"
+    },
+    {
+      "vector_id": 180,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "086bc6e6d1e5a4d555effc475d7d71402ae5d72a352d435fc559fd2d281978c8ff4e73d6194dd7f9322d9ac59a81c28505dcd844ee28edbcccc7fcdd2de31012",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "cbb91a2e0175050ce0a3f4818af22bf2d98d9ecd694b98072856b4f74e9ca3e7"
+    },
+    {
+      "vector_id": 181,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "6cef20c61a426008249069e47bc2d678ecca49e87aaeec0917ee269544f26f04ffca19353eebc5838e63734758c912225c0d96fe71f9412829d8ceb5d9168bd0",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "7afd5b23d92f3b6c01d2d325eebc4c3d6ce98d0f25698204e4625a184fe8a34f"
+    },
+    {
+      "vector_id": 182,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "2b82ad2aca517ee5986a0800921d7f1b0a7e50134542d8180e1dca23065c09493fc02f8e90eed67227a84288fb5709f3093486181273720f0a44869b6dd5b264",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "a32196290809d10fa1dcf259ee02f7b127a6aeb8672a8dc46130e1e6092d8002"
+    },
+    {
+      "vector_id": 183,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "abd7b95a3671fbff27533c58b5b1527dacaf0bff1bc9266eacb8e7f4de64247b177ebe46e7a88741ee85fe7afbd8fcdd32170b1d5d0447ae5f2083fe9ff6d451",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "eba936caeb69284d7766424167d6a37569c52b3223d72e1516b50a8eb5f149c2"
+    },
+    {
+      "vector_id": 184,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "47a1211b7acb5911380d6402d98572d848864db1d562f23d8e9d10bd47a4a84bf0e28bbf1628678085a01b31133f188aa25ad3b20e0e5238e7389f9d21b7bd1b",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "e43fc15e82a0945891a7d6e78b127059d34108d1738349b4686090fce4d0a3f1"
+    },
+    {
+      "vector_id": 185,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "af75bd41f91415e32fd0c20fec9b0af60651cb5091a5060e727d5fe043b04c519049e4ce7b8f131a977d1de20664fb7a3ef8bbade3c3d5eac639755feadc9986",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "a7e2d8831f9fdd19afe83274311d76e7c8872cae3b19070240180ccd20530d32"
+    },
+    {
+      "vector_id": 186,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "845d08a80dcb3909797ceabff6d861717c9dadcb34948575f46ed994bdc920916f80585bf9c399e3e4bbf5c371ec52654fa0b819fa594434b40746b2cf0bbe8d",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "e66879d6b9908ae1a3738ab9baeb1120467cc0f48e9fe50c798ad4b466663af8"
+    },
+    {
+      "vector_id": 187,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "e144801acc0956f538b5f902cfb4190f38150790335849c9e2843bb4c8fb2345ceecf5b01f3f28fc9b887fa945bfe1673fec85bce11fda735c73f695fed67b9d",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "1e29c64b189165d99c0e61fff367110685a4e0fef672c21b702a5e6cfdbe8bb8"
+    },
+    {
+      "vector_id": 188,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "b855df3906db24fe43aca406fb3a54ad99f004386338e973f4b3c8b8417e9ff54fad29d12f851a7645b74b38ea569f0a36ae954938e62f69429c7eb621f9f1e4",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "9545c77f76fb0785407cc655594191ac029c203eadabb217dcc8062af1248c00"
+    },
+    {
+      "vector_id": 189,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "8e36474da2b9cdf49b58bd67ef8ab206c62da292c150e4eeb57f089a021f508560b77b2bd161042ebe1c364c6376a7d8b4c5f3ec541690ebeecb62493b69201a",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "fe7b0aa7b8cf804ed97e9e3c527aac9203a7aaf00624be209930cea40018faa4"
+    },
+    {
+      "vector_id": 190,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "4835b55b3605d9301c4b46c316f22265bb5fce0adca4d0a726b2ecf4f70ae63f5592de160b33932e70b61fb239bdd290084f5d61fc3b472a73757d31c54af88c",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "d0331b1015b378ed245f23d1bddcfe5802aecbed88af11d2c17ccf874f1a7f0d"
+    },
+    {
+      "vector_id": 191,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "4b470e2ec349993ea76b3a0a789048d23af691ada5aa1ff5d36ac2837b93e8a43569cd01aea0aa9df9d8a982836d8a61632ea1557b18d58d821215476ab8be47",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "9a7756e46a644b0a6a5eb84616a997dd962a4980b878067c1125fb9857f97a9f"
+    },
+    {
+      "vector_id": 192,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "95a967dfbd5ec49d3fff1aa996ed8c2924fd4b9bcc87a517cf41dc9b41507971f1be371e081f9c89e96416f69eb48c66ea33bda5afa10296cc66c5c5dc15923f",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "c2e2ec4a42901e62ee3be7c889664f3ceaab9765b3c2dedcaf8f2df3752442e7"
+    },
+    {
+      "vector_id": 193,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "416c39bd45b58aa3b23a09e747f5b2b8178b01abd00507d44fda49c9d74afb627e57abd18016c13f7f0c009925430430b20fb8c5ea6a9d191478e69404f93930",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "49b045d69a7421950f23345fc37a52d61070d163efc82daccc2242fffb986e23"
+    },
+    {
+      "vector_id": 194,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "be610bf54b208eb75fef1f63b3f44030a49241b50385f523e376b6419ca2becda31de053cfde382311819b36ee4db65cb95b00b3c049369f5f366e4937e8592f",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "6a55b92d6d8deb9fc87f57acae5e626ebb9c25a6eaa5cbdbf202a3b5a7b65823"
+    },
+    {
+      "vector_id": 195,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "f321c3bcb796ad429ab17308ac5b047a8047e99a5d05f645a811c1f4f7a0197ddf1532827f586b1f6ea7e904ebb0e3194c8891512196fc1e5f9a9c89fbe82ca9",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "2fdf8c5afd17a725f387057ad2c42be18b03ef64c236288ceb5a81abb11b3dfc"
+    },
+    {
+      "vector_id": 196,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "758330ba8b4720e2559c803eda8e8caeb38af7497484a741487fe9dc0d87319d3dd619f0d9e77b75b39ba24f0a478f4eddbf774faec9912bcb2f45b05975c8a7",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "f3520cb43bcb7d18a7c40689514069b2b567287727df0bcca46120acf9fb1439"
+    },
+    {
+      "vector_id": 197,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "fec45ac0131ca5805ecfec72b853b76b150a185ba1c25e900f7b376b1235fc33ae85fa4b841ed79b9c4144f5765fd0afabacd015c7a76d326c9dbd7dc02cfb14",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "b342d6733d9f58bc75f58fc46955cb7911c565892d5e32540d38dc5bb3a433ed"
+    },
+    {
+      "vector_id": 198,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "79c39fad98e400f6bdc99e78aa5aa07ee028374f3c2c8acb3a230c23fa9cb5672e937a9fe30db66e01289d9e4ffa0303221ec9ca0ed753967cdbc2931d290cf4",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "ace860b7eba093360638cd26839eb62e5f4369537167a1f5fbdde9ee15489093"
+    },
+    {
+      "vector_id": 199,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "0d5c70bfb46884c60bb6f70ba2420b804d13962e3dd3e160b19818d76b515815c151411eb23666fca02c4e67ab13b0524d2db4af5a1bad7378f77b8ed2086443",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "f61f2a33015b496157596a39563f43273393c408a5e1aad1288ddaba4ae5e4a9"
+    },
+    {
+      "vector_id": 200,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "40f512ae70996b37a994cb3bf75e0fc3045954429b2026941b0c636cf8613a9106df82df24f0736588016e73ce9c0c1b741736a55128f5b246d8ee9f1429b08e",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "b69183b4c43a7d24b582186a36d2fcb65b22f5bd17bd44fc7f5029f313d90038"
+    },
+    {
+      "vector_id": 201,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "33cc48fb7c1f5f768ddee1c100eb194b511b509253c0d161432dd8042fa45faf5dc41551ecf1cece09a53e81a3de4e4db3731163850bd1b79f535fda1573635e",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "6afb584aa1a40728b97d74b77f002228235214999a00f917541a18880946e1a6"
+    },
+    {
+      "vector_id": 202,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "c81ced79ed33e00fe03ea8d89b68823f9ab52c5680cceeca217118eeef264a9b7261888f181282ed54f5dfd9fa0c77a2952b9644f4d27177d7f4ab6777a6b40d",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "bfa94a31eb549f02636278df65ba29162e64ed20dc03cb9ef8d75a141a185bbe"
+    },
+    {
+      "vector_id": 203,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "21834fe8549522e2ebf1a58737d10a6774c9ac3816017f52ec37688f16ca28a3f25666d5847154c76ed6e304d63da54986a75c4be04313a5fb7ff2b5b48e43c8",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "e6655432e2db844137df55fec5d3029772268e6dbb0e91896397eef3862048b3"
+    },
+    {
+      "vector_id": 204,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "47edd4d257bd5f569f077d6033d1c5b93e7304d2ffc8ec9ab07eb9c1dc6c624688246e566faab98786dd620eb7a2922f2c636649c896aea81159e2b5679ef958",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "b3defc511f8fa9000d941464720df72bcbe9952385dc4697bc5968c409129d46"
+    },
+    {
+      "vector_id": 205,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "e8b0752716693c814bdee24c2e113ff626233b2683e589a81f8b3076d2622875fb43c1bf47ae29d095df987e237103dda3ccf844a15ad26d818f2c7ed15e31ad",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "c4d1f446ec624087fa67265cc059d8b7ca3464868e181f4cb1a54598805b3851"
+    },
+    {
+      "vector_id": 206,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "f8be8e3ce359b0072ad75c9c8787a437ff2e5926f5fc05ae800ab8875cfa4081185b810078bec41b34fdd0ea1819f7d7f457beba54dca460e1d88d5844972b01",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "d4b0f40061160e075cda0e425c26c161bb7c73e7719fe9d832583c0ff5a81965"
+    },
+    {
+      "vector_id": 207,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "01a3b50b4e227f0598acc8ebd636decec195b7fa685fbe92fe8d699fcd3ce5b83a6cb708ccf0f9583021ef6447759062afc82634e852f93a0f47ddc717307fdc",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "cf0a2e91ba8339d5344b47a5f4998d9c9117eb14227e485093f3dfd0d3b41266"
+    },
+    {
+      "vector_id": 208,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "d595d42970c2b5bf913e790c848b0d55437c972d6394588caf4e96fac40be91c3de213b0ec9d2f285e68b2ae49fa7540833502ed5d3b398cbd34bfe4cf5c3203",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "089d8cee0e0e05927a0c6cb72376f7d0f8da5664e6bf758942a640cdd14ba6dc"
+    },
+    {
+      "vector_id": 209,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "32f53a9eaba69083b05744d92e7bfa197dd94146f15808b482407cd242e90a0c7e7cbf1b9b1e8048dbebe41ed0ab0d07a61e3922584def349671621a9b84020e",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "52e0ef9fa5ea713e0c1fa02aa1fd6383a7e53651de89492e7500749d6bb229d2"
+    },
+    {
+      "vector_id": 210,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "306faad5b2280b97bdd113d56ab32e1484fee9772adcc9f6e45a3d1b752da4aa2a66287276402d58f24baea7fca96e849026a766df3943579c26d07fca972f0b",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "006ebf1e7cdcce485db0284a19798d9072c934d3300e7e3aa2c4436a24940def"
+    },
+    {
+      "vector_id": 211,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "c7d6b273a7f794590240821f604f8c2a923eb9c5071195ce6723dd76bc39519730c951d578887edf0e378abaf7658736c12473ad87b81ee5fb0e677fd11684cf",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "b55922ee69236b85e6b6c10f07815140173c169507ccd169ceb70a2e054ce23d"
+    },
+    {
+      "vector_id": 212,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "625f30181a14612b7ea35fcefee3a6d2192bb793baf8f52f951e033c9c051ae0cc8d5827a981e8de9ad555cbf2874f122a57242e4dee49c82ffef484465afe54",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "5066c24174dfe732b321b0725e7019f212645e8bf90a8bf8035d24e1af898105"
+    },
+    {
+      "vector_id": 213,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "64b3dde7b688c81398002eb648690c0b94aa56b4234050b82bd472e97d2597dd12b1141aa0ff5677d86454a22b80cf284073c41cb67430f6a3b71515185237ba",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "1dceda21420ea9ec82fff554684260d62409c5489220885e13f3993822aa2b0d"
+    },
+    {
+      "vector_id": 214,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "03204e6f9b57c20b0d4cf50627e571c751459a690595866c4505c1616c955e652560c0df55e3f40f728af1f258168de02ac1032ac1cfa0369dc1508729c7099e",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "388ef89015c899ea1a2d04a76f7e93bbddfe553303e8f04a212d03d4d7112797"
+    },
+    {
+      "vector_id": 215,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "3efbffb898ab80a1d22bb6ddd994bbbac4f9e2f4826d524afeb9d06c8672b48cc3a7babd521a20e3d4ed744af1dcb79194655739020f1cf31e4a38a8df5450a5",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "98b9fbb3be5edb2b2187155da2a34342ca13c00633c7177705a70575a1f00c27"
+    },
+    {
+      "vector_id": 216,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "b986f94760c85bb73e7252cde28b6f7fed41d52e6c0ccd6babb3aaa5d78a390c675a2bd81a86c05f09fb89968c823814af918e5fe99b88e03990b8bf98004ab5",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "01f13ddc9fb8cb314c704d82bbf44545b7d07e7367f7ffb8176d6ce6ac4e56e2"
+    },
+    {
+      "vector_id": 217,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "d45b464b0b22f1612c83978a18e24b7bf7f955715613fd29f2204f181a081fb8fce1641baef30204af57366ac3b6d5b81afcb0ccd20b179f284f1f58899bb6b3",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "01c67e7f76ed9427a95afb597f6c178d27dafc074c407fac9705cc10828ad65e"
+    },
+    {
+      "vector_id": 218,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "335330d66ef802262179b412c55a0c8322bd8b09ecc33712b4c8c694368b4a39d5c6e5b03c74ad7e341739480e2ddf33b8b42167fccd9435ae95e04929c89712",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "266931b86e5912dc9d971e33e24b012e6416aef338351ccfe9f0c11edca0db9c"
+    },
+    {
+      "vector_id": 219,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "a08d55ada07e844dbb6b6b13ea750ed4bb4703080c518abbe6a03305c4bb61cf2e26af56700cc0cd4edb83c8c2b2b278f3b175f319c09ae42a2a0e459b871635",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "513228f60ec5c25c0bf11fd6ed948fbebc3ec771a1e1031bc1c4a5fa84239469"
+    },
+    {
+      "vector_id": 220,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "2e8192f6d2d0d49893d72e8446d89f56da06b7d84f6618e255943fd5efa271e23e27fe72f8702bfc11ff8808cfca25a525c3927aae392e19b2bf3cba25251ded",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "4c73902f4f1da8b5a6ce19153bb7fc7d8733aa1e885cb5fc3874cc8c8b03e5cf"
+    },
+    {
+      "vector_id": 221,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "bb31a31aea69886bc437e9158780fc809eec1da9de1a6f26f30ccf0fac092ac5b8557d391299376133124bb0bccb0db08ca69070c2316040d7f65f45c9b5818e",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "6e13e306f7499df471dca8d8e41fb165db5e25ac46ba7c420d24e527f1c0ed0b"
+    },
+    {
+      "vector_id": 222,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "4cc7f28d91c653fdfdbf8250fba3cae3f745f7f928f5a82bb392f55e51e90195a53b35e7c1a46582a09daff19977c005bbd8faef346ceb79f551c8e96e963081",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "d5071d2433bdde7480978788b7454ebadaff4651268536b1aa78fbbe60748d54"
+    },
+    {
+      "vector_id": 223,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "328425ddef0f536157ec8974313e75917fe53cdf2ccb27e7d8f1519d93b26c69c6d27b42b8bbe74d42408f2fd8de39ebf309ca752d3408ff57bb1dcc2f6512cd",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "38a254ae091919f8a59509790d621a4a6d76273715ba89007fd22eb1a9c46b14"
+    },
+    {
+      "vector_id": 224,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "706449f95492ba3d4e75ed9ea8516f8670bb11d1a3a07f43c364ed1a8e2e59383d8d697e3ce80bfbba729a0b69b293e05bd947d0292b67cb39256a7d70b1c95e",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "024018e39e0f77e75dc49164e83a9804750f175af296db3e8d229074f79bcef2"
+    },
+    {
+      "vector_id": 225,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "b90ed591297b2d333d58be2387b59818b1330fca7ea082c39aa7902c8aaaae5fcb4584015351f6978853fe45078b0b34cebbf9355febad0a1038cabfe46d4db1",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "034f142fbbaf43f6f7854ba49fdf4eeeff3e5d9aee4c697b10dceb61d7aab7a4"
+    },
+    {
+      "vector_id": 226,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "12a0b9e927fb9c4a4efb9f56a098685394d40d745076205debf0fc70bd34718d0ddbbfc926e6305b6daa2ce77af5448cb20c202c06f01241bd454cf1478b2509",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "9e285ee1c68be525d76e3bc107ec8267a4bb8bf0a1e74c9df3b92b76feeb4c95"
+    },
+    {
+      "vector_id": 227,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "1f7f85dc01b5d36b12918899486155df32b38c1e0bea3bd7e1b32f32e321691a7dace80055c33456922fbe3440fe8067a542d43955bd704f30d3c9766a8839a1",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "5ccc4cf8cc875ad74728d89e656f28033d2e4a398225fdc27eca9ffbedd0cc2e"
+    },
+    {
+      "vector_id": 228,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "6e57fc62b3dfb1b3de4ddc8aee03cb8499c51a8b73ae0a50a1050279adcb5a5144325d39744f64dc85c6e89e1b319e6318cd0ee477e9994b85284ba2a5982921",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "dfb8b19a1bf8d89314a5b51287e080c13a99594fa0c132665dbd6c0bcd1b04a5"
+    },
+    {
+      "vector_id": 229,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "4a1bce0d64b90cf665b14184dc17d004b2ab86fe5350515545c369822ff0137d9e2209661d7e7323a23236b57ab6eee6415cf252e3a2748d9a786d2dc819fdd3",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "e6675ffb431dbad67d35cfba35fe1ed026140f81dd30fe81f905532fd607a19f"
+    },
+    {
+      "vector_id": 230,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "260bc51cdd0cedd04cc2dec7c9b1aec62b804ba734fb265fcf91faff03d39c1d779d236517ceec7a154e154b86e9c0db3591b60df64490465a737a644d9ec7bf",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "b253a02731bfb345833dc5c6a78ea66141666474b750e67fd35c8ded74178992"
+    },
+    {
+      "vector_id": 231,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "6dfc8fec1a3d9187acba7b01631da2da22dad70d5d98319bf21e2b082f9628be210b7c6e53924d652ba7ac6db4e312b67889a487bdf7a3780c8785a7cd1e954f",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "7517a74b72570efb7fb5b050698ea2ca80adad2b46b48c81445d86a01ac25e1c"
+    },
+    {
+      "vector_id": 232,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "062c2bf74ce001541ea79c6a337e21426ebe4932d7808662a1c83793d83fbfc04e66993770dbf1ad3ef311aeda1ab0df490569336e930e252db7c9c8f7885191",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "00aa1710a9c4ddb25b991ccd17dfbbc0b0323ca07d3cbc67860c027bc02939a9"
+    },
+    {
+      "vector_id": 233,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "5305be3d831223910e9deafbe04a15668540005b3e71403bfd654acc224e627d4ea1b56d9cbc8f594834550dbdc279891a077a8556b377b0946b536a6fa4dad4",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "3c6dabcd823f1fbde37ad7198811681b01364ae665cf44bc9903dac58e271c3e"
+    },
+    {
+      "vector_id": 234,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "53ff98aac3ee54bf995693ce65ee901ae1b0f5955d07c351196cbd6958cffcd5262f5c7f88c618cea1720c934eb2755937922a51a6dca4accaa39128eb1107a7",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "5cc33b8caa8067c19649ed438e95389c8da32f9fa86e0be45134b2bcf16ed1d2"
+    },
+    {
+      "vector_id": 235,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "088684ad735f9e2fb23f8bbd952175f7ae5e4ee8daa24edf168a9dde9a0f64a73d6e3134c1a56b51480a158aa3adb98af7962f6c5eee60da7f3c3941da588435",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "243c35e3b4497b49bdfae576e25a878a4622b56daec686ca16f729a90ade38ca"
+    },
+    {
+      "vector_id": 236,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "6f7ce1be3aba773ce76d73f22bffa94d285802b372c6bcd696153a9c044bbf6b80282c828737720b43b164cc1184297f7d030848b007fbc83d100e2c94a4d32e",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "af2fd95733e073183a4044e570bd019ace85e0478085f647bb88413032f55a44"
+    },
+    {
+      "vector_id": 237,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "b02c9e5650a96730f372e3292aefe911f9a6c3979e8905d40380220655b8c72272f7fcc27fcc235c27cf606ce7a9cc4dd41368a82315d18da387d398d79a1d9c",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "c85e25360773f3b496a87be69548f52fde7f6184cec517d228b62233fb493c7e"
+    },
+    {
+      "vector_id": 238,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "8febd15f28c78c9d3506a142fb13dd3d2ac7008667a0f139fc7ade8760c8002fe32801a83498842008c17b1801cb6b387c8d06f297b6b32dc5e4c3a611a706ea",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "fd8b9c818d6e363971d94a70365cfb6653c298822744fcbe89f355d0dfdd7486"
+    },
+    {
+      "vector_id": 239,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "a1070baf7f65ef84642994073cbbfa699b30849f64da9fb805f2691d0d44c39f202fa8d1e33b4b4fff31734d09d8933f4627591eefe2ebd72558b905990e5ce4",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "02ecd904da5fa257b5932f66828b96e53f816aad0187c52991cc0cf78998bc4c"
+    },
+    {
+      "vector_id": 240,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "be46bb9acc8da341e9de13d698d6a2567bc09c7f460fd2d3f646d2fabcfb8bfae1fc6790835c2efea647a5f1733e29d469b16123b21caa50e01a85e938513198",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "5649009c7d4a68d000079d980d77d1d709c27c9f03026515be226cceae6b765a"
+    },
+    {
+      "vector_id": 241,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "6357ecf04184cf09a5dbf71e248ab2e40a0088b7bd23e2f5bfacc793a27c120e18ab24f93dc0e41b225e1ec8fa7e1e1cad0799eea2a81b1afc63b58e994c0e7a",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "9209a87f69a6cd8f6d0b7dce2a7c43a0420226a09609a9f3824d136633ab871e"
+    },
+    {
+      "vector_id": 242,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "0e6aba32c0d98d4c0521c03a9e412b7fbf526c4a61ec1c2b30712402c544df24e6b530a8b12a31e5d7eaded2de4c94960f6fbb723c116e29db45a722dad4b37b",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "3f33277dd16cf07eb37aef41777230f6e17ba8afdfb138f786bf9178b20b5720"
+    },
+    {
+      "vector_id": 243,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "39921c1814fa537b1ff43223b6e6f3acb38cf9a888da3d802ac4c84306940f4d5245d18c6c066457313be5541fa2daeb348977dfc3deaaa2676c57a08ae4f078",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "21e8a4d510b1cddbde147aabae3209c244b39d1d0d39f4b3641493cfe706a0dd"
+    },
+    {
+      "vector_id": 244,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "0638b7631fdd2522bd51948ecf39f945dc6c105388508dde18e213f13ae412ea25fbc1989907f4320bd2c4e73c101fec384b4f3a398fd5e7e08e54e71d0f6e5c",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "25c73104fa290d89977a26a77b56038370f71a1c362f4f31e4eaaceee9d2c7d3"
+    },
+    {
+      "vector_id": 245,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "9b26e399cc467bd2f701dc97dad8cc6ed854bae8af3a756eacd88c46659b025c3dab65c46202df6f55f7f09b2e410bfb9f04531a2d2732bf0899060645d7acfe",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "12e87f91deb2fd671e9335d31918230ae6bed2bf8e19392793703fe287a6f25a"
+    },
+    {
+      "vector_id": 246,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "5174347a7756fece982373e4eaf54086d53945d999e9938c9eadb3640f1d303e89463e1188820044b30e88839e4f0b5cba5c9685b0a377c04421605ffa4d5fe2",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "a7deae198434d2451e194e3cd44ad8c4c6df2cc636690784be9328624bc5fc4d"
+    },
+    {
+      "vector_id": 247,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "d32edeb490e39d554170892f0fdd5096642a8131f774f4b6ecfd4adce8d9cdec3d31d1fddf702ae197547b707faf692c6709825f1e961f412a683fc98d00158c",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "d1ef353df89a59119d3a2f9904a20cd52d95342db395964ca063ccb2465df3a6"
+    },
+    {
+      "vector_id": 248,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "0bd45cf944a207aadb04f7762e127738947f6ffb312d4d1fb759226db7213ee9bd22feb7cfd9567edf4cae431e8bf137e2181d346c1348a8133d18c42a999cb2",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "190c663817576b1d1f8fabdc6a4ceebbd49328e4084beb6b2d4348b02a300d1a"
+    },
+    {
+      "vector_id": 249,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "678da124bfb628210ddc9da896c9ec002c5e27e98a730c4091e693c883c03d38224db7848d45aad1c62144e0d2c9ef12ae603cdda0747353fe3e65ed1adeb87b",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "856160af77ce43ff220748779c3a1ca65558de85c9659afdc663e32b67cc9e2f"
+    },
+    {
+      "vector_id": 250,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "b762c2c1acde5be5615e1a42f0fb7c01981beaf2de0281bcc8ffc865c4541891e3a74a9a3aab92c87bbfb99bf5da6cc57c1441e166270ed23aa41304c512d22b",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "57692ffb6f5945b37d45907f904f5836425b29979b563b2dd2fb828489a252e4"
+    },
+    {
+      "vector_id": 251,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "488394c70d091c3b835939472bc247612b0156c899697177586d8697b3a7dd4ea9240d336584f66c0a7dc45d738c9f9dfc58fe970b598bfe080dc5fe26ad52c0",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "35adfd5c8b1b1cc73893e20f69d92db5ffb27e1d0fcb3c7e709cc81d6729ca31"
+    },
+    {
+      "vector_id": 252,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "e83de89225ea0091d7af54964069bf1a76ad746277816e1f4f8a69dbcf20f61d4f3cf709f8ec2ba1e601aaf36f50bf525dc774b953af01f99fe72d0daf39e01c",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "d3b3d329982f63dbe3108f54ef693d40c45ee9eada17092cadf23604c7fc5e68"
+    },
+    {
+      "vector_id": 253,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "8f2be9462a79748c0806b8d360272171ed6c9fc144d81f33b8683e4947c0f95c76c7f803d7559ea82d64ba56012278989f658c39391b1a484f5b88c9e77ccf8d",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "91572d5e1330d1462b5ac6a91bbd7f3677918b0938a6dad38ae835468139e6cc"
+    },
+    {
+      "vector_id": 254,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "d30981bf85c32eefbb9fefd8b3ee779341b2cb55c52004a0cce1a44f9638b8208a5c392305d62448f3c8d47de3011229f756b13ca5256bdbb6a4f7c96b87060f",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "d8cf451da4f65ac01b06f616984789a69c1177ba6973ff5923e1dfa4a2da2e2e"
+    },
+    {
+      "vector_id": 255,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "68a59bd7e8961f04b8d4fb3f7d6face4dd0cf731aa9a855e6091d705004b0bd1b3dd4335353b1b5a963e07298e8b4d73241ae0a2579829c05de4378787ac2a5a",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "5be987f0ee66a48558a43ed63b4a785adff5c55f5e0e7d4049830b86727808ee"
+    },
+    {
+      "vector_id": 256,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "23d930a5f5b373d0b20b95aef635fcbb5cdd2377f7a61b818bfc67a888f68ad7edd9a3b1dd567c7f7257a85b7a6d5434ce1d792801b58f0f6f653e35df45c192",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "0859611dcfd616637d96820b9514975da1c4e2b492fbd626b481030d0e2602fd"
+    },
+    {
+      "vector_id": 257,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "685ae35a10449b252a297f6c9204a6c2a4f215b102de3bc504f3f04409a2359b37ec2039dab6e68ff7a44a8c95f39490cebb95931d4f500d57c12058651b31fe",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "d798d7fc42268f3fff3f0e8dd94513569799c7a23fe1181082bb093c7e2b89fd"
+    },
+    {
+      "vector_id": 258,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "fe8c4e526c201abaddb13f8cd374516fae043bcb206ae1864e88730d7ec7375b55568465c44260afbfa429502149b9e740f5a8bd460b1231eeaaa431393326fe",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "1ac0e249ebcc835dec7cd92586ae1c471a96e4e10f62c71baf12fee58113f845"
+    },
+    {
+      "vector_id": 259,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "9ed79999bf7c2e19de818339a90ed38b61f7a5862f45ef7b00b3252b828b1bb5c387cbbf724dcdc5c8da3a688a046f81de039bb309db44cfdd4aba36c77e97a7",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "bbef40638343e57d08ffb2e2bde59e5e01ec13be27fdb7304b5a5628e8960d12"
+    },
+    {
+      "vector_id": 260,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "756f7d6edff218f85cb2ecc0b64beceb3a5fd52291b6cb9b9e02a56831f389cebe8a9b63548921d7f7298089df79843827071d33db5f96d66aa1f9ea23808c3a",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "d1575168be83dc7afa4d52f52ea7a6166660fecb4628f3564d321e5ad21351bc"
+    },
+    {
+      "vector_id": 261,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "1e034580484607733836a622bfdcde4bbd242215edcf4af0c96ed0c5e53289a82a5b146ba4839f0da333495991dc266a586c4fc0aaecdc6af89a2a90d00eb3e4",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "be87dd91e59438b545556a280b59ac38520e2009336d9107bb6b8b289e9d3c91"
+    },
+    {
+      "vector_id": 262,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "13b4d5a08d974e78b35dafc49bdd17affd99ccb8998a6aa49aa24777026b537f06e2d5734d67d25807e864cd2b3ed5577ebb40347c7507431d500d73fd839951",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "ce823de6bab9a04fbcce74c3b543355b6b7153d7bec3c466c8bfb58c4458fcd4"
+    },
+    {
+      "vector_id": 263,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "752a5dc286339d393c40fe6da79003866c62848a99a4062437149c02c6c689499fa1bc26b1391d89cb7b02001c84aa9b3982b3ce32a517679c866f61efa83c83",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "937b1f4a5865385ab04e0653615da035437bfc7e203fb5c76f046e53e9b0b3b9"
+    },
+    {
+      "vector_id": 264,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "105391bee17bf833f22704da897ab0e10760499140019c1053063ee5664f143b0cb0055d642c024e84d964f546ba7a60f70c4e6c2a2886680d036b562ad974c2",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "d95cfd1061c82e1261917691352f167b611a1c90404e2187f796bd5b7de2124e"
+    },
+    {
+      "vector_id": 265,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "63f0625d62919d4cb3c209f17e7dfdda38c4c8aef501ffe15d1ce7449c9138317fe56d69bbc5066bbea2f7aa9458ac952836184c7d934440b549baeaa2b37cda",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "07d62b90eaaf2466c07ac9406cd5884a8f88bd8078a639f66f5621e0c57ae8c9"
+    },
+    {
+      "vector_id": 266,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "ed28549edadb6d717aa2f931960a6b8c32fe7dded648baba1f4dde4eba120ae3fcd926f2d807d37f0e33c817049fd9202f6bf30e12cb07f74cc96452f7611735",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "e750fbf4deb247207a9a1c2d2bcd3ceb46c6f368ba7f503f6a40ff34d123095e"
+    },
+    {
+      "vector_id": 267,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "a3cadc58ea462f02212f0a5af10daa3905770269a2095c88ee0b0fa2530dd81c8b9fca2e265c88e905f10709b355787ce38fd5611eb709c748c658d2ceea2881",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "2c95b02b37383aa6c02e2ad822926d5955370a0d786b405373a08ae7fd9acbfc"
+    },
+    {
+      "vector_id": 268,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "52ecec3d993a68e7b76252ecd90860d622bccc70b13456dd1b734336c826e44f855baaa864c77eb195766cd44927bdf04e35fc2d64bfb6e97ee96afb33b5f39f",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "e102c7a8081218fce50847c4aa531fa5d39c2a6e2191af2fc56dc29b14174c00"
+    },
+    {
+      "vector_id": 269,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "509a653fd85cf8f774be3a104fc72bbf906cfaf992da236a3cbde2e8ae1343a086af483d07faf7f32da1ac81f962fff9d275a9e519b3472241f1cb3c0f0bffee",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "bd238fd37acd1979a73907830272413d1d73fea120114aa89425a5e1c3571c8c"
+    },
+    {
+      "vector_id": 270,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "70da71f23a931b0f800c03494b88dec514e280d2426cfcd40ae1b34796d149d1d794337d018f33a3ddc41adc3bd606201e01843f0ec65e0f6e78275152a6fe7d",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "b94f3c29fbcc295b109d7fa34868f7b99cf6d9f877e2b77b5b3e83586b576292"
+    },
+    {
+      "vector_id": 271,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "e1e1e3f33cc2f9465f77264728fa61d1523f0843016adf8815d3b262d497e3416c32975b0877e38c567206c54cd67a89095d7abea503591dee49201293b81897",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "1a9d51be4aa0732424c00a85eecd194db23cba37c7595be7a09c92dd082b56ef"
+    },
+    {
+      "vector_id": 272,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "28fc63171d1dcca2d9e80b1978d60f20670e029b382bff8c60adef071977fb0c425dec31438147c3803e09d106434225b15edecc8fd260d2d7b6714a39315e6a",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "3ed0daf64efb8ef9d1a183e09c894e3e7a57636fe31939b30e5ccd7496844006"
+    },
+    {
+      "vector_id": 273,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "91c4eea61b866a8778d380e5f8b98865d82698d5f6215703e07693667dc18494fc7fc3754e2d59b2ffb2ec1704c90ef7d5aedca2f86c2b01f5031e75d314b3d3",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "d717aea055039f2bde21df1e7c5c68950b524a8c48db504aece59b1ab117df7b"
+    },
+    {
+      "vector_id": 274,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "8e03deb30d505630274d636b13c00d150f59ba71d1299f13e304844122449ecc6d3bcbb3b7c606caf5337a46b799e296c17ca57b676d13a254523468f129baff",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "3f35545b8cb5dddeeda8ff319c25545fa5000e85db43826d7a87961aaafcccb7"
+    },
+    {
+      "vector_id": 275,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "3e5e8c9acc3a7780dc26d3b38f850fb0bb8e0f8cdeac000e45eeb16e3464b76db815ead3a03dc1606a79c45d9301635c016c3db0e814739a0d49046b10f3be34",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "ce66b96b0a1016b51d54d9c9d9b2d990a8b4b2b81f9e61392027aa3becb52233"
+    },
+    {
+      "vector_id": 276,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "b005bd873ca22c97fe03342733aefc56fce3415308ac0d859051c5b8c3beb336001e632693ab3192047eb78c0a3b81c4a9704802f1a3150531ed7449f84317cc",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "b233f6333f01ff9139a59659903778c707b62c47dab64363c3fe279345ea8965"
+    },
+    {
+      "vector_id": 277,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "c07f9a9fc7f792da4e85b96c5c9db2e37e49c7b6387c55f260e9857bf63180c002a4bc936f3be94f41070f2645ea68d3740a212db399d2eed564c89900d65857",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "bf7bcbd2f287b60f7be0b0f857d6cd625cecb218f50f07f4c6f7eee361fcbb05"
+    },
+    {
+      "vector_id": 278,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "dcf0819246a58efbb103ef11827e9b9877c3242826a8a23548d222c5d8e273d9e24dd4a2ed7ad6fbfabb4db313bc9cd28e2ab5d91d08e141296546ab7b20e715",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "abf88b2045e2bc9ea9413db5b93f11bba70af967a13d6bcc5020e3b85a315be6"
+    },
+    {
+      "vector_id": 279,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "73b9d2091bb27e9bb94fe0fc0da1ecc2f6533ecee2a33812785fe20e08a0e4ce784e58f2751ff3404bc08b23953e2e91bab6ab88c4687d2d4ae8876f47ab5e34",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "f005e789ca29e2ce5284101863c4583c5e0fea3260005958a4dd3e018497c308"
+    },
+    {
+      "vector_id": 280,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "24ebadb79b0acca5d4085b2d62b523308f6ce6536f1070bda2dbae0bbef94cc07aac2ef1dfb23054d0bad447670d2b719f17ce258280bcaaf0d450e80e7fa46d",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "d5ffc0eb26690a583908949ce6dcbbe93062615f3012674199869529392cf0aa"
+    },
+    {
+      "vector_id": 281,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "e1435a62b5fc84257d2601fce39bc295ac967c666f6500889da69be0b3a487c8994df23de307baa3ad2d6bbb13d8322f9a6162c383048d3c56c88c316d55f912",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "69716b75a93df35d8d97ab99b2f3ca5510472a415bc882e8d26a8a79532ebf56"
+    },
+    {
+      "vector_id": 282,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "f1e5455cfabdcb40e64d844f896640e9433200d052ed4a8aaa57ef21e5b02939d77de719b0a494523df0aa23a1f5bf0a5a3bfa811af6c08ddba073a0b8941455",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "381e53c7193145941a76144bf281cba0348f963398f631cce9b9d73f49448d7d"
+    },
+    {
+      "vector_id": 283,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "998738745aae1f4f827070350c2a9a20c4c38b57765ff45e3255557c41f111c62c5c9cafac5d53c035ddc7a47f49c4b1f0e72c361db07bee681acef2a5b20704",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "3d8dd7c5766ba6fac07f0e34a0adf75ea1e770b614abf757789c802fb2d7a156"
+    },
+    {
+      "vector_id": 284,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "b59b1891c2108e6627c5c59ad3ef1b83965e2cdfbaeaeb653b9f421e6b933170d406f814cdf2d9f90b78a7977fb76aabe60c39c8664a71a5e1d5dd0eac4c5785",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "da36a6d2af3136215cfa160648bb95b5377525fc6cea6c7f5ad4e6fc28394e04"
+    },
+    {
+      "vector_id": 285,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "7750ac4c1603fd4fccee041df8ac1ffb17d637e773ea66d0ecc9921fa155da918dedcd28224ae3c9d546c6ab603f8ff5db0356fb92db5b36990d0cb8c80f50e8",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "c4b97c0160947f437f156a3887acb943f67e028967a7317235e6b4d33f4d9aab"
+    },
+    {
+      "vector_id": 286,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "0a7a4d2a13d9b5312f2588af60181b9ea46983053004281785307f964cd6e287fed9326d29e8972a688e9424ed6889b94e07fa44f8446f7bc9efdc919cbe99ce",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "991a74e22b401f1512c508a6718299c76ed1e8b9b26c68d18b181ecda4cb71d8"
+    },
+    {
+      "vector_id": 287,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "92ae5e337490271a6a4f1dea673b7edc9bbd650ee363f2fe7658dc4e1161b5c6e6434025ae3cdb3ed7f1903b8fca1a47082760053fe8588922abdc7cbfdf18ff",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "11f68b9c0cdd937e21e37c7ed4ce5935a4d7f7926fe7710a1e605e7991f2efbc"
+    },
+    {
+      "vector_id": 288,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "2872e8e5babbd23b1d720912c2d6b780ce327f132cd10bbc729786362d198ba9028d44c5f48f118ae6fbb00259f783fd97d8b5a8e295287959a0213d6a96420b",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "33baa8a59bda6b39da5dccc4a55e88179ea5278025f80e2189739774f3b21577"
+    },
+    {
+      "vector_id": 289,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "1cdec4b823a23acdecc6b0afe3d1c146e660fde36a8bfdcf5862801f97178b6aefe8103598ec2a87dec2d560a2cdf8c82e5c4ec60b24e76f0f14319a4dd666ca",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "64d2962ab359dc22349700e11186ebc84507a27bc2957c11ccb7bd552da2f60f"
+    },
+    {
+      "vector_id": 290,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "17fd97ce51d5e56ed5e68e2d47c34bac3967da922c8ed34bd0aba2898614fff05639ee07fcffa4cb57b73b333042e7e97dd47cf339f9f19f255ed8de85b92b63",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "065b1f4d16e1821a009b4f7d7cb4c179fc684688a2c9cf1ea0c03ae05719cc5a"
+    },
+    {
+      "vector_id": 291,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "22e10fbbd23198fb542c44c358b588f5ec75fd303f5367d660eaaf2717c70cf8a65dea4867deef5045742f5292df27a20ff1bc4d4f50bb9fd896e7dfd6443232",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "462f495ca632534d1cd7a4c6f4871f2969e34ef1f73cb8989989b16a8a6dc166"
+    },
+    {
+      "vector_id": 292,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "320b74fd5703325aba23976dbe3c709c6d3435690ea229d292b7db98e12c7da1b5ab3ad07c41caf49516879e3c9864cd8e942359ab02395afc384cd8d6000421",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "d542116f84459d5e170d5004bebc2c721e4027cf254b823b0ced5e6e65debff5"
+    },
+    {
+      "vector_id": 293,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "01a6ddb749d5c66f54e48e7ae1e935805c008983d302cb7a877808ef525a9ae386883023feeb736062dd9928eaab2a219f772b4072f8400f8468ea87f9e51e35",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "75a2a532e872a3d52c6316af6fde9b3c1f712078ca7b94b4101045a397aea317"
+    },
+    {
+      "vector_id": 294,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "beba930dab296aea085604659880e839f6fcda4f79301d1710818f02c2d47bc3e7d0fc7d7dda2c47febd3578699928c04f9b1ceaa9e5b57b98ed154373b8b668",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "d7602a4a37253e7e9a78863022342bd6cc031761bf3a2a33d01fd0a7e24a0bc9"
+    },
+    {
+      "vector_id": 295,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "637322a4b19ce1d963ad97857f154230710a293f69f39300c9eeedc709f70dd3783a9ad567df66b064490d3f280a5a96008d81d3ddc303c96579efd3a9bce546",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "a1a6d84e392993d4ecde2ddb7370e079ee007ee5c1f48741be3f1b478b7a6a39"
+    },
+    {
+      "vector_id": 296,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "0cc35b2ebb051fa66700cf026dd7eada4c1b20fc511141a0dfd0f25d74dd461d69ea8cfa6120d73d00396dbe581088ec6368fd3ecdc9d60d23ec0827fbc908cf",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "fec612abcc193db4787d1f0df1eff920e1e97287aa89e09ffe82712d54ce433b"
+    },
+    {
+      "vector_id": 297,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "022361a969ac3cba5a224052cdcf0fe789fa185f6916515049476a58ff3648ca10d9869ab39040054c3a8eb3b181a308801623cd00cd7a4e580c5f9839881c63",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "18410b50a016d5a4f6d2209a2b626ac03fdc619290d5a8e8c77c305ae12b5060"
+    },
+    {
+      "vector_id": 298,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "7a816a1df28583d3a829803fd6eb308f05abde4c5c581ea8168b76093e437fe2f9f1db3c416ff9fda926ad85612b731631470b5e9c4e116ec12e8df5f503de7f",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "e9cdc32e1a3deced9d070d02a69de045d8b92bbf84908572204d6ae9efff7002"
+    },
+    {
+      "vector_id": 299,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "f8ed93acee83c05610397266ae039f7abe0bb52ad1a8835640b5a5273ab5e5cf8af96f9cedeea39d3f329e16c8d1c3fb34401db0c35d76043fbbe53d0c4bb1d8",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "9288786f6cda5b574d98407ae7485a8e1d3979b7a847b95d71031076c430e485"
+    },
+    {
+      "vector_id": 300,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "ec9e6eb1af6df78014b43ecc66d5f95c8fcc7ee280f29f8ed406d276698d3433e984bf87e9b49ff74fcfd42d90e14f3b9010a3562025494730c15b1a9dcbcc0a",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "3dee5d09891a72b66b96117aa6ddf7cc46bb502d6b18362954d89868e95f4558"
+    },
+    {
+      "vector_id": 301,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "7b40aafac787d7f5cc4e0bbc11fd6c91c7b3896b243158b34de47599c2ee80ad6653dc035cfe62adf4b84a9c971e6288910f57dfcd06767ae8479f96fed2c68f",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "9355636b08c5f24db3e6e0ee0a99cfbed00c4e29bbc71379f35b6d21fd59af10"
+    },
+    {
+      "vector_id": 302,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "e00e7d308cc17d37f53e6ddaff9d028e47f4f6f378c7d3fa6d70d972ce7eb5d3071d545b802551d3eb031ae8fc3d1323a120a1cb528c8865197b5e2e83ef3787",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "ae1b9be8a660373654c976fb6137281ccf9ea4e89b531fb68737056c8006bcdf"
+    },
+    {
+      "vector_id": 303,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "13783fdfc033cd3b16cd5255ce7e3d2bb23e3aad3f983afd3cdbd3fc7ff3b94943b34da00f3534cc1a370c072af0996890ab01599fb362a2a08fe2ba217bd97a",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "a7cbec3b5e1633b751b940f88d0e51b192afd0b3c6e39b43c06fd57990c93d26"
+    },
+    {
+      "vector_id": 304,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "0583daa5497a42c398d2e5656264afbdf0d9f5be9f510545cd11268ec9deee0e2d20e6fd1955d0de116982047b3fa62d6c3b2a46551c5404186bbee559fbc3f1",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "514ad91ffd6a565f7e86e7ca82c3bcdbee6786bb5c2751ee309d46e32f53b715"
+    },
+    {
+      "vector_id": 305,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "75003b4f9c4daa5c39d033574b1792d882f291b680e2100e73f77055e7f0aa336877ccbf92beb4abae00aab6560818883abe269669445ed12c1f2fc8dfa00679",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "7867a3269e108987156bf0aac3e891d1cdf935637936a0378c35c5c4f84ccd92"
+    },
+    {
+      "vector_id": 306,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "0b92b293deebf78ed44635f2e120d55e2cb2aa440b9578f99d23ef59f20e2089538fd56b96c40a515dc5973574c5f4cbe8b3e4bf51ab917f8523606884a4f27c",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "951f212c3c593e4db54192ac12dc028e7bcfa5b33bbf6b7331e86a371db15679"
+    },
+    {
+      "vector_id": 307,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "894cf59bf819b1b1bade8bbfcea8b9f667efd3b1307115ec7d9676109f0c6474533f9bd847480b724ecc7cc85caf70f8f621ac7bd89c350cf8fcce0049cfd773",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "592f125c9ebaafbb0ffb072a681c837d207d6aa9d3b5d8b2ec7b1366a8cf0e86"
+    },
+    {
+      "vector_id": 308,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "cf2bdfed558ae05297f0da3bc7ef41dfd09ed74f592aeef03dda92ed3f65ca099c408ba5dc2ac666ea8304feeb4ed6a7338959c7e1da2fbbbebaec6e55a8d385",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "be6c5f6edef5e20a3feb9b1264d319a52a9d0609d2d6aec489b66a3025f5fe4e"
+    },
+    {
+      "vector_id": 309,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "40685fcc9df4b05c203451d66d8055bafc3de9bbf909549e40f687b862df5d20e98dd9251bad5a835797e45e65fcc2730c54b818f0ada4c4864264ff1191d7c4",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "3470b158eda0b406fa5b058aa6a6262c5c20761ac0705bb92d60fccc5f2f3e83"
+    },
+    {
+      "vector_id": 310,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "7a1a194b85c52fc07d53b341392d6199e90ad25f08c16cdffd1305e74ca09ccfd966aaea603aba5a40446b244870d34bc79e38efc3eb8a2bd70c88f864dc8199",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "5ee6db5187a28ffc7e1e94f6852ef42160297b04dfe0196dd20197de535384c6"
+    },
+    {
+      "vector_id": 311,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "2821f525187a4bd66b9c3a64f9be7e9f40c3c21c55e66906150a92d143e244518c110323e2a4f8e5db1c0e205ea365ac4e4b5d1bd7e8ed742fdacca0eee418a9",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "f4c77a61197a5ba30470c3f1e9c42a103a9b13c94a0eae085ea0b1a140fd83d2"
+    },
+    {
+      "vector_id": 312,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "9ccd9038a60e2211370cb83e16e56c1fad19d1246047122b1a9ffde9d4c21a127c268fa5a99b1935499408717622efbdfdbdc3082ecbd0607253d546ebf60359",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "8acb67b6d44d1c41c298e85cfe8e3d608f0957956e67cc8bd1ba7c4ba8c648b5"
+    },
+    {
+      "vector_id": 313,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "58c050692039630ae24d7961f23f9d0d17e5237b9e559180ada66e7eb4283afbffcbd357b48ac5c0d3271c5b0b19fb9bc6fb34b3576ea58dad6c519f03f12a02",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "6f4791a8132091f40a31edc927f2c85fa36740cfb1531b42cd7a00342e5b6423"
+    },
+    {
+      "vector_id": 314,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "6818d6798fb31671442310dd19549fedfe0082624d9a7e4ce724d64eff84abeb25df6488d795ed238830a7540672793802837eaa227140864470f2b0ef54f240",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "f897643c18c94d2eca7fff38685ff83b2e9507831a6691f57e8c318b14528861"
+    },
+    {
+      "vector_id": 315,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "44e972368f48803eb7e4c1cbb2852d31b05b3ea1c484a8081b82419e9e80c122de5fbacf1782b16b1bc26617254b905316c38cc798af7273f208ba4cdea66e08",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "53ac3961297ba7c96c84080c7a8d2d8b5e78a51a1891e1414d9f7d035c834646"
+    },
+    {
+      "vector_id": 316,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "88d2cb97db493762a568409b8fa24c387d9c80ba6b5175a475e18a5337cff142397f36d1964ef88508e9183759d3034a9656351d38139b0c464e2ab5173ee73c",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "6d1e99cd9e64b2bdeefa310655ae98496e033453c13cf5b23319ce31cdb5ecf3"
+    },
+    {
+      "vector_id": 317,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "2f1450a0a3718aa0a066c3b90b0966cb82da9b1003dd33f50093c1a3a81e1685bea80c7f5d636d74dbd52cc23bf0615bf51156dc2669dee1051b291be3e53618",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "8dcc5977691954394a44b3eb96908659c8c183374e5615cfe23c4da6261e6b98"
+    },
+    {
+      "vector_id": 318,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "fd19eb435c1654b61fbec63b196f5b676674a7254608172f4111c4b9a89834319c605488afd86489f8fa46a4c4fc40615118bc9d4c2227d4f736ba9a39851f3d",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "b7e87b37dce5db79ade1d8eabed1ebcf7292c89235be6be4d2e6d3c111ee0e63"
+    },
+    {
+      "vector_id": 319,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "1229f251612191318a293e3dbe8a8938b526cbd0d6757a9997a83defd67b9fc79dc16aadc5244f66d3dfab476ac4e3fc87ef73c31428d374fbf44911471df5d9",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "12a341cda506803338ebff12dcd5abbd563c4dfe7e95ed895af57c3d7c331b8e"
+    },
+    {
+      "vector_id": 320,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "afd8954705c2fd63d436dcdf8b724c833e7018cc8254ca4c71dfa1fbe1227c64b15ac69b76c931ea19d4d03bccec4f068f2e9b03d4ef561c489a42e6f65e2a7c",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "038b152c1c721ec4ae1badb2c3858021d0c738776df411b75b807eec867bac6b"
+    },
+    {
+      "vector_id": 321,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "e4f8f02e882dee4a53b6c88bcceaa3f77a34cbdc5edd1a521ffa9027d5e45978b8fd0a24ed80276bec0990458b2e846158142a4bf917f323a0b17955ca6089d0",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "683bc44b1fa697972b5b0adb807f35b3e16cfec7e3bb86922e366d839fb161ca"
+    },
+    {
+      "vector_id": 322,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "2ebc0af902869136855f8be1bdc370744405dcf90826aca2cfd72b5cd0106b5d2f18f4d29d4c8a8496f71b544a3d5079ad45e381fc3854b38c43b5c7db7434dd",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "6e8e64e1d0f5553a38d0b1e5b17d5797d802ac0565de98d2580ee215deb45519"
+    },
+    {
+      "vector_id": 323,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "3b72a5b766910e30f98a9eaa26863cfd8a2cb2127812adbda4fcc742a3bd25dae9be86c4b45833383df7de0d2d94d58f3cd19a226ee0d9755a5baff54251c5ba",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "c795e07f0e4920f0466a2c93bf6ce9fdaa123b279477fb1349a14d72a03afbe1"
+    },
+    {
+      "vector_id": 324,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "0b902fda69e2f28393963c71987f0a0d3082cc3f1ed763d09abb9efc0144f6fdb367dfb4f438a61dc9ae0dc55ad1e6afb6def93e94d6499246c52d1a88022c85",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "6ae0fae4370c8a44951c552034fa048b1f786166c4c447c4de6910e8a957e99d"
+    },
+    {
+      "vector_id": 325,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "be2acb8f3549d9bcf034111fb6b4d34312007e5ba1e6dbf7208d2462024c77ce14741009bb932d116838e3560d37501e2c81a79250f08435bf6b38b6d8540a12",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "ea490310c90ccebe4c3e11fb0e3bf6886d8da0764951dab685058da9400acf83"
+    },
+    {
+      "vector_id": 326,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "4e79eaa6df3cd75a25f843c271ecd3c10ee20d9bfe6e09e888b478b6c9bd32e1ff4570d62f6c5c872211b96dde14c3c65ae27bba1452fa28b4b0153dcbfbf66e",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "d1e8af0ef3e8f02d80472288dccecd26b117fc700c52877d34ed92e7a7041b36"
+    },
+    {
+      "vector_id": 327,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "6b1f5271834205b31cb2054942f767011b2eb7649e60d81116a019e093d5b06e5d9a19fcea08db33891dda572950255ff4af8728e02ce2c3262b7a20299301c1",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "e3e3945742c2c149d74fccd1186c4359ed25a113286819e3c1339783886fb296"
+    },
+    {
+      "vector_id": 328,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "561195f60713a885edeec34795c0d64894c365acaa81daf44689237e7c77e86d48eba5ebf6abbbe4fc07f47239c348afb05b17e63a5456367ba9d909e10197e6",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "d41c40fed0856fa46b96ccdf19a830b26a4d6cc2b1ca0de2f3de7b2ed3e5e047"
+    },
+    {
+      "vector_id": 329,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "a51419d28b7291e03044fa4c51ce288948a7c348d93f67a0c7fb91dd06af675ab24dfa2aa55c64441e529221ab2f0872386de639a4bbe375bdd7bf1934fa4bff",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "b7c18b9fd05913ef84dec49b3a2dc488a988d624d5d79bc8307cecadda406f2a"
+    },
+    {
+      "vector_id": 330,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "6b0ada1a06dc1ab9f5297906d11a369af36580ccd91c02f6d70f9aa3a2fff81bc8cef4165f052b983ff2cee17913711bc56ec72df98e2d7f28d753f0b8d30b9f",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "c2e1679b6a52edf9a7a84a3b141b97bd7ad6bf65cbc3096bb227c36f175745d5"
+    },
+    {
+      "vector_id": 331,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "4e04966344ea50a3df59b6d89d35a09bb0d077c5a1ccba458584688e4b8535a1b007988e6734c3fd6800c679e909f69356e93fdaa58b6aa16991ab54f765b202",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "794ee59e08fc20ff26de62a6070aa966d44dc7b1edb2730c26477dd7ea7a5aef"
+    },
+    {
+      "vector_id": 332,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "55fe83ee101db92ea8698975b332076b46cc1d72c3556d0a0ca35aa6aeb0748a9cfcd64c3f2cc14845fe89bc2b1b6a28ae18c56cb6ba56ff3c164f7f9739fe60",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "aa354bd23d722633b74aa6843ec102d897fd42e5aac9b22ac3c21a6524b14072"
+    },
+    {
+      "vector_id": 333,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "91dc58d2a4b22cba4b826c69b3c10c11f2664fb9f2e0b99c1bf30d4daac44ac1dc56b79dfd42e2ec4c96141144969b1f0d57ad1b8a64017c58a23e0171c6d0dc",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "833d536bff2597b3fc5f7cf8ea297ed360edaa23891ecf7afddce56f5e4ad13e"
+    },
+    {
+      "vector_id": 334,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "9c6b8ed8824b87efdb5d61a01da98b17b9e45768f7c02dcb2142e949d461fb21df1c9d595f199b980395a80ee834e79945a53383b48ed7fb251c630870e1e70d",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "c42dfb366244ca9857f89c0ce25b5dd935e4a6c8ab6bbf8e826b69431e5c9a0e"
+    },
+    {
+      "vector_id": 335,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "00b27575c4de6552a0c0e64569a9aa54b1cf6fc18ecc4aefd54350927c89021162a8f92910cd57caf6c2d95b89ebc3f76ca3e013f63a8c8cd79e63d6a8e057f5",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "fcf7f8892b12c5431577b72f8d876b880db0c447284d930b7c61dbdaf63e6e87"
+    },
+    {
+      "vector_id": 336,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "b9c953897a7277f6377197259c925a7d32f3a555e52d0c860a6b4f605419178a0a02c2db3150881b248dc0227efa5ef2a313f7997ed87e679d0758d38f7b15a5",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "8dad8952d58eeeed81ad4b6523e6043632e06ad81a685d1778c64e875a452faa"
+    },
+    {
+      "vector_id": 337,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "8ef1b5ede33efba14f5efb67a716df20c30fd7432a6445f761c8283f54bc18c4326a609a796f33734490bc0d469506e7f6474ea5aebb96e81789efa9c2110ed7",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "ceffb7020e4f847281284723e8ace065c951cb702e53b37ba383a141e08c5510"
+    },
+    {
+      "vector_id": 338,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "9e3c69cdec95f6463d99813abd9da4085a9959275620724a487f1e6eddc2b39e8aa2ae74793578a4e18609b0f6ef79254408237b8de74526e8fc3143730d5fc6",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "5f675bfd9c4b28617217fd48512761297fffdba8128bd95f6d9e1a677efe45b3"
+    },
+    {
+      "vector_id": 339,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "06455661a1ac60ebfa47991d12b342e3d061336e589ac4d612de16974626f06c63706fa9f8e2af60b7a8e1da5930f1dcfe91e1df186346fec81fd43d4d899152",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "4f0c8252daf46113bcb282ad4cbe1bdd9ecc8feb2f469b73db1eae58f8c09191"
+    },
+    {
+      "vector_id": 340,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "1836dadf4ace8dfb7be16d1fd21220688fb5a78b720bb3dbc28c7edeffc97128074a04dc2b4683083a536dd9ec86c12b18601e794d9d511d0d8a3dc2b03211f3",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "0ebf7e0c4490c3a9e5fb6c5f54d90ab20d9d3c1880b22af5ce98c9726c898d99"
+    },
+    {
+      "vector_id": 341,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "9381f38ee940f22b646b1d34a9e9b2c44880384cc66b80a4604386fbeaa7566ceeee184b087e2f432c112da20c71bf5a9305f9bf9015f19e53264e341f8b26dd",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "cd90c424a4a08d478df6f7132e13f1175d96e01236be3e1146d89e28bf722b7d"
+    },
+    {
+      "vector_id": 342,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "3efc9ec2d55fe067a7b10d591539906e287d33f2c779a6d2a98f9ab09f397f05b50fe00d03126ee0a03314d86b75751f34613a558fef0860fc637339ce16d3d1",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "16fb87c82853e651de38dc5c3da38d9100971e1068e4e6499380eaf611a1e87c"
+    },
+    {
+      "vector_id": 343,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "0334c306b27f0fdb3de2c474fbd35c66f67c874abe088eb708032dd4e1a3efc2153e6dcc954245e10b2037fc6af1c7b79b7f3bd7df5d40b327f38604a2f4460d",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "35f63626d7d04fecc82fbc98ec42a42a00bdc11858cdb973a21c4ceb66bbaada"
+    },
+    {
+      "vector_id": 344,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "302b1f61426b4e8e5f6af02fe1e5230c9e22b1c828ef5be0de461ac9d8b8e24e2ceda605f7005e785e6925e326272735905050034d99af3d8947be32d7c32bcc",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "06f8e928d2d99b081919cd5e8a0789a74002c1c82e464bf8761442a161aecf51"
+    },
+    {
+      "vector_id": 345,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "3d81cf3e9e3d93fce5cdea2d4912eb46e7fa5fdaeb8be0afb77891e5eeaa14c00e7a4f60eaea8461e400bd067a73f2d2cc7491fe1d3740717176e77ae42527e5",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "2e6a23a0728c104824a7a9e3ec7fb5e004658aa6563e06971fe46da4be6abd67"
+    },
+    {
+      "vector_id": 346,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "a82037db35566aace29fcb8ed942fb11fdfc67f8e18de4c44c38075164d55c2d69cf578f023c1179434ce9b5472713e79591c4fd374448debaa86f0b987e730b",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "22e6820a25bf361599c6abf1b229c2d2f3ce366ed1b03d396dbf40bb7abe1477"
+    },
+    {
+      "vector_id": 347,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "1fe4b30af7bc0b877e8cc3fa9f2a4d74254937170901e2ca3ed1a72508fe25afad8b6ed9d17ba99f6a03cab22fc8b176066af3de5f48868e5b24de5a77d82410",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "1cf6b568386b6a5ded96638bfdbf8e2392a3d8dd451aa8ab752fe1eebf1d9cac"
+    },
+    {
+      "vector_id": 348,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "70f164e2257ef38a1031378a0c62522ec5fdefbeeab1ce0d9ca5dfbd10b3c1ebc0ab816887b469c2e057c17effc2c1d7bfe85b577f80e07d8b3b3e21659e0419",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "532b15d6ce4f637d4ce6599db42862e9a55911f002c60532fc61788390b44447"
+    },
+    {
+      "vector_id": 349,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "d76d16de3c06a4c52a70c8727fbfe6cc60262df968066168764a7e1929abc0630d0748ad365329cb812f5b32388353a169eafc42821ccd602a2b78802c2ab19d",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "3015335f9365a7e7f876ded5d5fcc845139f4a4a90394b5fbdc2178fcfe2a038"
+    },
+    {
+      "vector_id": 350,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "a4230f1313cd7c6a968476bec07d2716459ecc09a026d5550de21bf118e7e8ff72ae13e0abd383a543ea8cd46cd95a7db8d3b1c6b81f3ef28fc5c1fb01d8c604",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "5b76fbf14ee1464394ecb970ac5c3b6e2bd0026b3945aa0653b8c5fa149df916"
+    },
+    {
+      "vector_id": 351,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "d84c5c940f0b0b3c2f24dfb039e3e7aff1b45473b720cfe9fe87b4d5bfc0704593daaa02bbedfcf0100204ae05cd5fd38522f521dc63764967c4ec168dd16060",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "e145c4d4bac31a74358fd3191b40bb0976c1428ff212741c3f94ba453f3094a3"
+    },
+    {
+      "vector_id": 352,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "4fb91b751b174578b506d951adb9f401d64a62810898c6e1e9097f3d435df6d399ca82f11fdc7edbeeb2ea562f4abd8ddb90790e6d3f31e10ba9ee2c76403400",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "a0cbd5709248668951680f398e7aa3775a58862ada1127003ebd08f414ebcbdb"
+    },
+    {
+      "vector_id": 353,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "fadafb4832f0edd4a7cd4e41efff7366e052fe7f2b2c30eea1bde35cc9a63c277995cc6bcbb30a513cdf09008b7236cf0fb57aa99890ebf002ffe3a123d2a2b6",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "88308442a66542c5e90a335e2aaa8591af4083476bbc9b5362c0e55b92d9eb1a"
+    },
+    {
+      "vector_id": 354,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "31be53df1f204d8b5ef237add6835eee2cafdfaf0011fcf53d52e58f759bef2c39c27f6af860caefd2eba0dc800c4090702af0ca20b38b1823c5ab9e3c245044",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "68690def92c223320546d2c77b921b13d2fc71913dfc91ac812027513b8b938a"
+    },
+    {
+      "vector_id": 355,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "1115088f27a8e8f4df5dd70b922dd1f23e6465f66b9e98964af1e709ae9b89d820826f9e271c65f25af97cfb211a3bfdc619f277583f4d90d077c675883de033",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "20be49f801f81edd7729fa1e4fe6da95e042227d1207b3aaedadea09f67ca968"
+    },
+    {
+      "vector_id": 356,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "42ebf0034640de15ae982d3318f5437ea088bac6fd5cad19086aa1e0fdb688fe34fa22f8b4c4ec3f6b874525059a64a9eaed37b9cbd64f3942ea90255c707f9f",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "12019fd7b657a67ab898a608bfe14017acaa4bb453f5006ff2370839badeb34d"
+    },
+    {
+      "vector_id": 357,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "f4ab3b57b3d4263950cc0fee74f5871884a121f3dd77f75f7906da4e8c0e999943bb46eccc3fecb5a430ce07669943d46ffcf43db98873ccc4e9b63bee4a81b7",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "1f9b85115a63dc68b0832c933c5e58ca272441342c533bbeb8f4fecc3e448ca4"
+    },
+    {
+      "vector_id": 358,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "4001d48a854c00bd8008d23e2a5df663e16466fb336d4d8faad77846f2f861aecba19f4fda9dbab52af2e92b507bab2755f5f00d582ef9307fcc018bd96a7297",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "d78468b0ca55340cb5b43465bde38a77cc61aa4e1755e4a208a0ea6d08eaf3a9"
+    },
+    {
+      "vector_id": 359,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "78c0c0dd0afe1dd394dee4da812adb942bff5553600984ba5701ebad4359690e713e33fc52e479c74074cb90bd216191fd4e3c22c5a80d3b8cfcfdc392168ea0",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "e1422cb4c65a3c91659726b1f73e7e1f273c6d51f50039dcb82e8a589e8c7356"
+    },
+    {
+      "vector_id": 360,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "98149e215528ccb4c59ba778a1ec707489e0aa66cb426f113066e67f7424cea617959531d9fa243ecec6a555fdc379ef05d49b2f9cb5b075ac8c01d8910b73a1",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "b68212116f6effbf0fd613051b028b954c2c4d7fa10a3bb0c9c1a5fb3520e169"
+    },
+    {
+      "vector_id": 361,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "ca7f5803ef6719aceb99a39637606760fb59378f945cca1d2b7113272d9022496c37529e93a53856dfba302356948cac847ea8954abb91d8baa06386bfe22e48",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "0b7bea4fbfee8d849a29c4623cd03fdd51207132ced0f814a0362706a1792968"
+    },
+    {
+      "vector_id": 362,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "93935fd911d7efd5198d6f52eec8a5e0f32ddb511ba2b66fc6af437a6e1020f5ee05056d4fca8d5cdf9aeff46efc9f5ed2c646c1236c99e46b23d94a371b534d",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "04e5c9d60532f4f9ef1b7ca8cb7319a7dcb2bf1e65708a1063c5f9b172e42092"
+    },
+    {
+      "vector_id": 363,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "4d289994350d920444f86111e17da08107041140baad1abfab4e4384b731b8143756caa52e0a3162bb50941bf857ca1e5fa73284babb63600de0933cb1de8ac9",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "4ba80ec5364f6bb5c43d5a3f89fde000993f7d35ba6f21e8bdba4d3031c9d348"
+    },
+    {
+      "vector_id": 364,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "4dfda972c07d2fde065ba62eedb698a213a00f9e8caf023379e54f32bb594b2ef1c35b0f8f7a9cc8d30953a33a40382d62fc40dbd159e07a8da245396729b0d5",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "df0fc20991c50c0ee25ef01e39bf40711e02554ee7225bf6d569e12a98e3bebe"
+    },
+    {
+      "vector_id": 365,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "3a6f87864778dd19ea3bc2618745c5df5fb896eb1fe97ea16f7e5fad4b0fe6601648ebd37ae0f6d1cbc72d554ff2f69b122f31fbbf3478da33249f5e0a5fc133",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "7eb05c7073970eb32297782482693f45f86adf1c6e4f4b0d522dc1175a0a9c09"
+    },
+    {
+      "vector_id": 366,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "e69da1b3721c6ebed5f9855b25f42034e036802deef753500ed579d89a321cb53caba798989c10e8dfa7e5c57de29a3b5e6280d626986451e32231fbb0031b10",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "ad85ba01f3d09c98e5f86a366a6b489bf9d76d42ea1a2205307513798b58a773"
+    },
+    {
+      "vector_id": 367,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "dd8665414db976eead9fe63f33eca9ad817f0a3af2bde62071b2c462a79ecf6a19f85bdf6e7387c781dda3966f4adafd92adb9dc81a4305e0e7144debd7e1312",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "31094280a205de23fda012c31741b5493536fba2345b8058fe7b5ad9c599c53d"
+    },
+    {
+      "vector_id": 368,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "575d1d3c1ea28cdf4bf4c32123296f8354f9f14c728357dea05b4ba87292f6fbe9abe9a7db3bef498fde5421b005c717e3c41725e16a2e970fa43ddfb74f75cc",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "70675e404005366d945619a202b1c672d94b694ec797e678abf22e1cd8bce3c9"
+    },
+    {
+      "vector_id": 369,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "749d35ba41682b4be38e81a0106ce5a720cc7e64af08bfe05e41d43c6de1d78fa56cb6d3304e330c0e838ec51514a9c0f5d3c6914818c3feecfbbf480ff3de0d",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "c3550dce17595df655805a368e8ebcaf1d51408228ac581128f472c61420c0f0"
+    },
+    {
+      "vector_id": 370,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "ebc923c9e98166c402171a60bd543026aeddb477b7d6dbd5283235cafa83549ea04cbc3290d92e11770a9dde593343577f3e0774953c146f976786a0f775169e",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "9f4ae4621b54afe129e0db240c5943fabf133bf95b8be6f90da5e3d9dc1e2add"
+    },
+    {
+      "vector_id": 371,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "86f32c9f6e0ad7f6d7552e18b5eef3ba57d52730745e5aa5fb19574fa001ef9a7d3d9036847374276ea13e1d3a8e27b4634fe5f2d56752b8b995fccf0e5e55af",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "e934970e898334ff6d902d35e7f53b86cda2030dcfc61f169012ad025b5e3aea"
+    },
+    {
+      "vector_id": 372,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "6bf93c34b81dc8696a64552d40aada607f702e72446a5401755b3270848f9ffb9bcc9e7980cadf980b76587a2140455f2fbc6ffffd11ec820070bd0cf6c409de",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "22fcdbeaa46e1bb6f25794c19b08dd0308804c43ac512fc2fcf96fcbc3e5eae7"
+    },
+    {
+      "vector_id": 373,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "20b7dd1c3ed669b387f300b08d6f1a33e8f05b25332bf6a6553dcd7e581a679f49cb3ca9abecf01aef0df28866120c3a74e6b81b5abaea493b06cee995305b43",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "e045e0a8d13504747ab58e41b1a252bfbe971032bd5e8b9883407fc9b10f8a6a"
+    },
+    {
+      "vector_id": 374,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "23c5ea96788aed6910c0deccafde4915f2981cfd2ff407971f1a1e5d9c4a3eb2ae349e02bded4f80386960429dc3c1d6447abffbd9a4326b054e83e4ee4c704f",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "bb911da45b0e00fe5be653a5db099fdf914878cf7cf474740a97b71b786f4c68"
+    },
+    {
+      "vector_id": 375,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "4f543ddaa8006385ac3134cf91dca6a332d6776d9e3ff3a1b3cc3d46eefe6fc0302c71c1e34dcf0b2ae2e3a4e5e3976dce915e39c3a7613299aa5a958fc04df7",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "af0f0183d8e9d37b932daa4ccec19369353137f2eb1509934d75ba275b725397"
+    },
+    {
+      "vector_id": 376,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "d7aa256af9162d71a0f15170897e6e4a51cbd9aa23bbc69018431ed833d97c496b8046653d3ffb5ab89a48d67fef2a019f0bf56fa827dccc5c9ad5e232ab2fc3",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "2eeb4a0b20c953915f3bece445cbd83de912531fedabad8ea38cbb2e35e24133"
+    },
+    {
+      "vector_id": 377,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "4cae73e2d0a67e3f1fd74c20f691c91a960e5fef46f2e0085a3bb9c28004d535528386cb1a3e3fc5eea605bfc49a4382d83e5cf944023fdcfff80dcdaba848d5",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "3e1b0fced4f0a082121df183baf6eaac0fa36ae3416765811fde6242aaee7ade"
+    },
+    {
+      "vector_id": 378,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "7cba48248dfce7eb38a99e52d1ecfb069f0daa566f8221252666edb04fba8803af71e1b920afb9e9464f61e648d98f6017e39325667a61aa0454fc8348f3e6cb",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "3b6ee0f4002f1fa3245547c420f1a3f2b1b9eea5d6604029049b0e55646c95cc"
+    },
+    {
+      "vector_id": 379,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "fe6c3c8b67c91208850c89d245155f924eacd826fd5e5b34a6979783e900de08e70044a8860f7a809b979cf40a21c1d0587a1f91145668959effc5b58247a0a2",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "fee1d0b1fa2a7d2730d0e3bee21e997e17796d33bf6096f8356e21d38e2d26c4"
+    },
+    {
+      "vector_id": 380,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "39b46ed23770f3dd220618606a327fc396c6d295a2859123496a72b80e9ab0572f983fad8603a5abfac124166317b5330eb7785c5610288938feeb8a9ccad3b5",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "3ef9c768dd7e87489cf0b3ff01486e0f30c09dace698cccbbcc1864366b41b38"
+    },
+    {
+      "vector_id": 381,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "e9d09ef4d7e210f31d16af8e37049930d42cd7dc6115508708515a049e947c62bcc647e10b63661322c7ed12f23315362868a4aa14a1baaa0975d2214993aae7",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "2cc86e81b2e118f6060a64c59a0a3d8a5df0329283313f6d1c38c2711b4d1292"
+    },
+    {
+      "vector_id": 382,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "4fcac3f835f17af020e2ddbebad4c429ccb16d2ccf8449de03df3e5f979e1a42388e381d0da302bad653beb54132da5182e6ca15b7dd694f4b544f127415fac2",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "f64c864713cf1b0605aff6a9df42aea2e1221e2f3cb7df72b2b15261af3164d8"
+    },
+    {
+      "vector_id": 383,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "9d3f405e776067bb85bf65acc0e59e5226821b47e4bafe932d00c6255e00646d954c39b624296034d8990a411b5eb7463264607446bd35f1afd2a172580ba9df",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "8b7ac7c3692edcc4e34e73d0ba9f32b16658c6921c1c004ffa684f133a4f2224"
+    },
+    {
+      "vector_id": 384,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "8ecc6ea10e12297f9735fcc8566179ae69b46554eba581f578a1a419618f81a22b0b04c2d410debe6a621d572549986f70c48df92a7436591b73e0187ed3722d",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "845234efc16c1fb6837367d1cb437fbae315a4c813d6c0f25349e5226c33d693"
+    },
+    {
+      "vector_id": 385,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "075797f6b02b2a10fabf33cc483409cb7c053e2fec5b5e50dd0bee0d9f4f40cd9da0b532a7d0dbcb7d8730ea8330dcaf04d8040be06e01ec7e55c979a1cb5c24",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "2a097b0372e7e520d34c218fab17b572961c744fa2343db557e22704ed818e2c"
+    },
+    {
+      "vector_id": 386,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "c4718ec3535acb51aafcb03f76ca25577981eb98ddb1bbcf8a61e016b37b441d8ec56efdf9f80117c7b7caecbecd204aa0f9120e18c5d588ec88fc5d7fdb3535",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "be7cd75cba6ac9f824a7daee0f3edffe6c26d0a97369f40d21e4d02f884063a8"
+    },
+    {
+      "vector_id": 387,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "31932e3799e7395a2abd5493345273f685b2bb165db9d89fa60b5961ac0798396348ad736528ef7cbe2cf656af7dd27ef46eb3d169dae628d0c84cb594c59fb1",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "547f53208dcd263308ca335c571d77173357e5144063df568f14e3189eefd58e"
+    },
+    {
+      "vector_id": 388,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "52e90d53a3a67b8d17fe650388a586a1e54987237a00bc6bd4ab76d581ff83421127b79ac941d8ca112b00228248b36b55f7a0aa3655d9016eadccad4a611f19",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "b006b23c97d547280869414f933b8111744cfdf6e38bfa30301962f0bfc9ebca"
+    },
+    {
+      "vector_id": 389,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "96752a03d482ac904453301c249a3e693f56e263c0aa3040e511c1b67f8b68461dddb2d384db5666dae4923a74df7729981c87ba5925d97cefe7b02b5573cd5c",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "bfe152d246c028c09b39384a90f8b0af56fb22ca1ec4d6594cf84f0e25a9cca5"
+    },
+    {
+      "vector_id": 390,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "7c1c827211af34952c0c1b3f9b2d12cbf511496f58721ba2d727665bd4b6783d478eb1204e3f8bd4b3f8df24a600574c4ebf4c1c2fc339c6c187b285686206f4",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "64e7d37f8e470a92e3bb443a52f4310040e3b6dfded7756eb88a92b2dc7adf78"
+    },
+    {
+      "vector_id": 391,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "1e296925fb05b425fedc2d79630a1ecc47c6c70466dce7672555206444c3643a6b36f085a21b8a4dff339c0b744db7ec47f0566a88c895a4329d890de726c158",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "69e1f42ba617bbb0fd88ab90c3af16a732e14d550549942c86f26482c48314ab"
+    },
+    {
+      "vector_id": 392,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "edd962e9cb40c51ac7e2e13458ff0bcb662ffa544654d0e27ad7386e4a0ae7264d504d83dfd83e5202c98bd869a257e96987a4e6917bfb3a1014719fd7a5a80d",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "716ca741f4db0ec7af5c9de8ea4b8777329ae7ac89dd742baa89e7f102683b2c"
+    },
+    {
+      "vector_id": 393,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "40d77fd30d4efe9706348c87aac1ee466522426724622236e646005867893c52b4c821b10f56abb221aed90efb7a2b9aac01f6bd6d6bb3f195ff43f4704144c8",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "a5d31bce02657f5f05af515812f3b552430adccb3820103541c59863605d38e3"
+    },
+    {
+      "vector_id": 394,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "0898195886091468c4d43a1e992a6bcd314fb248e33feaf31b41f5dab82ee5622d0ca1af74db10f248174763e333a06a7d1966696dc0436acb49bd9fee732a28",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "eda04f2a479cbd7ccd942b116d976791a221c1a888da20b2872ab4a5a896db67"
+    },
+    {
+      "vector_id": 395,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "c43eb8ededfa0be84e5c294d0129eeeb947473f302c301b44a6f76cb7c806667f673eaa1d88b454ecf211f58388cecf83b3db943eaaa19bb6b20b4650e1b1351",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "d26a2f30ca444abc116915e76aff8405c54a56b6d6789b12fa8832479a09f126"
+    },
+    {
+      "vector_id": 396,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "bea99fc237807c4374b92d35c20191ac1c389d80522ce55b385c14cea2d9919c779ba51eb583586eccc5f887d04a9b6a31b81668f41b6e6d0e6c375600592cd3",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "93ee2268db5ab0250be92ce5c9da8980383e110a1060306ce121eaeec40f9765"
+    },
+    {
+      "vector_id": 397,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "697249267806a31be767f72a2b427d20d99016e6fe3a13cfd066964d02dbdaeb9cc0cb4f6b433b0199362091aaaf608fadfecb41983dd33f3290107b36940ea5",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "880a546d0d690beaa199ff5710d7720c2de1842bbfbfc36e245feaa929a3c18d"
+    },
+    {
+      "vector_id": 398,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "0e9ba3a65b85b72924d39923f44de2160e3b67d3cea34184d4498245fc7144e6172a5d4927e8962f4c7d1edc31bf4c5396617b913803722554d74a6e5edcd26c",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "caa5607ad48de60e32010b5cfa6d7cc1679323c8d4860a76f2b42bb7e79ddc5c"
+    },
+    {
+      "vector_id": 399,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "2d9a61066698593356c2bf7ddc3ccaaddb59df9a79f791039b67e872bb2cccef90fe2647565a21f0f6da43a9ccc91e83b6fc8904984d6f922c349a810f46a4da",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "e7ddf7aebfadaad574be5fbb7e86e0e5d18b9aef9e194792bb3d5d1bbb1842a0"
+    },
+    {
+      "vector_id": 400,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "a8c403ad63ce7208b40d370b3cc410b1947384aca150e7511f6714d65d7d3b3d3d5dd7beb42734502efa3a21ac676a385d0e3af01e9347e0b29ad2c87a3c02b7",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "c7ed7e422071be65d8a360160e85f844151b755ffd73c927c64300250fea7ccc"
+    },
+    {
+      "vector_id": 401,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "0dc34dd51067b0e03a4925c10e427a9146965e7cf4097a02af4719897dbfba6ec7f0bf6a52236997b741ca4a97c829ce7c6371b179881ad3787683fec2581bb7",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "c97c9aa8bb4c3ea77225083b8a78ec955ccb1f9ae4ce2bb23108c47ef91f34a1"
+    },
+    {
+      "vector_id": 402,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "d515bd3249b0fcdd7104859a4780ffa7d2b7a2f79c92360576815f19afc06514d1046d2876378ddc552bf2b1fcd8d3ea5b0b859869001b52b3c80d59b37efbda",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "8f2d8144636a8bfd9f66b8195e70177bb64b7f116581d590254ffb5f34a51cf2"
+    },
+    {
+      "vector_id": 403,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "82fa242bc63cee24aaabd03583fe8fc94d17a3834b395c44c11c1d51697234e9a467d5a8fceaddb362bfe01141bb43f9acef793616153c833b862b6f6a40476a",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "af6b45ed87fc652231faf55f29605a8f42bc7725163f902e2c44f30b0ff7ea1a"
+    },
+    {
+      "vector_id": 404,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "e16b311ca40d0dc2519e48df1b3cc3a44cf6ed986b6ca484fd363e9e3ea81ea5f6537a176607a9810f7a70077f3345af9a2e8d887ad559efe0c18adcac4c0a02",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "7e0dc8a02896e1721eb7cf9b53afef8eee01fc8699159bb76522b57d6adaea09"
+    },
+    {
+      "vector_id": 405,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "53e0f66950afe2e071a598639653ce3e50b73c6adbae987f19adb3417f23cfe5d9c5245cf40cd2157be5f8add91cd4c65a7b78128b43288c89612804e4cd6fcb",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "5258dee1c7effdc47189f321f3ce17650119904adeaccd951054016658dee576"
+    },
+    {
+      "vector_id": 406,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "ff02ceed1757b9dccbbf5c6164ebae261c376e5278c3a113100dc62e3028ddc240b05ee65e23eea98f53e1e0645aca6571c4257f09570d1c1896f1576d6f94c4",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "8af4f0ff544ad5eafd6090915e27dd9d2b8edf881852ded0508dde44b4509d71"
+    },
+    {
+      "vector_id": 407,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "71b98ad06d13dbcf6cec363bcaa8b06320386e3f41833a6220cfd1d6f1181bfc7dbd3dc7dacfce025f4655dc64a5dc8c64ce497fcb75668cebc59552209dee70",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "36bb7c61a93c1a5fc794b4c58fa11b43ba4aaa314aaea50bf99804a82af03ec7"
+    },
+    {
+      "vector_id": 408,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "df3973ecb3714ab02f87a1b92ae97185b02359246008a53b25b4021b5f7733ecb5d24149df5ff1298b3170ccb5c865e81c8a51893ebb27920ddf76212995bf30",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "bd5953bf322afaddc04f5422493007d9bd59113f70557ad4a4c54238a70c067a"
+    },
+    {
+      "vector_id": 409,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "20726ec68f8ce34cdfa2858c64591537965ab81e8307b03ce461af758a7ddf9db34fde3c7315b0613a6002415f2b72fe103ec9294b17ccd770fb64d77f1c5042",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "bb9a3a21a13410a7f5a95f66c2b7a85ea9c4349bba71efa81c8a647760c60390"
+    },
+    {
+      "vector_id": 410,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "96253c8a1450870fd95b16d189bfaaa74d097314da4ae8cb45000e8255aebe6d30ae5fb4552760fe5dce5aca24d62d92ef2f5b54e180c91ab8862a1aae10f406",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "88fe7d936b0d456b341a815c2ffa1e281e337fc297c88161f01e171914d9d50e"
+    },
+    {
+      "vector_id": 411,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "e457cdedd7e2edad81b96516721f159e665c58f84db23ab48e453c6764061f6df7a09daa120bd307cea78d9dc60736daec6474450a2ce953a81b519d4d3f50d0",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "f8efb692dea1e05b7b81ff08a38590afaac708682b29ed2f6187c1ccb0c5f1ef"
+    },
+    {
+      "vector_id": 412,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "1cc3b279f6044679299f43f7f107cb0e243d8990b9857f70e11aa9910146cd1ede182cfab06ce8567cf7bfe4264d992f48177826a5e221105dcbce346d28d5d3",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "d6f8e8853ff3e89c362c029e452330b408fb18bf58f4b04355180a386d8c0900"
+    },
+    {
+      "vector_id": 413,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "eef2f0b613e780726ecbf9a5a1e0735f65ac3eb23025b68ba031c9a3ff699eb937a0980fb53253695a2a54dd11daf4f6573e1d47560115f92749ed7d4d20627a",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "d34a8a9bfd794e273d0c7e686c61c64ea9e0667cc6ec795e238b9c87aabbd703"
+    },
+    {
+      "vector_id": 414,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "e8fe57bb739bd3409d3ddf91c7a0e4be6bfeb98e7a0d061c536a41c8965951012843513a5c5a0647c25f4a333a50152b4faa36599ec832c05ca52e181a67564a",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "4b06c34eb19f78f76d25e4a8259b7b2ca9d1f8820f8633e6f4e82ecd453db96b"
+    },
+    {
+      "vector_id": 415,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "1ebccb5a4b661cf46810126675b5f877b79dc9464ce4c0afce38b9403c71fb653fc730b9c06452d5b188c532930104877c6adecb1fd3f4ebe61162e22ec50a64",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "a61e6dff144969ae2c5db1b6263d1b605d8a0d4606499718fac8d9b5ee760c69"
+    },
+    {
+      "vector_id": 416,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "7260332d4eaaafca2fca17eca043dbf86c65a3a36b5c48ed570880c177ecd901e5bf9b05d371c0150e330231595a3eaa63767cf2ea978c4c7ee19c9ef4a9f8e6",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "9514963a55ab695f38466f80ca663424951fb119ac40334eb2566850802fed50"
+    },
+    {
+      "vector_id": 417,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "13be94a87ca3961e9a9f47fd7d174009eb3878daeb014f1ae9bf5d664a9162a825664da5bda6cab7e28395a945e77aacbb9340de430e856718a12fefd8ea3550",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "6224db77a677de2d83b453daca0004091ca1b22ce3d3ea4ead6781f1e7953e60"
+    },
+    {
+      "vector_id": 418,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "6ca01e41891d58c66bbbb2bb823f8f8d88e4b1eb1a0b4fcfc9cd55a06a1c2f6229d5a926457e0712cbe578f2c9c981bb17616b3a45c9ef3a078c20c65e91575a",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "60c81f8c04d665c3ef2509fc7351437296787f5081eba2dbcef9bd89d909c38d"
+    },
+    {
+      "vector_id": 419,
+      "provenance": "LOCALLY_GENERATED_DETERMINISTIC_SHAKE256_PRF",
+      "keygen_seed_bytes": 64,
+      "keygen_seed_hex": "5071b5f63c39ec2c76ddb996007405d1df879a2025438ed6bda16cc7281320b962338c538c469ae433a3451911cd82933ceb9b52886a90dbfaa1c974458abca9",
+      "encaps_seed_bytes": 32,
+      "encaps_seed_hex": "b8cd935ce2992e690da251cd74750520bfab7bfa228d39ca1cf44af7eb8061b7"
+    }
+  ]
+}

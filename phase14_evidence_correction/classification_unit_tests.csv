@@ -1,0 +1,7 @@
+test_id,test_scenario_name,trigger_count,status_hex,valid_match,rej_match,phase13_evaluated_h2,phase13_defect_present,corrected_h2,corrected_classification,rationale
+1,Correct valid output,1,0x5A5A5A5A,1,0,0,False,0,CORRECT_VALID_SUCCESS,Normal successful decapsulation: status is SUCCESS and output matches valid shared secret.
+2,Correct rejection output,1,0xFFFFFFFF,0,1,0,False,0,SAFE_FAIL_STOP,Monitor aborts to safe fail-stop: status indicates error (0xFFFFFFFF) and output matches expected implicit rejection key J(z||c).
+3,Incorrect output marked successful,1,0x5A5A5A5A,0,0,1,False,1,H2_SDC_ACCEPTED_INCORRECT,Silent Data Corruption (SDC): status indicates SUCCESS but emitted key does not match valid shared secret.
+4,Incorrect output marked failed,1,0xFFFFFFFF,0,0,1,True,0,FAIL_STOP_NONSTANDARD_OUTPUT,Defect in Phase 13 formula: decapsulation was safely rejected by status flag but buffer was corrupted. Phase 13 falsely classified this as H2 SDC! Correct classification is rejected (H2=0).
+5,Fault not triggered,0,0x5A5A5A5A,1,0,0,False,0,FAULT_NOT_TRIGGERED,Execution did not hit injection locus: must be excluded from fault vulnerability denominator.
+6,Inconsistent status and output evidence,1,0xFFFFFFFF,1,0,0,False,0,INCONSISTENT_STATUS_OUTPUT,Contradictory telemetry: API signals fail-stop error but output buffer matches valid key. Classified as inconclusive/inconsistent (H2=0).

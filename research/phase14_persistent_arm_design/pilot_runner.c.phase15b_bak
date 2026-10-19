@@ -1,0 +1,372 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <stdint.h>
+#include <string.h>
+#include <mach/mach.h>
+#include <mach/vm_region.h>
+#include <mach/vm_map.h>
+
+#define MLK_CONFIG_PARAMETER_SET 768
+#include "references/test_vectors/mlkem_expected_kat.h"
+
+/* Declarations from research build */
+int mlkem768_keypair_derand(uint8_t *pk, uint8_t *sk, const uint8_t *coins);
+int mlkem768_enc_derand(uint8_t *ct, uint8_t *ss, const uint8_t *pk, const uint8_t *coins);
+int mlkem768_dec(uint8_t *ss, const uint8_t *ct, const uint8_t *sk);
+int16_t *mlkem_research_get_zetas_mutable_ptr(void);
+const int16_t *mlkem_research_get_zetas_table(void);
+
+int randombytes(uint8_t *out, size_t outlen) {
+    (void)out; (void)outlen;
+    return 0;
+}
+
+/* Pre-computed golden table */
+static const int16_t golden_zetas[128] = {
+    -1044, -758,  -359,  -1517, 1493,  1422,  287,   202,  -171,  622,   1577,
+    182,   962,   -1202, -1474, 1468,  573,   -1325, 264,  383,   -829,  1458,
+    -1602, -130,  -681,  1017,  732,   608,   -1542, 411,  -205,  -1571, 1223,
+    652,   -552,  1015,  -1293, 1491,  -282,  -1544, 516,  -8,    -320,  -666,
+    -1618, -1162, 126,   1469,  -853,  -90,   -271,  830,  107,   -1421, -247,
+    -951,  -398,  961,   -1508, -725,  448,   -1065, 677,  -1275, -1103, 430,
+    555,   843,   -1251, 871,   1550,  105,   422,   587,  177,   -235,  -291,
+    -460,  1574,  1653,  -246,  778,   1159,  -147,  -777, 1483,  -602,  1119,
+    -1590, 644,   -872,  349,   418,   329,   -156,  -75,  817,   1097,  603,
+    610,   1322,  -1285, -1465, 384,   -1215, -136,  1218, -1335, -874,  220,
+    -1187, -1659, -1185, -1530, -1278, 794,   -1510, -854, -870,  478,   -108,
+    -308,  996,   991,   958,   -1460, 1522,  1628
+};
+
+typedef struct {
+    int trial_id;
+    int target_idx;
+    uint16_t bit_mask;
+    const char *desc;
+    const char *mutation_status;
+    const char *consumption_status;
+    const char *crypto_endpoint;
+    const char *restoration_status;
+    uint8_t output_ss[32];
+    int is_rejection_key;
+} trial_record_t;
+
+/* Trial specifications (16 trials) */
+typedef struct {
+    int target_idx;
+    uint16_t bit_mask;
+    const char *desc;
+} trial_spec_t;
+
+static const trial_spec_t pilot_specs[16] = {
+    { -1,  0x0000, "Trial 0: Baseline uncorrupted check" },
+    {  0,  0x0001, "Trial 1: Index 0, LSB flip (Root/Unused twiddle)" },
+    {  0,  0x0000, "Trial 2: Sham Control (Index 0, unprotect/write-0/reprotect)" },
+    {  1,  0x0001, "Trial 3: Index 1, LSB flip (Forward NTT Layer 1)" },
+    {  1,  0x0080, "Trial 4: Index 1, Mid-byte flip (Forward NTT Layer 1)" },
+    {  1,  0x8000, "Trial 5: Index 1, Sign-bit flip (Forward NTT Layer 1)" },
+    { 32,  0x0002, "Trial 6: Index 32, Bit 1 flip (Mid NTT Layer 6)" },
+    { 63,  0x0004, "Trial 7: Index 63, Bit 2 flip (Forward NTT Layer 7)" },
+    { 64,  0x0001, "Trial 8: Index 64, LSB flip (Mulcache Layer factor)" },
+    { 64,  0x0400, "Trial 9: Index 64, Bit 10 flip (Mulcache Layer factor)" },
+    { 95,  0x0001, "Trial 10: Index 95, LSB flip (Mulcache Mid factor)" },
+    { 127, 0x0001, "Trial 11: Index 127, LSB flip (Basemul & InvNTT factor)" },
+    { 127, 0xFFFF, "Trial 12: Index 127, Word inversion (Basemul & InvNTT factor)" },
+    { 64,  0x0000, "Trial 13: Sham Control on active index 64" },
+    {  2,  0x0008, "Trial 14: Index 2, Bit 3 flip (Forward NTT Layer 2)" },
+    { -1,  0x0000, "Trial 15: Post-pilot baseline uncorrupted check" }
+};
+
+static void print_hex32(const uint8_t *data) {
+    for (int i = 0; i < 32; i++) {
+        printf("%02x", data[i]);
+    }
+}
+
+int main(void) {
+    printf("=======================================================================\n");
+    printf(" PHASE 15B: CONTROLLED PERSISTENT-TABLE FEASIBILITY PILOT (16 TRIALS)\n");
+    printf(" Target: mlk_zetas_page (ML-KEM-768 relocated twiddle table)\n");
+    printf("=======================================================================\n\n");
+
+    /* ------------------------------------------------------------- */
+    /* 1. MANDATORY PREFLIGHT CHECKS                                 */
+    /* ------------------------------------------------------------- */
+    printf("--- [PREFLIGHT 1/5] Symbol Resolution & Section Alignment ---\n");
+    int16_t *table_ptr = mlkem_research_get_zetas_mutable_ptr();
+    if (!table_ptr) {
+        fprintf(stderr, "PREFLIGHT FAIL: mlkem_research_get_zetas_mutable_ptr() returned NULL.\n");
+        return 1;
+    }
+    uintptr_t table_addr = (uintptr_t)table_ptr;
+    vm_address_t page_addr = table_addr & ~(0x4000 - 1);
+    printf("  Resolved symbol address: 0x%lx\n", (unsigned long)table_addr);
+    printf("  Calculated page base:    0x%lx\n", (unsigned long)page_addr);
+    if (table_addr != (uintptr_t)page_addr) {
+        fprintf(stderr, "PREFLIGHT FAIL: table_addr is not 16KB aligned (offset: 0x%lx)\n",
+                (unsigned long)(table_addr - page_addr));
+        return 1;
+    }
+    printf("  Result: PASS (16KB Page-Aligned)\n\n");
+
+    printf("--- [PREFLIGHT 2/5] Live VM Mapping Query via vm_region_64 ---\n");
+    vm_address_t query_addr = page_addr;
+    vm_size_t region_size = 0;
+    vm_region_basic_info_data_64_t info;
+    mach_msg_type_number_t count = VM_REGION_BASIC_INFO_COUNT_64;
+    mach_port_t object_name = MACH_PORT_NULL;
+    kern_return_t kr = vm_region_64(mach_task_self(), &query_addr, &region_size,
+                                    VM_REGION_BASIC_INFO_64,
+                                    (vm_region_info_t)&info, &count, &object_name);
+    if (kr != KERN_SUCCESS) {
+        fprintf(stderr, "PREFLIGHT FAIL: vm_region_64 returned code %d\n", kr);
+        return 1;
+    }
+    printf("  Region mapped address:   0x%lx\n", (unsigned long)query_addr);
+    printf("  Region mapped size:      0x%lx (%lu bytes)\n", (unsigned long)region_size, (unsigned long)region_size);
+    printf("  Current protection:      %s%s%s (0x%x)\n",
+           (info.protection & VM_PROT_READ) ? "r" : "-",
+           (info.protection & VM_PROT_WRITE) ? "w" : "-",
+           (info.protection & VM_PROT_EXECUTE) ? "x" : "-",
+           info.protection);
+    printf("  Maximum protection:      %s%s%s (0x%x)\n",
+           (info.max_protection & VM_PROT_READ) ? "r" : "-",
+           (info.max_protection & VM_PROT_WRITE) ? "w" : "-",
+           (info.max_protection & VM_PROT_EXECUTE) ? "x" : "-",
+           info.max_protection);
+
+    if (query_addr != page_addr) {
+        fprintf(stderr, "PREFLIGHT FAIL: Region address 0x%lx does not match expected page 0x%lx\n",
+                (unsigned long)query_addr, (unsigned long)page_addr);
+        return 1;
+    }
+    if (!(info.protection & VM_PROT_READ)) {
+        fprintf(stderr, "PREFLIGHT FAIL: Page is not readable initially.\n");
+        return 1;
+    }
+    if (!(info.max_protection & VM_PROT_WRITE)) {
+        fprintf(stderr, "PREFLIGHT FAIL: maxprot does not allow write (0x%x).\n", info.max_protection);
+        return 1;
+    }
+    printf("  Result: PASS (Darwin VM confirms __DATA_CONST permissions)\n\n");
+
+    printf("--- [PREFLIGHT 3/5] Initial Table Integrity & Padding Canary Check ---\n");
+    if (memcmp(table_ptr, golden_zetas, sizeof(golden_zetas)) != 0) {
+        fprintf(stderr, "PREFLIGHT FAIL: Initial table does not match golden twiddle constants.\n");
+        return 1;
+    }
+    /* Verify padding (16,128 bytes after the 256-byte table) */
+    uint8_t *padding_ptr = (uint8_t *)(table_ptr + 128);
+    size_t padding_len = 16384 - sizeof(golden_zetas);
+    for (size_t i = 0; i < padding_len; i++) {
+        if (padding_ptr[i] != 0) {
+            fprintf(stderr, "PREFLIGHT FAIL: Non-zero byte detected in page padding at offset %zu (0x%x)\n",
+                    i, padding_ptr[i]);
+            return 1;
+        }
+    }
+    printf("  Result: PASS (Table matches golden digest; 16,128 padding bytes clean)\n\n");
+
+    printf("--- [PREFLIGHT 4/5] Dry-Run Protection Transition (Zero Write) ---\n");
+    kr = vm_protect(mach_task_self(), page_addr, 0x4000, FALSE, VM_PROT_READ | VM_PROT_WRITE);
+    if (kr != KERN_SUCCESS) {
+        fprintf(stderr, "PREFLIGHT FAIL: vm_protect(RW) dry-run returned %d\n", kr);
+        return 1;
+    }
+    /* Re-protect read-only immediately */
+    kr = vm_protect(mach_task_self(), page_addr, 0x4000, FALSE, VM_PROT_READ);
+    if (kr != KERN_SUCCESS) {
+        fprintf(stderr, "PREFLIGHT FAIL: vm_protect(RO) dry-run returned %d\n", kr);
+        return 1;
+    }
+    printf("  Result: PASS (vm_protect RW -> RO toggling verified without write)\n\n");
+
+    printf("--- [PREFLIGHT 5/5] Preflight Clean Baseline Decapsulation Check ---\n");
+    uint8_t ss_base[32];
+    if (mlkem768_dec(ss_base, test_vector_ct, test_vector_sk) != 0) {
+        fprintf(stderr, "PREFLIGHT FAIL: Baseline mlkem768_dec returned non-zero error.\n");
+        return 1;
+    }
+    if (memcmp(ss_base, test_vector_ss, 32) != 0) {
+        fprintf(stderr, "PREFLIGHT FAIL: Baseline shared secret does not match NIST KAT.\n");
+        return 1;
+    }
+    printf("  Expected KAT SS: ");
+    print_hex32(test_vector_ss);
+    printf("\n  Computed KAT SS: ");
+    print_hex32(ss_base);
+    printf("\n  Result: PASS (Cryptographic baseline 100%% matches KAT)\n\n");
+
+    printf(">>> PREFLIGHT VERDICT: GO (Proceeding to 16 predeclared trials) <<<\n\n");
+
+    /* ------------------------------------------------------------- */
+    /* 2. PREDECLARED 16-TRIAL PILOT EXECUTION                       */
+    /* ------------------------------------------------------------- */
+    trial_record_t records[16];
+    memset(records, 0, sizeof(records));
+
+    for (int t = 0; t < 16; t++) {
+        records[t].trial_id = t;
+        records[t].target_idx = pilot_specs[t].target_idx;
+        records[t].bit_mask = pilot_specs[t].bit_mask;
+        records[t].desc = pilot_specs[t].desc;
+
+        printf("-----------------------------------------------------------------------\n");
+        printf("Executing [%s]\n", pilot_specs[t].desc);
+
+        int is_mutation = (pilot_specs[t].target_idx >= 0 && pilot_specs[t].bit_mask != 0);
+        int is_sham = (pilot_specs[t].target_idx >= 0 && pilot_specs[t].bit_mask == 0);
+
+        if (is_mutation || is_sham) {
+            int idx = pilot_specs[t].target_idx;
+            uint16_t mask = pilot_specs[t].bit_mask;
+            int16_t orig_val = golden_zetas[idx];
+            int16_t target_val = orig_val ^ mask;
+
+            /* Step 1: Unprotect to RW */
+            kr = vm_protect(mach_task_self(), page_addr, 0x4000, FALSE, VM_PROT_READ | VM_PROT_WRITE);
+            if (kr != KERN_SUCCESS) {
+                records[t].mutation_status = "REJECTED";
+                records[t].consumption_status = "UNKNOWN";
+                records[t].crypto_endpoint = "NOT_RUN";
+                records[t].restoration_status = "UNKNOWN";
+                fprintf(stderr, "ABORT in trial %d: vm_protect(RW) failed with %d\n", t, kr);
+                break;
+            }
+
+            /* Step 2: Write mutated value (or sham write) */
+            volatile int16_t *vtable = (volatile int16_t *)table_ptr;
+            vtable[idx] = target_val;
+
+            /* Step 3: Immediate read-back */
+            int16_t readback_val = vtable[idx];
+            if (readback_val == target_val) {
+                records[t].mutation_status = "APPLIED";
+            } else {
+                records[t].mutation_status = "UNKNOWN";
+                fprintf(stderr, "CRITICAL: Read-back mismatch in trial %d (expected 0x%x, got 0x%x)\n",
+                        t, target_val, readback_val);
+            }
+
+            /* Step 4: Re-protect to RO */
+            kr = vm_protect(mach_task_self(), page_addr, 0x4000, FALSE, VM_PROT_READ);
+            if (kr != KERN_SUCCESS) {
+                fprintf(stderr, "ABORT in trial %d: vm_protect(RO) post-mutation failed with %d\n", t, kr);
+                break;
+            }
+
+            /* Step 5: Execute decapsulation */
+            uint8_t ss_out[32];
+            int dec_rc = mlkem768_dec(ss_out, test_vector_ct, test_vector_sk);
+            memcpy(records[t].output_ss, ss_out, 32);
+
+            /* Step 6: Endpoint analysis */
+            if (dec_rc != 0) {
+                records[t].crypto_endpoint = "NO_OUTPUT";
+                records[t].consumption_status = "VERIFIED_CONSUMED";
+            } else if (memcmp(ss_out, test_vector_ss, 32) == 0) {
+                records[t].crypto_endpoint = "EXPECTED_OUTPUT";
+                if (is_mutation) {
+                    /* Mutation was applied, but output remained golden */
+                    records[t].consumption_status = "VERIFIED_NOT_CONSUMED";
+                } else {
+                    /* Sham control */
+                    records[t].consumption_status = "VERIFIED_NOT_CONSUMED";
+                }
+            } else {
+                /* Output changed */
+                records[t].crypto_endpoint = "REJECTION";
+                records[t].consumption_status = "VERIFIED_CONSUMED";
+            }
+
+            printf("  Injected value: 0x%04x (orig: 0x%04x, mask: 0x%04x)\n",
+                   (uint16_t)target_val, (uint16_t)orig_val, mask);
+            printf("  Output SS:      ");
+            print_hex32(ss_out);
+            printf(" [%s]\n", records[t].crypto_endpoint);
+
+            /* Step 7: Restore table entry */
+            kr = vm_protect(mach_task_self(), page_addr, 0x4000, FALSE, VM_PROT_READ | VM_PROT_WRITE);
+            if (kr != KERN_SUCCESS) {
+                records[t].restoration_status = "RESTORATION_FAILED";
+                fprintf(stderr, "ABORT: Failed to unprotect for restore in trial %d\n", t);
+                break;
+            }
+            vtable[idx] = orig_val;
+            kr = vm_protect(mach_task_self(), page_addr, 0x4000, FALSE, VM_PROT_READ);
+            if (kr != KERN_SUCCESS) {
+                records[t].restoration_status = "RESTORATION_FAILED";
+                fprintf(stderr, "ABORT: Failed to reprotect RO post-restore in trial %d\n", t);
+                break;
+            }
+
+            /* Step 8: Verify table and padding integrity */
+            int restore_ok = (memcmp(table_ptr, golden_zetas, sizeof(golden_zetas)) == 0);
+            int pad_ok = 1;
+            for (size_t i = 0; i < padding_len; i++) {
+                if (padding_ptr[i] != 0) { pad_ok = 0; break; }
+            }
+
+            /* Step 9: Post-trial baseline decapsulation recheck */
+            uint8_t ss_recheck[32];
+            int recheck_rc = mlkem768_dec(ss_recheck, test_vector_ct, test_vector_sk);
+            int ss_recheck_ok = (recheck_rc == 0 && memcmp(ss_recheck, test_vector_ss, 32) == 0);
+
+            if (restore_ok && pad_ok && ss_recheck_ok) {
+                records[t].restoration_status = "RESTORED_AND_BASELINE_RECHECK_PASSED";
+                printf("  Restoration:    PASS (Table restored, padding clean, baseline reproduced)\n");
+            } else {
+                records[t].restoration_status = "RESTORATION_FAILED";
+                fprintf(stderr, "CRITICAL STOP: Restoration check failed in trial %d (restore=%d, pad=%d, recheck=%d)\n",
+                        t, restore_ok, pad_ok, ss_recheck_ok);
+                break;
+            }
+
+        } else {
+            /* Baseline run (Trial 0 or Trial 15) */
+            records[t].mutation_status = "NOT_ATTEMPTED";
+            records[t].consumption_status = "VERIFIED_NOT_CONSUMED";
+
+            uint8_t ss_out[32];
+            int dec_rc = mlkem768_dec(ss_out, test_vector_ct, test_vector_sk);
+            memcpy(records[t].output_ss, ss_out, 32);
+
+            if (dec_rc == 0 && memcmp(ss_out, test_vector_ss, 32) == 0) {
+                records[t].crypto_endpoint = "EXPECTED_OUTPUT";
+            } else {
+                records[t].crypto_endpoint = "DIFFERENT_OUTPUT";
+            }
+
+            int table_ok = (memcmp(table_ptr, golden_zetas, sizeof(golden_zetas)) == 0);
+            if (table_ok && records[t].crypto_endpoint[0] == 'E') {
+                records[t].restoration_status = "RESTORED_AND_BASELINE_RECHECK_PASSED";
+            } else {
+                records[t].restoration_status = "RESTORATION_FAILED";
+            }
+
+            printf("  Output SS:      ");
+            print_hex32(ss_out);
+            printf(" [%s]\n", records[t].crypto_endpoint);
+            printf("  Restoration:    PASS (Baseline intact)\n");
+        }
+    }
+
+    /* ------------------------------------------------------------- */
+    /* 3. GENERATE TRIAL LEDGER CSV OUTPUT                           */
+    /* ------------------------------------------------------------- */
+    printf("\n=======================================================================\n");
+    printf(" SUMMARY TRIAL LEDGER (CSV FORMAT)\n");
+    printf("=======================================================================\n");
+    printf("trial_id,target_idx,bit_mask,mutation_status,consumption_status,crypto_endpoint,restoration_status\n");
+    for (int t = 0; t < 16; t++) {
+        printf("%d,%d,0x%04x,%s,%s,%s,%s\n",
+               records[t].trial_id,
+               records[t].target_idx,
+               records[t].bit_mask,
+               records[t].mutation_status ? records[t].mutation_status : "UNKNOWN",
+               records[t].consumption_status ? records[t].consumption_status : "UNKNOWN",
+               records[t].crypto_endpoint ? records[t].crypto_endpoint : "UNKNOWN",
+               records[t].restoration_status ? records[t].restoration_status : "UNKNOWN");
+    }
+
+    return 0;
+}

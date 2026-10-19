@@ -1,0 +1,181 @@
+================================================================================
+GIT STATUS & DIFF-STAT AUDIT REPORT
+Generated: 2026-10-04T02:40:35+05:30
+Repository Root: /Users/dhairyajain/Desktop/pqc research
+================================================================================
+
+--- SECTION 1: git status --short ---
+ M README.md
+ M experiments/fault_injection/mlkem768_internal_fault_experiment.c
+ M experiments/system_model/spacecraft_protocol_sim.py
+ M fault_injection/fault_models/fault_definitions.py
+ M phase2_step2c_dependency_model.md
+ M phase2_step2c_experiment_design.md
+ M phase2_step2c_report.md
+ M results/phase7i/processed/phase7i_e2e_results.json
+ M results/spacecraft_protocol_desync_results.json
+ M tests/test_fips_kats.c
+ M tfib_experiments/phase2_step2c_dependency_model.md
+ M tfib_experiments/phase2_step2c_experiment_design.md
+ M tfib_experiments/phase2_step2c_report.md
+?? Step2C_A_Final_Review_Package/
+?? adversarial_audit/
+?? authoritative_results.csv
+?? chatgpt/
+?? claim_evidence_matrix.csv
+?? closest_prior_art_comparison.csv
+?? contribution_analysis.md
+?? docs/phase4b-validation-audit.md
+?? experimental_gap_closure.md
+?? experiments/mathematics/audit_correlated_faults.c
+?? final_contribution_decision.md
+?? manuscript_corrections.md
+?? paper/
+?? phase10_corrected_reproduction/
+?? phase11_conformance_audit/
+?? phase12_reproducibility_audit/
+?? phase13_final_evidence_audit/
+?? phase14_evidence_correction/
+?? phase15_final_evidence_validation/
+?? phase16_targeted_evidence_closure/
+?? phase17a_verification/
+?? phase17b_corrected/
+?? phase18_audit/
+?? phase2_independent_validation/
+?? phase2_step2c_docs_final.diff
+?? phase3_harness_audit/
+?? phase4_evidence_reconciliation/
+?? phase5_recovery_trust_audit/
+?? phase6_verifier_falsification/
+?? phase7_independent_claim_audit/
+?? phase8_production_path_audit/
+?? phase9_reproducibility_audit/
+?? research_extension_proposal.md
+?? research_inventory.md
+?? research_redesign/CANDIDATE_RESEARCH_GAPS.csv
+?? research_redesign/LITERATURE_MATRIX_RADIATION_PQC.csv
+?? research_redesign/SYSTEMATIC_RESEARCH_GAP_REPORT.md
+?? results/mlkem768_internal_fault_validation.json
+?? tags_out.txt
+?? tests/kat_mldsa44.c
+?? tests/kat_mldsa65.c
+?? tests/kat_mldsa87.c
+?? tests/kat_mlkem1024.c
+?? tests/kat_mlkem512.c
+?? tests/kat_mlkem768.c
+?? tests/kat_runners.h
+?? tfib_analysis.md
+?? tfib_benchmark_raw.csv
+?? tfib_design.md
+?? tfib_execution_log.md
+?? tfib_experiments/campaign_prf.h
+?? tfib_experiments/phase11_assertion_hardening.md
+?? tfib_experiments/phase11_initial_audit.md
+?? tfib_experiments/phase11_oracle/
+?? tfib_experiments/phase11_oracle_review.md
+?? tfib_experiments/phase11_oracle_validation.md
+?? tfib_experiments/phase2_step1_integration_report.md
+?? tfib_experiments/phase2_step1_preintegration_audit.md
+?? tfib_experiments/phase2_step1b_independent_audit.md
+?? tfib_experiments/phase2_step2a_independent_input_report.md
+?? tfib_experiments/phase2_step2b_audit/
+?? tfib_experiments/phase2_step2b_final_independent_audit.md
+?? tfib_experiments/phase2_step2b_keygen_csprng_report.md
+?? tfib_experiments/phase2_step2b_remediation_report.md
+?? tfib_experiments/phase2_step2b_remediation_test_results.md
+?? tfib_experiments/phase2_step2b_runner_output.csv
+?? tfib_experiments/run_step1_integration_tests.sh
+?? tfib_experiments/run_step2a_tests.sh
+?? tfib_experiments/run_step2b_mutation_checks.sh
+?? tfib_experiments/run_step2b_tests.sh
+?? tfib_experiments/test_compatibility_output.csv
+?? tfib_experiments/test_oracle_integration
+?? tfib_experiments/test_oracle_integration.c
+?? tfib_experiments/test_step2a_output.csv
+?? tfib_experiments/test_step2a_validation
+?? tfib_experiments/test_step2a_validation.c
+?? tfib_experiments/test_step2b_validation
+?? tfib_experiments/test_step2b_validation.c
+?? tfib_experiments/test_step2c_countermeasure_independence
+?? tfib_experiments/tfib_benchmark
+?? tfib_experiments/tfib_benchmark.c
+?? tfib_experiments/tfib_benchmark_audit
+?? tfib_experiments/tfib_benchmark_audit.c
+?? tfib_experiments/tfib_benchmark_results.csv
+?? tfib_experiments/tfib_experiment_runner
+?? tfib_experiments/tfib_experiment_runner.c
+?? tfib_experiments/tfib_validity_audit_runner
+?? tfib_experiments/tfib_validity_audit_runner.c
+?? tfib_failure_cases.md
+?? tfib_implementation/
+?? tfib_raw_results.csv
+?? tfib_reproduced_results.csv
+?? tfib_reproducibility_commands.md
+?? tfib_trial_level_results.csv
+?? tfib_validity_audit.md
+
+--- SECTION 2: git diff --stat (All Tracked Files) ---
+ README.md                                          |  12 +
+ .../mlkem768_internal_fault_experiment.c           | 508 +++++++++++++++++----
+ .../system_model/spacecraft_protocol_sim.py        | 207 +++++++--
+ fault_injection/fault_models/fault_definitions.py  |  11 +-
+ phase2_step2c_dependency_model.md                  |  42 +-
+ phase2_step2c_experiment_design.md                 |  32 +-
+ phase2_step2c_report.md                            |  91 ++--
+ results/phase7i/processed/phase7i_e2e_results.json |  16 +-
+ results/spacecraft_protocol_desync_results.json    | 159 ++++---
+ tests/test_fips_kats.c                             | 114 ++---
+ tfib_experiments/phase2_step2c_dependency_model.md |  42 +-
+ .../phase2_step2c_experiment_design.md             |  32 +-
+ tfib_experiments/phase2_step2c_report.md           |  91 ++--
+ 13 files changed, 928 insertions(+), 429 deletions(-)
+
+--- SECTION 3: git diff --stat (Target Step 2C-A Documentation Files Only) ---
+ phase2_step2c_dependency_model.md                  | 42 +++++-----
+ phase2_step2c_experiment_design.md                 | 32 ++++----
+ phase2_step2c_report.md                            | 91 ++++++++++++----------
+ tfib_experiments/phase2_step2c_dependency_model.md | 42 +++++-----
+ .../phase2_step2c_experiment_design.md             | 32 ++++----
+ tfib_experiments/phase2_step2c_report.md           | 91 ++++++++++++----------
+ 6 files changed, 180 insertions(+), 150 deletions(-)
+
+================================================================================
+SECTION 4: CHANGE SEGREGATION & AUDIT CATEGORIZATION
+================================================================================
+
+1. CHANGES BELONGING DIRECTLY TO STEP 2C-A DOCUMENTATION CORRECTION:
+   The following 6 files contain the precise scientific and statistical corrections:
+   - phase2_step2c_dependency_model.md
+   - phase2_step2c_experiment_design.md
+   - phase2_step2c_report.md
+   - tfib_experiments/phase2_step2c_dependency_model.md
+   - tfib_experiments/phase2_step2c_experiment_design.md
+   - tfib_experiments/phase2_step2c_report.md
+   
+   Summary of Corrections in these 6 files:
+   - Replaced ambiguous statistical claims with exact one-sided 95% binomial upper bounds:
+     p_SDC <= 0.399% on N_act = 750 fault-activated trials, and p_SDC <= 5.82% on N_simul = 50.
+   - Clarified that zero observed SDC does not prove zero theoretical risk.
+   - Narrowed paired-mutation claims to software-level checker blindness under tested inputs,
+     explicitly disclaiming physical common-mode coupling, hardware vulnerability, or radiation immunity.
+   - Refined decoding-slack language to state that intermediate perturbations were absorbed by
+     centered binomial error-tolerance, preserving the final message/key without implying that
+     the fault had no internal effect.
+   - Explicitly distinguished active FO re-encryption rejection (147/150 trials) from decoding preservation (3/150 trials).
+
+2. UNRELATED PRE-EXISTING MODIFICATIONS (PRESERVED UNCHANGED, NOT STAGED):
+   The following tracked files contain modifications from prior or concurrent research phases:
+   - README.md: Workspace top-level readme updates.
+   - experiments/fault_injection/mlkem768_internal_fault_experiment.c: Standalone fault experiment harness.
+   - experiments/system_model/spacecraft_protocol_sim.py: Spacecraft communication protocol simulation.
+   - fault_injection/fault_models/fault_definitions.py: Python fault model definitions.
+   - results/phase7i/processed/phase7i_e2e_results.json: Historical Phase 7i test data.
+   - results/spacecraft_protocol_desync_results.json: Spacecraft protocol simulation results.
+   - tests/test_fips_kats.c: FIPS KAT runner adjustments.
+
+   Audit Action: These files are preserved exactly as they were. They are NOT staged, NOT committed,
+   and NOT included in the Step 2C-A documentation patch.
+
+3. UNTRACKED EXPERIMENT ARTIFACTS AND LOGS:
+   All untracked files (including earlier research scratch directories and benchmarks) remain untouched.
+================================================================================
