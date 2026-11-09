@@ -69,6 +69,15 @@ $(OBJ_DIR)/mlkem768_instrumented.o: algorithms/source_ref/mlkem/mlkem_native.c |
 $(BIN_DIR)/test_interop: tests/test_interop_path_a_b.c $(OBJ_DIR)/mlkem768.o $(OBJ_DIR)/mldsa65.o | $(BIN_DIR)
 	$(CC) $(CFLAGS) -I algorithms/source_ref/mlkem -I algorithms/source_ref/mldsa $^ -o $@ $(LDFLAGS)
 
+# TFIB Implementation Static Library
+tfib_implementation/libtfib.a: tfib_implementation/tfib_core.c tfib_implementation/tfib_hooks.c tfib_implementation/tfib_meta.c tfib_implementation/tfib_ref.c
+	$(CC) -O3 -std=c99 -c tfib_implementation/tfib_core.c -o tfib_implementation/tfib_core.o
+	$(CC) -O3 -std=c99 -c tfib_implementation/tfib_hooks.c -o tfib_implementation/tfib_hooks.o
+	$(CC) -O3 -std=c99 -c tfib_implementation/tfib_meta.c -o tfib_implementation/tfib_meta.o
+	$(CC) -O3 -std=c99 -c tfib_implementation/tfib_ref.c -o tfib_implementation/tfib_ref.o
+	ar rcs $@ tfib_implementation/tfib_core.o tfib_implementation/tfib_hooks.o tfib_implementation/tfib_meta.o tfib_implementation/tfib_ref.o
+	rm -f tfib_implementation/*.o
+
 # ASTRA-Sec Monitored C Cryptographic Shared Library
 $(ASTRA_CRYPTO_LIB): src/astra_crypto_bridge.c $(OBJ_DIR)/mlkem768_inst.o tfib_implementation/libtfib.a $(OBJ_DIR)/mldsa65.o | $(BIN_DIR)
 	$(CC) $(SHARED_LIB_FLAG) -O3 -Wall -Wextra -std=c11 -I src -I algorithms/source_ref/mlkem -I tfib_implementation -I algorithms/source_ref/mldsa $^ -o $@
