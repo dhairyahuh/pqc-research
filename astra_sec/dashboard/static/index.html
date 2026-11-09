@@ -7,6 +7,11 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  
+  <!-- Standalone 3D Geospatial Engine (Three.js & Globe.gl - 100% Offline) -->
+  <script src="/static/vendor/three.min.js"></script>
+  <script src="/static/vendor/globe.gl.min.js"></script>
+  <script src="/static/js/mission_control_3d.js"></script>
   <style>
     :root {
       --bg-dark: #0a0d14;
@@ -204,6 +209,110 @@
       border: 1px solid var(--card-border);
     }
 
+    /* 3D Mission Control Globe Viewport */
+    .globe-card-wrapper {
+      position: relative;
+      background: #060910;
+      border: 1px solid var(--card-border);
+      border-radius: 8px;
+      overflow: hidden;
+      margin-top: 10px;
+    }
+
+    #globe-viewport {
+      width: 100%;
+      height: 560px;
+      background: radial-gradient(circle at center, #0a1124 0%, #03060c 100%);
+      position: relative;
+      cursor: grab;
+    }
+
+    #globe-viewport:active {
+      cursor: grabbing;
+    }
+
+    /* HUD Overlays */
+    .hud-overlay {
+      position: absolute;
+      z-index: 10;
+      pointer-events: none;
+    }
+
+    .hud-interactive {
+      pointer-events: auto;
+    }
+
+    .globe-hud-topleft {
+      top: 16px;
+      left: 16px;
+      background: rgba(10, 15, 26, 0.85);
+      border: 1px solid rgba(0, 229, 255, 0.35);
+      backdrop-filter: blur(8px);
+      padding: 12px 16px;
+      border-radius: 6px;
+      font-size: 0.75rem;
+      font-family: 'JetBrains Mono', monospace;
+      max-width: 290px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.6);
+    }
+
+    .globe-hud-topright {
+      top: 16px;
+      right: 16px;
+      background: rgba(10, 15, 26, 0.90);
+      border: 1px solid rgba(41, 121, 255, 0.5);
+      backdrop-filter: blur(10px);
+      padding: 16px;
+      border-radius: 6px;
+      font-size: 0.8rem;
+      width: 320px;
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.7);
+      display: none;
+    }
+
+    .globe-hud-bottomcenter {
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(10, 15, 26, 0.92);
+      border: 1px solid rgba(0, 229, 255, 0.6);
+      backdrop-filter: blur(10px);
+      padding: 12px 24px;
+      border-radius: 8px;
+      text-align: center;
+      min-width: 380px;
+      box-shadow: 0 0 25px rgba(0, 229, 255, 0.35);
+      display: none;
+    }
+
+    .globe-hud-bottomleft {
+      bottom: 16px;
+      left: 16px;
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .cam-btn {
+      background: rgba(18, 23, 34, 0.85);
+      border: 1px solid var(--card-border);
+      color: var(--text-main);
+      padding: 6px 12px;
+      font-size: 0.75rem;
+      font-family: 'JetBrains Mono', monospace;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      backdrop-filter: blur(6px);
+    }
+
+    .cam-btn:hover {
+      background: var(--accent-blue);
+      border-color: var(--accent-cyan);
+      color: #fff;
+      box-shadow: 0 0 8px rgba(0, 229, 255, 0.4);
+    }
+
     /* Dispatch Controls */
     .control-row {
       display: flex;
@@ -331,41 +440,87 @@
     </div>
   </header>
 
-  <!-- Network Topology Visualization -->
-  <div class="card" style="margin-bottom: 25px;">
-    <div class="card-title">
-      <span>Operational Space Network Topology (4-Node Disruption-Tolerant Routing)</span>
-      <span style="color: var(--accent-green); font-family: 'JetBrains Mono';">ZERO INTERMEDIATE DECRYPTION</span>
+  <!-- 3D Satellite Mission Control & Geospatial Network Visualization -->
+  <div class="card" style="margin-bottom: 25px; padding: 18px 20px 22px 20px;">
+    <div class="card-title" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+      <div style="display: flex; align-items: center; gap: 12px;">
+        <span style="font-size: 1.1rem; font-weight: 700; color: #fff;">3D Earth & Satellite Constellation Mission Control</span>
+        <span class="brand-pill" style="border-color: var(--accent-cyan); color: var(--accent-cyan); font-size: 0.7rem;">WGS84 GEODETIC LEO ORBITS</span>
+      </div>
+      <div style="display: flex; align-items: center; gap: 15px;">
+        <span style="color: var(--accent-green); font-family: 'JetBrains Mono'; font-size: 0.8rem;">● ZERO INTERMEDIATE DECRYPTION</span>
+        <span style="font-family: 'JetBrains Mono'; font-size: 0.75rem; color: var(--text-muted);">LIVE EVENT-DRIVEN STREAM</span>
+      </div>
     </div>
-    <div class="topology-container">
-      <div class="topology-node">
-        <div class="node-icon">📡</div>
-        <div class="node-title">Ground Station A</div>
-        <span class="node-badge" id="gsa-badge">EID: dtn://gsa/app</span>
-      </div>
-      <div class="topology-link">
-        <div class="link-badge">Uplink (RFC 9171)</div>
-      </div>
-      <div class="topology-node">
-        <div class="node-icon">🛰️</div>
-        <div class="node-title">Satellite Relay 1</div>
-        <span class="node-badge" id="sat1-badge">LEO-1 | Spool: 0 B</span>
-      </div>
-      <div class="topology-link" id="isl-link">
-        <div class="link-badge" id="isl-badge">ISL Contact: ACTIVE</div>
-      </div>
-      <div class="topology-node">
-        <div class="node-icon">🛰️</div>
-        <div class="node-title">Satellite Relay 2</div>
-        <span class="node-badge" id="sat2-badge">LEO-2 | Spool: 0 B</span>
-      </div>
-      <div class="topology-link">
-        <div class="link-badge">Downlink (BPv7)</div>
-      </div>
-      <div class="topology-node">
-        <div class="node-icon">🏢</div>
-        <div class="node-title">Ground Station B</div>
-        <span class="node-badge" id="gsb-badge">EID: dtn://gsb/app</span>
+
+    <!-- 3D Earth Viewport Container -->
+    <div class="globe-card-wrapper">
+      <div id="globe-viewport">
+        <!-- Top-Left Operational HUD -->
+        <div class="hud-overlay globe-hud-topleft">
+          <div style="color: var(--accent-cyan); font-weight: 700; margin-bottom: 6px; letter-spacing: 0.5px; border-bottom: 1px solid rgba(0,229,255,0.2); padding-bottom: 4px;">
+            MISSION TELEMETRY STREAM
+          </div>
+          <div style="display: flex; justify-content: space-between; margin-bottom: 4px;">
+            <span style="color: var(--text-muted);">Topology:</span>
+            <span>4 Nodes (2 Ground, 2 LEO)</span>
+          </div>
+          <div style="display: flex; justify-content: space-between; margin-bottom: 4px;">
+            <span style="color: var(--text-muted);">Inter-Sat Link:</span>
+            <span id="hud-isl-status" style="color: var(--accent-cyan); font-weight: 700;">ISL: ACTIVE (UP)</span>
+          </div>
+          <div style="display: flex; justify-content: space-between; margin-bottom: 4px;">
+            <span style="color: var(--text-muted);">Crypto Scheme:</span>
+            <span>ML-KEM-768 + ML-DSA-65</span>
+          </div>
+          <div style="display: flex; justify-content: space-between;">
+            <span style="color: var(--text-muted);">Anti-Replay:</span>
+            <span style="color: var(--accent-green);">ACID WAL Persistent</span>
+          </div>
+        </div>
+
+        <!-- Top-Right Node Inspector Panel (Interactive) -->
+        <div class="hud-overlay hud-interactive globe-hud-topright" id="node-inspector-hud">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; border-bottom: 1px solid var(--card-border); padding-bottom: 6px;">
+            <span id="insp-node-name" style="font-weight: 700; color: #fff; font-size: 0.95rem;">Node Inspector</span>
+            <button onclick="AstraMissionControl3D.deselectNode()" style="background: transparent; border: none; color: var(--text-muted); cursor: pointer; font-size: 1.1rem; padding: 0 4px;">✕</button>
+          </div>
+          <div style="font-family: 'JetBrains Mono', monospace; font-size: 0.72rem; line-height: 1.6;">
+            <div><span style="color: var(--text-muted);">EID:</span> <code id="insp-node-eid" style="color: var(--accent-cyan);">dtn://sat1/relay</code></div>
+            <div><span style="color: var(--text-muted);">Type:</span> <span id="insp-node-type" style="color: #fff;">SATELLITE_RELAY</span></div>
+            <div><span style="color: var(--text-muted);">Coordinates:</span> <span id="insp-node-coords">52.00° N, 38.00° E (Alt: 0.36)</span></div>
+            <div><span style="color: var(--text-muted);">Status:</span> <span id="insp-node-status" style="color: var(--accent-green); font-weight: 700;">ONLINE</span></div>
+            <div><span style="color: var(--text-muted);">Role:</span> <span id="insp-node-role" style="color: var(--text-main);">Store-and-Forward Router</span></div>
+            <div style="margin-top: 6px; padding-top: 6px; border-top: 1px dashed var(--card-border);">
+              <div><span style="color: var(--text-muted);">SQLite WAL Queue:</span> <span id="insp-node-queue" style="color: var(--accent-amber); font-weight: 700;">0 bundles (0.00 KB)</span></div>
+              <div><span style="color: var(--text-muted);">KEM Key ID:</span> <span id="insp-node-kem" style="color: var(--text-muted);">RELAY_TRANSIT_ONLY</span></div>
+              <div><span style="color: var(--text-muted);">DSA Key ID:</span> <span id="insp-node-dsa" style="color: var(--text-muted);">UNAUTHORIZED_FOR_L2_DECAP</span></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Bottom-Center In-Flight Packet Inspector -->
+        <div class="hud-overlay globe-hud-bottomcenter" id="packet-hud">
+          <div style="font-family: 'JetBrains Mono', monospace; font-size: 0.75rem; color: var(--accent-cyan); font-weight: 700; margin-bottom: 4px;">
+            IN-FLIGHT PQC ENVELOPE: <span id="packet-id-text" style="color: #fff;">DISPATCHING</span>
+          </div>
+          <div id="packet-hop-text" style="font-size: 0.85rem; font-weight: 700; color: #fff; margin-bottom: 2px;">
+            HOP 1/3: Uplink GSA -> SAT-1
+          </div>
+          <div id="packet-status-text" style="font-family: 'JetBrains Mono', monospace; font-size: 0.75rem; color: var(--accent-cyan);">
+            Transmitting 5,119 B Post-Quantum Wire Bundle...
+          </div>
+        </div>
+
+        <!-- Bottom-Left Camera Presets & Orbit Controls -->
+        <div class="hud-overlay hud-interactive globe-hud-bottomleft">
+          <button class="cam-btn" onclick="AstraMissionControl3D.setCameraView('overview')">🌐 Orbit Overview</button>
+          <button class="cam-btn" onclick="AstraMissionControl3D.setCameraView('sat1')">🛰️ SAT-1 (LEO)</button>
+          <button class="cam-btn" onclick="AstraMissionControl3D.setCameraView('sat2')">🛰️ SAT-2 (LEO)</button>
+          <button class="cam-btn" onclick="AstraMissionControl3D.setCameraView('gsa')">📡 GSA (Svalbard)</button>
+          <button class="cam-btn" onclick="AstraMissionControl3D.setCameraView('gsb')">🏢 GSB (Canberra)</button>
+          <button class="cam-btn" id="rotate-toggle-btn" onclick="AstraMissionControl3D.toggleAutoRotate()">Auto-Rotate: OFF</button>
+        </div>
       </div>
     </div>
 
@@ -557,9 +712,11 @@
         const res = await fetch('/api/queue');
         const data = await res.json();
         if (data.queues && data.queues.length >= 2) {
-          document.getElementById('sat1-badge').textContent = `LEO-1 | Queue: ${data.queues[0].pending_bundles} (${data.queues[0].storage_kb} KB)`;
-          document.getElementById('sat2-badge').textContent = `LEO-2 | Queue: ${data.queues[1].pending_bundles} (${data.queues[1].storage_kb} KB)`;
-          document.getElementById('sat1-storage').textContent = `${data.queues[0].storage_kb} KB`;
+          const sat1StorageEl = document.getElementById('sat1-storage');
+          if (sat1StorageEl) sat1StorageEl.textContent = `${data.queues[0].storage_kb} KB`;
+        }
+        if (window.AstraMissionControl3D) {
+          window.AstraMissionControl3D.fetchTelemetry();
         }
       } catch (e) {
         console.error("Failed to load queues", e);
@@ -571,7 +728,12 @@
       const simulateFault = document.getElementById('inject-fault-toggle').checked;
       const statusDiv = document.getElementById('dispatch-status');
       statusDiv.style.display = 'block';
-      statusDiv.textContent = 'Encrypting with ML-KEM-768, signing with ML-DSA-65, and routing across satellite constellation...';
+      statusDiv.textContent = 'Encrypting with ML-KEM-768, signing with ML-DSA-65, and routing across 3D satellite constellation...';
+
+      // Trigger 3D packet animation
+      if (window.AstraMissionControl3D) {
+        window.AstraMissionControl3D.animatePacketDispatch(null, payload, simulateFault);
+      }
 
       try {
         const res = await fetch('/api/admin/dispatch', {
@@ -609,18 +771,18 @@
           })
         });
         islState = islState === "UP" ? "DOWN" : "UP";
-        const linkElem = document.getElementById('isl-link');
-        const badgeElem = document.getElementById('isl-badge');
-        if (islState === "DOWN") {
-          linkElem.style.background = "var(--accent-red)";
-          linkElem.style.boxShadow = "0 0 8px var(--accent-red)";
-          badgeElem.textContent = "ISL Contact: OUTAGE (SPOOLING)";
-          badgeElem.style.color = "var(--accent-red)";
-        } else {
-          linkElem.style.background = "var(--accent-blue)";
-          linkElem.style.boxShadow = "0 0 6px var(--accent-blue)";
-          badgeElem.textContent = "ISL Contact: ACTIVE (FLUSHED)";
-          badgeElem.style.color = "var(--accent-cyan)";
+        if (window.AstraMissionControl3D) {
+          window.AstraMissionControl3D.setIslState(islState);
+        }
+        const btn = document.getElementById('isl-toggle-btn');
+        if (btn) {
+          if (islState === "DOWN") {
+            btn.textContent = "RESTORE ISL LINK";
+            btn.style.background = "var(--accent-red)";
+          } else {
+            btn.textContent = "TOGGLE ISL LINK OUTAGE";
+            btn.style.background = "";
+          }
         }
         addAuditLine(`[TOPOLOGY] Inter-Satellite Link SAT1 -> SAT2 transitioned to ${islState}`);
         loadQueues();
@@ -644,6 +806,9 @@
       const ws = new WebSocket(`${protocol}//${window.location.host}/ws/live`);
       ws.onmessage = (event) => {
         const msg = JSON.parse(event.data);
+        if (window.AstraMissionControl3D) {
+          window.AstraMissionControl3D.handleWsMessage(msg);
+        }
         if (msg.type === "MESSAGE_TRANSMITTED") {
           addAuditLine(`[WS EVENT] Envelope ${msg.record.envelope_id} delivered in ${msg.record.duration_ms} ms`);
           loadQueues();
