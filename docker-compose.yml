@@ -1,0 +1,62 @@
+version: '3.8'
+
+services:
+  gsa:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: astra-gsa
+    environment:
+      - ASTRA_NODE_EID=dtn://gsa/app
+      - ASTRA_NODE_ROLE=ground_station
+      - ASTRA_BIND_PORT=8081
+    ports:
+      - "8081:8080"
+    networks:
+      - space-net
+
+  sat1:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: astra-sat1
+    environment:
+      - ASTRA_NODE_EID=dtn://sat1/relay
+      - ASTRA_NODE_ROLE=satellite_relay
+      - ASTRA_BIND_PORT=8082
+    ports:
+      - "8082:8080"
+    networks:
+      - space-net
+
+  sat2:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: astra-sat2
+    environment:
+      - ASTRA_NODE_EID=dtn://sat2/relay
+      - ASTRA_NODE_ROLE=satellite_relay
+      - ASTRA_BIND_PORT=8083
+    ports:
+      - "8083:8080"
+    networks:
+      - space-net
+
+  gsb:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: astra-gsb
+    environment:
+      - ASTRA_NODE_EID=dtn://gsb/app
+      - ASTRA_NODE_ROLE=ground_station
+      - ASTRA_BIND_PORT=8084
+    ports:
+      - "8084:8080"
+    networks:
+      - space-net
+
+networks:
+  space-net:
+    driver: bridge

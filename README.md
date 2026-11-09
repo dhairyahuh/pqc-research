@@ -1,87 +1,249 @@
-# Fault Resilience Analysis of Post-Quantum Cryptographic Implementations for Space Systems
+# FAULT RESILIENCE ANALYSIS OF POST-QUANTUM CRYPTOGRAPHIC IMPLEMENTATIONS FOR SPACE SYSTEMS
+## Initial Case Study: Software-Level Fault Resilience for ML-KEM-768 Decapsulation
 
-## 1. Executive Summary
-
-This research project investigates the computational and algorithmic fault resilience of standardized Post-Quantum Cryptographic (PQC) algorithms—specifically **ML-KEM** (FIPS 203) and **ML-DSA** (FIPS 204)—under fault models representative of space-based and radiation-constrained computing environments.
-
-Modern satellite constellations, CubeSats, and deep-space missions require post-quantum secure communications to guard against "harvest now, decrypt later" threats. However, space computing platforms are exposed to galactic cosmic rays, solar energetic particles, and trapped radiation belts that induce Single Event Effects (SEEs), such as Single Event Upsets (SEUs), transient computational glitches, and memory bit corruption. 
-
-Because lattice-based cryptographic algorithms depend heavily on high-degree polynomial arithmetic, Number Theoretic Transforms (NTT), rejection sampling loops, and module-lattice structures, their sensitivity to computational and memory faults differs qualitatively from pre-quantum primitives (e.g., RSA, ECC).
-
-This project integrates three research layers:
-1. **Layer A — Cryptographic Mathematics:** Detailed algebraic formulation of Module Learning with Errors (M-LWE) and Module Short Integer Solution (M-SIS) problems, polynomial rings, NTT, Gaussian/binomial noise distributions, and rejection sampling.
-2. **Layer B — Cryptographic Implementation:** Analysis of concrete C/C++ memory operations, cache layouts, modular reduction routines (Montgomery / Barrett), sampling loops, and serialization routines.
-3. **Layer C — Fault-Resilience Experimentation:** A controlled, deterministic, repeatable fault-injection framework operating across multiple abstraction levels (input-level, memory-level, intermediate-state, and instruction/computation-level).
+[![Build & KATs](https://img.shields.io/badge/FIPS%20203%2F204%20KATs-18%2F18%20Pass-brightgreen.svg)]()
+[![Step 2C Independence](https://img.shields.io/badge/Step%202C%20Independence-9%2F9%20Pass-blue.svg)]()
+[![Overhead](https://img.shields.io/badge/Decapsulation%20Overhead-%2B16.9%25-success.svg)]()
+[![SDC Rate](https://img.shields.io/badge/Observed%20SDC-0%2F300%20(Production)-brightgreen.svg)]()
+[![Standards](https://img.shields.io/badge/NIST-FIPS%20203%20%7C%20FIPS%20204-orange.svg)]()
 
 ---
 
-## 2. Directory Structure
+## 1. Research Identity & Three-Level Architecture
+
+> **Authoritative Research Framing:**  
+> "The research, titled 'Fault Resilience Analysis of Post-Quantum Cryptographic Implementations for Space Systems', investigates the reliability and fault resilience of post-quantum cryptographic implementations in space-system environments.
+> 
+> As part of the initial implementation and experimental evaluation, the project has focused on ML-KEM-768, a standardized post-quantum key-encapsulation mechanism under NIST FIPS 203.
+> 
+> This implementation-level study investigates NTT arithmetic fault detection through dual-transform algebraic invariant monitoring, localized rollback and retry, and fail-stop containment using the Fujisaki–Okamoto implicit rejection mechanism.
+> 
+> The experimental results obtained so far provide an initial technical foundation for the broader research. However, the overall research objective extends beyond this implementation and includes additional cryptographic implementations, embedded processor evaluation, representative space-relevant fault models, hardware/software co-design, physical fault testing, and eventual spacecraft-level integration and validation."
+
+### The Three-Level Research Structure
 
 ```text
-pqc-fault-resilience/
-├── README.md                           # Project top-level documentation
-├── requirements/
-│   └── requirements.txt                # Python dependencies
-├── docs/
-│   ├── project-overview.md             # In-depth architectural & research overview
-│   ├── research-questions.md           # RQs formulation and hypothesis mapping
-│   ├── methodology.md                  # Experimental protocol and metrics definition
-│   ├── references.md                   # Formal academic bibliography
-│   ├── mathematics/
-│   │   ├── ml-kem.md                   # Mathematical analysis of ML-KEM (FIPS 203)
-│   │   └── ml-dsa.md                   # Mathematical analysis of ML-DSA (FIPS 204)
-│   └── fault-model/
-│       └── fault-model.md              # Space radiation to software fault abstraction model
-├── algorithms/
-│   ├── ml-kem/                         # ML-KEM baseline harness and wrapper
-│   └── ml-dsa/                         # ML-DSA baseline harness and wrapper
-├── fault_injection/
-│   ├── injector/                       # Core deterministic fault injector engine
-│   ├── fault_models/                   # SEU, multi-bit, transient, and burst fault definitions
-│   ├── targets/                        # Target memory buffers, coefficients, and registers
-│   └── scheduler/                      # Injection timing and trigger controllers
-├── resilience/
-│   ├── redundancy/                     # Redundant computation modules (selective / dual)
-│   ├── integrity_checks/               # Norm, range, and checksum verification routines
-│   ├── retry/                          # Exception and fault handling retry wrappers
-│   └── checkpoint/                     # Intermediate state checkpointing & recovery
-├── experiments/
-│   ├── baseline/                       # Correctness validation and performance benchmarks
-│   ├── fault_injection/                # Experimental campaign runners
-│   ├── resilience/                     # Protected execution comparative evaluations
-│   └── configurations/                 # YAML/JSON reproducible experiment manifests
-├── results/                            # Structured CSV, JSON, and plotting outputs
-├── scripts/                            # Analysis, visualization, and automation scripts
-└── tests/                              # Unit, integration, and known-answer test suites
++---------------------------------------------------------------------------------------------------------+
+| LEVEL A — OVERALL RESEARCH PROGRAMME (PERMANENT TITLE)                                                  |
+| "Fault Resilience Analysis of Post-Quantum Cryptographic Implementations for Space Systems"             |
+| The complete research agenda: evaluating and improving PQC reliability under space radiation, SEUs,    |
+| hardware resource constraints, and orbital operational environments.                                    |
++---------------------------------------------------------------------------------------------------------+
+                                                     │
+                                                     ▼
++---------------------------------------------------------------------------------------------------------+
+| LEVEL B — WORK COMPLETED SO FAR (INITIAL IMPLEMENTATION CASE STUDY)                                     |
+| "Software-Level Fault Resilience for ML-KEM-768"                                                        |
+| • Standardized primitive: NIST FIPS 203 ML-KEM-768 (Kyber)                                              |
+| • Micro-level invariant monitoring across all 9,856 NTT butterflies (5,376 CT + 4,480 GS)                |
+| • Localized single-butterfly register rollback (~0.0101% operation-count retry ratio, 100/100 recovered)|
+| • Deterministic fail-stop containment via FIPS 203 Section 7.3 implicit rejection (200/200 safe stops) |
+| • Cleanroom & canonical validation: 0 SDC across 300 production trials & 750 campaign trials            |
+| • Apple Silicon ARM64 benchmark: +16.9% decapsulation latency overhead under -O3; 0 dynamic heap bytes  |
+| • Disclosed limitation: Theorem 1 twiddle-factor blindness of local monitors                           |
++---------------------------------------------------------------------------------------------------------+
+                                                     │
+                                                     ▼
++---------------------------------------------------------------------------------------------------------+
+| LEVEL C — REMAINING RESEARCH & FUTURE WORK (SEVEN BROAD WORK PACKAGES)                                  |
+| • WP1: Broader Cryptographic Evaluation (ML-DSA, SLH-DSA, stateful hash signatures, cross-algorithm)     |
+| • WP2: Embedded & Space-Oriented Computing (ARM Cortex-M4, RISC-V RV32IM, memory/stack/cycles)          |
+| • WP3: Space-Relevant Fault Modelling (SEUs, SETs, multi-bit bursts, memory, control flow)              |
+| • WP4: Hardware/Software Fault Resilience (hardware ECC, memory protection, twiddle CRC32 binding)     |
+| • WP5: Physical Validation (laboratory EMFI, voltage/clock glitching, cyclotron beam irradiation)       |
+| • WP6: Space-System Integration (spacecraft OBC, NASA cFS, RTEMS, CCSDS SDLS, FDIR safe-mode)          |
+| • WP7: System-Level Validation (hardware-in-the-loop testbed, mission availability & link reliability) |
++---------------------------------------------------------------------------------------------------------+
+```
+
+See [`docs/architecture/RESEARCH_EVOLUTION.md`](file:///Users/dhairyajain/Desktop/pqc%20research/docs/architecture/RESEARCH_EVOLUTION.md) for the complete multi-layer architecture and evolution mapping.
+
+---
+
+## 2. Current Implementation and Experimental Progress: ML-KEM-768
+
+### The Problem in Parameter Set 768
+In post-quantum cryptography under NIST FIPS 203 (**ML-KEM-768**), key decapsulation executes **9,856 Number Theoretic Transform (NTT) butterfly operations** across 11 polynomial transforms. If an unmitigated bit-flip strikes an intermediate arithmetic operand:
+- **Silent Data Corruption (SDC):** The decapsulation routine emits an undetected incorrect shared key, exposing downstream communications to cryptanalytic compromise.
+- **Unavailability:** Uncontained aborts or sequential Dual Modular Redundancy (DMR)—which incurs **$+99.33\%$** latency overhead at the NTT level—drain tight power budgets and cause link renegotiation storms.
+- **Circular Verifier Blindness:** Naive sanity verifiers that re-read live corrupted registers fail due to common-mode blindness, exhibiting a **98.5% false-pass rate** ($591/600$ trials across 6 H1-relevant targets).
+
+### Our Implemented Solution: Dual Invariants + Local Rollback
+We design, implement, and empirically validate an end-to-end software fault-resilience architecture:
+- **Micro-Level Monitoring:** Intercepts all 9,856 butterflies (5,376 Forward Cooley-Tukey + 4,480 Inverse Gentleman-Sande) using decoupled algebraic invariants with zero modular division overhead.
+- **Localized Register Rollback:** Restores operands from software-managed snapshot variables, recovering transient faults on retry 1 with only a single-butterfly recomputation (~$0.0101\%$ operation ratio; distinct from wall-clock overhead).
+- **Deterministic Containment:** Escalate persistent faults to FIPS 203 Section 7.3 implicit rejection ($K_{\text{rej}} = \text{SHAKE256}(z \parallel c)$).
+- **Empirical Results:** $100\%$ transient recovery (100/100, Wilson CI: $[96.3\%, 100\%]$), $100\%$ safe fail-stop (200/200, Wilson CI: $[98.1\%, 100\%]$), **0 SDC observed across 300 active production trials** (Wilson CI: $[0.00\%, 1.26\%]$) and **0 SDC across 750 active campaign trials** (Clopper-Pearson bound: $0.49\%$), with **$+16.9\%$** decapsulation overhead under `-O3`. Zero dynamic heap allocations in monitoring paths.
+
+---
+
+## 2. Fast Navigation & Presentation Preparation
+
+For tomorrow's academic progress defense, all essential materials are centralized in [`docs/presentation/`](file:///Users/dhairyajain/Desktop/pqc%20research/docs/presentation/):
+- **Master Progress Report:** [`docs/presentation/RESEARCH_PROGRESS_MASTER.md`](file:///Users/dhairyajain/Desktop/pqc%20research/docs/presentation/RESEARCH_PROGRESS_MASTER.md) (Comprehensive 16-section technical foundation)
+- **14-Slide Presentation Deck:** [`docs/presentation/PROGRESS_PRESENTATION_OUTLINE.md`](file:///Users/dhairyajain/Desktop/pqc%20research/docs/presentation/PROGRESS_PRESENTATION_OUTLINE.md) (Slide-by-slide scripts & talking points)
+- **Defense Question Bank:** [`docs/presentation/DEFENSE_QUESTION_BANK.md`](file:///Users/dhairyajain/Desktop/pqc%20research/docs/presentation/DEFENSE_QUESTION_BANK.md) (22 anticipated defense Q&As)
+- **Live Code Demo Guide:** [`docs/presentation/LIVE_CODE_DEMO_GUIDE.md`](file:///Users/dhairyajain/Desktop/pqc%20research/docs/presentation/LIVE_CODE_DEMO_GUIDE.md) (3–5 min terminal script with line references)
+- **Codebase Architecture Map:** [`docs/architecture/CODEBASE_MAP.md`](file:///Users/dhairyajain/Desktop/pqc%20research/docs/architecture/CODEBASE_MAP.md) (Direct answers to 10 codebase questions)
+
+---
+
+## 3. Repository Architecture
+
+```text
+pqc-research/
+│
+├── README.md                           <- Master front-door guide (This file)
+├── PROJECT_OVERVIEW.md                 <- High-level project summary
+├── CONTRIBUTING.md                     <- Safety & non-destructive research protocol
+├── research-roadmap.md                 <- Long-term research milestones
+│
+├── docs/                               <- Centralized documentation hub
+│   ├── README.md                       <- Documentation overview
+│   ├── presentation/                   <- Progress defense deliverables & question bank
+│   ├── project/                        <- Mission, objectives, scope, tech stack, glossary
+│   ├── architecture/                   <- System diagrams, execution flow, codebase map
+│   ├── phases/                         <- Chronological phase archive (Phase 00 - Phase 18, TFIB)
+│   ├── experiments/                    <- Fault injection, benchmarks, testing, reproducibility
+│   ├── audits/                         <- Evidence audits, gap closure, prior art comparisons
+│   └── references/                     <- Literature database and bibtex records
+│
+├── algorithms/                         <- Core PQC cryptographic source trees
+│   ├── README.md
+│   ├── ml-kem/                         <- ML-KEM-768 production wrappers & harnesses
+│   ├── ml-dsa/                         <- ML-DSA digital signature harnesses
+│   └── source_ref/                     <- Standalone C99 FIPS 203/204 reference trees & fault hooks
+│
+├── tfib_implementation/                <- TFIB v2 source code and precompiled static library
+│   ├── README.md
+│   ├── tfib_ref.h & tfib_ref.c         <- Canonical ROM assertion and self-healing engine
+│   └── libtfib.a                       <- Static library for linking
+│
+├── tfib_experiments/                  <- Step 2C countermeasure independence test suite
+│   └── test_step2c_countermeasure_independence.c
+│
+├── phase18_audit/                      <- Cleanroom trial reproducer (N=400 Gate A trials)
+│   ├── production_reproducer.c
+│   └── raw_production_trials.csv
+│
+├── phase11_conformance_audit/          <- FIPS 203 Section 7.3 implicit rejection oracle audit (N=100)
+├── phase16_targeted_evidence_closure/  <- Hypothesis 1 circular verifier study (N=600)
+│
+├── data/                               <- Experimental datasets & cryptographic digests
+│   ├── README.md
+│   └── manifests/                      <- dataset_provenance_manifest.csv (SHA-256 fingerprints)
+│
+├── tests/                              <- Conformance and regression test suites
+│   ├── README.md
+│   ├── kat_mlkem768.c & kat_mldsa65.c  <- NIST FIPS Known Answer Tests
+│   └── test_phase*.py                  <- Python audit and diffusion test suites
+│
+├── results/                            <- Historical logs, distributions, and plot figures
+├── benchmarks/                         <- Hardware performance profiles (Apple M3 Pro)
+├── paper/                              <- Academic manuscript (manuscript.md), references, versions
+└── scripts/                            <- Utility plotting and verification scripts
 ```
 
 ---
 
-## 3. Technology Stack & Environment
+## 4. Quickstart: Build & Verification
 
-- **Host Architecture:** Apple Silicon (arm64, Apple M1, 8 cores, 8 GB RAM)
-- **Host OS:** macOS (Darwin 27.x)
-- **Primary Toolchain:** Apple Clang (C99 / C++17), CMake 4.4+, GNU Make 3.81, Ninja
-- **Cryptographic Engines:**
-  - OpenSSL 3.6.4+ (Standard FIPS 203 / 204 provider)
-  - `liboqs` 0.16.0+ (Open Quantum Safe C library)
-- **Analysis & Instrumentation Environment:** Python 3.9+, NumPy, SciPy, Matplotlib
+### Step 1: Compile All Targets
+```bash
+make clean
+make all
+```
+
+### Step 2: Validate Cryptographic Conformance (FIPS 203 KATs)
+```bash
+./bin/test_fips_kats
+```
+*Expected: 100/100 KAT vectors passing with zero regressions.*
+
+### Step 3: Run Step 2C Countermeasure Independence Suite
+```bash
+./tfib_experiments/test_step2c_countermeasure_independence
+```
+*Expected: 9/9 assertions pass, confirming TFIB operates orthogonally to DMR and FO rejection.*
+
+### Step 4: Run Phase 18 Cleanroom Trials
+```bash
+./phase18_audit/production_reproducer
+```
+*Expected: 400 cleanroom trials executed with 100% containment and zero false alarms.*
+
+### Step 5: Run Python Verification Suites
+```bash
+python3 -m unittest tests/test_phase4_audit.py
+python3 -m unittest tests/test_phase5_cross_impl.py
+python3 -m unittest tests/test_phase6_resilience.py
+```
+*Expected: All test suites exit with code 0.*
 
 ---
 
-## 4. Research Scope and Constraints
+## 5. ASTRA-Sec: Space Network Cryptographic Architecture
 
-- **Simulation Model:** All fault experiments are conducted via software-based fault simulation representing abstract fault classes (SEU, transient arithmetic disturbance, persistent memory cell degradation). We do not claim physical equivalence to in-situ orbital radiation testing.
-- **Standards Compliance:** Cryptographic operations are bound strictly to NIST FIPS 203 (ML-KEM) and NIST FIPS 204 (ML-DSA). No proprietary or non-standard cryptographic primitives are invented.
+Building upon the low-level ML-KEM-768 fault resilience foundations, **ASTRA-Sec** establishes an end-to-end post-quantum secure messaging protocol designed for high-latency, intermittently-connected space networks (RFC 9171 DTN Bundle Protocol v7, RFC 9172 BPSec).
+
+### 7-Layer Protocol Architecture
+
+```text
++-----------------------------------------------------------------------------------+
+| L1: Application & Telemetry     | Validated ADU creation, telemetry command opcode |
++-----------------------------------------------------------------------------------+
+| L2: End-to-End Secure Messaging | AES-256-GCM envelope, 162-byte canonical AAD    |
++-----------------------------------------------------------------------------------+
+| L3: Post-Quantum Crypto Services| ML-KEM-768 key encapsulation, ML-DSA-65 verify   |
++-----------------------------------------------------------------------------------+
+| L4: Fault-Resilient Execution   | NTT invariant checks, K<=2 rollback, fail-stop   |
++-----------------------------------------------------------------------------------+
+| L5: Delay-Tolerant Transport    | RFC 9171 BPv7 bundles, RFC 9172 hop integrity    |
++-----------------------------------------------------------------------------------+
+| L6: Disruption Management       | Persistent spooling, out-of-order reassembly     |
++-----------------------------------------------------------------------------------+
+| L7: FDIR & Ground Audit         | Spacecraft telemetry, SDC suppression audit      |
++-----------------------------------------------------------------------------------+
+```
+
+### Reference Scenario: 4-Node Space Relay Topology
+$$\text{Ground Station A (GSA)} \longrightarrow \text{Satellite Relay 1 (SAT1)} \longrightarrow \text{Satellite Relay 2 (SAT2)} \longrightarrow \text{Ground Station B (GSB)}$$
 
 ---
 
-## 5. Phase 4B Internal Validation Audit Status
+## 6. ASTRA-Sec Quickstart & Unified Testing
 
-A comprehensive validation audit of the internal fault injection framework has been completed (see [`docs/phase4b-validation-audit.md`](file:///Users/dhairyajain/Desktop/pqc%20research/docs/phase4b-validation-audit.md)):
-- **Taxonomy:** Standardized into Categories A through F (distinguishing Post-Op mutations, Mid-NTT butterfly faults, Mid-PolyMul accumulator glitches, and FO verification predicates).
-- **Diffusion & Compression Finding:** Mid-NTT faults in Layer 1 diffuse across 128 coefficients and are absorbed by ciphertext compression quantization ($d_u=10, d_v=4$), resulting in 100% valid decapsulation (`CORRECT_VALID_DECAPSULATION`), whereas Layers 4 and 7 trigger 100% implicit rejection (`EXPECTED_IMPLICIT_REJECTION`).
-- **FO Predicate Resolution:** Tested bidirectionally: valid ciphertext ($0 \to 1$) yields implicit rejection; 1-bit corrupted ciphertext ($1 \to 0$) decodes the true message $m$ via LWE error slack; severely corrupted ciphertext ($1 \to 0$) yields an invalid candidate key (`CANDIDATE_KEY_SELECTED_MISMATCH`).
-- **NIST FIPS KAT Verification:** ML-KEM-512/768/1024 and ML-DSA-44/65/87 verified with 100% bit-level reproducibility (`make test`).
-- **Spacecraft Protocol Model:** Refactored into an explicit 6-stage receiver model (`Abstract Spacecraft Communication Model`), confirming that out-of-sync session keys result in 100% `FORMAT_REJECTED` at the framing layer.
+### Step 1: Install Development Environment
+```bash
+make setup-dev
+```
 
+### Step 2: Run Unified Verification (C Engines & Python Suites)
+```bash
+make test
+```
+*Executes all NIST FIPS 203/204 KATs, cross-engine interoperability tests, internal fault injection experiments, and Python unit & integration suites.*
+
+### Step 3: Run Real-Time System Diagnostic Health Check
+```bash
+make health-check
+# or directly:
+python3 -m astra_sec.app health
+```
+
+### Step 4: Multi-Node Simulation via Docker Compose
+```bash
+docker compose up --build
+```
+
+For developer guidelines, zero-heap flight invariants, and architectural rules, see [`AGENTS.md`](file:///Users/dhairyajain/Desktop/pqc research/AGENTS.md) and [`docs/implementation-roadmap.md`](file:///Users/dhairyajain/Desktop/pqc research/docs/implementation-roadmap.md).
+
+---
+
+## 7. Experimental Data & Provenance
+
+All primary datasets used in this research are cataloged with genuine cryptographic SHA-256 digests in [`data/manifests/dataset_provenance_manifest.csv`](file:///Users/dhairyajain/Desktop/pqc%20research/data/manifests/dataset_provenance_manifest.csv):
+- `tfib_benchmark_raw.csv`: 15,000 raw latency trials across baseline and hardened NTT configurations.
+- `tfib_trial_level_results.csv`: 900 canonical fault injection trials.
+- `raw_production_trials.csv`: 400 cleanroom production trials.
+- `h1_activation_audit.csv`: 600 targeted injection trials validating circular verifier vulnerabilities.
