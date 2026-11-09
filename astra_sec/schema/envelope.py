@@ -124,6 +124,68 @@ class PqcMessageEnvelope(BaseModel):
             + self.signature
         )
 
+    @classmethod
+    def from_binary(cls, data: bytes) -> "PqcMessageEnvelope":
+        """Decodes envelope from canonical binary wire format."""
+        if len(data) < 20:
+            raise ValueError(f"Binary envelope too short: {len(data)} bytes")
+        wire_magic, aad_len, ct_len = struct.unpack(">12sII", data[:20])
+        if wire_magic != b"ASTRA_MSG_V1":
+            raise ValueError(f"Invalid binary envelope magic: {wire_magic}")
+
+        expected_min_len = 20 + aad_len + ct_len + 16 + 3309
+        if len(data) != expected_min_len:
+            raise ValueError(
+                f"Binary envelope size mismatch: expected {expected_min_len} bytes, got {len(data)} bytes"
+            )
+
+        aad = data[20 : 20 + aad_len]
+        if len(aad) < 74 + 1088 + 12:
+            raise ValueError("Corrupt canonical AAD in binary envelope")
+
+        magic, version, env_id_raw, src_len, dst_len, seq_id, ts, ttl = struct.unpack(
+            ">12sH36sHHQQI", aad[:74]
+        )
+        if magic != b"ASTR-AEAD-V1":
+            raise ValueError("Invalid AAD magic in binary envelope")
+
+        env_id = env_id_raw.rstrip(b"\x00").decode("ascii")
+        offset = 74
+        src_eid = aad[offset : offset + src_len].decode("utf-8")
+        offset += src_len
+        dst_eid = aad[offset : offset + dst_len].decode("utf-8")
+        offset += dst_len
+        kem_ct = aad[offset : offset + 1088]
+        offset += 1088
+        nonce = aad[offset : offset + 12]
+
+        header = EnvelopeHeader(
+            version=version,
+            envelope_id=env_id,
+            source_eid=src_eid,
+            destination_eid=dst_eid,
+            sequence_id=seq_id,
+            timestamp_utc=ts,
+            ttl_seconds=ttl,
+            kem_ciphertext=kem_ct,
+            nonce=nonce,
+        )
+
+        env_offset = 20 + aad_len
+        ciphertext = data[env_offset : env_offset + ct_len]
+        env_offset += ct_len
+        tag = data[env_offset : env_offset + 16]
+        env_offset += 16
+        signature = data[env_offset : env_offset + 3309]
+
+        return cls(
+            header=header,
+            ciphertext=ciphertext,
+            tag=tag,
+            signature=signature,
+        )
+
+
 
 class MessageAcknowledgment(BaseModel):
     """Signed Cryptographic Receipt returned by recipient (GSB) upon valid receipt."""

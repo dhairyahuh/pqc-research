@@ -3,7 +3,7 @@
 import logging
 import time
 import uuid
-from typing import Optional, Tuple
+from typing import Callable, Optional, Tuple
 
 from astra_sec.core.exceptions import AstraError, ProtocolError, SchemaValidationError
 from astra_sec.crypto.aead import Aes256GcmAead, HkdfSha256Engine
@@ -290,4 +290,16 @@ class GroundStationNode:
 
         ack_signable = ack.to_signable_bytes()
         return self.dsa.verify(ack_signable, ack.signature, peer_dsa_pk)
+
+    def transmit(
+        self,
+        envelope: PqcMessageEnvelope,
+        next_hop_eid: str,
+        forwarder_fn: Optional[Callable[[str, PqcMessageEnvelope], bool]] = None,
+    ) -> bool:
+        """Transmits an originated envelope to the designated next-hop relay or destination."""
+        if forwarder_fn is not None:
+            return forwarder_fn(next_hop_eid, envelope)
+        raise ProtocolError("No forwarder function provided for transmission.")
+
 
