@@ -5,6 +5,10 @@ from typing import Any, Dict, Optional
 
 from astra_sec.crypto.aead import Aes256GcmAead, HkdfSha256Engine
 from astra_sec.crypto.base import DsaAdapter, KemAdapter
+from astra_sec.crypto.mlkem_monitored import (
+    MonitoredMlkemAdapter,
+    MonitoredMlkemError,
+)
 from astra_sec.crypto.monitored_c import (
     MonitoredCLoadError,
     MonitoredNativeDsaAdapter,
@@ -22,15 +26,15 @@ class CryptoEngineFactory:
     def get_kem_adapter(cls, prefer_monitored: bool = True) -> KemAdapter:
         """Returns the active ML-KEM-768 adapter.
 
-        Prioritizes the monitored native C implementation (intended research path).
+        Prioritizes the monitored native C implementation with TFIB-Ref (intended research path).
         Falls back to liboqs if native shared library is unavailable.
         """
         if prefer_monitored:
             try:
-                adapter = MonitoredNativeKemAdapter()
-                logger.info("Using Monitored Native ML-KEM-768 (Intended Research Path)")
+                adapter = MonitoredMlkemAdapter()
+                logger.info("Using Monitored Native ML-KEM-768 with TFIB-Ref (Intended Research Path)")
                 return adapter
-            except (MonitoredCLoadError, Exception) as e:
+            except (MonitoredMlkemError, MonitoredCLoadError, Exception) as e:
                 logger.warning(
                     f"Monitored C KEM engine unavailable ({e}). Falling back to LibOQS baseline."
                 )
@@ -99,3 +103,4 @@ class CryptoEngineFactory:
             "liboqs_error": oqs_err,
             "preferred_engine": "Native-Monitored" if native_ok else "LibOQS",
         }
+

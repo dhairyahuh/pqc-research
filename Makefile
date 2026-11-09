@@ -68,8 +68,8 @@ $(BIN_DIR)/test_interop: tests/test_interop_path_a_b.c $(OBJ_DIR)/mlkem768.o $(O
 	$(CC) $(CFLAGS) -I algorithms/source_ref/mlkem -I algorithms/source_ref/mldsa $^ -o $@ $(LDFLAGS)
 
 # ASTRA-Sec Monitored C Cryptographic Shared Library
-$(ASTRA_CRYPTO_LIB): src/astra_crypto_bridge.c $(OBJ_DIR)/mlkem768_instrumented.o $(OBJ_DIR)/mlkem_fault_hooks.o $(OBJ_DIR)/mldsa65.o | $(BIN_DIR)
-	$(CC) $(SHARED_LIB_FLAG) -O3 -Wall -Wextra -std=c11 -I algorithms/source_ref/mlkem -I algorithms/source_ref/mldsa $^ -o $@
+$(ASTRA_CRYPTO_LIB): src/astra_crypto_bridge.c $(OBJ_DIR)/mlkem768_inst.o tfib_implementation/libtfib.a $(OBJ_DIR)/mldsa65.o | $(BIN_DIR)
+	$(CC) $(SHARED_LIB_FLAG) -O3 -Wall -Wextra -std=c11 -I src -I algorithms/source_ref/mlkem -I tfib_implementation -I algorithms/source_ref/mldsa $^ -o $@
 
 # Comprehensive NIST FIPS 203 & 204 KAT Runner (ML-KEM-512/768/1024 & ML-DSA-44/65/87)
 $(BIN_DIR)/test_fips_kats: tests/test_fips_kats.c tests/kat_mlkem512.c tests/kat_mlkem768.c tests/kat_mlkem1024.c tests/kat_mldsa44.c tests/kat_mldsa65.c tests/kat_mldsa87.c $(OBJ_DIR)/mlkem512.o $(OBJ_DIR)/mlkem768_kat.o $(OBJ_DIR)/mlkem1024.o $(OBJ_DIR)/mldsa44.o $(OBJ_DIR)/mldsa65_kat.o $(OBJ_DIR)/mldsa87.o | $(BIN_DIR)

@@ -13,6 +13,12 @@ from astra_sec.crypto.base import (
     KemAdapter,
 )
 from astra_sec.crypto.factory import CryptoEngineFactory
+from astra_sec.crypto.mlkem_monitored import (
+    AstraFaultStatus,
+    MlkemTelemetry,
+    MonitoredMlkemAdapter,
+    MonitoredMlkemError,
+)
 from astra_sec.crypto.monitored_c import (
     MonitoredNativeDsaAdapter,
     MonitoredNativeKemAdapter,
@@ -23,11 +29,15 @@ __all__ = [
     "AeadDecryptionError",
     "AeadEngine",
     "Aes256GcmAead",
+    "AstraFaultStatus",
     "CryptoEngineFactory",
     "DecapsulationStatus",
     "DsaAdapter",
     "HkdfSha256Engine",
     "KemAdapter",
+    "MlkemTelemetry",
+    "MonitoredMlkemAdapter",
+    "MonitoredMlkemError",
     "MonitoredNativeDsaAdapter",
     "MonitoredNativeKemAdapter",
     "NonceReuseError",

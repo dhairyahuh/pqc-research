@@ -14,6 +14,7 @@ from astra_sec.schema.envelope import (
     MessageAcknowledgment,
     PqcMessageEnvelope,
 )
+from astra_sec.schema.messages import FdirTelemetryReport
 from astra_sec.schema.trust import KeyPair, NodeIdentity, PublicKeyTrustStore, TrustError
 from astra_sec.service.replay import AntiReplayFilter
 
@@ -68,8 +69,15 @@ class GroundStationNode:
         # Keypairs for this node instance
         self._init_node_keys()
 
+        # FDIR Telemetry tracker
+        self.fdir_telemetry = FdirTelemetryReport(node_eid=self.node_eid)
+
         # Monotonic outgoing sequence counter
         self._next_sequence_id: int = 1
+
+    def get_fdir_telemetry(self) -> FdirTelemetryReport:
+        """Returns the current FDIR fault resilience telemetry report."""
+        return self.fdir_telemetry
 
     def _init_node_keys(self) -> None:
         """Initializes ML-KEM and ML-DSA keys for this node."""
@@ -218,12 +226,30 @@ class GroundStationNode:
                 f"Signature verification failed for envelope '{header.envelope_id}' from '{header.source_eid}'."
             )
 
-        # 5. Decapsulate ML-KEM-768 Shared Secret
-        shared_secret, dec_status = self.kem.decapsulate(header.kem_ciphertext, self.kem_keys.secret_key)
-        if not dec_status.is_success:
-            raise DecapsulationFaultError(
-                f"ML-KEM decapsulation rejected or faulted with status {dec_status.name} (0x{dec_status.value:08X})."
-            )
+        # 5. Decapsulate ML-KEM-768 Shared Secret (Monitored Native C Engine)
+        if hasattr(self.kem, "decapsulate_with_telemetry"):
+            try:
+                shared_secret, telemetry = self.kem.decapsulate_with_telemetry(
+                    header.kem_ciphertext, self.kem_keys.secret_key
+                )
+                self.fdir_telemetry.transient_recoveries += telemetry.recovered_count
+                self.fdir_telemetry.twiddle_faults_detected += telemetry.twiddle_faults_detected
+            except Exception as e:
+                self.fdir_telemetry.persistent_fail_stops += 1
+                self.fdir_telemetry.bundles_rejected += 1
+                raise DecapsulationFaultError(
+                    f"Monitored ML-KEM decapsulation fault suppression engaged: {e}"
+                ) from e
+        else:
+            shared_secret, dec_status = self.kem.decapsulate(header.kem_ciphertext, self.kem_keys.secret_key)
+            if not dec_status.is_success:
+                self.fdir_telemetry.persistent_fail_stops += 1
+                self.fdir_telemetry.bundles_rejected += 1
+                raise DecapsulationFaultError(
+                    f"ML-KEM decapsulation rejected or faulted with status {dec_status.name} (0x{dec_status.value:08X})."
+                )
+
+        self.fdir_telemetry.bundles_forwarded += 1
 
         # 6. Derive AES key via HKDF-SHA256
         aead_key = HkdfSha256Engine.derive_payload_key(shared_secret)
@@ -264,3 +290,4 @@ class GroundStationNode:
 
         ack_signable = ack.to_signable_bytes()
         return self.dsa.verify(ack_signable, ack.signature, peer_dsa_pk)
+
