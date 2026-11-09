@@ -94,3 +94,4 @@ Each scenario defines independent variables, dependent variables, controls, expe
    - Every single trial generates an immutable JSON-Lines record containing: trial UUID, timestamp, seed, injected bit mask, execution cycles, CPU memory rss, intermediate SHA-256 digests, and return code.
 3. **Statistical Reporting:**
    - All latency metrics reported with Mean, Standard Deviation ($\sigma$), Median ($P_{50}$), $95^{\text{th}}$ percentile ($P_{95}$), and $99^{\text{th}}$ percentile ($P_{99}$). Confidence intervals computed at $99\%$ confidence level ($p < 0.01$).
+

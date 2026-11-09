@@ -30,3 +30,4 @@ In compliance with strict anti-hallucination standards:
 1. **Radiation Environment Boundary:** All fault injection results are obtained via software bit-flipping in C registers, not physical heavy-ion beam tests.
 2. **Space Deployment Boundary:** All multi-node experiments are executed across emulated local processes and network sockets, not orbital spacecraft hardware.
 3. **NASA ION Boundary:** NASA/JPL ION-DTN integration is verified via configuration file synthesis (`.ionrc`, `.bprc`) and RFC 9171 wire compatibility, not native `ionadmin` C daemons running on macOS.
+

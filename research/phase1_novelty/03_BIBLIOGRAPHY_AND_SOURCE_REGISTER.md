@@ -221,3 +221,4 @@
 ## 2. Bibliographic Summary
 
 All cited literature has been verified against official digital object identifier resolvers (`doi.org`), IEEE Xplore, IACR, and NIST standards repositories. No synthetic or hallucinated documents exist in this register.
+

@@ -161,3 +161,4 @@ No published work currently coordinates:
 The existing literature either studies **PQC on satellites** (ignoring cosmic arithmetic faults and DTN disconnections), **cryptographic fault attacks** (ignoring space networks and DTN transport), or **DTN security** (ignoring post-quantum lattice algorithms and hardware SEU recovery). 
 
 Developing a **Formal Cross-Layer Fault-Aware Security State Machine** that coordinates cryptographic execution outcomes with DTN store-and-forward persistence represents an authentic, defensible, and high-impact research opportunity.
+

@@ -197,3 +197,4 @@ Strong, but MLS is increasingly exploring asynchronous group key transitions, in
 | **Candidate 3: Fault-Aware Lifecycle** | DTN Transport | Practical queue optimization under high SEU rates. | Reviewers may view as an engineering heuristic. | **MEDIUM** |
 | **Candidate 4: TFIB-Ref Fault Checker** | Embedded Cryptography | Deep algorithmic novelty in C99; $+2.29\%$ vs $+101.49\%$ DMR. | Narrower algorithmic focus; ignores wider DTN space network. | **HIGH (CHES scope)** |
 | **Candidate 5: Key-Transition Safety** | Cryptographic Protocols | Critical for multi-day interplanetary disconnections. | Overlaps partially with ongoing IETF MLS asynchronous extensions. | **MEDIUM** |
+

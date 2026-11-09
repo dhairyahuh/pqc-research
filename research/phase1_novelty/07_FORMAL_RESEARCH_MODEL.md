@@ -130,3 +130,4 @@ $$\forall \text{Relay } r \in \{\text{SAT}_1, \text{SAT}_2\}, \quad \mathcal{I}(
 ### Property 9: Bounded Transient Fault Recovery (Liveness)
 $$\forall \text{Single-Bit SEU}, \quad t_{\text{recovery}} \le 2 \cdot t_{\text{butterfly}} \implies \text{DecapsStatus} = \text{SUCCESS}$$
 *Proof Mechanism:* Localized stack snapshot rollback restores valid coefficients within $K \le 2$ iterations, preventing unnecessary DTN custody drops.
+

@@ -97,3 +97,4 @@ To ensure our research survives peer review, the research manuscript must explic
 1. We do **not** claim to invent the pure algebraic relation $r \equiv t\zeta \pmod q$. We contribute its constant-time, zero-heap C99 realization with bounded snapshot rollback ($K \le 2$) for COTS space processors.
 2. We do **not** claim that physical radiation tests were conducted; all validation was achieved via controlled in-memory bit-flip injection in native C registers.
 3. We do **not** claim to replace BPSec; we define how Layer 2 post-quantum envelope security and Layer 4 arithmetic fault states integrate with Layer 5 BPv7 transport.
+

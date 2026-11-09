@@ -47,3 +47,4 @@ In strict adherence to academic standards:
 3. **No Phantom Novelty:** Simply assembling standard libraries (e.g. LibOQS + PyDTN + SQLite) is explicitly categorized as an *engineering integration*, not a scientific research contribution.
 4. **Physical Distinctions Maintained:** Software register bit-flip injection is explicitly distinguished from heavy-ion particle radiation testing in cyclotron facilities.
 5. **Preservation of Baseline Code:** Application source code and historical experiment logs remain untouched.
+

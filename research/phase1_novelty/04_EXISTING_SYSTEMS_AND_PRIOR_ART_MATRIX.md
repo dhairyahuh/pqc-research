@@ -52,3 +52,4 @@ As revealed by Column 21 ("Cross-Layer Fault Handling"), **not a single existing
 - In NASA ION-DTN, an arithmetic decapsulation failure appears as an unexplained payload drop or corrupt bundle, triggering blind retransmissions or complete loss of telecommands.
 - In ESA E2EQSS, a failure crashes the synchronous session.
 - ASTRA-Sec stands uniquely positioned to define and validate this cross-layer coordination mechanism.
+

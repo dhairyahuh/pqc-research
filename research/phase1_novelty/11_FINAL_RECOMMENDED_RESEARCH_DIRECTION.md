@@ -125,3 +125,4 @@ The proposed architecture binds three interconnected layers:
    - Refactor `astra_sec/security/verifier.py` to enforce the 5-phase crash-consistent transaction protocol atomically.
 2. **Experimental Expansion Required:**
    - Scale randomized fault injection campaigns from 38 deterministic tests to **$3,000+$ trials per baseline group** ($N \ge 12,000$ total trials) to achieve $99\%$ statistical confidence.
+

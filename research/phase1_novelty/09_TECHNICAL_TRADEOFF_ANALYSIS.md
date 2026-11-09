@@ -72,3 +72,4 @@ This analysis evaluates the 10 fundamental engineering trade-offs governing ASTR
 ## 4. Conclusion
 
 ASTRA-Sec is deliberately engineered for **mission-critical telecommand and telemetry security across untrusted, radiation-exposed commercial satellite networks**, where data authenticity and quantum resistance outweigh strict bandwidth minimization. It is not suitable for ultra-low-bandwidth CubeSat beaconing or hard real-time sub-millisecond control loops.
+

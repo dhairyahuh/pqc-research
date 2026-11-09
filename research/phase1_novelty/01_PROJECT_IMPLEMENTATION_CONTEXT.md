@@ -59,3 +59,4 @@ Before identifying research gaps, we classify every existing subsystem based on 
 3. **The Critical Research Question Identified:**
    - How does a DTN node handle cryptographic failures when transient cosmic SEUs, persistent hardware faults, network link disruptions, and security epoch transitions occur simultaneously?
    - In existing systems (e.g., standard DTN + standard PQC), a decapsulation fault either causes permanent packet drop or naive infinite retransmission. ASTRA-Sec has the unique structural ability to bridge low-level cryptographic rollback states with high-level DTN custody and delivery state transitions.
+

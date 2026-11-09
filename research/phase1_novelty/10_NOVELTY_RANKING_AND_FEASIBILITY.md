@@ -85,3 +85,4 @@ Rather than diluting the research by claiming all five candidates, the research 
 | "Atomic WAL-Backed Replay Protection Preventing Re-Execution Across Power-Cycles"             |
 +-----------------------------------------------------------------------------------------------+
 ```
+
