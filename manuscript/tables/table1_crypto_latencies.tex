@@ -1,0 +1,36 @@
+\begin{table*}[t]
+\centering
+\caption{Cryptographic Primitive Operational Latency Breakdown ($N=200$ Trials, $N_{\text{warmup}}=20$, Apple Silicon arm64, Mean $\pm 95\%$ Confidence Interval).}
+\label{tab:crypto_latencies}
+\small
+\begin{tabular}{llccccccc}
+\hline
+\textbf{Primitive / Configuration} & \textbf{Category} & \textbf{Sample ($N$)} & \textbf{Mean ($\mu$s)} & \textbf{95\% Conf. Interval} & \textbf{Median ($\mu$s)} & \textbf{$p_{90}$ ($\mu$s)} & \textbf{$p_{99}$ ($\mu$s)} & \textbf{Throughput (ops/s)} \\
+\hline
+LibOQS ML-KEM-768 KeyGen & KEM Baseline & 200 & 29.95 & [29.86, 30.03] & 29.75 & 30.26 & 32.00 & 33,393 \\
+LibOQS ML-KEM-768 Encaps & KEM Baseline & 200 & 32.07 & [32.01, 32.12] & 32.00 & 32.33 & 32.92 & 31,184 \\
+LibOQS ML-KEM-768 Decaps & KEM Baseline & 200 & 36.25 & [36.22, 36.28] & 36.21 & 36.46 & 37.04 & 27,589 \\
+\hline
+\textbf{ASTRA-Sec ML-KEM-768 KeyGen} & Monitored & 200 & 78.58 & [78.48, 78.67] & 78.42 & 79.30 & 80.59 & 12,726 \\
+\textbf{ASTRA-Sec ML-KEM-768 Encaps} & Monitored & 200 & 83.41 & [83.35, 83.47] & 83.25 & 83.93 & 85.12 & 11,989 \\
+\textbf{ASTRA-Sec ML-KEM-768 Decaps (Clean)} & Monitored & 200 & 142.68 & [142.55, 142.80] & 142.33 & 143.63 & 147.05 & \textbf{7,009} \\
+\textbf{ASTRA-Sec ML-KEM-768 Decaps (Recovery $K=1$)} & Monitored & 200 & 199.99 & [183.22, 216.76] & 154.13 & 287.47 & 576.45 & \textbf{5,000} \\
+DMR ML-KEM-768 Decaps ($2\times$ Execution) & DMR Baseline & 200 & 73.04 & [72.90, 73.17] & 72.83 & 73.54 & 75.71 & 13,691 \\
+\hline
+LibOQS ML-DSA-65 KeyGen & DSA Baseline & 200 & 113.27 & [112.81, 113.73] & 112.71 & 113.46 & 125.00 & 8,828 \\
+LibOQS ML-DSA-65 Sign & DSA Baseline & 200 & 237.83 & [218.04, 257.61] & 186.12 & 386.38 & 855.67 & 4,205 \\
+LibOQS ML-DSA-65 Verify & DSA Baseline & 200 & 101.44 & [101.38, 101.49] & 101.33 & 101.88 & 102.84 & 9,858 \\
+\textbf{ASTRA-Sec ML-DSA-65 KeyGen} & Native DSA & 200 & 121.90 & [121.79, 122.00] & 121.87 & 122.80 & 123.87 & 8,204 \\
+\textbf{ASTRA-Sec ML-DSA-65 Sign} & Native DSA & 200 & 344.80 & [312.41, 377.19] & 272.00 & 613.91 & 1291.19 & \textbf{2,900} \\
+\textbf{ASTRA-Sec ML-DSA-65 Verify} & Native DSA & 200 & 100.50 & [100.44, 100.56] & 100.37 & 101.05 & 101.80 & \textbf{9,950} \\
+\hline
+AES-256-GCM Encrypt ($256$~B) & Symmetric AEAD & 200 & 10.99 & [10.86, 11.13] & 10.83 & 11.08 & 13.93 & 90,951 \\
+AES-256-GCM Decrypt ($256$~B) & Symmetric AEAD & 200 & 5.53 & [5.52, 5.54] & 5.50 & 5.63 & 5.75 & 180,886 \\
+AES-256-GCM Encrypt ($1024$~B) & Symmetric AEAD & 200 & 11.26 & [11.21, 11.30] & 11.17 & 11.46 & 12.23 & 88,848 \\
+AES-256-GCM Decrypt ($1024$~B) & Symmetric AEAD & 200 & 5.77 & [5.77, 5.78] & 5.79 & 5.83 & 5.88 & 173,180 \\
+AES-256-GCM Encrypt ($4096$~B) & Symmetric AEAD & 200 & 12.21 & [12.03, 12.40] & 12.08 & 12.37 & 14.17 & 81,871 \\
+AES-256-GCM Decrypt ($4096$~B) & Symmetric AEAD & 200 & 6.59 & [6.58, 6.60] & 6.58 & 6.67 & 6.71 & 151,769 \\
+HKDF-SHA256 Derivation & Symmetric KDF & 200 & 8.49 & [8.47, 8.50] & 8.48 & 8.58 & 8.71 & 117,844 \\
+\hline
+\end{tabular}
+\end{table*}

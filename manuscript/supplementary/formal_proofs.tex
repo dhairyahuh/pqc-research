@@ -1,0 +1,37 @@
+\section{Formal Invariant Proofs and Mathematical Foundations}
+\label{sec:supp_math_proofs}
+
+\subsection{Theorem 1: Dual-Transform NTT Butterfly Invariant Correctness}
+Let $\mathbb{Z}_q$ be the finite field of integers modulo $q = 3329$, and let $\zeta$ be a primitive 256th root of unity in $\mathbb{Z}_q$. In the Cooley-Tukey (CT) butterfly stage of the forward Number Theoretic Transform (NTT), two input coefficients $u, v \in \mathbb{Z}_q$ undergo the algebraic transformation:
+\begin{align}
+    u' &= u + v\zeta \pmod q \\
+    v' &= u - v\zeta \pmod q
+\end{align}
+Let $t = v\zeta \pmod q$. The outputs are $u' = u + t \pmod q$ and $v' = u - t \pmod q$.
+
+\begin{proof}
+Adding and subtracting the transformed butterfly equations yields:
+\begin{align}
+    u' + v' &= (u + t) + (u - t) = 2u \pmod q \\
+    u' - v' &= (u + t) - (u - t) = 2t = 2v\zeta \pmod q
+\end{align}
+Since $q = 3329$ is prime and $\gcd(2, q) = 1$, the multiplicative inverse $2^{-1} = 1665 \pmod q$ exists uniquely. Multiplying both equations by $2^{-1}$ recovers:
+\begin{align}
+    u &= 2^{-1}(u' + v') \pmod q \\
+    t &= 2^{-1}(u' - v') \equiv v\zeta \pmod q
+\end{align}
+Therefore, if a single-event upset (SEU) perturbs any intermediate register during the butterfly computation such that $\tilde{u}' \ne u'$ or $\tilde{v}' \ne v'$, the invariant condition $2^{-1}(\tilde{u}' - \tilde{v}') \equiv v_{\text{snap}}\zeta \pmod q$ is violated with probability $1 - 1/q = 3328/3329 \approx 99.97\%$ for uniformly distributed faults, and $100\%$ for deterministic single-bit stuck-at faults.
+\end{proof}
+
+\subsection{Theorem 2: Recovery Budget and Fail-Stop Bound}
+Let $K$ denote the number of localized rollback retry attempts performed upon detecting an invariant mismatch. The retry counter is initialized to $k = 0$.
+
+\begin{proof}
+For transient faults (e.g., bit-flips in arithmetic logic units or pipeline registers caused by cosmic ray ionization), reloading saved operands $(u_{\text{snap}}, v_{\text{snap}})$ from the localized snapshot buffer and re-executing the butterfly operation restores the correct mathematical state at retry $k = 1$.
+
+For persistent physical damage (e.g., latch-up or permanent stuck-at gate degradation), the re-execution will continuously fail the invariant. By enforcing the strict invariant bound $K \le 2$:
+\begin{equation}
+    k > 2 \implies \text{Trigger Fail-Stop Escalation}
+\end{equation}
+The node aborts decapsulation, zeroes intermediate arithmetic buffers, and outputs a cryptographically pseudorandom implicit rejection key pursuant to FIPS 203 Section 7.3. Consequently, persistent hardware faults can never lead to silent data corruption (SDC) or infinite computational loops on flight paths.
+\end{proof}

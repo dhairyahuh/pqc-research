@@ -1,0 +1,24 @@
+\begin{table}[t]
+\centering
+\caption{Wire Framing Overhead and Non-Volatile Persistent Storage Footprint.}
+\label{tab:wire_and_storage}
+\small
+\begin{tabular}{lcp{6.5cm}}
+\hline
+\textbf{Layer / Protocol Metric} & \textbf{Measurement} & \textbf{Architectural Description / Constraint} \\
+\hline
+Raw Application Payload & 256 bytes & Command or telemetry data unit ($L_1$) \\
+ML-KEM-768 Ciphertext & 1,088 bytes & FIPS 203 ephemeral encapsulation payload \\
+ML-DSA-65 Digital Signature & 3,309 bytes & FIPS 204 sender authentication field \\
+AES-256-GCM Nonce \& Auth Tag & 28 bytes & 12-byte unique nonce + 16-byte authentication tag \\
+\textbf{Total PqcMessageEnvelope} & \textbf{4,801 bytes} & Canonical $L_2$ security framing \\
+ASTRA-Sec over BPv7 CBOR & 4,863 bytes & RFC 9171 bundle encapsulation (+62 B overhead) \\
+Full Stack (+ BPSec BIB) & 4,905 bytes & RFC 9172 hop-by-hop integrity block (+42 B overhead) \\
+\hline
+SQLite Transactional Spool (100 Bundles) & 20.00 KB & Persistent non-volatile WAL queue on flash \\
+Anti-Replay Filter (500 Sequence IDs) & 56.00 KB & Persistent sliding window tracking \\
+HMAC State Boot Manifest & 32 bytes & SHA-256 HMAC integrity manifest \\
+Peak Process Resident Memory (RSS) & 53.22 MB & Bounded memory footprint for satellite OBCs \\
+\hline
+\end{tabular}
+\end{table}

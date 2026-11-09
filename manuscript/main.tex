@@ -1,0 +1,227 @@
+\documentclass[conference,10pt]{IEEEtran}
+
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath,amssymb,amsfonts}
+\usepackage{graphicx}
+\usepackage{textcomp}
+\usepackage{xcolor}
+\usepackage{booktabs}
+\usepackage{cite}
+\usepackage{url}
+\usepackage{hyperref}
+\usepackage{listings}
+\usepackage{microtype}
+
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    citecolor=blue,
+    urlcolor=blue
+}
+
+\begin{document}
+
+\title{ASTRA-Sec: A Fault-Resilient Post-Quantum End-to-End Security Framework for Disruption-Tolerant Satellite Communication}
+
+\author{
+    \IEEEauthorblockN{Dhairya Jain\IEEEauthorrefmark{1}}
+    \IEEEauthorblockA{\IEEEauthorrefmark{1}Department of Computer Science and Engineering\\
+    Autonomous Space Resilience Research Laboratory\\
+    Email: 1008dhairyajain@gmail.com}
+}
+
+\maketitle
+
+\begin{abstract}
+Satellite constellations operating in Low Earth Orbit (LEO) and deep space are increasingly exposed to two converging threats: the imminent cryptographic obsolescence of classical asymmetric algorithms due to quantum computing, and Single-Event Upsets (SEUs) induced by ionizing space radiation. While standardized post-quantum schemes such as ML-KEM-768 (FIPS 203) and ML-DSA-65 (FIPS 204) provide theoretical quantum resistance, their practical deployment on space platforms is severely undermined by transient physical faults in arithmetic pipelines, which induce Silent Data Corruption (SDC) or enable side-channel fault exploitation. Furthermore, existing space link protocols (e.g., CCSDS Space Data Link Security and RFC 9172 BPSec) operate hop-by-hop, exposing unencrypted message payloads at intermediate untrusted or compromised satellite relay nodes.
+
+To address these vulnerabilities, this paper introduces \textbf{ASTRA-Sec}, an end-to-end post-quantum cryptographic security framework designed specifically for delay- and disruption-tolerant space networks. ASTRA-Sec introduces three core contributions: (1) an end-to-end cryptographic envelope decoupling application-layer confidentiality and authenticity from intermediate transport relays; (2) a low-overhead ($<5\%$ NTT latency penalty) fault-resilient execution monitor for ML-KEM-768 featuring dual-transform Number Theoretic Transform (NTT) invariant checking ($r \equiv t\zeta \pmod q$), localized operand snapshot rollback ($K \le 2$), and Twiddle-Factor Invariant Blindness (TFIB-Ref); and (3) a crash-consistent, non-volatile state continuity architecture integrating RFC 9171 Bundle Protocol v7 (BPv7), persistent anti-replay sliding windows, and HMAC-verified boot manifests. Across 38 comprehensive empirical fault-injection and adversarial trials, ASTRA-Sec achieved a 100\% fault detection rate and 0 observed SDC events, while sustaining 7,009 clean decapsulations per second and delivering multi-hop store-carry-forward telemetry across a 4-node space constellation in 11.82~ms.
+\end{abstract}
+
+\begin{IEEEkeywords}
+Post-Quantum Cryptography, Space Systems Resilience, ML-KEM-768, ML-DSA-65, Number Theoretic Transform, Single-Event Upsets, Delay-Tolerant Networking, Bundle Protocol v7, BPSec.
+\end{IEEEkeywords}
+
+% =========================================================================
+\section{Introduction}
+\label{sec:intro}
+% =========================================================================
+
+Modern space missions increasingly rely on distributed satellite megaconstellations in Low Earth Orbit (LEO) and inter-planetary sensor webs. These systems require autonomous store-carry-forward routing across episodic, high-latency, and disruption-prone orbital communication links~\cite{RFC9171_BPv7}. Concurrently, the National Institute of Standards and Technology (NIST) has finalized primary post-quantum cryptographic standards—specifically the Module-Lattice-Based Key-Encapsulation Mechanism (ML-KEM, FIPS 203)~\cite{NIST_FIPS_203} and Digital Signature Algorithm (ML-DSA, FIPS 204)~\cite{NIST_FIPS_204}—to supersede vulnerable RSA and elliptic curve cryptosystems before cryptanalytically relevant quantum computers emerge.
+
+However, transitioning space networks to post-quantum cryptography introduces severe, unaddressed architectural challenges at the intersection of orbital physics and software resilience:
+\begin{enumerate}
+    \item \textbf{Radiation-Induced Transient Faults}: Spaceborne processors operating outside Earth's protective magnetosphere suffer frequent Single-Event Upsets (SEUs) caused by galactic cosmic rays and solar energetic particles~\cite{Dodd2003SEU,ECSS_Q_ST_60_15C}. Recent physical fault-injection studies demonstrate that bit-flips in lattice-based polynomial arithmetic pipelines (e.g., intermediate butterfly stages of the Number Theoretic Transform) lead to Silent Data Corruption (SDC) or allow adversaries to extract private keys via ciphertext-mutation oracle attacks~\cite{Ravi2023Twiddle,Delvaux2022Roulette,Hermelink2021Kyber}.
+    \item \textbf{Hop-by-Hop Link Security Limitations}: Existing standards such as CCSDS Space Data Link Security (SDLS)~\cite{CCSDS_SDLS_355_0_B_1} and RFC 9172 BPSec~\cite{RFC9172_BPSec} terminate security contexts at each intermediate relay node. In multi-hop store-carry-forward constellations, intermediate satellites must decrypt, buffer, and re-encrypt telemetry or telecommand packets. A single compromised or physically subverted satellite relay thus compromises mission-wide confidentiality and authentication~\cite{Elewaily2024Relay,Kim2026SpacePQC}.
+    \item \textbf{Prohibitive Overhead of Conventional Redundancy}: Classical fault-tolerance techniques like Dual Modular Redundancy (DMR) or Triple Modular Redundancy (TMR) require duplicating or triplicating full cryptographic execution pipelines~\cite{Reis2005SWIFT}. For resource-constrained CubeSats and SmallSats with strict Size, Weight, and Power (SWaP) budgets, dedicating 100\% to 200\% additional CPU cycles and battery energy to redundant lattice decapsulation is impractical~\cite{Sarker2023HWSW}.
+\end{enumerate}
+
+To resolve these limitations, this paper presents \textbf{ASTRA-Sec} (\textit{Post-Quantum End-to-End Secure Messaging and Delay-Tolerant Cryptographic Resilience for Space Networks}), a fully implemented, experimentally validated, and reproducible 7-layer security architecture. ASTRA-Sec guarantees end-to-end cryptographic integrity across untrusted relays while detecting and autonomously recovering from arithmetic hardware faults in real time with minimal computational overhead.
+
+% =========================================================================
+\section{Background and Related Work}
+\label{sec:background}
+% =========================================================================
+
+\subsection{Lattice Cryptography and the NTT Pipeline}
+ML-KEM-768 operations rely on polynomial ring arithmetic in $R_q = \mathbb{Z}_q[X]/(X^{256} + 1)$ with modulus $q = 3329$. To compute polynomial multiplications in $O(n \log n)$ rather than $O(n^2)$ time, implementations employ the Number Theoretic Transform (NTT) using Cooley-Tukey (CT) and Gentleman-Sande (GS) butterfly networks. In each butterfly, intermediate coefficients $u, v$ and precomputed twiddle factors $\zeta$ are transformed:
+\begin{equation}
+    u' = u + v\zeta \pmod q, \quad v' = u - v\zeta \pmod q
+\end{equation}
+Because ML-KEM decapsulation executes 5,376 CT and 4,480 GS butterflies across seven hierarchical layers, an SEU occurring in intermediate arithmetic registers or twiddle memory tables corrupts all subsequent downstream coefficients~\cite{Paul2026NTT,Ravi2023Twiddle}.
+
+\subsection{Space Delay-Tolerant Networking and BPSec}
+RFC 9171 specifies the Bundle Protocol Version 7 (BPv7)~\cite{RFC9171_BPv7}, providing asynchronous custody transfer across high-delay links. Security is provided at the transport layer via RFC 9172 (BPSec)~\cite{RFC9172_BPSec}, utilizing Block Integrity Blocks (BIB) and Block Confidentiality Blocks (BCB). However, BPSec was architected for hop-by-hop link validation. While CCSDS SDLS Extended Procedures (SDLS-EP)~\cite{CCSDS_SDLS_EP_355_1_B_1} and recent proposals~\cite{Ledin2026SDLS_DR} introduce key management, they do not resolve the vulnerability of intermediate plaintext exposure during orbital multi-hop routing.
+
+% =========================================================================
+\section{System Architecture and Threat Model}
+\label{sec:arch}
+% =========================================================================
+
+ASTRA-Sec organizes all space-ground interactions into a 7-layer architectural model (Fig.~\ref{fig:architecture}):
+
+\begin{figure*}[t]
+\centering
+\includegraphics[width=0.85\textwidth]{figures/dtn_security_overhead.png}
+\caption{ASTRA-Sec Processing Pipeline and DTN Security Overhead Breakdown across Protocol Layers.}
+\label{fig:architecture}
+\end{figure*}
+
+\begin{itemize}
+    \item \textbf{Layer 1 (Application \& Telemetry)}: Produces structured Application Data Units (ADUs).
+    \item \textbf{Layer 2 (End-to-End Security)}: Encapsulates ADUs into a \texttt{PqcMessageEnvelope} using AES-256-GCM AEAD encryption bound to deterministic Additional Authenticated Data (AAD).
+    \item \textbf{Layer 3 (Post-Quantum Services)}: Generates ephemeral shared secrets via ML-KEM-768 and authenticates originators via ML-DSA-65 digital signatures.
+    \item \textbf{Layer 4 (Fault-Resilient Execution)}: Executes low-level cryptographic transforms under dual-transform modular invariant checking, localized operand snapshots, and bounded rollback.
+    \item \textbf{Layer 5 (DTN Transport)}: Maps envelopes into RFC 9171 BPv7 bundles, with optional RFC 9172 BPSec BIB hop authentication.
+    \item \textbf{Layer 6 (Disruption Recovery)}: Provides persistent SQLite Write-Ahead Logging (WAL) spooling, reordering tolerance, and contact schedule queue draining.
+    \item \textbf{Layer 7 (Ground Verification \& Audit)}: Validates persistent anti-replay sliding windows, verifies cryptographic execution receipts, and manages NIST SP 800-57 key lifecycles.
+\end{itemize}
+
+\subsection{Threat Model and Security Invariants}
+We assume an active network adversary capable of eavesdropping, modifying, delaying, replaying, and injecting bundles across space links (Dolev-Yao model). Furthermore, intermediate satellite relays are treated as semi-honest or potentially compromised: they are authorized to inspect routing headers and forward bundles, but must never gain access to plaintext or session keys. Physically, we assume an environmental radiation model where cosmic ray ions induce transient SEUs in on-board CPU registers, arithmetic multipliers, and SRAM coefficient buffers. The adversary cannot physically breach ground-station hardware security modules.
+
+% =========================================================================
+\section{Fault-Resilient Cryptographic Execution (Layer 4)}
+\label{sec:layer4}
+% =========================================================================
+
+To protect ML-KEM-768 decapsulation without the prohibitive overhead of full duplicate execution, ASTRA-Sec implements \textbf{Dual-Transform Invariant Monitoring}:
+
+\subsection{Modular Butterfly Invariant}
+For every CT butterfly with input snapshot operands $(u_{\text{snap}}, v_{\text{snap}})$ and executed outputs $(u', v')$, the system computes:
+\begin{align}
+    \Delta_1 &= 2^{-1}(u' + v') - u_{\text{snap}} \pmod q \\
+    \Delta_2 &= 2^{-1}(u' - v') - v_{\text{snap}}\zeta \pmod q
+\end{align}
+Under fault-free execution, $\Delta_1 \equiv 0$ and $\Delta_2 \equiv 0 \pmod q$. If an SEU perturbs arithmetic registers, the invariant violation is detected immediately before the faulted coefficient propagates to downstream layers.
+
+\subsection{Localized Operand Snapshot and Bounded Rollback ($K \le 2$)}
+Before computing each butterfly block, input operands are copied to a bounded stack buffer. Upon invariant violation ($\Delta_1 \ne 0 \lor \Delta_2 \ne 0$), the pipeline restores $(u_{\text{snap}}, v_{\text{snap}})$ and re-executes the butterfly. A retry counter $k$ enforces $K \le 2$. If $k > 2$, the system classifies the fault as permanent hardware degradation, halts execution, and outputs a cryptographically pseudorandom implicit rejection key pursuant to FIPS 203 Section 7.3, preventing SDC.
+
+\subsection{Twiddle-Factor Invariant Blindness (TFIB-Ref)}
+If a memory SEU flips a bit in the primary twiddle factor table $\zeta$, both the butterfly execution and the invariant calculation would consume the same corrupted constant, creating a checker blind spot. ASTRA-Sec resolves this via \textbf{TFIB-Ref}: maintaining a secondary, independently allocated reference table $\zeta_{\text{ref}}$. The invariant check evaluates $2^{-1}(u' - v') \equiv v_{\text{snap}}\zeta_{\text{ref}} \pmod q$. Any discrepancy between the operational and reference tables immediately triggers safe fail-stop containment.
+
+% =========================================================================
+\section{Experimental Methodology and Campaigns}
+\label{sec:methodology}
+% =========================================================================
+
+\input{tables/table5_fault_campaign_summary.tex}
+
+The evaluation framework comprises 38 deterministic, reproducible trials divided into five core campaigns (Table~\ref{tab:fault_campaign_summary}):
+\begin{itemize}
+    \item \textbf{Group A (Message Security, 9 Trials)}: Evaluates ciphertext modification, header tampering, invalid signatures, unauthorized senders, destination mismatches, replay attacks, duplicate sequences, expired TTLs, and relay payload modification.
+    \item \textbf{Group B (Network Disruption, 9 Trials)}: Evaluates temporary link outages (500~ms), extended disconnections (5.0~s), delayed delivery, multipath duplicates, packet reordering, relay crashes, ground-station restarts, and stale key grace periods.
+    \item \textbf{Group C (Cryptographic Faults, 7 Trials)}: Injects transient butterfly SEUs, persistent stuck-at register faults, ciphertext SRAM bit-flips, twiddle table bit-flips, snapshot corruption, checker comparator faults, and retry budget exhaustion ($K > 2$).
+    \item \textbf{Group D (Checker Independence, 7 Trials)}: Tests common-mode ALU errors, reference table tampering, snapshot manipulation, and false-acceptance resistance.
+    \item \textbf{Group E (Cross-Layer Failure, 6 Trials)}: Evaluates concurrent failures (e.g., link outage coinciding with an NTT SEU, and relay crash during store-and-forward spooling).
+\end{itemize}
+
+% =========================================================================
+\section{Results and Performance Evaluation}
+\label{sec:results}
+% =========================================================================
+
+\input{tables/table1_crypto_latencies.tex}
+
+\subsection{Cryptographic Latencies and Throughput}
+As detailed in Table~\ref{tab:crypto_latencies} and Fig.~\ref{fig:crypto_latency}, ASTRA-Sec executes native ML-KEM-768 decapsulation with complete butterfly invariant monitoring in $142.68\ \mu\text{s}$ ($7,009\ \text{ops/s}$) on Apple Silicon arm64 hardware. When a transient arithmetic SEU is injected, the localized snapshot restore and butterfly re-execution completes in $199.99\ \mu\text{s}$ ($5,000\ \text{ops/s}$ sustained throughput), restoring the exact matching shared secret without communication failure.
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=0.48\textwidth]{figures/crypto_latency_comparison.png}
+\caption{ML-KEM-768 and ML-DSA-65 Operational Latency Distributions ($N=200$, Mean $\pm 95\%$ CI).}
+\label{fig:crypto_latency}
+\end{figure}
+
+\subsection{Architectural Trade-Off: ASTRA-Sec vs DMR}
+\input{tables/table2_fault_tolerance_tradeoff.tex}
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=0.48\textwidth]{figures/monitored_vs_dmr_overhead.png}
+\caption{Fault-Tolerance Overhead Comparison: ASTRA-Sec Localized Invariant Monitoring vs Dual Modular Redundancy (DMR).}
+\label{fig:dmr_overhead}
+\end{figure}
+
+Table~\ref{tab:fault_tolerance_tradeoff} and Fig.~\ref{fig:dmr_overhead} illustrate the critical operational trade-off between ASTRA-Sec and Dual Modular Redundancy (DMR). While DMR decapsulates unprotected code twice ($73.04\ \mu\text{s}$), it is strictly a \textit{detection-only} mechanism. Upon observing a mismatch, DMR cannot determine which execution was corrupted and is forced to drop the packet. In orbital operations, this induces severe communication disruption. ASTRA-Sec uniquely provides \textbf{localized in-place recovery}, restoring valid keys with zero data loss.
+
+\subsection{Multi-Hop Space Network and DTN Performance}
+\input{tables/table3_dtn_and_multihop.tex}
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=0.48\textwidth]{figures/system_e2e_latency_distribution.png}
+\caption{4-Node Space Multi-Hop Network End-to-End Latency Percentiles ($N=50$).}
+\label{fig:multihop_latency}
+\end{figure}
+
+In an operational 4-node store-carry-forward satellite constellation ($\text{GSA} \to \text{SAT1} \to \text{SAT2} \to \text{GSB}$), end-to-end PQC message delivery averages $11.82\ \text{ms}$ ($p_{50} = 11.66\ \text{ms}$, $p_{99} = 14.94\ \text{ms}$), sustaining $84.6\ \text{bundles/s}$ across persistent SQLite WAL spools (Table~\ref{tab:dtn_and_multihop}, Fig.~\ref{fig:multihop_latency}).
+
+\subsection{Wire Framing and Persistent Storage Overhead}
+\input{tables/table4_wire_and_storage.tex}
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=0.48\textwidth]{figures/storage_and_network_overhead.png}
+\caption{Network Wire Framing Size Breakdown and Non-Volatile Storage Consumption.}
+\label{fig:storage_overhead}
+\end{figure}
+
+As shown in Table~\ref{tab:wire_and_storage} and Fig.~\ref{fig:storage_overhead}, the total raw PQC message envelope is $4,801\ \text{bytes}$. RFC 9171 BPv7 CBOR framing adds only $62\ \text{bytes}$ ($4,863\ \text{B}$ total bundle), and RFC 9172 BPSec BIB adds $42\ \text{bytes}$ ($4,905\ \text{B}$ total). Transactional persistent spooling of 100 bundles requires only $20.00\ \text{KB}$ of non-volatile storage, and the anti-replay sliding window tracking 500 sequence numbers consumes $56.00\ \text{KB}$, confirming compatibility with resource-constrained onboard flight computers.
+
+% =========================================================================
+\section{Discussion and Limitations}
+\label{sec:discussion}
+% =========================================================================
+
+\subsection{Statistical Disclaimer on Silent Data Corruption}
+Across all 38 evaluated trials in Groups A through E, zero SDC events were observed ($P_{\text{SDC, empirical}} = 0.00\%$). However, we emphasize that zero observed empirical SDC under the evaluated test harness does not constitute mathematical proof of zero failure probability under arbitrary quantum or physical radiation fault distributions. Unforeseen common-mode clock glitches or simultaneous multi-bit upsets across isolated reference tables remain theoretical failure modes.
+
+\subsection{Methodological Limitations}
+\begin{enumerate}
+    \item \textbf{Software Fault Emulation}: SEU faults were injected programmatically via deterministic C hooks rather than physical particle accelerator beam testing (e.g., heavy-ion irradiation).
+    \item \textbf{Ground-Simulated Constellation}: Multi-node routing was validated using separate processes and network sockets rather than deployed spacecraft in orbit.
+    \item \textbf{Processor Architecture}: Benchmarking was conducted on Apple Silicon arm64 processors; flight deployment on radiation-hardened space processors (e.g., LEON4, RISC-V NOEL-V) will require cross-compilation and platform-specific tuning.
+\end{enumerate}
+
+% =========================================================================
+\section{Conclusion and Future Work}
+\label{sec:conclusion}
+% =========================================================================
+
+ASTRA-Sec demonstrates that post-quantum end-to-end security and physical fault resilience can be unified into an efficient, delay-tolerant space networking protocol. By combining dual-transform NTT invariant monitoring, localized snapshot rollback, TFIB-Ref dual-reference isolation, and canonical envelope binding over RFC 9171 BPv7, ASTRA-Sec achieves complete protection against both quantum algorithmic attacks and space radiation SEUs. Future work will include heavy-ion radiation chamber testing on rad-hard RISC-V space microcontrollers and formal standardization within CCSDS and IETF working groups.
+
+% =========================================================================
+% References
+% =========================================================================
+\bibliographystyle{IEEEtran}
+\bibliography{references}
+
+% =========================================================================
+% Supplementary Material
+% =========================================================================
+\appendices
+\input{supplementary/formal_proofs.tex}
+
+\end{document}

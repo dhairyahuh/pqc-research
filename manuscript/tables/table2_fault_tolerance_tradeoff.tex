@@ -1,0 +1,16 @@
+\begin{table}[t]
+\centering
+\caption{Fault-Tolerance Architectural Trade-off for ML-KEM-768 Decapsulation.}
+\label{tab:fault_tolerance_tradeoff}
+\small
+\begin{tabular}{lccccc}
+\hline
+\textbf{Architecture / Strategy} & \textbf{Decaps ($\mu$s)} & \textbf{Overhead} & \textbf{Detection} & \textbf{In-Place Recovery} & \textbf{SDC Suppression} \\
+\hline
+Unprotected Baseline (LibOQS) & 36.25 & 0.0\% (Ref.) & 0.0\% & None & 0.0\% (Silent Failure) \\
+ASTRA-Sec Nominal Clean & 142.68 & +293.60\% & \textbf{100.0\%} & Supported ($K \le 2$) & \textbf{100.0\%} \\
+ASTRA-Sec Injected Recovery ($K=1$) & 199.99 & +451.70\% & \textbf{100.0\%} & \textbf{Recovered in-place} & \textbf{100.0\%} \\
+Dual Modular Redundancy (DMR $2\times$) & 73.04 & +101.49\% & 100.0\% & \textbf{None} (Needs TMR $3\times$) & 100.0\% (Fail-Stop) \\
+\hline
+\end{tabular}
+\end{table}

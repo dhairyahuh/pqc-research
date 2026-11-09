@@ -1,0 +1,19 @@
+\begin{table*}[t]
+\centering
+\caption{Adversarial and Fault-Injection Evaluation Campaign Summary (38 Empirical Trials).}
+\label{tab:fault_campaign_summary}
+\small
+\begin{tabular}{llccll}
+\hline
+\textbf{Campaign Group} & \textbf{Evaluation Scope} & \textbf{Trials} & \textbf{Detections} & \textbf{Observed SDC} & \textbf{Primary Containment / Recovery Mechanism} \\
+\hline
+\textbf{Group A} & Message Security & 9 & 9 / 9 & \textbf{0} & AEAD Tag, ML-DSA-65 Check, Anti-Replay Drop, TTL Expiration \\
+\textbf{Group B} & Network Disruption & 9 & 9 / 9 & \textbf{0} & SQLite WAL Spool, Contact Schedule Draining, Key Grace Periods \\
+\textbf{Group C} & Cryptographic Faults & 7 & 7 / 7 & \textbf{0} & NTT Invariant Monitoring, Snapshot Rollback ($K \le 2$), TFIB-Ref \\
+\textbf{Group D} & Checker Independence & 7 & 7 / 7 & \textbf{0} & Isolated Reference Domains, Comparator Glitch Safe Fail-Stop \\
+\textbf{Group E} & Cross-Layer Compound & 6 & 6 / 6 & \textbf{0} & Coinciding Outage + SEU Recovery, Crash Spooling, In-Flight Revocation \\
+\hline
+\textbf{Total} & \textbf{Full Defense-in-Depth} & \textbf{38} & \textbf{38 / 38} & \textbf{0 ($P_{\text{SDC}}=0.00\%$)} & \textbf{Zero SDC across all tested scenarios under tested conditions} \\
+\hline
+\end{tabular}
+\end{table*}

@@ -1,0 +1,19 @@
+\begin{table}[t]
+\centering
+\caption{DTN Transport Security and 4-Node Space Multi-Hop Network Latency.}
+\label{tab:dtn_and_multihop}
+\small
+\begin{tabular}{lccccc}
+\hline
+\textbf{Component / Configuration} & \textbf{Sample ($N$)} & \textbf{Mean (ms)} & \textbf{Median (ms)} & \textbf{$p_{99}$ (ms)} & \textbf{Throughput (ops/s)} \\
+\hline
+Plain BPv7 Wrap \& Parse & 100 & 0.043 & 0.041 & 0.060 & 23,377.9 \\
+BPv7 + BPSec BIB Sign \& Verify & 100 & 0.061 & 0.060 & 0.062 & 16,504.8 \\
+ASTRA-Sec L2 E2E PQC over BPv7 & 100 & 1.190 & 1.133 & 2.063 & 840.7 \\
+ASTRA-Sec Full Stack (L2 E2E + BPSec BIB) & 100 & 1.187 & 1.128 & 1.949 & 842.7 \\
+\hline
+4-Node Multi-Hop (Clean Path: GSA$\to$SAT1$\to$SAT2$\to$GSB) & 50 & 11.815 & 11.656 & 14.937 & 84.6 \\
+4-Node Multi-Hop (Transient Recovery at Destination) & 50 & 11.443 & 11.381 & 13.366 & 87.4 \\
+\hline
+\end{tabular}
+\end{table}
