@@ -89,3 +89,4 @@ All buffer lengths were verified using static C assertions (`_Static_assert`) an
 ## 4. Verdict
 
 All cryptographic algorithms strictly conform to NIST FIPS 203, NIST FIPS 204, and NIST SP 800-38D. They exhibit zero dynamic heap allocations on the flight path, constant-time coefficient handling, and authentic cross-interoperability with LibOQS.
+

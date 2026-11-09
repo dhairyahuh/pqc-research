@@ -102,3 +102,4 @@ The three latency values do not represent inconsistency, experimental noise, or 
 - **$0.802\ \text{ms}$**: Microbenchmark of crypto decapsulation and ACK processing.
 - **$1.50\ \text{ms}$**: Multi-hop memory-based 4-node protocol transport.
 - **$22.78\ \text{ms}$**: Full-stack HTTP API dispatch with multi-node persistent disk WAL logging.
+

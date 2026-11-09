@@ -99,3 +99,4 @@ In 8 out of 3,000 trials, the injected bit-flip occurred on unreferenced padding
 ## 6. Verdict
 
 The fault injection framework and resilience mechanisms are **100% physically authentic**. Faults are injected directly into CPU registers during C execution. The $K \le 2$ localized rollback and fail-stop implicit rejection mechanisms guarantee **0.00% Silent Data Corruption**.
+

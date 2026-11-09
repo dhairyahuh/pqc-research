@@ -79,3 +79,4 @@ We classify each metric into one of five rigorous forensic categories:
 ## 4. Verdict
 
 All 15 dashboard metrics are tied directly to executing source code, database queries, and operating system measurements. There are **ZERO synthetic mockup generators** or hardcoded deception counters.
+
