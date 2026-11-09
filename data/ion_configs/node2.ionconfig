@@ -1,0 +1,4 @@
+# ION-DTN Configuration for SAT1 (Node 2)
+sdrWmSize 50000000
+configFlags 1
+heapWords 5000000

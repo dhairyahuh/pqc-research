@@ -1,0 +1,4 @@
+# ION-DTN Configuration for GSB (Node 4)
+sdrWmSize 50000000
+configFlags 1
+heapWords 5000000

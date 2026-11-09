@@ -1,0 +1,10 @@
+# BPv7 Administration for Node 2 (SAT1)
+1
+a scheme ipn 'ipnfw' 'ipnadminep'
+a endpoint ipn:2.1 q
+a endpoint ipn:2.2 q
+a protocol udp 1400 100
+a induct udp 127.0.0.1:4557 cli_udp
+a outduct udp 127.0.0.1:4556 clo_udp
+a outduct udp 127.0.0.1:4558 clo_udp
+s

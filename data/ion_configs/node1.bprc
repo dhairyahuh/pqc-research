@@ -1,0 +1,9 @@
+# BPv7 Administration for Node 1 (GSA)
+1
+a scheme ipn 'ipnfw' 'ipnadminep'
+a endpoint ipn:1.1 q
+a endpoint ipn:1.2 q
+a protocol udp 1400 100
+a induct udp 127.0.0.1:4556 cli_udp
+a outduct udp 127.0.0.1:4557 clo_udp
+s
