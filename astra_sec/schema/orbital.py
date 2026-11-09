@@ -81,3 +81,4 @@ class OrbitalCatalogPayload(BaseModel):
     air_gapped_fallback: bool
     satellites: List[SatelliteOrbitalRecord]
     ground_stations: List[GroundStationRecord]
+

@@ -1,15 +1,18 @@
-# Build outputs
+# ==============================================================================
+# ASTRA-Sec: Git Ignore Rules
+# ==============================================================================
+
+# Compiled Native Binaries & Shared Libraries
 bin/
 *.o
 *.dylib
 *.a
 *.so
 
-# Python artifacts
+# Python Cache & Package Artifacts
 __pycache__/
-*.pyc
-*.pyo
-*.pyd
+*.py[cod]
+*$py.class
 *.egg-info/
 dist/
 build/
@@ -17,24 +20,32 @@ build/
 .ruff_cache/
 .coverage
 htmlcov/
+
+# Virtual Environments
 .venv/
 venv/
 env/
 ENV/
 
-# Local Environment Variables & Secrets
+# Local Environment Variables, Credentials & Secret Keys
 .env
 .env.local
 .env.*.local
 *.pem
 *.key
 
-# IDE & OS
+# SQLite Temporary Transaction Journals
+*.db-wal
+*.db-shm
+*.db-journal
+
+# Operating System & IDE Metadata
 .DS_Store
+Thumbs.db
 .vscode/
 .idea/
 
-# Compiled test binaries in audit and experiment directories
+# Audit and Experiment Ephemeral Binaries
 phase*/*reproducer
 phase*/*oracle*
 phase*/*tracer*

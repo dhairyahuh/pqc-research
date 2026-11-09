@@ -17,6 +17,8 @@ ASTRA_CRYPTO_LIB = $(BIN_DIR)/libastra_crypto.$(SHARED_LIB_EXT)
 
 all: $(BIN_DIR)/ml_kem_harness $(BIN_DIR)/ml_dsa_harness $(BIN_DIR)/test_interop $(BIN_DIR)/test_fips_kats $(BIN_DIR)/mlkem768_internal_fault_experiment $(ASTRA_CRYPTO_LIB)
 
+build: all
+
 $(BIN_DIR):
 	mkdir -p $(BIN_DIR)
 
@@ -383,6 +385,59 @@ lab-campaign:
 	python3 scripts/run_phase3_lab.py --run research/phase3_experimental_lab/configs/group_g_impairment.json
 	python3 scripts/run_phase3_lab.py --run research/phase3_experimental_lab/configs/group_j_fault_campaign.json
 
-.PHONY: all clean test test-c test-python health-check setup-dev lint audit-deps dashboard phase5 test-phase5 phase6 test-phase6 phase6b test-phase6b phase7 test-phase7 phase7b test-phase7b phase7c test-phase7c phase7d test-phase7d phase7e test-phase7e phase7f test-phase7f phase7g test-phase7g phase7h test-phase7h phase7i test-phase7i phase7j test-phase7j phase7k test-phase7k lab-validate lab-test lab-pilot lab-campaign
+help:
+	@echo "ASTRA-Sec Developer & Research Command Interface"
+	@echo "================================================="
+	@echo "  make help             - Display this command reference"
+	@echo "  make setup            - Install development dependencies"
+	@echo "  make build            - Compile native C harnesses & libastra_crypto"
+	@echo "  make health-check     - Verify system diagnostic health & storage"
+	@echo "  make test             - Run all C and Python verification test suites"
+	@echo "  make test-python      - Run all Python unit & integration test suites"
+	@echo "  make test-c           - Run all C Known Answer Tests & fault experiments"
+	@echo "  make test-crypto      - Run FIPS 203/204 KATs and C/Python interop tests"
+	@echo "  make test-dtn         - Run BPv7 CBOR framing and multi-node spooling tests"
+	@echo "  make test-faults      - Run NTT twiddle invariant and SEU recovery tests"
+	@echo "  make test-integration - Run 4-node space constellation integration tests"
+	@echo "  make test-orbital     - Run Phase 7 SGP4 ephemeris and astrodynamics tests"
+	@echo "  make dashboard        - Start flight operations dashboard on port 8000"
+	@echo "  make experiments      - Validate and execute experimental lab pilot suite"
+	@echo "  make clean            - Remove compiled binaries and temporary test artifacts"
+
+setup:
+	pip install -r requirements/dev.txt
+	pip install -e .
+
+test-crypto: $(BIN_DIR)/test_fips_kats $(BIN_DIR)/test_interop
+	@echo "\n=== Running C FIPS 203 & 204 Known Answer Tests ==="
+	./$(BIN_DIR)/test_fips_kats
+	@echo "\n=== Running Path A vs Path B Interoperability Test ==="
+	./$(BIN_DIR)/test_interop
+	@echo "\n=== Running Python Crypto Adapters Verification ==="
+	python3 -m unittest discover -s tests/unit -p "test_crypto_adapters.py" -v
+
+test-dtn:
+	@echo "\n=== Running BPv7 / BPSec CBOR Wire Framing Tests ==="
+	python3 -m unittest discover -s tests/unit -p "test_bpv7_cbor.py" -v
+	@echo "\n=== Running Multi-Node DTN Spooling & Disruption Tests ==="
+	python3 -m unittest discover -s tests/integration -p "test_multinode_satellite.py" -v
+
+test-faults: $(BIN_DIR)/mlkem768_internal_fault_experiment
+	@echo "\n=== Running ML-KEM-768 Native Fault Injection Experiment ==="
+	./$(BIN_DIR)/mlkem768_internal_fault_experiment
+	@echo "\n=== Running L4 Fault Resilience & Telemetry Tests ==="
+	python3 -m unittest discover -s tests/unit -p "test_phase6_telemetry.py" -v
+
+test-integration:
+	@echo "\n=== Running Full 4-Node Space Constellation Integration Tests ==="
+	python3 -m unittest discover -s tests/integration -v
+
+test-orbital:
+	@echo "\n=== Running Phase 7 SGP4 Astrodynamics & Orbital Tests ==="
+	python3 -m unittest discover -s tests/unit -p "test_phase7_orbital.py" -v
+
+experiments: lab-validate lab-pilot
+
+.PHONY: all build help setup clean test test-c test-python test-crypto test-dtn test-faults test-integration test-orbital health-check setup-dev lint audit-deps dashboard experiments lab-validate lab-test lab-pilot lab-campaign
 
 
