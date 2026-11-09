@@ -1,0 +1,19 @@
+# ASTRA-Sec: Production and Research Dependencies
+# Post-Quantum Space Systems Cryptographic Resilience Framework
+
+# Web Framework & Real-Time Telemetry
+fastapi>=0.100.0
+uvicorn[standard]>=0.20.0
+websockets>=11.0
+
+# Schema Validation & Models
+pydantic>=2.0.0
+
+# Cryptography & Native Integration
+cryptography>=41.0.0
+
+# Scientific Computing & Empirical Laboratory
+numpy>=1.24.0
+scipy>=1.10.0
+matplotlib>=3.7.0
+pyyaml>=6.0.0

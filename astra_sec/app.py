@@ -82,5 +82,17 @@ def main() -> int:
         return 0
 
 
+def __getattr__(name: str):
+    """Lazy-load dashboard ASGI application when invoked via `uvicorn astra_sec.app:app`."""
+    if name == "app":
+        from astra_sec.dashboard.app import app
+        return app
+    if name == "create_app":
+        from astra_sec.dashboard.app import create_app
+        return create_app
+    raise AttributeError(f"module '{__name__}' has no attribute '{name}'")
+
+
 if __name__ == "__main__":
     sys.exit(main())
+
