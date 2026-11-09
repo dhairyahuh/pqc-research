@@ -136,3 +136,4 @@ class SystemHealthReport(BaseModel):
     active_envelope_authenticated: bool = Field(default=True)
     active_envelope_id: Optional[str] = None
     timestamp_utc: str = Field(default_factory=lambda: time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()))
+

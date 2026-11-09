@@ -8,8 +8,10 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   
-  <!-- Standalone 3D Geospatial Engine (Globe.gl - 100% Offline Air-Gapped) -->
+  <!-- Standalone 3D Geospatial Engine & SGP4 Orbital Propagator (100% Offline Air-Gapped) -->
   <script src="/static/vendor/globe.gl.min.js"></script>
+  <script src="/static/vendor/three.min.js"></script>
+  <script src="/static/vendor/satellite.min.js"></script>
   <script src="/static/js/mission_control_3d.js"></script>
 
   <style>
@@ -904,23 +906,28 @@
 
           <!-- Top-Left Telemetry HUD Overlay -->
           <div class="hud-overlay hud-top-telemetry">
-            <div style="color: var(--accent-cyan); font-weight: 700; margin-bottom: 4px; border-bottom: 1px solid rgba(0,229,255,0.25); padding-bottom: 3px;">
-              ORBITAL LINK TELEMETRY
+            <div style="color: var(--accent-cyan); font-weight: 700; margin-bottom: 4px; border-bottom: 1px solid rgba(0,229,255,0.25); padding-bottom: 3px; display: flex; justify-content: space-between;">
+              <span>ORBITAL ASTRODYNAMICS</span>
+              <span id="hud-ephemeris-status" style="color: var(--accent-green); font-size: 0.6rem;">SGP4 REAL-TIME</span>
             </div>
             <div class="hud-top-telemetry-row">
-              <span style="color: var(--text-muted);">Active Links:</span>
-              <span>GSA-SAT1-SAT2-GSB</span>
+              <span style="color: var(--text-muted);">Ephemeris:</span>
+              <span id="hud-ephemeris-source" style="color: #fff;">CelesTrak / TLE</span>
             </div>
             <div class="hud-top-telemetry-row">
-              <span style="color: var(--text-muted);">Crosslink ISL:</span>
+              <span style="color: var(--text-muted);">ISL Intersat:</span>
               <span id="hud-isl-status" style="color: var(--accent-cyan); font-weight: 700;">ISL: ACTIVE (UP)</span>
+            </div>
+            <div class="hud-top-telemetry-row">
+              <span style="color: var(--text-muted);">ISL Range:</span>
+              <span id="hud-isl-range" style="color: var(--accent-gold); font-weight: 700;">-- km</span>
             </div>
             <div class="hud-top-telemetry-row">
               <span style="color: var(--text-muted);">FDIR Guard:</span>
               <span style="color: var(--accent-green);">TFIB-Ref Dual-Domain</span>
             </div>
             <div class="hud-top-telemetry-row">
-              <span style="color: var(--text-muted);">Envelope ID:</span>
+              <span style="color: var(--text-muted);">Active Envelope:</span>
               <code id="active-envelope-id" style="color: #fff;">8f3b2014...</code>
             </div>
           </div>
@@ -932,15 +939,18 @@
               <button onclick="AstraMissionControl3D.deselectNode()" style="background: transparent; border: none; color: var(--text-muted); cursor: pointer; font-size: 0.95rem;">✕</button>
             </div>
             <div style="font-family: 'JetBrains Mono', monospace; font-size: 0.68rem; line-height: 1.5;">
-              <div><span style="color: var(--text-muted);">EID:</span> <code id="insp-node-eid" style="color: var(--accent-cyan);">dtn://sat1/relay</code></div>
-              <div><span style="color: var(--text-muted);">Type:</span> <span id="insp-node-type">SATELLITE_RELAY</span></div>
+              <div><span style="color: var(--text-muted);">Classification:</span> <span id="insp-node-class" style="color: var(--accent-gold); font-weight: 700;">SIMULATED_TESTBED_NODE</span></div>
+              <div><span style="color: var(--text-muted);">EID / NORAD:</span> <code id="insp-node-eid" style="color: var(--accent-cyan);">dtn://sat1/relay</code></div>
+              <div><span style="color: var(--text-muted);">Orbit Regime:</span> <span id="insp-node-orbit">Polar Sun-Sync LEO</span></div>
               <div><span style="color: var(--text-muted);">Coords:</span> <span id="insp-node-coords">52.00° N, 38.00° E</span></div>
-              <div><span style="color: var(--text-muted);">Status:</span> <span id="insp-node-status" style="color: var(--accent-green); font-weight: 700;">ONLINE / NORMAL</span></div>
-              <div><span style="color: var(--text-muted);">Role:</span> <span id="insp-node-role">Store-and-Forward</span></div>
+              <div><span style="color: var(--text-muted);">Altitude / V:</span> <span id="insp-node-alt-vel" style="color: #fff;">550.00 km | 7.59 km/s</span></div>
+              <div><span style="color: var(--text-muted);">Period / Inc:</span> <span id="insp-node-period-inc">95.6 min | 97.40°</span></div>
+              <div><span style="color: var(--text-muted);">Sub-Sat Point:</span> <span id="insp-node-subsat" style="color: var(--accent-cyan);">--</span></div>
+              <div><span style="color: var(--text-muted);">Flight Status:</span> <span id="insp-node-status" style="color: var(--accent-green); font-weight: 700;">ONLINE / NORMAL</span></div>
               <div style="margin-top: 4px; padding-top: 4px; border-top: 1px dashed var(--card-border);">
+                <div><span style="color: var(--text-muted);">Bus / Terminal:</span> <span id="insp-node-bus" style="color: var(--text-muted); font-size: 0.62rem;">High-Gain Dish + Dual 3-Wing Solar</span></div>
                 <div><span style="color: var(--text-muted);">Spool:</span> <span id="insp-node-queue" style="color: var(--accent-amber);">0 (20.00 KB)</span></div>
-                <div><span style="color: var(--text-muted);">KEM:</span> <span id="insp-node-kem" style="color: var(--text-muted);">TRANSIT_ONLY</span></div>
-                <div><span style="color: var(--text-muted);">DSA:</span> <span id="insp-node-dsa" style="color: var(--text-muted);">UNAUTHORIZED</span></div>
+                <div><span style="color: var(--text-muted);">Crypto Role:</span> <span id="insp-node-role" style="color: var(--text-muted);">Store-and-Forward Router</span></div>
               </div>
             </div>
           </div>
@@ -965,6 +975,7 @@
             <button class="cam-btn" onclick="AstraMissionControl3D.setCameraView('sat2')">🛰️ SAT-2</button>
             <button class="cam-btn" onclick="AstraMissionControl3D.setCameraView('gsa')">📡 GSA</button>
             <button class="cam-btn" onclick="AstraMissionControl3D.setCameraView('gsb')">🏢 GSB</button>
+            <button class="cam-btn" onclick="AstraMissionControl3D.setCameraView('iss')">🛰️ ISS Ref</button>
             <button class="cam-btn" id="rotate-toggle-btn" onclick="AstraMissionControl3D.toggleAutoRotate()">Auto-Rotate: OFF</button>
           </div>
         </div>

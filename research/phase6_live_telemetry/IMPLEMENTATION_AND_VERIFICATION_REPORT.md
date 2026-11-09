@@ -257,3 +257,4 @@ Automated headless Chromium testing via Playwright (`/tmp/verify_phase6_frontend
 - [x] Visual evidence captured via Playwright screenshots.
 
 Phase 6 is complete, fully verified, and ready for commit.
+

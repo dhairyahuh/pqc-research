@@ -72,6 +72,7 @@ from astra_sec.schema.telemetry import (
     TelemetryEvent,
 )
 from astra_sec.core.telemetry_engine import TelemetryEngine
+from astra_sec.service.orbital_service import OrbitalService
 from astra_sec.service.telemetry_benchmark import measure_instrumentation_overhead
 from astra_sec.security.policy import AuthorizationPolicy, AuthorizationStatus
 from astra_sec.security.verifier import GroundStationVerifier
@@ -512,6 +513,7 @@ def create_app() -> FastAPI:
 
     ws_manager = WebSocketManager()
     controller = MissionStateController()
+    orbital_service = OrbitalService()
 
     def on_telemetry_event(ev: TelemetryEvent) -> None:
         try:
@@ -560,6 +562,25 @@ def create_app() -> FastAPI:
     @app.get("/api/topology")
     def get_topology():
         return controller.get_topology()
+
+    @app.get("/api/orbital/satellites")
+    def get_orbital_satellites(refresh_live: bool = False):
+        try:
+            catalog = orbital_service.get_catalog(refresh_live=refresh_live)
+            return catalog.model_dump()
+        except Exception as e:
+            raise HTTPException(status_code=500, detail=f"Failed to retrieve orbital catalog: {e}")
+
+    @app.get("/api/orbital/propagation")
+    def get_orbital_propagation(timestamp: Optional[float] = None):
+        try:
+            states = orbital_service.propagate_all(timestamp=timestamp)
+            return {
+                "timestamp_utc": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime(timestamp or time.time())),
+                "satellites": [s.model_dump() for s in states],
+            }
+        except Exception as e:
+            raise HTTPException(status_code=500, detail=f"Failed to propagate orbital states: {e}")
 
     @app.get("/api/nodes")
     def get_nodes():
