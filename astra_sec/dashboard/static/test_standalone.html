@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>ASTRA-Sec 3D Standalone Verification</title>
+  <style>
+    body { margin: 0; background-color: #060910; font-family: 'JetBrains Mono', monospace; color: #e2e8f0; overflow: hidden; }
+    #globeViz { width: 100vw; height: 100vh; }
+    .hud { position: absolute; z-index: 10; pointer-events: none; }
+    .hud-interactive { pointer-events: auto; }
+    #status-hud {
+      top: 15px; left: 15px;
+      background: rgba(10, 15, 26, 0.85);
+      border: 1px solid rgba(0, 229, 255, 0.4);
+      padding: 12px 16px; border-radius: 6px; font-size: 12px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.6);
+    }
+    #inspector-hud {
+      top: 15px; right: 15px;
+      background: rgba(10, 15, 26, 0.9);
+      border: 1px solid rgba(41, 121, 255, 0.5);
+      padding: 15px; border-radius: 6px; font-size: 12px; width: 300px;
+      display: none; box-shadow: 0 4px 20px rgba(0,0,0,0.7);
+    }
+    #packet-hud {
+      bottom: 20px; left: 50%; transform: translateX(-50%);
+      background: rgba(10, 15, 26, 0.95);
+      border: 1px solid rgba(0, 229, 255, 0.6);
+      padding: 12px 24px; border-radius: 8px; text-align: center;
+      font-size: 13px; font-weight: bold; color: #00e5ff;
+      box-shadow: 0 0 20px rgba(0, 229, 255, 0.3);
+    }
+    .btn {
+      background: #2979ff; color: #fff; border: none; padding: 6px 12px;
+      border-radius: 4px; font-family: inherit; font-size: 11px; cursor: pointer;
+    }
+  </style>
+  <script src="/static/vendor/globe.gl.min.js"></script>
+</head>
+<body>
+  <div id="globeViz"></div>
+
+  <div class="hud" id="status-hud">
+    <div style="color: #00e5ff; font-weight: bold; margin-bottom: 6px;">ASTRA-SEC STANDALONE 3D TEST</div>
+    <div>Nodes: 4 (GSA, SAT-1, SAT-2, GSB)</div>
+    <div>Links: 3 (Uplink, ISL, Downlink)</div>
+    <div id="isl-status" style="color: #00e5ff;">ISL Contact: ACTIVE (UP)</div>
+  </div>
+
+  <div class="hud hud-interactive" id="inspector-hud">
+    <div style="display:flex; justify-content:space-between; margin-bottom:8px; border-bottom:1px solid #1e2638; padding-bottom:4px;">
+      <span id="insp-name" style="font-weight:bold; color:#fff;">Node Details</span>
+      <button onclick="document.getElementById('inspector-hud').style.display='none'" style="background:transparent; border:none; color:#888; cursor:pointer;">✕</button>
+    </div>
+    <div id="insp-details" style="line-height:1.6; font-size:11px;"></div>
+  </div>
+
+  <div class="hud" id="packet-hud">
+    PACKET HOP: <span id="hop-text" style="color:#fff;">IDLE - READY FOR DISPATCH</span>
+  </div>
+
+  <script>
+    const NODES = [
+      { id: 'dtn://gsa/app', name: 'Ground Station Alpha', lat: 78.23, lng: 15.41, alt: 0.01, type: 'ground_station', color: '#00e5ff', location: 'Svalbard, Norway' },
+      { id: 'dtn://sat1/relay', name: 'Satellite Relay 1 (LEO-1)', lat: 52.0, lng: 38.0, alt: 0.35, type: 'satellite', color: '#ffd700', location: 'Polar Orbit (~550 km)' },
+      { id: 'dtn://sat2/relay', name: 'Satellite Relay 2 (LEO-2)', lat: -8.0, lng: 92.0, alt: 0.35, type: 'satellite', color: '#ffd700', location: 'LEO Relay (~550 km)' },
+      { id: 'dtn://gsb/app', name: 'Ground Station Bravo', lat: -35.40, lng: 148.98, alt: 0.01, type: 'ground_station', color: '#00e676', location: 'Canberra, Australia' }
+    ];
+
+    const LINKS = [
+      { id: 'uplink', name: 'Uplink (RFC 9171)', startLat: 78.23, startLng: 15.41, startAlt: 0.01, endLat: 52.0, endLng: 38.0, endAlt: 0.35, color: ['#00e5ff', '#2979ff'], altitude: 0.22 },
+      { id: 'isl', name: 'ISL (SAT1 -> SAT2)', startLat: 52.0, startLng: 38.0, startAlt: 0.35, endLat: -8.0, endLng: 92.0, endAlt: 0.35, color: ['#00e5ff', '#00e676'], altitude: 0.45 },
+      { id: 'downlink', name: 'Downlink (BPv7)', startLat: -8.0, startLng: 92.0, startAlt: 0.35, endLat: -35.40, endLng: 148.98, endAlt: 0.01, color: ['#2979ff', '#00e676'], altitude: 0.22 }
+    ];
+
+    const globe = Globe()(document.getElementById('globeViz'))
+      .globeImageUrl('/static/textures/earth-night.jpg')
+      .backgroundImageUrl('/static/textures/night-sky.png')
+      .showAtmosphere(true)
+      .atmosphereColor('#2979ff')
+      .atmosphereAltitude(0.25)
+      // Points
+      .pointsData(NODES)
+      .pointLat('lat')
+      .pointLng('lng')
+      .pointAltitude('alt')
+      .pointColor('color')
+      .pointRadius(d => d.type === 'satellite' ? 0.9 : 0.6)
+      // Labels
+      .labelsData(NODES.map(n => ({ lat: n.lat, lng: n.lng, alt: n.alt + 0.06, text: n.name })))
+      .labelText('text')
+      .labelSize(1.1)
+      .labelColor(() => '#ffffff')
+      .labelDotRadius(0.3)
+      // Arcs
+      .arcsData(LINKS)
+      .arcStartLat('startLat')
+      .arcStartLng('startLng')
+      .arcStartAltitude('startAlt')
+      .arcEndLat('endLat')
+      .arcEndLng('endLng')
+      .arcEndAltitude('endAlt')
+      .arcColor('color')
+      .arcAltitude('altitude')
+      .arcStroke(2.5)
+      .arcDashLength(0.4)
+      .arcDashGap(0.2)
+      .arcDashAnimateTime(1800)
+      // Pulsing Rings
+      .ringsData(NODES.map(n => ({ lat: n.lat, lng: n.lng, alt: n.alt, color: n.color, maxRadius: 5, speed: 1.5, period: 1400 })))
+      .ringLat('lat')
+      .ringLng('lng')
+      .ringAltitude('alt')
+      .ringColor('color')
+      .ringMaxRadius('maxRadius')
+      .ringPropagationSpeed('speed')
+      .ringRepeatPeriod('period')
+      // Click Interaction
+      .onPointClick(d => {
+        const hud = document.getElementById('inspector-hud');
+        document.getElementById('insp-name').textContent = d.name;
+        document.getElementById('insp-details').innerHTML = `
+          <div><strong>EID:</strong> ${d.id}</div>
+          <div><strong>Type:</strong> ${d.type.toUpperCase()}</div>
+          <div><strong>Location:</strong> ${d.location}</div>
+          <div><strong>Coordinates:</strong> ${d.lat}° N/S, ${d.lng}° E/W</div>
+          <div><strong>Altitude:</strong> ${d.alt} (~${d.alt > 0.1 ? '550 km LEO' : 'Surface'})</div>
+          <div><strong>Crypto Role:</strong> FIPS 203 / FIPS 204 Verified</div>
+        `;
+        hud.style.display = 'block';
+      });
+
+    globe.pointOfView({ lat: 25.0, lng: 55.0, altitude: 2.3 }, 1000);
+
+    // Animated packet traversal
+    let currentHop = 0;
+    const hops = [
+      'HOP 1/3: Uplink GSA -> SAT-1',
+      'HOP 2/3: Inter-Satellite Link SAT-1 -> SAT-2',
+      'HOP 3/3: Downlink SAT-2 -> GSB (Verified)'
+    ];
+
+    setInterval(() => {
+      document.getElementById('hop-text').textContent = hops[currentHop];
+      currentHop = (currentHop + 1) % hops.length;
+    }, 2000);
+  </script>
+</body>
+</html>

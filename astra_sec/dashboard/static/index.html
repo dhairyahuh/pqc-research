@@ -8,8 +8,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   
-  <!-- Standalone 3D Geospatial Engine (Three.js & Globe.gl - 100% Offline) -->
-  <script src="/static/vendor/three.min.js"></script>
+  <!-- Standalone 3D Geospatial Engine (Globe.gl - 100% Offline) -->
   <script src="/static/vendor/globe.gl.min.js"></script>
   <script src="/static/js/mission_control_3d.js"></script>
   <style>
@@ -455,72 +454,72 @@
 
     <!-- 3D Earth Viewport Container -->
     <div class="globe-card-wrapper">
-      <div id="globe-viewport">
-        <!-- Top-Left Operational HUD -->
-        <div class="hud-overlay globe-hud-topleft">
-          <div style="color: var(--accent-cyan); font-weight: 700; margin-bottom: 6px; letter-spacing: 0.5px; border-bottom: 1px solid rgba(0,229,255,0.2); padding-bottom: 4px;">
-            MISSION TELEMETRY STREAM
-          </div>
-          <div style="display: flex; justify-content: space-between; margin-bottom: 4px;">
-            <span style="color: var(--text-muted);">Topology:</span>
-            <span>4 Nodes (2 Ground, 2 LEO)</span>
-          </div>
-          <div style="display: flex; justify-content: space-between; margin-bottom: 4px;">
-            <span style="color: var(--text-muted);">Inter-Sat Link:</span>
-            <span id="hud-isl-status" style="color: var(--accent-cyan); font-weight: 700;">ISL: ACTIVE (UP)</span>
-          </div>
-          <div style="display: flex; justify-content: space-between; margin-bottom: 4px;">
-            <span style="color: var(--text-muted);">Crypto Scheme:</span>
-            <span>ML-KEM-768 + ML-DSA-65</span>
-          </div>
-          <div style="display: flex; justify-content: space-between;">
-            <span style="color: var(--text-muted);">Anti-Replay:</span>
-            <span style="color: var(--accent-green);">ACID WAL Persistent</span>
-          </div>
-        </div>
+      <div id="globe-viewport"></div>
 
-        <!-- Top-Right Node Inspector Panel (Interactive) -->
-        <div class="hud-overlay hud-interactive globe-hud-topright" id="node-inspector-hud">
-          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; border-bottom: 1px solid var(--card-border); padding-bottom: 6px;">
-            <span id="insp-node-name" style="font-weight: 700; color: #fff; font-size: 0.95rem;">Node Inspector</span>
-            <button onclick="AstraMissionControl3D.deselectNode()" style="background: transparent; border: none; color: var(--text-muted); cursor: pointer; font-size: 1.1rem; padding: 0 4px;">✕</button>
-          </div>
-          <div style="font-family: 'JetBrains Mono', monospace; font-size: 0.72rem; line-height: 1.6;">
-            <div><span style="color: var(--text-muted);">EID:</span> <code id="insp-node-eid" style="color: var(--accent-cyan);">dtn://sat1/relay</code></div>
-            <div><span style="color: var(--text-muted);">Type:</span> <span id="insp-node-type" style="color: #fff;">SATELLITE_RELAY</span></div>
-            <div><span style="color: var(--text-muted);">Coordinates:</span> <span id="insp-node-coords">52.00° N, 38.00° E (Alt: 0.36)</span></div>
-            <div><span style="color: var(--text-muted);">Status:</span> <span id="insp-node-status" style="color: var(--accent-green); font-weight: 700;">ONLINE</span></div>
-            <div><span style="color: var(--text-muted);">Role:</span> <span id="insp-node-role" style="color: var(--text-main);">Store-and-Forward Router</span></div>
-            <div style="margin-top: 6px; padding-top: 6px; border-top: 1px dashed var(--card-border);">
-              <div><span style="color: var(--text-muted);">SQLite WAL Queue:</span> <span id="insp-node-queue" style="color: var(--accent-amber); font-weight: 700;">0 bundles (0.00 KB)</span></div>
-              <div><span style="color: var(--text-muted);">KEM Key ID:</span> <span id="insp-node-kem" style="color: var(--text-muted);">RELAY_TRANSIT_ONLY</span></div>
-              <div><span style="color: var(--text-muted);">DSA Key ID:</span> <span id="insp-node-dsa" style="color: var(--text-muted);">UNAUTHORIZED_FOR_L2_DECAP</span></div>
-            </div>
-          </div>
+      <!-- Top-Left Operational HUD -->
+      <div class="hud-overlay globe-hud-topleft">
+        <div style="color: var(--accent-cyan); font-weight: 700; margin-bottom: 6px; letter-spacing: 0.5px; border-bottom: 1px solid rgba(0,229,255,0.2); padding-bottom: 4px;">
+          MISSION TELEMETRY STREAM
         </div>
+        <div style="display: flex; justify-content: space-between; margin-bottom: 4px;">
+          <span style="color: var(--text-muted);">Topology:</span>
+          <span>4 Nodes (2 Ground, 2 LEO)</span>
+        </div>
+        <div style="display: flex; justify-content: space-between; margin-bottom: 4px;">
+          <span style="color: var(--text-muted);">Inter-Sat Link:</span>
+          <span id="hud-isl-status" style="color: var(--accent-cyan); font-weight: 700;">ISL: ACTIVE (UP)</span>
+        </div>
+        <div style="display: flex; justify-content: space-between; margin-bottom: 4px;">
+          <span style="color: var(--text-muted);">Crypto Scheme:</span>
+          <span>ML-KEM-768 + ML-DSA-65</span>
+        </div>
+        <div style="display: flex; justify-content: space-between;">
+          <span style="color: var(--text-muted);">Anti-Replay:</span>
+          <span style="color: var(--accent-green);">ACID WAL Persistent</span>
+        </div>
+      </div>
 
-        <!-- Bottom-Center In-Flight Packet Inspector -->
-        <div class="hud-overlay globe-hud-bottomcenter" id="packet-hud">
-          <div style="font-family: 'JetBrains Mono', monospace; font-size: 0.75rem; color: var(--accent-cyan); font-weight: 700; margin-bottom: 4px;">
-            IN-FLIGHT PQC ENVELOPE: <span id="packet-id-text" style="color: #fff;">DISPATCHING</span>
-          </div>
-          <div id="packet-hop-text" style="font-size: 0.85rem; font-weight: 700; color: #fff; margin-bottom: 2px;">
-            HOP 1/3: Uplink GSA -> SAT-1
-          </div>
-          <div id="packet-status-text" style="font-family: 'JetBrains Mono', monospace; font-size: 0.75rem; color: var(--accent-cyan);">
-            Transmitting 5,119 B Post-Quantum Wire Bundle...
+      <!-- Top-Right Node Inspector Panel (Interactive) -->
+      <div class="hud-overlay hud-interactive globe-hud-topright" id="node-inspector-hud">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; border-bottom: 1px solid var(--card-border); padding-bottom: 6px;">
+          <span id="insp-node-name" style="font-weight: 700; color: #fff; font-size: 0.95rem;">Node Inspector</span>
+          <button onclick="AstraMissionControl3D.deselectNode()" style="background: transparent; border: none; color: var(--text-muted); cursor: pointer; font-size: 1.1rem; padding: 0 4px;">✕</button>
+        </div>
+        <div style="font-family: 'JetBrains Mono', monospace; font-size: 0.72rem; line-height: 1.6;">
+          <div><span style="color: var(--text-muted);">EID:</span> <code id="insp-node-eid" style="color: var(--accent-cyan);">dtn://sat1/relay</code></div>
+          <div><span style="color: var(--text-muted);">Type:</span> <span id="insp-node-type" style="color: #fff;">SATELLITE_RELAY</span></div>
+          <div><span style="color: var(--text-muted);">Coordinates:</span> <span id="insp-node-coords">52.00° N, 38.00° E (Alt: 0.36)</span></div>
+          <div><span style="color: var(--text-muted);">Status:</span> <span id="insp-node-status" style="color: var(--accent-green); font-weight: 700;">ONLINE</span></div>
+          <div><span style="color: var(--text-muted);">Role:</span> <span id="insp-node-role" style="color: var(--text-main);">Store-and-Forward Router</span></div>
+          <div style="margin-top: 6px; padding-top: 6px; border-top: 1px dashed var(--card-border);">
+            <div><span style="color: var(--text-muted);">SQLite WAL Queue:</span> <span id="insp-node-queue" style="color: var(--accent-amber); font-weight: 700;">0 bundles (0.00 KB)</span></div>
+            <div><span style="color: var(--text-muted);">KEM Key ID:</span> <span id="insp-node-kem" style="color: var(--text-muted);">RELAY_TRANSIT_ONLY</span></div>
+            <div><span style="color: var(--text-muted);">DSA Key ID:</span> <span id="insp-node-dsa" style="color: var(--text-muted);">UNAUTHORIZED_FOR_L2_DECAP</span></div>
           </div>
         </div>
+      </div>
 
-        <!-- Bottom-Left Camera Presets & Orbit Controls -->
-        <div class="hud-overlay hud-interactive globe-hud-bottomleft">
-          <button class="cam-btn" onclick="AstraMissionControl3D.setCameraView('overview')">🌐 Orbit Overview</button>
-          <button class="cam-btn" onclick="AstraMissionControl3D.setCameraView('sat1')">🛰️ SAT-1 (LEO)</button>
-          <button class="cam-btn" onclick="AstraMissionControl3D.setCameraView('sat2')">🛰️ SAT-2 (LEO)</button>
-          <button class="cam-btn" onclick="AstraMissionControl3D.setCameraView('gsa')">📡 GSA (Svalbard)</button>
-          <button class="cam-btn" onclick="AstraMissionControl3D.setCameraView('gsb')">🏢 GSB (Canberra)</button>
-          <button class="cam-btn" id="rotate-toggle-btn" onclick="AstraMissionControl3D.toggleAutoRotate()">Auto-Rotate: OFF</button>
+      <!-- Bottom-Center In-Flight Packet Inspector -->
+      <div class="hud-overlay globe-hud-bottomcenter" id="packet-hud">
+        <div style="font-family: 'JetBrains Mono', monospace; font-size: 0.75rem; color: var(--accent-cyan); font-weight: 700; margin-bottom: 4px;">
+          IN-FLIGHT PQC ENVELOPE: <span id="packet-id-text" style="color: #fff;">DISPATCHING</span>
         </div>
+        <div id="packet-hop-text" style="font-size: 0.85rem; font-weight: 700; color: #fff; margin-bottom: 2px;">
+          HOP 1/3: Uplink GSA -> SAT-1
+        </div>
+        <div id="packet-status-text" style="font-family: 'JetBrains Mono', monospace; font-size: 0.75rem; color: var(--accent-cyan);">
+          Transmitting 5,119 B Post-Quantum Wire Bundle...
+        </div>
+      </div>
+
+      <!-- Bottom-Left Camera Presets & Orbit Controls -->
+      <div class="hud-overlay hud-interactive globe-hud-bottomleft">
+        <button class="cam-btn" onclick="AstraMissionControl3D.setCameraView('overview')">🌐 Orbit Overview</button>
+        <button class="cam-btn" onclick="AstraMissionControl3D.setCameraView('sat1')">🛰️ SAT-1 (LEO)</button>
+        <button class="cam-btn" onclick="AstraMissionControl3D.setCameraView('sat2')">🛰️ SAT-2 (LEO)</button>
+        <button class="cam-btn" onclick="AstraMissionControl3D.setCameraView('gsa')">📡 GSA (Svalbard)</button>
+        <button class="cam-btn" onclick="AstraMissionControl3D.setCameraView('gsb')">🏢 GSB (Canberra)</button>
+        <button class="cam-btn" id="rotate-toggle-btn" onclick="AstraMissionControl3D.toggleAutoRotate()">Auto-Rotate: OFF</button>
       </div>
     </div>
 

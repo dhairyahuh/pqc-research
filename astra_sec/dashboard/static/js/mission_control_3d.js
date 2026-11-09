@@ -1,10 +1,10 @@
 /**
  * ASTRA-Sec: 3D Satellite Mission Control & Geospatial Network Visualization.
- * Powered by Three.js & Globe.gl (Open Source, MIT License).
+ * Powered by Globe.gl (Open Source, MIT License - 100% Offline).
  * 
  * Implements real-time 3D Earth, 4-node space constellation topology,
  * dynamic communication links, animated packet hops, interactive node inspection,
- * and seamless integration with FastAPI backend & WebSocket events.
+ * and live integration with FastAPI backend & WebSocket stream.
  */
 
 (function () {
@@ -29,9 +29,9 @@
       location: 'Polar Sun-Synchronous Orbit (~550 km)',
       lat: 52.0,
       lng: 38.0,
-      alt: 0.36,
-      type: 'satellite_relay',
-      color: '#00e5ff',
+      alt: 0.35,
+      type: 'satellite',
+      color: '#ffd700',
       role: 'Store-and-Forward Router (SQLite WAL Persistent Spool)'
     },
     sat2: {
@@ -40,9 +40,9 @@
       location: 'Inclined LEO Relay Constellation (~550 km)',
       lat: -8.0,
       lng: 92.0,
-      alt: 0.36,
-      type: 'satellite_relay',
-      color: '#00e5ff',
+      alt: 0.35,
+      type: 'satellite',
+      color: '#ffd700',
       role: 'Store-and-Forward Router (SQLite WAL Persistent Spool)'
     },
     gsb: {
@@ -82,11 +82,10 @@
         endAlt: NODE_CONFIG.sat1.alt,
         color: ['#00e5ff', '#2979ff'],
         altitude: 0.22,
-        stroke: 2.0,
-        dashLength: 0.4,
-        dashGap: 0.2,
-        animateTime: 1800,
-        state: 'UP'
+        stroke: 2.2,
+        dashLength: 0.45,
+        dashGap: 0.15,
+        animateTime: 1800
       },
       {
         id: 'isl',
@@ -100,10 +99,9 @@
         color: isOutage ? ['#ff1744', '#b71c1c'] : ['#00e5ff', '#00e676'],
         altitude: 0.45,
         stroke: isOutage ? 3.5 : 2.5,
-        dashLength: isOutage ? 0.1 : 0.5,
-        dashGap: isOutage ? 0.3 : 0.15,
-        animateTime: isOutage ? 0 : 2200,
-        state: activeIslState
+        dashLength: isOutage ? 0.08 : 0.5,
+        dashGap: isOutage ? 0.35 : 0.15,
+        animateTime: isOutage ? 0 : 2200
       },
       {
         id: 'downlink',
@@ -116,30 +114,58 @@
         endAlt: NODE_CONFIG.gsb.alt,
         color: ['#2979ff', '#00e676'],
         altitude: 0.22,
-        stroke: 2.0,
-        dashLength: 0.4,
-        dashGap: 0.2,
-        animateTime: 1800,
-        state: 'UP'
+        stroke: 2.2,
+        dashLength: 0.45,
+        dashGap: 0.15,
+        animateTime: 1800
       }
     ];
   }
 
-  // Node Objects Data
-  function getNodesData() {
+  // Node Points Data
+  function getPointsData() {
     return Object.values(NODE_CONFIG).map(n => {
-      const q = queueTelemetry[n.id] || { pending: 0, kb: 0 };
-      const t = nodesTelemetry[n.id] || {};
+      const isSat = n.type === 'satellite';
+      const isOutage = n.id.includes('sat') && activeIslState === 'DOWN';
       return {
         ...n,
-        pending_bundles: q.pending,
-        storage_kb: q.kb,
-        operational_state: (n.id.includes('sat') && activeIslState === 'DOWN') ? 'SPOOLING_ACTIVE' : 'ONLINE'
+        radius: isSat ? 0.95 : 0.65,
+        color: isOutage ? (n.id.includes('sat1') ? '#ffab00' : '#ff1744') : n.color
       };
     });
   }
 
-  // Rings Data (Pulsing node halos)
+  // Node Billboard Labels Data
+  function getLabelsData() {
+    return [
+      {
+        lat: NODE_CONFIG.gsa.lat,
+        lng: NODE_CONFIG.gsa.lng,
+        alt: 0.02,
+        text: '📡 GSA (Svalbard)'
+      },
+      {
+        lat: NODE_CONFIG.sat1.lat,
+        lng: NODE_CONFIG.sat1.lng,
+        alt: NODE_CONFIG.sat1.alt + 0.07,
+        text: `🛰️ SAT-1 | LEO-1 ${queueTelemetry['dtn://sat1/relay'] ? '(' + queueTelemetry['dtn://sat1/relay'].pending + ' queued)' : ''}`
+      },
+      {
+        lat: NODE_CONFIG.sat2.lat,
+        lng: NODE_CONFIG.sat2.lng,
+        alt: NODE_CONFIG.sat2.alt + 0.07,
+        text: `🛰️ SAT-2 | LEO-2 ${queueTelemetry['dtn://sat2/relay'] ? '(' + queueTelemetry['dtn://sat2/relay'].pending + ' queued)' : ''}`
+      },
+      {
+        lat: NODE_CONFIG.gsb.lat,
+        lng: NODE_CONFIG.gsb.lng,
+        alt: 0.02,
+        text: '🏢 GSB (Canberra)'
+      }
+    ];
+  }
+
+  // Pulsing Rings Data
   function getRingsData() {
     const isOutage = activeIslState === 'DOWN';
     return [
@@ -156,7 +182,7 @@
         lat: NODE_CONFIG.sat1.lat,
         lng: NODE_CONFIG.sat1.lng,
         alt: NODE_CONFIG.sat1.alt,
-        color: isOutage ? '#ffab00' : '#00e5ff',
+        color: isOutage ? '#ffab00' : '#ffd700',
         maxRadius: 6.0,
         speed: isOutage ? 2.5 : 1.8,
         period: 1200
@@ -165,7 +191,7 @@
         lat: NODE_CONFIG.sat2.lat,
         lng: NODE_CONFIG.sat2.lng,
         alt: NODE_CONFIG.sat2.alt,
-        color: isOutage ? '#ff1744' : '#00e5ff',
+        color: isOutage ? '#ff1744' : '#ffd700',
         maxRadius: 6.0,
         speed: isOutage ? 2.5 : 1.8,
         period: 1200
@@ -182,142 +208,6 @@
     ];
   }
 
-  // Labels Data
-  function getLabelsData() {
-    return [
-      {
-        lat: NODE_CONFIG.gsa.lat,
-        lng: NODE_CONFIG.gsa.lng,
-        alt: 0.02,
-        text: '📡 GSA (Svalbard)',
-        size: 0.9,
-        color: '#00e5ff'
-      },
-      {
-        lat: NODE_CONFIG.sat1.lat,
-        lng: NODE_CONFIG.sat1.lng,
-        alt: NODE_CONFIG.sat1.alt + 0.07,
-        text: `🛰️ SAT-1 | LEO-1 ${queueTelemetry['dtn://sat1/relay'] ? '(' + queueTelemetry['dtn://sat1/relay'].pending + ' queued)' : ''}`,
-        size: 0.95,
-        color: activeIslState === 'DOWN' ? '#ffab00' : '#00e5ff'
-      },
-      {
-        lat: NODE_CONFIG.sat2.lat,
-        lng: NODE_CONFIG.sat2.lng,
-        alt: NODE_CONFIG.sat2.alt + 0.07,
-        text: `🛰️ SAT-2 | LEO-2 ${queueTelemetry['dtn://sat2/relay'] ? '(' + queueTelemetry['dtn://sat2/relay'].pending + ' queued)' : ''}`,
-        size: 0.95,
-        color: activeIslState === 'DOWN' ? '#ff1744' : '#00e5ff'
-      },
-      {
-        lat: NODE_CONFIG.gsb.lat,
-        lng: NODE_CONFIG.gsb.lng,
-        alt: 0.02,
-        text: '🏢 GSB (Canberra)',
-        size: 0.9,
-        color: '#00e676'
-      }
-    ];
-  }
-
-  // --- Three.js Custom 3D Mesh Builders ---
-  function buildSatellite3D(d) {
-    const group = new THREE.Group();
-
-    // Metallic gold central spacecraft bus
-    const busGeo = new THREE.BoxGeometry(2.4, 2.4, 3.2);
-    const busMat = new THREE.MeshStandardMaterial({
-      color: 0xffd54f,
-      metalness: 0.9,
-      roughness: 0.2,
-      emissive: 0x443300
-    });
-    const bus = new THREE.Mesh(busGeo, busMat);
-    group.add(bus);
-
-    // Blue solar array panels
-    const panelGeo = new THREE.BoxGeometry(6.5, 1.8, 0.15);
-    const panelMat = new THREE.MeshStandardMaterial({
-      color: 0x0d47a1,
-      metalness: 0.8,
-      roughness: 0.15,
-      emissive: 0x001944
-    });
-
-    const panelL = new THREE.Mesh(panelGeo, panelMat);
-    panelL.position.set(-4.6, 0, 0);
-    group.add(panelL);
-
-    const panelR = new THREE.Mesh(panelGeo, panelMat);
-    panelR.position.set(4.6, 0, 0);
-    group.add(panelR);
-
-    // Nadir antenna dish pointing to Earth
-    const dishGeo = new THREE.ConeGeometry(1.2, 1.1, 16, 1, true);
-    const dishMat = new THREE.MeshStandardMaterial({
-      color: 0xeeeeee,
-      metalness: 0.6,
-      roughness: 0.3,
-      side: THREE.DoubleSide
-    });
-    const dish = new THREE.Mesh(dishGeo, dishMat);
-    dish.rotation.x = Math.PI;
-    dish.position.set(0, -1.8, 0);
-    group.add(dish);
-
-    // Beacon light
-    const isOutage = d.id === 'dtn://sat1/relay' && activeIslState === 'DOWN';
-    const beaconGeo = new THREE.SphereGeometry(0.7, 12, 12);
-    const beaconMat = new THREE.MeshBasicMaterial({
-      color: isOutage ? 0xff1744 : 0x00e5ff
-    });
-    const beacon = new THREE.Mesh(beaconGeo, beaconMat);
-    beacon.position.set(0, 2.0, 0);
-    group.add(beacon);
-
-    group.userData = d;
-    return group;
-  }
-
-  function buildGroundStation3D(d) {
-    const group = new THREE.Group();
-
-    // Radome base
-    const domeGeo = new THREE.SphereGeometry(2.0, 16, 12, 0, Math.PI * 2, 0, Math.PI / 2);
-    const domeMat = new THREE.MeshStandardMaterial({
-      color: 0xdde6ed,
-      metalness: 0.2,
-      roughness: 0.4
-    });
-    const dome = new THREE.Mesh(domeGeo, domeMat);
-    group.add(dome);
-
-    // Steerable antenna dish
-    const dishGeo = new THREE.CylinderGeometry(0.1, 1.8, 0.5, 16);
-    const dishMat = new THREE.MeshStandardMaterial({
-      color: d.color === '#00e676' ? 0x00e676 : 0x00e5ff,
-      metalness: 0.7,
-      roughness: 0.3
-    });
-    const dish = new THREE.Mesh(dishGeo, dishMat);
-    dish.position.set(0, 1.9, 0);
-    dish.rotation.z = Math.PI / 5;
-    group.add(dish);
-
-    // Ground platform ring
-    const ringGeo = new THREE.RingGeometry(2.1, 2.6, 24);
-    const ringMat = new THREE.MeshBasicMaterial({
-      color: d.color === '#00e676' ? 0x00e676 : 0x00e5ff,
-      side: THREE.DoubleSide
-    });
-    const ring = new THREE.Mesh(ringGeo, ringMat);
-    ring.rotation.x = Math.PI / 2;
-    group.add(ring);
-
-    group.userData = d;
-    return group;
-  }
-
   // --- Initialise 3D Globe Visualization ---
   function init3DGlobe() {
     const container = document.getElementById('globe-viewport');
@@ -329,51 +219,50 @@
       .showAtmosphere(true)
       .atmosphereColor('#2979ff')
       .atmosphereAltitude(0.25)
-      // Custom 3D Spacecraft & Antennas
-      .customLayerData(getNodesData())
-      .customThreeObject(d => {
-        return d.type === 'satellite_relay' ? buildSatellite3D(d) : buildGroundStation3D(d);
-      })
-      .customThreeObjectUpdate((obj, d) => {
-        Object.assign(obj.position, worldGlobe.getCoords(d.lat, d.lng, d.alt));
-      })
-      // 3D Communication Arcs
-      .arcsData(getLinksData())
-      .arcStartLat(d => d.startLat)
-      .arcStartLng(d => d.startLng)
-      .arcStartAltitude(d => d.startAlt)
-      .arcEndLat(d => d.endLat)
-      .arcEndLng(d => d.endLng)
-      .arcEndAltitude(d => d.endAlt)
-      .arcColor(d => d.color)
-      .arcAltitude(d => d.altitude)
-      .arcStroke(d => d.stroke)
-      .arcDashLength(d => d.dashLength)
-      .arcDashGap(d => d.dashGap)
-      .arcDashAnimateTime(d => d.animateTime)
-      // Pulsing Node Rings
-      .ringsData(getRingsData())
-      .ringLat(d => d.lat)
-      .ringLng(d => d.lng)
-      .ringAltitude(d => d.alt)
-      .ringColor(d => d.color)
-      .ringMaxRadius(d => d.maxRadius)
-      .ringPropagationSpeed(d => d.speed)
-      .ringRepeatPeriod(d => d.period)
-      // Node Billboard Labels
+      // 3D Nodes as Points
+      .pointsData(getPointsData())
+      .pointLat('lat')
+      .pointLng('lng')
+      .pointAltitude('alt')
+      .pointColor('color')
+      .pointRadius('radius')
+      // 3D Billboard Labels
       .labelsData(getLabelsData())
-      .labelLat(d => d.lat)
-      .labelLng(d => d.lng)
-      .labelAltitude(d => d.alt)
-      .labelText(d => d.text)
-      .labelSize(d => d.size)
-      .labelColor(d => d.color)
+      .labelLat('lat')
+      .labelLng('lng')
+      .labelAltitude('alt')
+      .labelText('text')
+      .labelSize(1.1)
+      .labelColor(() => '#ffffff')
       .labelDotRadius(0.3)
-      // Interaction Listeners
-      .onCustomLayerClick((d) => selectNode(d))
+      // 3D Curved Communication Arcs
+      .arcsData(getLinksData())
+      .arcStartLat('startLat')
+      .arcStartLng('startLng')
+      .arcStartAltitude('startAlt')
+      .arcEndLat('endLat')
+      .arcEndLng('endLng')
+      .arcEndAltitude('endAlt')
+      .arcColor('color')
+      .arcAltitude('altitude')
+      .arcStroke('stroke')
+      .arcDashLength('dashLength')
+      .arcDashGap('dashGap')
+      .arcDashAnimateTime('animateTime')
+      // Pulsing Halos / Rings
+      .ringsData(getRingsData())
+      .ringLat('lat')
+      .ringLng('lng')
+      .ringAltitude('alt')
+      .ringColor('color')
+      .ringMaxRadius('maxRadius')
+      .ringPropagationSpeed('speed')
+      .ringRepeatPeriod('period')
+      // Interactive Click Listeners
+      .onPointClick((d) => selectNode(d))
       .onGlobeClick(() => deselectNode());
 
-    // Configure OrbitControls
+    // OrbitControls Configuration
     const controls = worldGlobe.controls();
     if (controls) {
       controls.autoRotate = false;
@@ -384,41 +273,27 @@
       controls.maxDistance = 500;
     }
 
-    // Set initial camera focus framing the space network
-    worldGlobe.pointOfView({ lat: 25.0, lng: 55.0, altitude: 2.2 }, 1500);
+    // Initial Camera View framing space constellation
+    worldGlobe.pointOfView({ lat: 25.0, lng: 55.0, altitude: 2.3 }, 1500);
 
-    // Handle container resize
+    // Responsive window resizing
     window.addEventListener('resize', () => {
       if (worldGlobe && container) {
         worldGlobe.width(container.clientWidth);
         worldGlobe.height(container.clientHeight);
       }
     });
-
-    // Orbital Drift Loop
-    let lastTime = Date.now();
-    (function animateOrbit() {
-      const now = Date.now();
-      const dt = (now - lastTime) / 1000.0;
-      lastTime = now;
-
-      if (isAutoRotating && controls) {
-        controls.update();
-      }
-
-      requestAnimationFrame(animateOrbit);
-    })();
   }
 
   // --- Dynamic Scene Refresher ---
   function refreshScene() {
     if (!worldGlobe) return;
     worldGlobe.arcsData(getLinksData());
-    worldGlobe.customLayerData(getNodesData());
+    worldGlobe.pointsData(getPointsData());
     worldGlobe.ringsData(getRingsData());
     worldGlobe.labelsData(getLabelsData());
 
-    // Update link status badge in HUD
+    // Update HUD link badge
     const hudLinkBadge = document.getElementById('hud-isl-status');
     if (hudLinkBadge) {
       if (activeIslState === 'DOWN') {
@@ -447,11 +322,11 @@
         selectNode(NODE_CONFIG.sat2);
         break;
       case 'gsa':
-        worldGlobe.pointOfView({ lat: NODE_CONFIG.gsa.lat, lng: NODE_CONFIG.gsa.lng, altitude: 0.7 }, 1000);
+        worldGlobe.pointOfView({ lat: NODE_CONFIG.gsa.lat, lng: NODE_CONFIG.gsa.lng, altitude: 0.8 }, 1000);
         selectNode(NODE_CONFIG.gsa);
         break;
       case 'gsb':
-        worldGlobe.pointOfView({ lat: NODE_CONFIG.gsb.lat, lng: NODE_CONFIG.gsb.lng, altitude: 0.7 }, 1000);
+        worldGlobe.pointOfView({ lat: NODE_CONFIG.gsb.lat, lng: NODE_CONFIG.gsb.lng, altitude: 0.8 }, 1000);
         selectNode(NODE_CONFIG.gsb);
         break;
     }
@@ -469,37 +344,50 @@
     }
   }
 
-  // --- Node Inspection Panel ---
+  // --- Node Inspection HUD ---
   function selectNode(d) {
+    if (typeof d === 'string') {
+      d = NODE_CONFIG[d] || { id: d, name: d, type: 'UNKNOWN', lat: 0, lng: 0, alt: 0, role: 'Node' };
+    }
+    if (!d) return;
     selectedNode = d;
     const panel = document.getElementById('node-inspector-hud');
     if (!panel) return;
 
-    const q = queueTelemetry[d.id] || { pending: 0, kb: 0 };
-    const t = nodesTelemetry[d.id] || {};
+    const q = (d.id && queueTelemetry[d.id]) || { pending: 0, kb: 0 };
+    const t = (d.id && nodesTelemetry[d.id]) || {};
 
-    document.getElementById('insp-node-name').textContent = d.name;
-    document.getElementById('insp-node-eid').textContent = d.id;
-    document.getElementById('insp-node-type').textContent = d.type.toUpperCase();
-    document.getElementById('insp-node-coords').textContent = `${d.lat.toFixed(2)}° N/S, ${d.lng.toFixed(2)}° E/W (Alt: ${d.alt.toFixed(2)})`;
-    document.getElementById('insp-node-role').textContent = d.role;
+    const nameEl = document.getElementById('insp-node-name');
+    if (nameEl) nameEl.textContent = d.name || d.id || 'Node Inspector';
+    const eidEl = document.getElementById('insp-node-eid');
+    if (eidEl) eidEl.textContent = d.id || 'N/A';
+    const typeEl = document.getElementById('insp-node-type');
+    if (typeEl) typeEl.textContent = (d.type || 'NODE').toUpperCase();
+    const coordsEl = document.getElementById('insp-node-coords');
+    if (coordsEl) coordsEl.textContent = `${(d.lat || 0).toFixed(2)}° N/S, ${(d.lng || 0).toFixed(2)}° E/W (Alt: ${(d.alt || 0).toFixed(2)})`;
+    const roleEl = document.getElementById('insp-node-role');
+    if (roleEl) roleEl.textContent = d.role || 'Network Node';
 
     const statusEl = document.getElementById('insp-node-status');
-    if (d.id.includes('sat') && activeIslState === 'DOWN') {
-      statusEl.textContent = 'INTERRUPTED (SPOOLING)';
-      statusEl.style.color = 'var(--accent-red)';
-    } else {
-      statusEl.textContent = 'ONLINE / NORMAL';
-      statusEl.style.color = 'var(--accent-green)';
+    if (statusEl) {
+      if (d.id && d.id.includes('sat') && activeIslState === 'DOWN') {
+        statusEl.textContent = 'INTERRUPTED (SPOOLING)';
+        statusEl.style.color = 'var(--accent-red)';
+      } else {
+        statusEl.textContent = 'ONLINE / NORMAL';
+        statusEl.style.color = 'var(--accent-green)';
+      }
     }
 
-    document.getElementById('insp-node-queue').textContent = `${q.pending} bundles (${q.kb} KB)`;
+    const queueEl = document.getElementById('insp-node-queue');
+    if (queueEl) queueEl.textContent = `${q.pending} bundles (${q.kb} KB)`;
 
-    // Cryptographic Details
-    const kemFp = t.active_kem_pk_fingerprint || (d.id.includes('sat') ? 'RELAY_TRANSIT_ONLY' : 'b4a89e1f72c081...');
-    const dsaFp = t.active_dsa_pk_fingerprint || (d.id.includes('sat') ? 'UNAUTHORIZED_FOR_L2_DECAP' : '9c34cc27d4ee...');
-    document.getElementById('insp-node-kem').textContent = kemFp;
-    document.getElementById('insp-node-dsa').textContent = dsaFp;
+    const kemFp = t.active_kem_pk_fingerprint || (d.id && d.id.includes('sat') ? 'RELAY_TRANSIT_ONLY' : 'b4a89e1f72c081...');
+    const dsaFp = t.active_dsa_pk_fingerprint || (d.id && d.id.includes('sat') ? 'UNAUTHORIZED_FOR_L2_DECAP' : '9c34cc27d4ee...');
+    const kemEl = document.getElementById('insp-node-kem');
+    if (kemEl) kemEl.textContent = kemFp;
+    const dsaEl = document.getElementById('insp-node-dsa');
+    if (dsaEl) dsaEl.textContent = dsaFp;
 
     panel.style.display = 'block';
   }
@@ -522,7 +410,7 @@
 
     if (packetHud) {
       packetHud.style.display = 'block';
-      packetIdEl.textContent = envelopeId ? envelopeId.slice(0, 8) + '...' : 'DISPATCH-REQ';
+      if (packetIdEl) packetIdEl.textContent = envelopeId ? envelopeId.slice(0, 8) + '...' : 'DISPATCH-REQ';
     }
 
     const sleep = (ms) => new Promise(res => setTimeout(res, ms));
@@ -531,7 +419,6 @@
     if (packetHop) packetHop.textContent = 'HOP 1/3: Uplink GSA -> SAT-1 (Polar Orbit)';
     if (packetStatus) packetStatus.textContent = 'Transmitting 5,119 B Post-Quantum Wire Bundle...';
 
-    // Highlight Uplink arc
     worldGlobe.arcsData([
       {
         startLat: NODE_CONFIG.gsa.lat,
@@ -559,7 +446,6 @@
 
     // Check ISL Link State
     if (activeIslState === 'DOWN') {
-      // In-flight hold at SAT-1 due to outage!
       if (packetHop) packetHop.textContent = 'HOLD: ISL Link SAT-1 -> SAT-2 is OCCULTED / DOWN';
       if (packetStatus) {
         packetStatus.textContent = 'Bundle safely spooled in SQLite WAL queue. Awaiting link restoration.';
@@ -643,7 +529,6 @@
   // --- Backend Telemetry Ingestion ---
   async function fetchTelemetry() {
     try {
-      // 1. Fetch Queue States
       const qRes = await fetch('/api/queue');
       const qData = await qRes.json();
       if (qData.queues) {
@@ -655,7 +540,6 @@
         });
       }
 
-      // 2. Fetch Nodes Status
       const nRes = await fetch('/api/nodes');
       const nData = await nRes.json();
       if (nData.ground_stations) {
@@ -665,7 +549,6 @@
         nData.satellite_relays.forEach(sr => { nodesTelemetry[sr.eid] = sr; });
       }
 
-      // 3. Fetch Topology State
       const tRes = await fetch('/api/topology');
       const tData = await tRes.json();
       if (tData.links) {
@@ -682,7 +565,7 @@
     }
   }
 
-  // Hook into WebSocket live events
+  // WebSocket Live Message Listener
   function handleWsMessage(eventData) {
     try {
       const msg = typeof eventData === 'string' ? JSON.parse(eventData) : eventData;
@@ -699,7 +582,7 @@
     }
   }
 
-  // Export functions to global scope
+  // Export to window
   window.AstraMissionControl3D = {
     init: init3DGlobe,
     setCameraView: setCameraView,
