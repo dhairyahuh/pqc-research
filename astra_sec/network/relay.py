@@ -8,6 +8,7 @@ from astra_sec.core.exceptions import AstraError
 from astra_sec.network.routing import ContactSchedule, RoutingTable
 from astra_sec.network.spool import PersistentMessageSpool
 from astra_sec.schema.envelope import PqcMessageEnvelope
+from astra_sec.schema.messages import FdirTelemetryReport
 from astra_sec.schema.network import DeliveryStatus, ForwardingEvent, LinkState
 from astra_sec.schema.validators import validate_dtn_eid
 
@@ -49,6 +50,17 @@ class SatelliteRelayNode:
 
         # Audit event ledger
         self.events: List[ForwardingEvent] = []
+
+        # L7 Spacecraft FDIR Telemetry tracker
+        self.fdir_telemetry = FdirTelemetryReport(node_eid=self.node_eid)
+
+    def get_link_state(self, peer_eid: str, at_time: Optional[int] = None) -> LinkState:
+        """Returns the current link state towards a peer node."""
+        return self.contact_schedule.get_link_state(peer_eid, at_time)
+
+    def count_pending(self) -> int:
+        """Returns count of pending messages in the non-volatile spool."""
+        return self.spool.count_pending()
 
     def log_event(
         self,

@@ -356,6 +356,11 @@ test-phase7k: phase7k test-phase7j
 	@echo "\n=== Phase 7K: Publication Readiness & Reproducibility Tests ==="
 	python3 -m unittest discover -s tests/phase7k -v
 
-.PHONY: all clean test test-c test-python health-check setup-dev lint audit-deps phase5 test-phase5 phase6 test-phase6 phase6b test-phase6b phase7 test-phase7 phase7b test-phase7b phase7c test-phase7c phase7d test-phase7d phase7e test-phase7e phase7f test-phase7f phase7g test-phase7g phase7h test-phase7h phase7i test-phase7i phase7j test-phase7j phase7k test-phase7k
+# ASTRA-Sec Research Experiment & Telemetry Monitoring Dashboard
+dashboard:
+	@echo "\n=== Starting ASTRA-Sec Research Monitoring Dashboard on http://localhost:8000 ==="
+	python3 -m uvicorn astra_sec.dashboard.app:app --host 0.0.0.0 --port 8000
+
+.PHONY: all clean test test-c test-python health-check setup-dev lint audit-deps dashboard phase5 test-phase5 phase6 test-phase6 phase6b test-phase6b phase7 test-phase7 phase7b test-phase7b phase7c test-phase7c phase7d test-phase7d phase7e test-phase7e phase7f test-phase7f phase7g test-phase7g phase7h test-phase7h phase7i test-phase7i phase7j test-phase7j phase7k test-phase7k
 
 

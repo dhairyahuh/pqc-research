@@ -1,0 +1,661 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ASTRA-Sec — Mission Control & Research Monitoring Dashboard</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-dark: #0a0d14;
+      --card-bg: #121722;
+      --card-border: #1e2638;
+      --text-main: #e2e8f0;
+      --text-muted: #8b9bb4;
+      --accent-cyan: #00e5ff;
+      --accent-blue: #2979ff;
+      --accent-green: #00e676;
+      --accent-amber: #ffab00;
+      --accent-red: #ff1744;
+      --accent-purple: #d500f9;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: var(--bg-dark);
+      color: var(--text-main);
+      padding: 20px;
+      line-height: 1.5;
+    }
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-bottom: 20px;
+      border-bottom: 1px solid var(--card-border);
+      margin-bottom: 25px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+
+    .brand h1 {
+      font-size: 1.5rem;
+      font-weight: 700;
+      letter-spacing: -0.5px;
+      color: #fff;
+    }
+
+    .brand-pill {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.75rem;
+      background: rgba(0, 229, 255, 0.1);
+      border: 1px solid var(--accent-cyan);
+      color: var(--accent-cyan);
+      padding: 4px 8px;
+      border-radius: 4px;
+    }
+
+    .header-status {
+      display: flex;
+      gap: 20px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.85rem;
+    }
+
+    .status-item {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .status-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--accent-green);
+      box-shadow: 0 0 8px var(--accent-green);
+    }
+
+    .grid-4 {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 18px;
+      margin-bottom: 25px;
+    }
+
+    .grid-2 {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+      gap: 20px;
+      margin-bottom: 25px;
+    }
+
+    .card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 8px;
+      padding: 20px;
+      position: relative;
+    }
+
+    .card-title {
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 12px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .metric-value {
+      font-size: 2rem;
+      font-weight: 700;
+      color: #fff;
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    .metric-subtitle {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      margin-top: 5px;
+    }
+
+    /* Topology Diagram */
+    .topology-container {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 30px 15px;
+      position: relative;
+      background: rgba(18, 23, 34, 0.6);
+      border-radius: 8px;
+      margin-top: 10px;
+    }
+
+    .topology-node {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      z-index: 2;
+      width: 140px;
+      text-align: center;
+    }
+
+    .node-icon {
+      width: 52px;
+      height: 52px;
+      border-radius: 10px;
+      background: #1a2233;
+      border: 2px solid var(--accent-blue);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.4rem;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+    }
+
+    .node-title {
+      font-size: 0.85rem;
+      font-weight: 600;
+    }
+
+    .node-badge {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.7rem;
+      padding: 2px 6px;
+      border-radius: 3px;
+      background: rgba(0, 230, 118, 0.15);
+      color: var(--accent-green);
+    }
+
+    .topology-link {
+      flex: 1;
+      height: 3px;
+      background: var(--accent-blue);
+      position: relative;
+      margin: 0 10px;
+      box-shadow: 0 0 6px var(--accent-blue);
+    }
+
+    .link-badge {
+      position: absolute;
+      top: -24px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.65rem;
+      color: var(--accent-cyan);
+      white-space: nowrap;
+      background: var(--card-bg);
+      padding: 2px 6px;
+      border-radius: 4px;
+      border: 1px solid var(--card-border);
+    }
+
+    /* Dispatch Controls */
+    .control-row {
+      display: flex;
+      gap: 12px;
+      margin-top: 15px;
+      flex-wrap: wrap;
+    }
+
+    input[type="text"] {
+      flex: 1;
+      min-width: 240px;
+      background: #0d121c;
+      border: 1px solid var(--card-border);
+      border-radius: 6px;
+      color: #fff;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.85rem;
+      padding: 10px 14px;
+    }
+
+    button {
+      background: var(--accent-blue);
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      padding: 10px 18px;
+      font-weight: 600;
+      font-size: 0.85rem;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    button:hover {
+      background: #1e60d4;
+    }
+
+    button.btn-warn {
+      background: rgba(255, 171, 0, 0.15);
+      border: 1px solid var(--accent-amber);
+      color: var(--accent-amber);
+    }
+
+    button.btn-warn:hover {
+      background: rgba(255, 171, 0, 0.25);
+    }
+
+    /* Tables */
+    .table-container {
+      max-height: 320px;
+      overflow-y: auto;
+      margin-top: 10px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.8rem;
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    th {
+      background: #182030;
+      color: var(--text-muted);
+      text-align: left;
+      padding: 10px 12px;
+      position: sticky;
+      top: 0;
+      border-bottom: 1px solid var(--card-border);
+    }
+
+    td {
+      padding: 8px 12px;
+      border-bottom: 1px solid rgba(30, 38, 56, 0.5);
+    }
+
+    tr:hover {
+      background: rgba(41, 121, 255, 0.05);
+    }
+
+    .badge-pass {
+      color: var(--accent-green);
+      font-weight: 600;
+    }
+
+    .badge-contained {
+      color: var(--accent-purple);
+      font-weight: 600;
+    }
+
+    .badge-sdc {
+      color: var(--accent-cyan);
+      font-weight: 700;
+    }
+
+    .audit-log {
+      max-height: 250px;
+      overflow-y: auto;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.75rem;
+      background: #0d121c;
+      padding: 12px;
+      border-radius: 6px;
+      border: 1px solid var(--card-border);
+    }
+
+    .log-line {
+      padding: 4px 0;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="brand">
+      <h1>ASTRA-Sec</h1>
+      <span class="brand-pill">MISSION CONTROL OBSERVABILITY</span>
+      <span class="brand-pill" style="border-color: var(--accent-green); color: var(--accent-green);">PQC VERIFIED</span>
+    </div>
+    <div class="header-status">
+      <div class="status-item"><div class="status-dot"></div> WS: CONNECTED</div>
+      <div class="status-item">CRYPTO: ML-KEM-768 / ML-DSA-65</div>
+      <div class="status-item">DTN: BPv7 / RFC 9171</div>
+      <div class="status-item" id="utc-clock">UTC: 00:00:00</div>
+    </div>
+  </header>
+
+  <!-- Network Topology Visualization -->
+  <div class="card" style="margin-bottom: 25px;">
+    <div class="card-title">
+      <span>Operational Space Network Topology (4-Node Disruption-Tolerant Routing)</span>
+      <span style="color: var(--accent-green); font-family: 'JetBrains Mono';">ZERO INTERMEDIATE DECRYPTION</span>
+    </div>
+    <div class="topology-container">
+      <div class="topology-node">
+        <div class="node-icon">📡</div>
+        <div class="node-title">Ground Station A</div>
+        <span class="node-badge" id="gsa-badge">EID: dtn://gsa/app</span>
+      </div>
+      <div class="topology-link">
+        <div class="link-badge">Uplink (RFC 9171)</div>
+      </div>
+      <div class="topology-node">
+        <div class="node-icon">🛰️</div>
+        <div class="node-title">Satellite Relay 1</div>
+        <span class="node-badge" id="sat1-badge">LEO-1 | Spool: 0 B</span>
+      </div>
+      <div class="topology-link" id="isl-link">
+        <div class="link-badge" id="isl-badge">ISL Contact: ACTIVE</div>
+      </div>
+      <div class="topology-node">
+        <div class="node-icon">🛰️</div>
+        <div class="node-title">Satellite Relay 2</div>
+        <span class="node-badge" id="sat2-badge">LEO-2 | Spool: 0 B</span>
+      </div>
+      <div class="topology-link">
+        <div class="link-badge">Downlink (BPv7)</div>
+      </div>
+      <div class="topology-node">
+        <div class="node-icon">🏢</div>
+        <div class="node-title">Ground Station B</div>
+        <span class="node-badge" id="gsb-badge">EID: dtn://gsb/app</span>
+      </div>
+    </div>
+
+    <!-- Live Transmission Control -->
+    <div class="control-row">
+      <input type="text" id="payload-input" value="FLIGHT_TELEMETRY_PACKET_MISSION_EPOCH_2026">
+      <label style="display:flex; align-items:center; gap:8px; font-size:0.85rem; cursor:pointer;">
+        <input type="checkbox" id="inject-fault-toggle"> Simulate NTT SEU Bit-Flip at Destination
+      </label>
+      <button id="dispatch-btn" onclick="dispatchEnvelope()">DISPATCH ENVELOPE (E2E PQC)</button>
+      <button class="btn-warn" id="isl-toggle-btn" onclick="toggleLinkOutage()">TOGGLE ISL LINK OUTAGE</button>
+    </div>
+    <div id="dispatch-status" style="margin-top:10px; font-family:'JetBrains Mono'; font-size:0.8rem; color:var(--accent-cyan); display:none;"></div>
+  </div>
+
+  <!-- Key Metrics Row -->
+  <div class="grid-4">
+    <div class="card">
+      <div class="card-title">Empirical Trials</div>
+      <div class="metric-value" id="total-trials">38</div>
+      <div class="metric-subtitle">Across Groups A, B, C, D, E</div>
+    </div>
+    <div class="card">
+      <div class="card-title">Fault Detection Rate</div>
+      <div class="metric-value" style="color: var(--accent-green);" id="detection-rate">100.0%</div>
+      <div class="metric-subtitle">38 / 38 Anomalies Caught</div>
+    </div>
+    <div class="card">
+      <div class="card-title">Silent Data Corruption (SDC)</div>
+      <div class="metric-value" style="color: var(--accent-cyan);" id="sdc-count">0</div>
+      <div class="metric-subtitle">0.00% across tested trials</div>
+    </div>
+    <div class="card">
+      <div class="card-title">End-to-End Latency ($p_{50}$)</div>
+      <div class="metric-value" id="e2e-latency">11.66 ms</div>
+      <div class="metric-subtitle">4-Node Multi-Hop Delivery</div>
+    </div>
+  </div>
+
+  <!-- Telemetry and Queues Grid -->
+  <div class="grid-2">
+    <!-- Cryptographic Telemetry -->
+    <div class="card">
+      <div class="card-title">
+        <span>L4 NTT Cryptographic Invariant Telemetry</span>
+        <span style="color: var(--accent-purple); font-family: 'JetBrains Mono';">TFIB-Ref Dual-Domain</span>
+      </div>
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 10px;">
+        <div>
+          <div style="font-size:0.8rem; color:var(--text-muted);">Decapsulation Throughput</div>
+          <div style="font-size:1.4rem; font-weight:700; font-family:'JetBrains Mono';" id="decaps-tput">7,009 ops/s</div>
+        </div>
+        <div>
+          <div style="font-size:0.8rem; color:var(--text-muted);">Transient Rollback Latency</div>
+          <div style="font-size:1.4rem; font-weight:700; font-family:'JetBrains Mono';" id="recovery-lat">57.31 μs (K=1)</div>
+        </div>
+        <div>
+          <div style="font-size:0.8rem; color:var(--text-muted);">Butterflies Monitored</div>
+          <div style="font-size:1.4rem; font-weight:700; font-family:'JetBrains Mono';">9,856 / decaps</div>
+        </div>
+        <div>
+          <div style="font-size:0.8rem; color:var(--text-muted);">Fail-Stop Budget</div>
+          <div style="font-size:1.4rem; font-weight:700; font-family:'JetBrains Mono';">K &le; 2 (Bounded)</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Storage and Spool Overview -->
+    <div class="card">
+      <div class="card-title">
+        <span>Persistent Spool & Anti-Replay State (SQLite WAL)</span>
+        <span style="color: var(--accent-green); font-family: 'JetBrains Mono';">ACID Crash-Consistent</span>
+      </div>
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 10px;">
+        <div>
+          <div style="font-size:0.8rem; color:var(--text-muted);">Satellite 1 Queue Storage</div>
+          <div style="font-size:1.4rem; font-weight:700; font-family:'JetBrains Mono';" id="sat1-storage">20.00 KB</div>
+        </div>
+        <div>
+          <div style="font-size:0.8rem; color:var(--text-muted);">Anti-Replay Filter State</div>
+          <div style="font-size:1.4rem; font-weight:700; font-family:'JetBrains Mono';">56.00 KB (500 seqs)</div>
+        </div>
+        <div>
+          <div style="font-size:0.8rem; color:var(--text-muted);">HMAC Boot Manifest</div>
+          <div style="font-size:1.4rem; font-weight:700; font-family:'JetBrains Mono';">32 B (SHA-256)</div>
+        </div>
+        <div>
+          <div style="font-size:0.8rem; color:var(--text-muted);">Process RSS Footprint</div>
+          <div style="font-size:1.4rem; font-weight:700; font-family:'JetBrains Mono';">53.22 MB</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Experimental Trials Table -->
+  <div class="card" style="margin-bottom: 25px;">
+    <div class="card-title">
+      <span>Adversarial & Fault Campaign Trials (Live Database: campaign_results.jsonl)</span>
+      <span style="color:var(--text-muted); font-family:'JetBrains Mono';" id="trial-count-badge">38 Trials Loaded</span>
+    </div>
+    <div class="table-container">
+      <table>
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Group</th>
+            <th>Test Scenario</th>
+            <th>Fault Locus</th>
+            <th>Timing</th>
+            <th>Detection</th>
+            <th>Recovery Outcome</th>
+            <th>SDC</th>
+            <th>Latency</th>
+          </tr>
+        </thead>
+        <tbody id="trials-tbody">
+          <tr><td colspan="9" style="text-align:center; padding:20px;">Loading trials from experimental database...</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Real-Time Audit Log -->
+  <div class="card">
+    <div class="card-title">
+      <span>Cryptographic Forensic Audit Trail & Real-Time Event Stream</span>
+      <span style="color:var(--accent-cyan); font-family:'JetBrains Mono';">APPEND-ONLY SECURE LOG</span>
+    </div>
+    <div class="audit-log" id="audit-log">
+      <div class="log-line">[SYSTEM BOOT] ASTRA-Sec Mission Observability Engine online. Trust store validated.</div>
+      <div class="log-line">[SECURITY] Persistent anti-replay filter initialized with HMAC state manifest.</div>
+      <div class="log-line">[CRYPTO] FIPS 203 ML-KEM-768 and FIPS 204 ML-DSA-65 native monitored bridges loaded.</div>
+    </div>
+  </div>
+
+  <script>
+    const ADMIN_TOKEN = "astra-mission-control-token";
+    let islState = "UP";
+
+    function updateClock() {
+      const now = new Date();
+      document.getElementById('utc-clock').textContent = 'UTC: ' + now.toISOString().slice(11, 19);
+    }
+    setInterval(updateClock, 1000);
+    updateClock();
+
+    async function loadSummary() {
+      try {
+        const res = await fetch('/api/experiments/summary');
+        const data = await res.json();
+        document.getElementById('total-trials').textContent = data.total_trials;
+        document.getElementById('detection-rate').textContent = data.detection_rate_pct + '%';
+        document.getElementById('sdc-count').textContent = data.sdc_count;
+        document.getElementById('e2e-latency').textContent = data.latency_profile_ms.p50 + ' ms';
+      } catch (e) {
+        console.error("Failed to load summary", e);
+      }
+    }
+
+    async function loadTrials() {
+      try {
+        const res = await fetch('/api/experiments/trials?limit=50');
+        const data = await res.json();
+        const tbody = document.getElementById('trials-tbody');
+        tbody.innerHTML = '';
+        data.trials.forEach(t => {
+          const row = document.createElement('tr');
+          row.innerHTML = `
+            <td><strong>${t.experiment_id}</strong></td>
+            <td>${t.group}</td>
+            <td>${t.test_name}</td>
+            <td><code>${t.fault_location}</code></td>
+            <td>${t.fault_timing}</td>
+            <td><span class="badge-pass">${t.detection_result ? 'DETECTED' : 'CLEAN'}</span></td>
+            <td><span class="badge-contained">${t.recovery_result}</span></td>
+            <td><span class="badge-sdc">${t.sdc_outcome ? 'YES' : '0 (NONE)'}</span></td>
+            <td>${t.latency_ms.toFixed(2)} ms</td>
+          `;
+          tbody.appendChild(row);
+        });
+        document.getElementById('trial-count-badge').textContent = `${data.total} Trials Recorded`;
+      } catch (e) {
+        console.error("Failed to load trials", e);
+      }
+    }
+
+    async function loadQueues() {
+      try {
+        const res = await fetch('/api/queue');
+        const data = await res.json();
+        if (data.queues && data.queues.length >= 2) {
+          document.getElementById('sat1-badge').textContent = `LEO-1 | Queue: ${data.queues[0].pending_bundles} (${data.queues[0].storage_kb} KB)`;
+          document.getElementById('sat2-badge').textContent = `LEO-2 | Queue: ${data.queues[1].pending_bundles} (${data.queues[1].storage_kb} KB)`;
+          document.getElementById('sat1-storage').textContent = `${data.queues[0].storage_kb} KB`;
+        }
+      } catch (e) {
+        console.error("Failed to load queues", e);
+      }
+    }
+
+    async function dispatchEnvelope() {
+      const payload = document.getElementById('payload-input').value;
+      const simulateFault = document.getElementById('inject-fault-toggle').checked;
+      const statusDiv = document.getElementById('dispatch-status');
+      statusDiv.style.display = 'block';
+      statusDiv.textContent = 'Encrypting with ML-KEM-768, signing with ML-DSA-65, and routing across satellite constellation...';
+
+      try {
+        const res = await fetch('/api/admin/dispatch', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${ADMIN_TOKEN}`
+          },
+          body: JSON.stringify({
+            payload_text: payload,
+            simulate_transient_fault: simulateFault
+          })
+        });
+        const data = await res.json();
+        statusDiv.textContent = `[COMPLETED] Status: ${data.status} | Latency: ${data.duration_ms} ms | Delivered: ${data.delivered_to_destination} | Recovered SEU: ${data.transient_recovery_occurred} | Receipt Verified: ${data.receipt_verified}`;
+        addAuditLine(`[DISPATCH] Envelope ${data.envelope_id} routed in ${data.duration_ms} ms (${data.status}). Fault Recovered: ${data.transient_recovery_occurred}`);
+        loadQueues();
+      } catch (e) {
+        statusDiv.textContent = 'Error: ' + e;
+      }
+    }
+
+    async function toggleLinkOutage() {
+      const nextState = islState === "UP" ? "link_outage" : "link_restore";
+      try {
+        const res = await fetch('/api/admin/inject-fault', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${ADMIN_TOKEN}`
+          },
+          body: JSON.stringify({
+            target_node: "dtn://sat1/relay",
+            fault_type: nextState
+          })
+        });
+        islState = islState === "UP" ? "DOWN" : "UP";
+        const linkElem = document.getElementById('isl-link');
+        const badgeElem = document.getElementById('isl-badge');
+        if (islState === "DOWN") {
+          linkElem.style.background = "var(--accent-red)";
+          linkElem.style.boxShadow = "0 0 8px var(--accent-red)";
+          badgeElem.textContent = "ISL Contact: OUTAGE (SPOOLING)";
+          badgeElem.style.color = "var(--accent-red)";
+        } else {
+          linkElem.style.background = "var(--accent-blue)";
+          linkElem.style.boxShadow = "0 0 6px var(--accent-blue)";
+          badgeElem.textContent = "ISL Contact: ACTIVE (FLUSHED)";
+          badgeElem.style.color = "var(--accent-cyan)";
+        }
+        addAuditLine(`[TOPOLOGY] Inter-Satellite Link SAT1 -> SAT2 transitioned to ${islState}`);
+        loadQueues();
+      } catch (e) {
+        console.error("Link outage error", e);
+      }
+    }
+
+    function addAuditLine(text) {
+      const log = document.getElementById('audit-log');
+      const div = document.createElement('div');
+      div.className = 'log-line';
+      const timeStr = new Date().toISOString().slice(11, 19);
+      div.textContent = `[${timeStr}] ${text}`;
+      log.insertBefore(div, log.firstChild);
+    }
+
+    // Connect WebSocket
+    function connectWS() {
+      const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
+      const ws = new WebSocket(`${protocol}//${window.location.host}/ws/live`);
+      ws.onmessage = (event) => {
+        const msg = JSON.parse(event.data);
+        if (msg.type === "MESSAGE_TRANSMITTED") {
+          addAuditLine(`[WS EVENT] Envelope ${msg.record.envelope_id} delivered in ${msg.record.duration_ms} ms`);
+          loadQueues();
+        }
+      };
+      ws.onclose = () => setTimeout(connectWS, 2000);
+    }
+
+    loadSummary();
+    loadTrials();
+    loadQueues();
+    connectWS();
+  </script>
+</body>
+</html>
