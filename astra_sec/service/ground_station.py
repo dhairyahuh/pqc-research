@@ -73,6 +73,7 @@ class GroundStationNode:
 
         # FDIR Telemetry tracker
         self.fdir_telemetry = FdirTelemetryReport(node_eid=self.node_eid)
+        self.last_decaps_telemetry: Optional[Any] = None
 
         # Monotonic outgoing sequence counter
         self._next_sequence_id: int = 1
@@ -276,6 +277,7 @@ class GroundStationNode:
                 shared_secret, telemetry = self.kem.decapsulate_with_telemetry(
                     header.kem_ciphertext, self.kem_keys.secret_key
                 )
+                self.last_decaps_telemetry = telemetry
                 self.fdir_telemetry.transient_recoveries += telemetry.recovered_count
                 self.fdir_telemetry.twiddle_faults_detected += telemetry.twiddle_faults_detected
             except Exception as e:

@@ -1,10 +1,13 @@
 /**
- * ASTRA-Sec: 3D Satellite Mission Control & Geospatial Network Visualization.
- * Powered by Globe.gl (Open Source, MIT License - 100% Offline).
+ * ASTRA-Sec: Professional 3D Satellite Mission Control & Geospatial Network Visualization.
+ * Powered by Globe.gl (Open Source, MIT License - 100% Offline Air-Gapped).
  * 
- * Implements real-time 3D Earth, 4-node space constellation topology,
- * dynamic communication links, animated packet hops, interactive node inspection,
- * and live integration with FastAPI backend & WebSocket stream.
+ * Features:
+ * - Deterministic WGS84 Geodetic Coordinates for 4-Node Space Pipeline (GSA, SAT1, SAT2, GSB).
+ * - High-visibility 3D HTML aerospace satellite & ground station markers with live queue telemetry.
+ * - Dynamic 3D communication arcs (Uplink, ISL, Downlink, Return ACK) terminating precisely at node altitudes.
+ * - Multi-hop in-flight packet flight animation engine with disruption halting & queue spooling.
+ * - Interactive node inspection HUD, live telemetry synchronization, and camera orbit controls.
  */
 
 (function () {
@@ -15,46 +18,46 @@
     gsa: {
       id: 'dtn://gsa/app',
       name: 'Ground Station Alpha',
-      location: 'Svalbard Satellite Station, Norway',
+      location: 'Svalbard Satellite Station, Norway (78.23° N, 15.41° E)',
       lat: 78.2297,
       lng: 15.4078,
-      alt: 0.01,
+      alt: 0.015,
       type: 'ground_station',
       color: '#00e5ff',
-      role: 'Cryptographic Originator (ML-KEM Encap / ML-DSA Signer)'
+      role: 'Cryptographic Originator (ML-KEM Encap / ML-DSA Signer / L2 AEAD)'
     },
     sat1: {
       id: 'dtn://sat1/relay',
       name: 'Satellite Relay 1 (LEO-1)',
-      location: 'Polar Sun-Synchronous Orbit (~550 km)',
+      location: 'Sun-Synchronous Polar LEO (~550 km, 52.00° N, 38.00° E)',
       lat: 52.0,
       lng: 38.0,
       alt: 0.35,
       type: 'satellite',
       color: '#ffd700',
-      role: 'Store-and-Forward Router (SQLite WAL Persistent Spool)'
+      role: 'Store-and-Forward Router (SQLite WAL Persistent Spool / RFC 9171 BPv7)'
     },
     sat2: {
       id: 'dtn://sat2/relay',
       name: 'Satellite Relay 2 (LEO-2)',
-      location: 'Inclined LEO Relay Constellation (~550 km)',
+      location: 'Inclined LEO Relay Orbit (~550 km, -8.00° S, 92.00° E)',
       lat: -8.0,
       lng: 92.0,
       alt: 0.35,
       type: 'satellite',
       color: '#ffd700',
-      role: 'Store-and-Forward Router (SQLite WAL Persistent Spool)'
+      role: 'Store-and-Forward Router (SQLite WAL Persistent Spool / RFC 9171 BPv7)'
     },
     gsb: {
       id: 'dtn://gsb/app',
       name: 'Ground Station Bravo',
-      location: 'Canberra Deep Space Communication Complex, Australia',
+      location: 'Canberra Deep Space Complex, Australia (-35.40° S, 148.98° E)',
       lat: -35.4014,
       lng: 148.9817,
-      alt: 0.01,
+      alt: 0.015,
       type: 'ground_station',
       color: '#00e676',
-      role: 'Destination Verifier (ML-KEM Decapsulation / Anti-Replay / ACK)'
+      role: 'Destination Verifier (ML-KEM Monitored Decaps / ML-DSA Verify / ACK Signer)'
     }
   };
 
@@ -66,14 +69,16 @@
   let nodesTelemetry = {};
   let queueTelemetry = {};
   let inFlightAnimationActive = false;
+  let returnAckActive = false;
 
-  // Link Definitions
+  // 3D Communication Link Arcs
   function getLinksData() {
     const isOutage = activeIslState === 'DOWN';
-    return [
+    const links = [
       {
         id: 'uplink',
-        name: 'Uplink (RFC 9171 BPv7)',
+        name: 'Uplink (GSA -> SAT-1)',
+        protocol: 'RFC 9171 BPv7 / BPSec',
         startLat: NODE_CONFIG.gsa.lat,
         startLng: NODE_CONFIG.gsa.lng,
         startAlt: NODE_CONFIG.gsa.alt,
@@ -82,14 +87,15 @@
         endAlt: NODE_CONFIG.sat1.alt,
         color: ['#00e5ff', '#2979ff'],
         altitude: 0.22,
-        stroke: 2.2,
+        stroke: 2.5,
         dashLength: 0.45,
         dashGap: 0.15,
-        animateTime: 1800
+        animateTime: 1600
       },
       {
         id: 'isl',
-        name: 'Inter-Satellite Link (ISL)',
+        name: 'Inter-Satellite Link (ISL: SAT-1 -> SAT-2)',
+        protocol: 'Direct Optical/RF ISL',
         startLat: NODE_CONFIG.sat1.lat,
         startLng: NODE_CONFIG.sat1.lng,
         startAlt: NODE_CONFIG.sat1.alt,
@@ -99,13 +105,14 @@
         color: isOutage ? ['#ff1744', '#b71c1c'] : ['#00e5ff', '#00e676'],
         altitude: 0.45,
         stroke: isOutage ? 3.5 : 2.5,
-        dashLength: isOutage ? 0.08 : 0.5,
+        dashLength: isOutage ? 0.06 : 0.5,
         dashGap: isOutage ? 0.35 : 0.15,
-        animateTime: isOutage ? 0 : 2200
+        animateTime: isOutage ? 0 : 2000
       },
       {
         id: 'downlink',
-        name: 'Downlink (BPv7 E2E)',
+        name: 'Downlink (SAT-2 -> GSB)',
+        protocol: 'RFC 9171 BPv7 E2E',
         startLat: NODE_CONFIG.sat2.lat,
         startLng: NODE_CONFIG.sat2.lng,
         startAlt: NODE_CONFIG.sat2.alt,
@@ -114,22 +121,45 @@
         endAlt: NODE_CONFIG.gsb.alt,
         color: ['#2979ff', '#00e676'],
         altitude: 0.22,
-        stroke: 2.2,
+        stroke: 2.5,
         dashLength: 0.45,
         dashGap: 0.15,
-        animateTime: 1800
+        animateTime: 1600
       }
     ];
+
+    // Add return ACK path if active
+    if (returnAckActive) {
+      links.push({
+        id: 'ack-return',
+        name: 'Return ACK Verification Path (GSB -> GSA)',
+        protocol: 'Signed Cryptographic ACK',
+        startLat: NODE_CONFIG.gsb.lat,
+        startLng: NODE_CONFIG.gsb.lng,
+        startAlt: NODE_CONFIG.gsb.alt,
+        endLat: NODE_CONFIG.gsa.lat,
+        endLng: NODE_CONFIG.gsa.lng,
+        endAlt: NODE_CONFIG.gsa.alt,
+        color: ['#00e676', '#ffd700', '#00e5ff'],
+        altitude: 0.52,
+        stroke: 3.0,
+        dashLength: 0.6,
+        dashGap: 0.1,
+        animateTime: 1200
+      });
+    }
+
+    return links;
   }
 
-  // Node Points Data
+  // Node Points Data (Base Luminous Glows)
   function getPointsData() {
     return Object.values(NODE_CONFIG).map(n => {
       const isSat = n.type === 'satellite';
       const isOutage = n.id.includes('sat') && activeIslState === 'DOWN';
       return {
         ...n,
-        radius: isSat ? 0.95 : 0.65,
+        radius: isSat ? 1.1 : 0.85,
         color: isOutage ? (n.id.includes('sat1') ? '#ffab00' : '#ff1744') : n.color
       };
     });
@@ -141,31 +171,31 @@
       {
         lat: NODE_CONFIG.gsa.lat,
         lng: NODE_CONFIG.gsa.lng,
-        alt: 0.02,
+        alt: 0.03,
         text: '📡 GSA (Svalbard)'
       },
       {
         lat: NODE_CONFIG.sat1.lat,
         lng: NODE_CONFIG.sat1.lng,
-        alt: NODE_CONFIG.sat1.alt + 0.07,
-        text: `🛰️ SAT-1 | LEO-1 ${queueTelemetry['dtn://sat1/relay'] ? '(' + queueTelemetry['dtn://sat1/relay'].pending + ' queued)' : ''}`
+        alt: NODE_CONFIG.sat1.alt + 0.08,
+        text: `🛰️ SAT-1 [LEO-1] ${queueTelemetry['dtn://sat1/relay'] ? '(' + queueTelemetry['dtn://sat1/relay'].pending + ' queued)' : ''}`
       },
       {
         lat: NODE_CONFIG.sat2.lat,
         lng: NODE_CONFIG.sat2.lng,
-        alt: NODE_CONFIG.sat2.alt + 0.07,
-        text: `🛰️ SAT-2 | LEO-2 ${queueTelemetry['dtn://sat2/relay'] ? '(' + queueTelemetry['dtn://sat2/relay'].pending + ' queued)' : ''}`
+        alt: NODE_CONFIG.sat2.alt + 0.08,
+        text: `🛰️ SAT-2 [LEO-2] ${queueTelemetry['dtn://sat2/relay'] ? '(' + queueTelemetry['dtn://sat2/relay'].pending + ' queued)' : ''}`
       },
       {
         lat: NODE_CONFIG.gsb.lat,
         lng: NODE_CONFIG.gsb.lng,
-        alt: 0.02,
+        alt: 0.03,
         text: '🏢 GSB (Canberra)'
       }
     ];
   }
 
-  // Pulsing Rings Data
+  // Pulsing Communication Rings
   function getRingsData() {
     const isOutage = activeIslState === 'DOWN';
     return [
@@ -183,7 +213,7 @@
         lng: NODE_CONFIG.sat1.lng,
         alt: NODE_CONFIG.sat1.alt,
         color: isOutage ? '#ffab00' : '#ffd700',
-        maxRadius: 6.0,
+        maxRadius: 6.5,
         speed: isOutage ? 2.5 : 1.8,
         period: 1200
       },
@@ -192,7 +222,7 @@
         lng: NODE_CONFIG.sat2.lng,
         alt: NODE_CONFIG.sat2.alt,
         color: isOutage ? '#ff1744' : '#ffd700',
-        maxRadius: 6.0,
+        maxRadius: 6.5,
         speed: isOutage ? 2.5 : 1.8,
         period: 1200
       },
@@ -232,9 +262,9 @@
       .labelLng('lng')
       .labelAltitude('alt')
       .labelText('text')
-      .labelSize(1.1)
+      .labelSize(1.15)
       .labelColor(() => '#ffffff')
-      .labelDotRadius(0.3)
+      .labelDotRadius(0.35)
       // 3D Curved Communication Arcs
       .arcsData(getLinksData())
       .arcStartLat('startLat')
@@ -266,15 +296,15 @@
     const controls = worldGlobe.controls();
     if (controls) {
       controls.autoRotate = false;
-      controls.autoRotateSpeed = 0.6;
+      controls.autoRotateSpeed = 0.5;
       controls.enableDamping = true;
       controls.dampingFactor = 0.05;
       controls.minDistance = 140;
-      controls.maxDistance = 500;
+      controls.maxDistance = 520;
     }
 
-    // Initial Camera View framing space constellation
-    worldGlobe.pointOfView({ lat: 25.0, lng: 55.0, altitude: 2.3 }, 1500);
+    // Default Camera Framing (Centered on space constellation & Earth)
+    worldGlobe.pointOfView({ lat: 25.0, lng: 55.0, altitude: 2.2 }, 1500);
 
     // Responsive window resizing
     window.addEventListener('resize', () => {
@@ -283,6 +313,8 @@
         worldGlobe.height(container.clientHeight);
       }
     });
+
+    fetchTelemetry();
   }
 
   // --- Dynamic Scene Refresher ---
@@ -293,7 +325,6 @@
     worldGlobe.ringsData(getRingsData());
     worldGlobe.labelsData(getLabelsData());
 
-    // Update HUD link badge
     const hudLinkBadge = document.getElementById('hud-isl-status');
     if (hudLinkBadge) {
       if (activeIslState === 'DOWN') {
@@ -311,7 +342,7 @@
     if (!worldGlobe) return;
     switch (preset) {
       case 'overview':
-        worldGlobe.pointOfView({ lat: 25.0, lng: 55.0, altitude: 2.3 }, 1200);
+        worldGlobe.pointOfView({ lat: 25.0, lng: 55.0, altitude: 2.2 }, 1200);
         break;
       case 'sat1':
         worldGlobe.pointOfView({ lat: NODE_CONFIG.sat1.lat, lng: NODE_CONFIG.sat1.lng, altitude: 1.1 }, 1000);
@@ -399,7 +430,7 @@
   }
 
   // --- 3D Packet Movement Animation Engine ---
-  async function animatePacketDispatch(envelopeId, payloadText, hasFault) {
+  async function animatePacketDispatch(envelopeId, payloadText, hasFault, scenario) {
     if (!worldGlobe || inFlightAnimationActive) return;
     inFlightAnimationActive = true;
 
@@ -410,143 +441,124 @@
 
     if (packetHud) {
       packetHud.style.display = 'block';
-      if (packetIdEl) packetIdEl.textContent = envelopeId ? envelopeId.slice(0, 8) + '...' : 'DISPATCH-REQ';
+      if (packetIdEl) packetIdEl.textContent = envelopeId ? envelopeId.slice(0, 8) + '...' : 'PQC-ENVELOPE';
     }
 
-    const sleep = (ms) => new Promise(res => setTimeout(res, ms));
+    const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 
-    // STEP 1: Uplink GSA -> SAT1
-    if (packetHop) packetHop.textContent = 'HOP 1/3: Uplink GSA -> SAT-1 (Polar Orbit)';
+    // Hop 1: GSA -> SAT-1 (Uplink)
+    if (packetHop) packetHop.textContent = 'HOP 1/3: Uplink GSA -> SAT-1';
     if (packetStatus) packetStatus.textContent = 'Transmitting 5,119 B Post-Quantum Wire Bundle...';
+    await sleep(900);
 
-    worldGlobe.arcsData([
-      {
-        startLat: NODE_CONFIG.gsa.lat,
-        startLng: NODE_CONFIG.gsa.lng,
-        startAlt: NODE_CONFIG.gsa.alt,
-        endLat: NODE_CONFIG.sat1.lat,
-        endLng: NODE_CONFIG.sat1.lng,
-        endAlt: NODE_CONFIG.sat1.alt,
-        color: ['#ffea00', '#ffea00'],
-        altitude: 0.22,
-        stroke: 4.5,
-        dashLength: 0.9,
-        dashGap: 0.1,
-        animateTime: 900
-      },
-      ...getLinksData()
-    ]);
-    await sleep(950);
-
-    // STEP 2: Spool Ingestion at SAT1
-    if (packetHop) packetHop.textContent = 'HOP 1/3 COMPLETED: Ingested at SAT-1 Relay';
-    if (packetStatus) packetStatus.textContent = 'Transactional SQLite WAL write committed. Checking ISL link state...';
-    refreshScene();
-    await sleep(400);
-
-    // Check ISL Link State
+    // Hop 2: SAT-1 -> SAT-2 (ISL)
     if (activeIslState === 'DOWN') {
-      if (packetHop) packetHop.textContent = 'HOLD: ISL Link SAT-1 -> SAT-2 is OCCULTED / DOWN';
+      if (packetHop) packetHop.textContent = 'HOP 2/3: INTER-SATELLITE LINK DOWN';
       if (packetStatus) {
-        packetStatus.textContent = 'Bundle safely spooled in SQLite WAL queue. Awaiting link restoration.';
-        packetStatus.style.color = 'var(--accent-red)';
+        packetStatus.textContent = 'Halting at SAT-1. Persisting to SQLite WAL Queue...';
+        packetStatus.style.color = 'var(--accent-amber)';
       }
+      // Re-fetch telemetry to show queue increment
+      fetchTelemetry();
+      await sleep(1800);
       inFlightAnimationActive = false;
       return;
     }
 
-    // STEP 3: ISL Transit SAT1 -> SAT2
     if (packetHop) packetHop.textContent = 'HOP 2/3: Inter-Satellite Link SAT-1 -> SAT-2';
-    if (packetStatus) packetStatus.textContent = 'Transiting space laser ISL. Zero intermediate decryption.';
-
-    worldGlobe.arcsData([
-      {
-        startLat: NODE_CONFIG.sat1.lat,
-        startLng: NODE_CONFIG.sat1.lng,
-        startAlt: NODE_CONFIG.sat1.alt,
-        endLat: NODE_CONFIG.sat2.lat,
-        endLng: NODE_CONFIG.sat2.lng,
-        endAlt: NODE_CONFIG.sat2.alt,
-        color: ['#ffea00', '#00e676'],
-        altitude: 0.45,
-        stroke: 5.0,
-        dashLength: 0.9,
-        dashGap: 0.1,
-        animateTime: 1200
-      },
-      ...getLinksData()
-    ]);
-    await sleep(1250);
-
-    // STEP 4: Downlink Transit SAT2 -> GSB
-    if (packetHop) packetHop.textContent = 'HOP 3/3: Direct Downlink SAT-2 -> GSB (Canberra)';
-    if (packetStatus) packetStatus.textContent = 'Entering destination atmosphere. BPv7 Bundle delivery in progress...';
-
-    worldGlobe.arcsData([
-      {
-        startLat: NODE_CONFIG.sat2.lat,
-        startLng: NODE_CONFIG.sat2.lng,
-        startAlt: NODE_CONFIG.sat2.alt,
-        endLat: NODE_CONFIG.gsb.lat,
-        endLng: NODE_CONFIG.gsb.lng,
-        endAlt: NODE_CONFIG.gsb.alt,
-        color: ['#00e676', '#ffea00'],
-        altitude: 0.22,
-        stroke: 4.5,
-        dashLength: 0.9,
-        dashGap: 0.1,
-        animateTime: 950
-      },
-      ...getLinksData()
-    ]);
+    if (packetStatus) {
+      packetStatus.textContent = 'Forwarding envelope via space crosslink (zero intermediate decryption)...';
+      packetStatus.style.color = 'var(--accent-cyan)';
+    }
     await sleep(1000);
 
-    // STEP 5: Destination Arrival & Verification at GSB
-    if (hasFault) {
-      if (packetHop) packetHop.textContent = 'DESTINATION ARRIVAL: L4 Invariant Triggered!';
+    // Hop 3: SAT-2 -> GSB (Downlink)
+    if (packetHop) packetHop.textContent = 'HOP 3/3: Downlink SAT-2 -> Ground Station Bravo';
+    if (packetStatus) packetStatus.textContent = 'Receiving bundle at GSB Canberra. Engaging L3/L4 verifier...';
+    await sleep(900);
+
+    // Destination Verification & Invariant Checking
+    if (hasFault || scenario === 'ntt_transient') {
+      if (packetHop) packetHop.textContent = 'L4 ANOMALY: NTT TWIDDLE INVARIANT VIOLATION';
       if (packetStatus) {
-        packetStatus.textContent = '[RECOVERED] NTT Butterfly SEU bit-flip detected! Local snapshot rollback K=1 succeeded!';
+        packetStatus.textContent = 'Invariant r != t*zeta detected! Localized register rollback K=1 engaged...';
         packetStatus.style.color = 'var(--accent-amber)';
       }
-    } else {
-      if (packetHop) packetHop.textContent = 'DELIVERY CONFIRMED: GSB Verified';
+      await sleep(1100);
+      if (packetHop) packetHop.textContent = 'L4 RECOVERY: RETRY K=1 VERIFIED';
       if (packetStatus) {
-        packetStatus.textContent = 'FIPS 203 ML-KEM-768 shared secret decapsulated. ML-DSA-65 signature verified. SDC: 0.';
+        packetStatus.textContent = 'Decapsulation retry succeeded. ML-DSA signature authentic. Plaintext accepted.';
+        packetStatus.style.color = 'var(--accent-green)';
+      }
+    } else if (scenario === 'ntt_persistent') {
+      if (packetHop) packetHop.textContent = 'L4 FAIL-STOP: PERSISTENT NTT FAULT';
+      if (packetStatus) {
+        packetStatus.textContent = 'Retry budget exceeded (K > 2). Engaging implicit rejection suppression.';
+        packetStatus.style.color = 'var(--accent-red)';
+      }
+      await sleep(1400);
+      inFlightAnimationActive = false;
+      return;
+    } else if (scenario === 'replay_attack') {
+      if (packetHop) packetHop.textContent = 'L6 SECURITY: REPLAY ATTACK DETECTED';
+      if (packetStatus) {
+        packetStatus.textContent = 'Sequence ID already present in persistent filter. Discarding duplicate envelope.';
+        packetStatus.style.color = 'var(--accent-red)';
+      }
+      await sleep(1400);
+      inFlightAnimationActive = false;
+      return;
+    } else if (scenario === 'tamper_sig') {
+      if (packetHop) packetHop.textContent = 'L3 INTEGRITY: SIGNATURE VERIFICATION FAILED';
+      if (packetStatus) {
+        packetStatus.textContent = 'ML-DSA-65 signature corrupted in transit. Discarding untrusted bundle.';
+        packetStatus.style.color = 'var(--accent-red)';
+      }
+      await sleep(1400);
+      inFlightAnimationActive = false;
+      return;
+    } else {
+      if (packetHop) packetHop.textContent = 'DELIVERED: E2E POST-QUANTUM VERIFIED';
+      if (packetStatus) {
+        packetStatus.textContent = 'ML-DSA-65 Valid | ML-KEM-768 Decaps Valid | AES-GCM Tag Authentic';
         packetStatus.style.color = 'var(--accent-green)';
       }
     }
 
+    // Return ACK animation across reverse path
+    returnAckActive = true;
     refreshScene();
-    await sleep(2500);
+    await sleep(900);
+    returnAckActive = false;
+    refreshScene();
 
-    if (packetHud) {
-      packetHud.style.display = 'none';
-      if (packetStatus) packetStatus.style.color = 'var(--accent-cyan)';
-    }
+    await sleep(1500);
+    if (packetHud) packetHud.style.display = 'none';
     inFlightAnimationActive = false;
   }
 
-  // --- Backend Telemetry Ingestion ---
+  // --- Real-Time Telemetry Polling ---
   async function fetchTelemetry() {
     try {
       const qRes = await fetch('/api/queue');
       const qData = await qRes.json();
       if (qData.queues) {
         qData.queues.forEach(q => {
-          queueTelemetry[q.relay_eid] = {
-            pending: q.pending_bundles,
-            kb: q.storage_kb
-          };
+          queueTelemetry[q.relay_eid] = { pending: q.pending_bundles, kb: q.storage_kb };
         });
       }
 
       const nRes = await fetch('/api/nodes');
       const nData = await nRes.json();
       if (nData.ground_stations) {
-        nData.ground_stations.forEach(gs => { nodesTelemetry[gs.eid] = gs; });
+        nData.ground_stations.forEach(g => {
+          nodesTelemetry[g.eid] = g;
+        });
       }
       if (nData.satellite_relays) {
-        nData.satellite_relays.forEach(sr => { nodesTelemetry[sr.eid] = sr; });
+        nData.satellite_relays.forEach(s => {
+          nodesTelemetry[s.eid] = s;
+        });
       }
 
       const tRes = await fetch('/api/topology');
@@ -570,7 +582,7 @@
     try {
       const msg = typeof eventData === 'string' ? JSON.parse(eventData) : eventData;
       if (msg.type === 'MESSAGE_TRANSMITTED' && msg.record) {
-        animatePacketDispatch(msg.record.envelope_id, '', msg.record.fault_recovered);
+        animatePacketDispatch(msg.record.envelope_id, '', msg.record.fault_recovered, msg.record.scenario);
         fetchTelemetry();
       } else if (msg.type === 'FAULT_STATE_CHANGED') {
         if (msg.fault_type === 'link_outage') activeIslState = 'DOWN';
@@ -599,12 +611,10 @@
     }
   };
 
-  // Auto-init upon DOM ready
-  document.addEventListener('DOMContentLoaded', () => {
-    setTimeout(() => {
-      init3DGlobe();
-      fetchTelemetry();
-      setInterval(fetchTelemetry, 3000);
-    }, 200);
-  });
+  // Auto-initialize when DOM is ready
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init3DGlobe);
+  } else {
+    init3DGlobe();
+  }
 })();

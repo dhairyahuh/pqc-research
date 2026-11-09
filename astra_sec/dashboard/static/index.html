@@ -3,19 +3,22 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ASTRA-Sec — Mission Control & Research Monitoring Dashboard</title>
+  <title>ASTRA-Sec — Mission Control & Cryptographic Security Observability</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   
-  <!-- Standalone 3D Geospatial Engine (Globe.gl - 100% Offline) -->
+  <!-- Standalone 3D Geospatial Engine (Globe.gl - 100% Offline Air-Gapped) -->
   <script src="/static/vendor/globe.gl.min.js"></script>
   <script src="/static/js/mission_control_3d.js"></script>
+
   <style>
     :root {
-      --bg-dark: #0a0d14;
-      --card-bg: #121722;
-      --card-border: #1e2638;
+      --bg-dark: #070a12;
+      --card-bg: #0e1424;
+      --card-bg-sub: #131b2e;
+      --card-border: #1b253b;
+      --card-border-glow: rgba(0, 229, 255, 0.25);
       --text-main: #e2e8f0;
       --text-muted: #8b9bb4;
       --accent-cyan: #00e5ff;
@@ -24,203 +27,192 @@
       --accent-amber: #ffab00;
       --accent-red: #ff1744;
       --accent-purple: #d500f9;
+      --accent-gold: #ffd700;
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
-      font-family: 'Inter', sans-serif;
+      font-family: 'Inter', -apple-system, sans-serif;
       background-color: var(--bg-dark);
       color: var(--text-main);
-      padding: 20px;
-      line-height: 1.5;
+      padding: 16px 20px;
+      line-height: 1.45;
+      overflow-x: hidden;
     }
 
+    /* Top Mission Header */
     header {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding-bottom: 20px;
+      padding-bottom: 14px;
       border-bottom: 1px solid var(--card-border);
-      margin-bottom: 25px;
+      margin-bottom: 16px;
+      flex-wrap: wrap;
+      gap: 12px;
     }
 
     .brand {
       display: flex;
       align-items: center;
-      gap: 15px;
+      gap: 12px;
     }
 
     .brand h1 {
-      font-size: 1.5rem;
-      font-weight: 700;
+      font-size: 1.45rem;
+      font-weight: 800;
       letter-spacing: -0.5px;
       color: #fff;
+      display: flex;
+      align-items: center;
+      gap: 8px;
     }
 
     .brand-pill {
       font-family: 'JetBrains Mono', monospace;
-      font-size: 0.75rem;
-      background: rgba(0, 229, 255, 0.1);
+      font-size: 0.7rem;
+      background: rgba(0, 229, 255, 0.08);
       border: 1px solid var(--accent-cyan);
       color: var(--accent-cyan);
-      padding: 4px 8px;
+      padding: 3px 8px;
       border-radius: 4px;
+      font-weight: 600;
+      letter-spacing: 0.5px;
     }
 
     .header-status {
       display: flex;
-      gap: 20px;
+      align-items: center;
+      gap: 16px;
       font-family: 'JetBrains Mono', monospace;
-      font-size: 0.85rem;
+      font-size: 0.78rem;
+      flex-wrap: wrap;
     }
 
     .status-item {
       display: flex;
       align-items: center;
       gap: 6px;
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      padding: 4px 10px;
+      border-radius: 4px;
     }
 
     .status-dot {
-      width: 8px;
-      height: 8px;
+      width: 7px;
+      height: 7px;
       border-radius: 50%;
       background: var(--accent-green);
-      box-shadow: 0 0 8px var(--accent-green);
+      box-shadow: 0 0 6px var(--accent-green);
     }
 
-    .grid-4 {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-      gap: 18px;
-      margin-bottom: 25px;
+    /* Mode Navigation Tabs */
+    .mode-nav {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 16px;
+      border-bottom: 1px solid var(--card-border);
+      padding-bottom: 10px;
     }
 
-    .grid-2 {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
-      gap: 20px;
-      margin-bottom: 25px;
+    .mode-tab-btn {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      color: var(--text-muted);
+      padding: 8px 18px;
+      font-size: 0.82rem;
+      font-weight: 700;
+      font-family: 'JetBrains Mono', monospace;
+      border-radius: 6px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.2s ease;
     }
 
+    .mode-tab-btn.active {
+      background: rgba(0, 229, 255, 0.12);
+      border-color: var(--accent-cyan);
+      color: #fff;
+      box-shadow: 0 0 12px rgba(0, 229, 255, 0.2);
+    }
+
+    /* Card & Grid Containers */
     .card {
       background: var(--card-bg);
       border: 1px solid var(--card-border);
       border-radius: 8px;
-      padding: 20px;
+      padding: 16px 18px;
       position: relative;
     }
 
     .card-title {
-      font-size: 0.9rem;
-      font-weight: 600;
+      font-size: 0.85rem;
+      font-weight: 700;
       color: var(--text-muted);
       text-transform: uppercase;
-      letter-spacing: 0.5px;
+      letter-spacing: 0.6px;
       margin-bottom: 12px;
       display: flex;
       justify-content: space-between;
       align-items: center;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      padding-bottom: 8px;
     }
 
+    .grid-4 {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 14px;
+      margin-bottom: 16px;
+    }
+
+    .grid-3 {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 16px;
+      margin-bottom: 16px;
+    }
+
+    .grid-2 {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(480px, 1fr));
+      gap: 16px;
+      margin-bottom: 16px;
+    }
+
+    /* Metric Display */
     .metric-value {
-      font-size: 2rem;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 1.55rem;
       font-weight: 700;
       color: #fff;
-      font-family: 'JetBrains Mono', monospace;
+      margin-top: 4px;
     }
 
     .metric-subtitle {
-      font-size: 0.8rem;
+      font-size: 0.72rem;
       color: var(--text-muted);
-      margin-top: 5px;
-    }
-
-    /* Topology Diagram */
-    .topology-container {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 30px 15px;
-      position: relative;
-      background: rgba(18, 23, 34, 0.6);
-      border-radius: 8px;
-      margin-top: 10px;
-    }
-
-    .topology-node {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 8px;
-      z-index: 2;
-      width: 140px;
-      text-align: center;
-    }
-
-    .node-icon {
-      width: 52px;
-      height: 52px;
-      border-radius: 10px;
-      background: #1a2233;
-      border: 2px solid var(--accent-blue);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 1.4rem;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
-    }
-
-    .node-title {
-      font-size: 0.85rem;
-      font-weight: 600;
-    }
-
-    .node-badge {
+      margin-top: 4px;
       font-family: 'JetBrains Mono', monospace;
-      font-size: 0.7rem;
-      padding: 2px 6px;
-      border-radius: 3px;
-      background: rgba(0, 230, 118, 0.15);
-      color: var(--accent-green);
-    }
-
-    .topology-link {
-      flex: 1;
-      height: 3px;
-      background: var(--accent-blue);
-      position: relative;
-      margin: 0 10px;
-      box-shadow: 0 0 6px var(--accent-blue);
-    }
-
-    .link-badge {
-      position: absolute;
-      top: -24px;
-      left: 50%;
-      transform: translateX(-50%);
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 0.65rem;
-      color: var(--accent-cyan);
-      white-space: nowrap;
-      background: var(--card-bg);
-      padding: 2px 6px;
-      border-radius: 4px;
-      border: 1px solid var(--card-border);
     }
 
     /* 3D Mission Control Globe Viewport */
     .globe-card-wrapper {
       position: relative;
-      background: #060910;
+      background: #03060c;
       border: 1px solid var(--card-border);
       border-radius: 8px;
       overflow: hidden;
-      margin-top: 10px;
+      margin-bottom: 16px;
+      box-shadow: 0 4px 30px rgba(0, 0, 0, 0.8);
     }
 
     #globe-viewport {
       width: 100%;
-      height: 560px;
+      height: 570px;
       background: radial-gradient(circle at center, #0a1124 0%, #03060c 100%);
       position: relative;
       cursor: grab;
@@ -242,41 +234,41 @@
     }
 
     .globe-hud-topleft {
-      top: 16px;
-      left: 16px;
-      background: rgba(10, 15, 26, 0.85);
+      top: 14px;
+      left: 14px;
+      background: rgba(10, 15, 26, 0.88);
       border: 1px solid rgba(0, 229, 255, 0.35);
       backdrop-filter: blur(8px);
-      padding: 12px 16px;
+      padding: 12px 14px;
       border-radius: 6px;
-      font-size: 0.75rem;
+      font-size: 0.72rem;
       font-family: 'JetBrains Mono', monospace;
-      max-width: 290px;
+      max-width: 280px;
       box-shadow: 0 4px 20px rgba(0, 0, 0, 0.6);
     }
 
     .globe-hud-topright {
-      top: 16px;
-      right: 16px;
-      background: rgba(10, 15, 26, 0.90);
+      top: 14px;
+      right: 14px;
+      background: rgba(10, 15, 26, 0.92);
       border: 1px solid rgba(41, 121, 255, 0.5);
       backdrop-filter: blur(10px);
-      padding: 16px;
+      padding: 14px;
       border-radius: 6px;
-      font-size: 0.8rem;
+      font-size: 0.75rem;
       width: 320px;
-      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.7);
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.75);
       display: none;
     }
 
     .globe-hud-bottomcenter {
-      bottom: 20px;
+      bottom: 18px;
       left: 50%;
       transform: translateX(-50%);
       background: rgba(10, 15, 26, 0.92);
       border: 1px solid rgba(0, 229, 255, 0.6);
       backdrop-filter: blur(10px);
-      padding: 12px 24px;
+      padding: 10px 22px;
       border-radius: 8px;
       text-align: center;
       min-width: 380px;
@@ -285,19 +277,19 @@
     }
 
     .globe-hud-bottomleft {
-      bottom: 16px;
-      left: 16px;
+      bottom: 14px;
+      left: 14px;
       display: flex;
-      gap: 8px;
+      gap: 6px;
       flex-wrap: wrap;
     }
 
     .cam-btn {
-      background: rgba(18, 23, 34, 0.85);
+      background: rgba(14, 20, 32, 0.85);
       border: 1px solid var(--card-border);
       color: var(--text-main);
-      padding: 6px 12px;
-      font-size: 0.75rem;
+      padding: 5px 11px;
+      font-size: 0.72rem;
       font-family: 'JetBrains Mono', monospace;
       border-radius: 4px;
       cursor: pointer;
@@ -309,42 +301,55 @@
       background: var(--accent-blue);
       border-color: var(--accent-cyan);
       color: #fff;
-      box-shadow: 0 0 8px rgba(0, 229, 255, 0.4);
     }
 
-    /* Dispatch Controls */
+    /* Demonstration Controller Bar */
     .control-row {
       display: flex;
-      gap: 12px;
-      margin-top: 15px;
+      gap: 10px;
+      align-items: center;
+      margin-top: 12px;
       flex-wrap: wrap;
+      background: var(--card-bg-sub);
+      padding: 12px 14px;
+      border-radius: 6px;
+      border: 1px solid var(--card-border);
+    }
+
+    input[type="text"], select {
+      background: #090e18;
+      border: 1px solid var(--card-border);
+      border-radius: 5px;
+      color: #fff;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.8rem;
+      padding: 8px 12px;
     }
 
     input[type="text"] {
       flex: 1;
-      min-width: 240px;
-      background: #0d121c;
-      border: 1px solid var(--card-border);
-      border-radius: 6px;
-      color: #fff;
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 0.85rem;
-      padding: 10px 14px;
+      min-width: 220px;
     }
 
-    button {
+    select {
+      min-width: 220px;
+      cursor: pointer;
+    }
+
+    button.btn-primary {
       background: var(--accent-blue);
       color: #fff;
       border: none;
-      border-radius: 6px;
-      padding: 10px 18px;
-      font-weight: 600;
-      font-size: 0.85rem;
+      border-radius: 5px;
+      padding: 9px 16px;
+      font-weight: 700;
+      font-size: 0.8rem;
       cursor: pointer;
       transition: background 0.2s;
+      font-family: 'JetBrains Mono', monospace;
     }
 
-    button:hover {
+    button.btn-primary:hover {
       background: #1e60d4;
     }
 
@@ -352,107 +357,284 @@
       background: rgba(255, 171, 0, 0.15);
       border: 1px solid var(--accent-amber);
       color: var(--accent-amber);
+      padding: 9px 14px;
+      font-weight: 700;
+      font-size: 0.8rem;
+      border-radius: 5px;
+      cursor: pointer;
+      font-family: 'JetBrains Mono', monospace;
     }
 
     button.btn-warn:hover {
       background: rgba(255, 171, 0, 0.25);
     }
 
-    /* Tables */
-    .table-container {
-      max-height: 320px;
-      overflow-y: auto;
+    button.btn-danger {
+      background: rgba(255, 23, 68, 0.15);
+      border: 1px solid var(--accent-red);
+      color: var(--accent-red);
+      padding: 9px 14px;
+      font-weight: 700;
+      font-size: 0.8rem;
+      border-radius: 5px;
+      cursor: pointer;
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    /* Horizontal Delivery Timeline */
+    .timeline-container {
+      margin-top: 14px;
+      overflow-x: auto;
+      padding-bottom: 6px;
+    }
+
+    .timeline-track {
+      display: flex;
+      align-items: center;
+      gap: 0;
+      min-width: 900px;
+      position: relative;
+    }
+
+    .timeline-item {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      position: relative;
+      cursor: pointer;
+      padding: 0 4px;
+    }
+
+    .timeline-item::before {
+      content: '';
+      position: absolute;
+      top: 11px;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: var(--card-border);
+      z-index: 1;
+    }
+
+    .timeline-node {
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      background: var(--card-bg);
+      border: 2px solid var(--card-border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.65rem;
+      font-weight: 700;
+      z-index: 2;
+      transition: all 0.2s ease;
+      color: var(--text-muted);
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    .timeline-item.active .timeline-node {
+      border-color: var(--accent-green);
+      background: rgba(0, 230, 118, 0.2);
+      color: var(--accent-green);
+      box-shadow: 0 0 8px rgba(0, 230, 118, 0.5);
+    }
+
+    .timeline-item.failed .timeline-node {
+      border-color: var(--accent-red);
+      background: rgba(255, 23, 68, 0.2);
+      color: var(--accent-red);
+    }
+
+    .timeline-label {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.65rem;
+      margin-top: 6px;
+      text-align: center;
+      white-space: nowrap;
+      color: var(--text-muted);
+    }
+
+    .timeline-item.active .timeline-label {
+      color: #fff;
+      font-weight: 600;
+    }
+
+    /* Cryptographic Pipeline Stage Cards */
+    .pipeline-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 12px;
       margin-top: 10px;
+    }
+
+    .pipe-card {
+      background: var(--card-bg-sub);
+      border: 1px solid var(--card-border);
+      border-radius: 6px;
+      padding: 12px 14px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.74rem;
+      position: relative;
+      transition: border-color 0.2s;
+    }
+
+    .pipe-card.active {
+      border-color: var(--accent-cyan);
+      box-shadow: 0 0 10px rgba(0, 229, 255, 0.15);
+    }
+
+    .pipe-card.failed {
+      border-color: var(--accent-red);
+      box-shadow: 0 0 10px rgba(255, 23, 68, 0.15);
+    }
+
+    .pipe-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+      font-size: 0.78rem;
+      font-weight: 700;
+      color: #fff;
+    }
+
+    .pipe-badge {
+      font-size: 0.65rem;
+      padding: 2px 6px;
+      border-radius: 3px;
+      font-weight: 700;
+    }
+
+    .badge-completed { background: rgba(0, 230, 118, 0.15); color: var(--accent-green); }
+    .badge-running   { background: rgba(0, 229, 255, 0.15); color: var(--accent-cyan); }
+    .badge-failed    { background: rgba(255, 23, 68, 0.15); color: var(--accent-red); }
+    .badge-pending   { background: rgba(139, 155, 180, 0.15); color: var(--text-muted); }
+
+    /* Tables & Audit Logs */
+    .table-container {
+      max-height: 280px;
+      overflow-y: auto;
+      margin-top: 8px;
     }
 
     table {
       width: 100%;
       border-collapse: collapse;
-      font-size: 0.8rem;
+      font-size: 0.74rem;
       font-family: 'JetBrains Mono', monospace;
     }
 
     th {
-      background: #182030;
+      background: #101726;
       color: var(--text-muted);
       text-align: left;
-      padding: 10px 12px;
+      padding: 8px 10px;
       position: sticky;
       top: 0;
       border-bottom: 1px solid var(--card-border);
+      font-size: 0.7rem;
     }
 
     td {
-      padding: 8px 12px;
-      border-bottom: 1px solid rgba(30, 38, 56, 0.5);
+      padding: 7px 10px;
+      border-bottom: 1px solid rgba(27, 37, 59, 0.6);
     }
 
-    tr:hover {
-      background: rgba(41, 121, 255, 0.05);
-    }
-
-    .badge-pass {
-      color: var(--accent-green);
-      font-weight: 600;
-    }
-
-    .badge-contained {
-      color: var(--accent-purple);
-      font-weight: 600;
-    }
-
-    .badge-sdc {
-      color: var(--accent-cyan);
-      font-weight: 700;
-    }
+    tr:hover { background: rgba(41, 121, 255, 0.05); }
 
     .audit-log {
-      max-height: 250px;
+      height: 200px;
       overflow-y: auto;
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 0.75rem;
-      background: #0d121c;
-      padding: 12px;
-      border-radius: 6px;
+      background: #050810;
       border: 1px solid var(--card-border);
+      border-radius: 6px;
+      padding: 10px 12px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.72rem;
+      line-height: 1.6;
     }
 
     .log-line {
-      padding: 4px 0;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      margin-bottom: 4px;
+      word-break: break-all;
+    }
+
+    .log-info    { color: var(--text-muted); }
+    .log-crypto  { color: var(--accent-cyan); }
+    .log-fault   { color: var(--accent-amber); font-weight: 600; }
+    .log-danger  { color: var(--accent-red); font-weight: 700; }
+    .log-success { color: var(--accent-green); }
+
+    /* Filter Pills */
+    .filter-row {
+      display: flex;
+      gap: 6px;
+      margin-bottom: 8px;
+    }
+
+    .filter-pill {
+      background: #131a2b;
+      border: 1px solid var(--card-border);
+      color: var(--text-muted);
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.68rem;
+      padding: 3px 8px;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    .filter-pill.active {
+      background: var(--accent-blue);
+      color: #fff;
+      border-color: var(--accent-cyan);
     }
   </style>
 </head>
 <body>
 
+  <!-- Top Mission Header -->
   <header>
     <div class="brand">
-      <h1>ASTRA-Sec</h1>
-      <span class="brand-pill">MISSION CONTROL OBSERVABILITY</span>
-      <span class="brand-pill" style="border-color: var(--accent-green); color: var(--accent-green);">PQC VERIFIED</span>
+      <h1>
+        <span style="color: var(--accent-cyan);">ASTRA</span>-Sec
+        <span class="brand-pill">MISSION CONTROL OBSERVABILITY</span>
+      </h1>
+      <span class="brand-pill" style="border-color: var(--accent-green); color: var(--accent-green);">FIPS 203 & 204 VERIFIED</span>
     </div>
+
     <div class="header-status">
-      <div class="status-item"><div class="status-dot"></div> WS: CONNECTED</div>
-      <div class="status-item">CRYPTO: ML-KEM-768 / ML-DSA-65</div>
-      <div class="status-item">DTN: BPv7 / RFC 9171</div>
+      <div class="status-item"><div class="status-dot"></div><span id="backend-status">SYSTEM: HEALTHY</span></div>
+      <div class="status-item"><span style="color: var(--accent-cyan);">MODE:</span> <span id="operating-mode">LIVE OPERATIONS</span></div>
+      <div class="status-item"><span style="color: var(--text-muted);">WS:</span> <span id="ws-status" style="color: var(--accent-green);">CONNECTED</span></div>
+      <div class="status-item"><span style="color: var(--text-muted);">KEM:</span> <span>ML-KEM-768</span></div>
+      <div class="status-item"><span style="color: var(--text-muted);">DSA:</span> <span>ML-DSA-65</span></div>
+      <div class="status-item"><span style="color: var(--text-muted);">DTN:</span> <span>RFC 9171 BPv7</span></div>
       <div class="status-item" id="utc-clock">UTC: 00:00:00</div>
     </div>
   </header>
 
-  <!-- 3D Satellite Mission Control & Geospatial Network Visualization -->
-  <div class="card" style="margin-bottom: 25px; padding: 18px 20px 22px 20px;">
-    <div class="card-title" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
-      <div style="display: flex; align-items: center; gap: 12px;">
-        <span style="font-size: 1.1rem; font-weight: 700; color: #fff;">3D Earth & Satellite Constellation Mission Control</span>
-        <span class="brand-pill" style="border-color: var(--accent-cyan); color: var(--accent-cyan); font-size: 0.7rem;">WGS84 GEODETIC LEO ORBITS</span>
-      </div>
-      <div style="display: flex; align-items: center; gap: 15px;">
-        <span style="color: var(--accent-green); font-family: 'JetBrains Mono'; font-size: 0.8rem;">● ZERO INTERMEDIATE DECRYPTION</span>
-        <span style="font-family: 'JetBrains Mono'; font-size: 0.75rem; color: var(--text-muted);">LIVE EVENT-DRIVEN STREAM</span>
-      </div>
+  <!-- Mode Navigation Tabs -->
+  <div class="mode-nav">
+    <button class="mode-tab-btn active" id="tab-ops-btn" onclick="switchMode('ops')">
+      🌐 MISSION OPERATIONS MODE
+    </button>
+    <button class="mode-tab-btn" id="tab-tech-btn" onclick="switchMode('tech')">
+      🔬 TECHNICAL ANALYSIS MODE
+    </button>
+    <div style="flex:1;"></div>
+    <div style="display:flex; align-items:center; gap:8px; font-family:'JetBrains Mono'; font-size:0.75rem; color:var(--text-muted);">
+      <span>ACTIVE ENVELOPE:</span> <code id="active-envelope-id" style="color:var(--accent-cyan);">8f3b2014-a991...</code>
     </div>
+  </div>
 
-    <!-- 3D Earth Viewport Container -->
+  <!-- ========================================================================= -->
+  <!-- VIEW 1: MISSION OPERATIONS MODE (DEFAULT) -->
+  <!-- ========================================================================= -->
+  <div id="view-ops-container">
+
+    <!-- 3D Earth & Constellation Viewport -->
     <div class="globe-card-wrapper">
       <div id="globe-viewport"></div>
 
@@ -482,17 +664,17 @@
       <!-- Top-Right Node Inspector Panel (Interactive) -->
       <div class="hud-overlay hud-interactive globe-hud-topright" id="node-inspector-hud">
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; border-bottom: 1px solid var(--card-border); padding-bottom: 6px;">
-          <span id="insp-node-name" style="font-weight: 700; color: #fff; font-size: 0.95rem;">Node Inspector</span>
+          <span id="insp-node-name" style="font-weight: 700; color: #fff; font-size: 0.92rem;">Node Inspector</span>
           <button onclick="AstraMissionControl3D.deselectNode()" style="background: transparent; border: none; color: var(--text-muted); cursor: pointer; font-size: 1.1rem; padding: 0 4px;">✕</button>
         </div>
         <div style="font-family: 'JetBrains Mono', monospace; font-size: 0.72rem; line-height: 1.6;">
           <div><span style="color: var(--text-muted);">EID:</span> <code id="insp-node-eid" style="color: var(--accent-cyan);">dtn://sat1/relay</code></div>
           <div><span style="color: var(--text-muted);">Type:</span> <span id="insp-node-type" style="color: #fff;">SATELLITE_RELAY</span></div>
-          <div><span style="color: var(--text-muted);">Coordinates:</span> <span id="insp-node-coords">52.00° N, 38.00° E (Alt: 0.36)</span></div>
-          <div><span style="color: var(--text-muted);">Status:</span> <span id="insp-node-status" style="color: var(--accent-green); font-weight: 700;">ONLINE</span></div>
+          <div><span style="color: var(--text-muted);">Coordinates:</span> <span id="insp-node-coords">52.00° N, 38.00° E (Alt: 0.35)</span></div>
+          <div><span style="color: var(--text-muted);">Status:</span> <span id="insp-node-status" style="color: var(--accent-green); font-weight: 700;">ONLINE / NORMAL</span></div>
           <div><span style="color: var(--text-muted);">Role:</span> <span id="insp-node-role" style="color: var(--text-main);">Store-and-Forward Router</span></div>
           <div style="margin-top: 6px; padding-top: 6px; border-top: 1px dashed var(--card-border);">
-            <div><span style="color: var(--text-muted);">SQLite WAL Queue:</span> <span id="insp-node-queue" style="color: var(--accent-amber); font-weight: 700;">0 bundles (0.00 KB)</span></div>
+            <div><span style="color: var(--text-muted);">SQLite WAL Queue:</span> <span id="insp-node-queue" style="color: var(--accent-amber); font-weight: 700;">0 bundles (20.00 KB)</span></div>
             <div><span style="color: var(--text-muted);">KEM Key ID:</span> <span id="insp-node-kem" style="color: var(--text-muted);">RELAY_TRANSIT_ONLY</span></div>
             <div><span style="color: var(--text-muted);">DSA Key ID:</span> <span id="insp-node-dsa" style="color: var(--text-muted);">UNAUTHORIZED_FOR_L2_DECAP</span></div>
           </div>
@@ -501,13 +683,13 @@
 
       <!-- Bottom-Center In-Flight Packet Inspector -->
       <div class="hud-overlay globe-hud-bottomcenter" id="packet-hud">
-        <div style="font-family: 'JetBrains Mono', monospace; font-size: 0.75rem; color: var(--accent-cyan); font-weight: 700; margin-bottom: 4px;">
+        <div style="font-family: 'JetBrains Mono', monospace; font-size: 0.74rem; color: var(--accent-cyan); font-weight: 700; margin-bottom: 4px;">
           IN-FLIGHT PQC ENVELOPE: <span id="packet-id-text" style="color: #fff;">DISPATCHING</span>
         </div>
         <div id="packet-hop-text" style="font-size: 0.85rem; font-weight: 700; color: #fff; margin-bottom: 2px;">
           HOP 1/3: Uplink GSA -> SAT-1
         </div>
-        <div id="packet-status-text" style="font-family: 'JetBrains Mono', monospace; font-size: 0.75rem; color: var(--accent-cyan);">
+        <div id="packet-status-text" style="font-family: 'JetBrains Mono', monospace; font-size: 0.74rem; color: var(--accent-cyan);">
           Transmitting 5,119 B Post-Quantum Wire Bundle...
         </div>
       </div>
@@ -523,142 +705,242 @@
       </div>
     </div>
 
-    <!-- Live Transmission Control -->
-    <div class="control-row">
-      <input type="text" id="payload-input" value="FLIGHT_TELEMETRY_PACKET_MISSION_EPOCH_2026">
-      <label style="display:flex; align-items:center; gap:8px; font-size:0.85rem; cursor:pointer;">
-        <input type="checkbox" id="inject-fault-toggle"> Simulate NTT SEU Bit-Flip at Destination
-      </label>
-      <button id="dispatch-btn" onclick="dispatchEnvelope()">DISPATCH ENVELOPE (E2E PQC)</button>
-      <button class="btn-warn" id="isl-toggle-btn" onclick="toggleLinkOutage()">TOGGLE ISL LINK OUTAGE</button>
-    </div>
-    <div id="dispatch-status" style="margin-top:10px; font-family:'JetBrains Mono'; font-size:0.8rem; color:var(--accent-cyan); display:none;"></div>
-  </div>
-
-  <!-- Key Metrics Row -->
-  <div class="grid-4">
-    <div class="card">
-      <div class="card-title">Empirical Trials</div>
-      <div class="metric-value" id="total-trials">38</div>
-      <div class="metric-subtitle">Across Groups A, B, C, D, E</div>
-    </div>
-    <div class="card">
-      <div class="card-title">Fault Detection Rate</div>
-      <div class="metric-value" style="color: var(--accent-green);" id="detection-rate">100.0%</div>
-      <div class="metric-subtitle">38 / 38 Anomalies Caught</div>
-    </div>
-    <div class="card">
-      <div class="card-title">Silent Data Corruption (SDC)</div>
-      <div class="metric-value" style="color: var(--accent-cyan);" id="sdc-count">0</div>
-      <div class="metric-subtitle">0.00% across tested trials</div>
-    </div>
-    <div class="card">
-      <div class="card-title">End-to-End Latency ($p_{50}$)</div>
-      <div class="metric-value" id="e2e-latency">11.66 ms</div>
-      <div class="metric-subtitle">4-Node Multi-Hop Delivery</div>
-    </div>
-  </div>
-
-  <!-- Telemetry and Queues Grid -->
-  <div class="grid-2">
-    <!-- Cryptographic Telemetry -->
-    <div class="card">
+    <!-- Live Demonstration & Scenario Dispatch Controller -->
+    <div class="card" style="margin-bottom: 16px;">
       <div class="card-title">
-        <span>L4 NTT Cryptographic Invariant Telemetry</span>
-        <span style="color: var(--accent-purple); font-family: 'JetBrains Mono';">TFIB-Ref Dual-Domain</span>
+        <span>Demonstration Orchestration & Live Packet Dispatch</span>
+        <span style="color: var(--accent-cyan); font-family: 'JetBrains Mono'; font-size: 0.72rem;">INTERACTIVE EXPERIMENT CONTROL</span>
       </div>
-      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 10px;">
-        <div>
-          <div style="font-size:0.8rem; color:var(--text-muted);">Decapsulation Throughput</div>
-          <div style="font-size:1.4rem; font-weight:700; font-family:'JetBrains Mono';" id="decaps-tput">7,009 ops/s</div>
+
+      <div class="control-row">
+        <input type="text" id="payload-input" value="FLIGHT_TELEMETRY_PACKET_MISSION_EPOCH_2026" placeholder="Enter Application Payload Text...">
+        
+        <select id="scenario-select" onchange="onScenarioChange()">
+          <option value="nominal">1. Nominal E2E PQC Transmission</option>
+          <option value="isl_outage">2. ISL Link Outage & Spooling</option>
+          <option value="ntt_transient">3. NTT Transient SEU (K=1 Rollback)</option>
+          <option value="ntt_persistent">4. Persistent Fault & Fail-Stop (K > 2)</option>
+          <option value="replay_attack">5. Anti-Replay Attack Suppression</option>
+          <option value="tamper_sig">6. ML-DSA-65 Signature Tamper Rejection</option>
+        </select>
+
+        <button class="btn-primary" id="dispatch-btn" onclick="dispatchEnvelope()">DISPATCH ENVELOPE</button>
+        <button class="btn-warn" id="isl-toggle-btn" onclick="toggleLinkOutage()">TOGGLE ISL OUTAGE</button>
+        <button class="btn-danger" onclick="resetFaults()">RESET ALL FAULTS</button>
+      </div>
+
+      <!-- Live Dispatch Status Banner -->
+      <div id="dispatch-status" style="margin-top:10px; font-family:'JetBrains Mono'; font-size:0.76rem; color:var(--accent-cyan); display:none; background: #050810; padding: 8px 12px; border-radius: 4px; border: 1px solid var(--card-border);"></div>
+
+      <!-- End-to-End Security & Delivery Timeline -->
+      <div style="margin-top: 14px;">
+        <div style="font-size: 0.72rem; font-weight: 700; color: var(--text-muted); font-family: 'JetBrains Mono'; letter-spacing: 0.5px; margin-bottom: 4px;">
+          MESSAGE JOURNEY & CRYPTOGRAPHIC MILESTONES (CLICK MILESTONE FOR AUDIT INSPECTION)
         </div>
-        <div>
-          <div style="font-size:0.8rem; color:var(--text-muted);">Transient Rollback Latency</div>
-          <div style="font-size:1.4rem; font-weight:700; font-family:'JetBrains Mono';" id="recovery-lat">57.31 μs (K=1)</div>
-        </div>
-        <div>
-          <div style="font-size:0.8rem; color:var(--text-muted);">Butterflies Monitored</div>
-          <div style="font-size:1.4rem; font-weight:700; font-family:'JetBrains Mono';">9,856 / decaps</div>
-        </div>
-        <div>
-          <div style="font-size:0.8rem; color:var(--text-muted);">Fail-Stop Budget</div>
-          <div style="font-size:1.4rem; font-weight:700; font-family:'JetBrains Mono';">K &le; 2 (Bounded)</div>
+        <div class="timeline-container">
+          <div class="timeline-track" id="timeline-track">
+            <!-- Timeline milestones rendered dynamically -->
+          </div>
         </div>
       </div>
     </div>
 
-    <!-- Storage and Spool Overview -->
-    <div class="card">
+    <!-- Core Metrics Row -->
+    <div class="grid-4">
+      <div class="card">
+        <div class="card-title">Empirical Trials</div>
+        <div class="metric-value" id="total-trials">38</div>
+        <div class="metric-subtitle">Across Groups A, B, C, D, E</div>
+      </div>
+      <div class="card">
+        <div class="card-title">Fault Detection Rate</div>
+        <div class="metric-value" style="color: var(--accent-green);" id="detection-rate">100.0%</div>
+        <div class="metric-subtitle">38 / 38 Anomalies Caught</div>
+      </div>
+      <div class="card">
+        <div class="card-title">Silent Data Corruption (SDC)</div>
+        <div class="metric-value" style="color: var(--accent-cyan);" id="sdc-count">0</div>
+        <div class="metric-subtitle">0.00% across tested trials</div>
+      </div>
+      <div class="card">
+        <div class="card-title">End-to-End Latency ($p_{50}$)</div>
+        <div class="metric-value" id="e2e-latency">11.66 ms</div>
+        <div class="metric-subtitle">4-Node Multi-Hop Delivery</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================================================= -->
+  <!-- VIEW 2: TECHNICAL ANALYSIS MODE -->
+  <!-- ========================================================================= -->
+  <div id="view-tech-container" style="display: none;">
+
+    <!-- L2 / L3 Cryptographic Security Pipeline Panel -->
+    <div class="card" style="margin-bottom: 16px;">
       <div class="card-title">
-        <span>Persistent Spool & Anti-Replay State (SQLite WAL)</span>
-        <span style="color: var(--accent-green); font-family: 'JetBrains Mono';">ACID Crash-Consistent</span>
+        <span>L2 / L3 Post-Quantum Cryptographic Security Pipeline</span>
+        <span style="color: var(--accent-cyan); font-family: 'JetBrains Mono'; font-size: 0.72rem;">7-STAGE LIFECYCLE ENGINE</span>
       </div>
-      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 10px;">
-        <div>
-          <div style="font-size:0.8rem; color:var(--text-muted);">Satellite 1 Queue Storage</div>
-          <div style="font-size:1.4rem; font-weight:700; font-family:'JetBrains Mono';" id="sat1-storage">20.00 KB</div>
-        </div>
-        <div>
-          <div style="font-size:0.8rem; color:var(--text-muted);">Anti-Replay Filter State</div>
-          <div style="font-size:1.4rem; font-weight:700; font-family:'JetBrains Mono';">56.00 KB (500 seqs)</div>
-        </div>
-        <div>
-          <div style="font-size:0.8rem; color:var(--text-muted);">HMAC Boot Manifest</div>
-          <div style="font-size:1.4rem; font-weight:700; font-family:'JetBrains Mono';">32 B (SHA-256)</div>
-        </div>
-        <div>
-          <div style="font-size:0.8rem; color:var(--text-muted);">Process RSS Footprint</div>
-          <div style="font-size:1.4rem; font-weight:700; font-family:'JetBrains Mono';">53.22 MB</div>
-        </div>
+      <div class="pipeline-grid" id="pipeline-cards-container">
+        <!-- Stages 1 to 8 rendered dynamically -->
       </div>
     </div>
-  </div>
 
-  <!-- Experimental Trials Table -->
-  <div class="card" style="margin-bottom: 25px;">
-    <div class="card-title">
-      <span>Adversarial & Fault Campaign Trials (Live Database: campaign_results.jsonl)</span>
-      <span style="color:var(--text-muted); font-family:'JetBrains Mono';" id="trial-count-badge">38 Trials Loaded</span>
-    </div>
-    <div class="table-container">
-      <table>
-        <thead>
-          <tr>
-            <th>ID</th>
-            <th>Group</th>
-            <th>Test Scenario</th>
-            <th>Fault Locus</th>
-            <th>Timing</th>
-            <th>Detection</th>
-            <th>Recovery Outcome</th>
-            <th>SDC</th>
-            <th>Latency</th>
-          </tr>
-        </thead>
-        <tbody id="trials-tbody">
-          <tr><td colspan="9" style="text-align:center; padding:20px;">Loading trials from experimental database...</td></tr>
-        </tbody>
-      </table>
-    </div>
-  </div>
+    <!-- Grid 2: L4 NTT Fault Monitor & L5/L6 DTN Spool Operations -->
+    <div class="grid-2">
 
-  <!-- Real-Time Audit Log -->
-  <div class="card">
-    <div class="card-title">
-      <span>Cryptographic Forensic Audit Trail & Real-Time Event Stream</span>
-      <span style="color:var(--accent-cyan); font-family:'JetBrains Mono';">APPEND-ONLY SECURE LOG</span>
+      <!-- L4 NTT Fault Resilience Monitor -->
+      <div class="card">
+        <div class="card-title">
+          <span>L4 NTT Fault Resilience Monitor</span>
+          <span style="color: var(--accent-purple); font-family: 'JetBrains Mono';">TFIB-Ref Dual-Domain</span>
+        </div>
+        <div style="font-family: 'JetBrains Mono', monospace; font-size: 0.75rem; line-height: 1.6;">
+          <div style="background: var(--card-bg-sub); padding: 10px 12px; border-radius: 6px; border: 1px solid var(--card-border); margin-bottom: 12px;">
+            <div style="color: var(--accent-cyan); font-weight: 700; margin-bottom: 2px;">MATHEMATICAL INVARIANT CHECK:</div>
+            <div style="color: #fff; font-size: 0.85rem; font-weight: 700;">r ≡ t · ζ (mod 3329)</div>
+            <div style="color: var(--text-muted); font-size: 0.7rem;">Kyber / ML-KEM modulus q = 3329 | 128 dual butterflies per NTT</div>
+          </div>
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+            <div><span style="color: var(--text-muted);">Invariant Status:</span> <span id="ntt-invariant-status" style="color: var(--accent-green); font-weight: 700;">NOMINAL_VERIFIED</span></div>
+            <div><span style="color: var(--text-muted);">Reference Checker:</span> <span id="ntt-ref-checker" style="color: var(--accent-cyan);">ACTIVE (Dual-Transform)</span></div>
+            <div><span style="color: var(--text-muted);">Snapshot Rollback:</span> <span id="ntt-rollback-status">ARMED (K &le; 2)</span></div>
+            <div><span style="color: var(--text-muted);">Recovery Count:</span> <span id="ntt-recovered-count" style="color: var(--accent-green); font-weight: 700;">0 (Nominal)</span></div>
+            <div><span style="color: var(--text-muted);">Fail-Stop Budget:</span> <span id="ntt-failstop-status">K &le; 2 (Bounded)</span></div>
+            <div><span style="color: var(--text-muted);">Twiddle Faults:</span> <span id="ntt-twiddle-faults">0 detected</span></div>
+          </div>
+          <div style="margin-top: 10px; padding: 8px 10px; background: #050810; border-radius: 4px; border: 1px solid var(--card-border);">
+            <span style="color: var(--text-muted);">Progression:</span>
+            <code id="ntt-progression-text" style="color: var(--accent-cyan);">NOMINAL -> INVARIANT VERIFIED -> ZERO VIOLATIONS</code>
+          </div>
+        </div>
+      </div>
+
+      <!-- L5 / L6 DTN Store-and-Forward Operations -->
+      <div class="card">
+        <div class="card-title">
+          <span>L5 / L6 DTN Store-and-Forward Operations</span>
+          <span style="color: var(--accent-green); font-family: 'JetBrains Mono';">RFC 9171 BPv7 WAL</span>
+        </div>
+        <div style="font-family: 'JetBrains Mono', monospace; font-size: 0.75rem; line-height: 1.6;">
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px;">
+            <div style="background: var(--card-bg-sub); padding: 10px; border-radius: 6px; border: 1px solid var(--card-border);">
+              <div style="color: var(--text-muted); font-size: 0.7rem;">SAT-1 QUEUE STORAGE</div>
+              <div style="font-size: 1.25rem; font-weight: 700; color: #fff;" id="tech-sat1-queue">0 bundles (20.00 KB)</div>
+              <div style="font-size: 0.68rem; color: var(--accent-cyan);">SQLite WAL Active</div>
+            </div>
+            <div style="background: var(--card-bg-sub); padding: 10px; border-radius: 6px; border: 1px solid var(--card-border);">
+              <div style="color: var(--text-muted); font-size: 0.7rem;">SAT-2 QUEUE STORAGE</div>
+              <div style="font-size: 1.25rem; font-weight: 700; color: #fff;" id="tech-sat2-queue">0 bundles (20.00 KB)</div>
+              <div style="font-size: 0.68rem; color: var(--accent-cyan);">SQLite WAL Active</div>
+            </div>
+          </div>
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
+            <div><span style="color: var(--text-muted);">Spool Mode:</span> <span>ACID Crash-Consistent</span></div>
+            <div><span style="color: var(--text-muted);">Anti-Replay Window:</span> <span>1,000 Seqs (HMAC)</span></div>
+            <div><span style="color: var(--text-muted);">Wire Protocol:</span> <span>RFC 9171 BPv7 CBOR</span></div>
+            <div><span style="color: var(--text-muted);">BPSec Security:</span> <span>BIB Integrity Enforced</span></div>
+          </div>
+        </div>
+      </div>
     </div>
-    <div class="audit-log" id="audit-log">
-      <div class="log-line">[SYSTEM BOOT] ASTRA-Sec Mission Observability Engine online. Trust store validated.</div>
-      <div class="log-line">[SECURITY] Persistent anti-replay filter initialized with HMAC state manifest.</div>
-      <div class="log-line">[CRYPTO] FIPS 203 ML-KEM-768 and FIPS 204 ML-DSA-65 native monitored bridges loaded.</div>
+
+    <!-- Live Packet & Bundle Inspector -->
+    <div class="card" style="margin-bottom: 16px;">
+      <div class="card-title">
+        <span>Active Dispatched Packet & DTN Bundle Inspector</span>
+        <span style="color: var(--accent-gold); font-family: 'JetBrains Mono'; font-size: 0.72rem;">WIRE REPRESENTATION & SECURITY BOUNDS</span>
+      </div>
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 14px; font-family: 'JetBrains Mono', monospace; font-size: 0.73rem;">
+        <div style="background: var(--card-bg-sub); padding: 10px 12px; border-radius: 6px; border: 1px solid var(--card-border);">
+          <div style="color: var(--accent-cyan); font-weight: 700; margin-bottom: 4px;">IDENTIFIERS & HOP</div>
+          <div><span style="color: var(--text-muted);">Bundle ID:</span> <span id="b-id">bundle-8f3b2014</span></div>
+          <div><span style="color: var(--text-muted);">Envelope ID:</span> <span id="b-envelope">8f3b2014-a991...</span></div>
+          <div><span style="color: var(--text-muted);">Source EID:</span> <code id="b-src">dtn://gsa/app</code></div>
+          <div><span style="color: var(--text-muted);">Dest EID:</span> <code id="b-dst">dtn://gsb/app</code></div>
+          <div><span style="color: var(--text-muted);">Sequence #:</span> <span id="b-seq">1</span></div>
+        </div>
+        <div style="background: var(--card-bg-sub); padding: 10px 12px; border-radius: 6px; border: 1px solid var(--card-border);">
+          <div style="color: var(--accent-cyan); font-weight: 700; margin-bottom: 4px;">WIRE SIZES (5,119 B TOTAL)</div>
+          <div><span style="color: var(--text-muted);">KEM Ciphertext:</span> <span id="b-kem-sz">1,088 B (FIPS 203)</span></div>
+          <div><span style="color: var(--text-muted);">DSA Signature:</span> <span id="b-dsa-sz">3,309 B (FIPS 204)</span></div>
+          <div><span style="color: var(--text-muted);">AES Ciphertext:</span> <span id="b-aes-sz">56 B</span></div>
+          <div><span style="color: var(--text-muted);">AEAD Nonce + Tag:</span> <span id="b-nonce-sz">12 B + 16 B</span></div>
+          <div><span style="color: var(--text-muted);">Header Framing:</span> <span>128 B</span></div>
+        </div>
+        <div style="background: var(--card-bg-sub); padding: 10px 12px; border-radius: 6px; border: 1px solid var(--card-border);">
+          <div style="color: var(--accent-cyan); font-weight: 700; margin-bottom: 4px;">SECURITY & DTN STATE</div>
+          <div><span style="color: var(--text-muted);">Delivery Status:</span> <span id="b-status" style="color: var(--accent-green); font-weight: 700;">DELIVERED & ACK VERIFIED</span></div>
+          <div><span style="color: var(--text-muted);">Anti-Replay Filter:</span> <span id="b-replay" style="color: var(--accent-green);">VALID (FRESH)</span></div>
+          <div><span style="color: var(--text-muted);">DSA Verification:</span> <span id="b-dsa-stat" style="color: var(--accent-green);">VALID (GENUINE)</span></div>
+          <div><span style="color: var(--text-muted);">KEM Invariant:</span> <span id="b-kem-stat" style="color: var(--accent-green);">NOMINAL (r = t*zeta)</span></div>
+          <div><span style="color: var(--text-muted);">ACK Receipt:</span> <span id="b-ack-stat" style="color: var(--accent-green);">VERIFIED AT ORIGINATOR</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Live Forensic Audit Trail & Benchmark Analytics Grid -->
+    <div class="grid-2">
+
+      <!-- Live Forensic Audit Stream -->
+      <div class="card">
+        <div class="card-title">
+          <span>Cryptographic Forensic Audit Trail</span>
+          <span style="color: var(--accent-cyan); font-family: 'JetBrains Mono';">APPEND-ONLY AUDIT STREAM</span>
+        </div>
+        <div class="filter-row">
+          <button class="filter-pill active" onclick="filterAuditLog('ALL')">ALL</button>
+          <button class="filter-pill" onclick="filterAuditLog('CRYPTO')">CRYPTO</button>
+          <button class="filter-pill" onclick="filterAuditLog('FAULT')">FAULT</button>
+          <button class="filter-pill" onclick="filterAuditLog('DTN')">DTN</button>
+          <button class="filter-pill" onclick="filterAuditLog('SECURITY')">SECURITY</button>
+        </div>
+        <div class="audit-log" id="tech-audit-log">
+          <!-- Dynamically populated -->
+        </div>
+      </div>
+
+      <!-- Empirical Experiment Selector & Micro-Benchmark Profiles -->
+      <div class="card">
+        <div class="card-title">
+          <span>Empirical Benchmark Profiles & Experiment Laboratory</span>
+          <span style="color: var(--accent-gold); font-family: 'JetBrains Mono';">CAMPAIGN TRIALS (N=38)</span>
+        </div>
+        <div style="margin-bottom: 8px; display: flex; align-items: center; gap: 8px;">
+          <span style="font-size: 0.72rem; color: var(--text-muted); font-family: 'JetBrains Mono';">Select Historical Trial:</span>
+          <select id="trial-selector" onchange="onTrialSelect()" style="flex:1;">
+            <option value="EXP-A1">EXP-A1: Ciphertext Modification (Group A)</option>
+            <option value="EXP-A2">EXP-A2: Metadata Modification (Group A)</option>
+            <option value="EXP-A3">EXP-A3: Invalid Digital Signature (Group A)</option>
+            <option value="EXP-B1">EXP-B1: Mid-NTT Stage 1 Bit 3 Flip (Group B)</option>
+            <option value="EXP-B2">EXP-B2: Mid-NTT Stage 4 Bit 3 Flip (Group B)</option>
+            <option value="EXP-B3">EXP-B3: Mid-NTT Stage 7 Bit 3 Flip (Group B)</option>
+            <option value="EXP-C1">EXP-C1: Polymul Glitch +15 (Group C)</option>
+            <option value="EXP-D1">EXP-D1: CBD Popcount Mutation (Group D)</option>
+            <option value="EXP-E1">EXP-E1: Replay Attack Immediate (Group E)</option>
+            <option value="EXP-E2">EXP-E2: Out-of-Order Message Tolerance (Group E)</option>
+          </select>
+        </div>
+        <div id="trial-details-box" style="background: var(--card-bg-sub); border: 1px solid var(--card-border); border-radius: 6px; padding: 10px 12px; font-family: 'JetBrains Mono', monospace; font-size: 0.72rem; line-height: 1.6;">
+          <div><span style="color: var(--text-muted);">Trial ID:</span> <span id="td-id">4782917a-6b4c-4ded...</span></div>
+          <div><span style="color: var(--text-muted);">Fault Locus:</span> <code id="td-locus" style="color: var(--accent-cyan);">L2_AES_GCM_CIPHERTEXT</code></div>
+          <div><span style="color: var(--text-muted);">Detection Result:</span> <span id="td-det" style="color: var(--accent-green); font-weight: 700;">DETECTED (100.0%)</span></div>
+          <div><span style="color: var(--text-muted);">Recovery Outcome:</span> <span id="td-rec" style="color: var(--accent-purple); font-weight: 700;">REJECTED</span></div>
+          <div><span style="color: var(--text-muted);">Silent Data Corruption:</span> <span id="td-sdc" style="color: var(--accent-green);">0 (NONE)</span></div>
+          <div><span style="color: var(--text-muted);">Execution Latency:</span> <span id="td-lat">7.68 ms</span></div>
+        </div>
+      </div>
     </div>
   </div>
 
   <script>
     const ADMIN_TOKEN = "astra-mission-control-token";
     let islState = "UP";
+    let currentMode = "ops";
+    let allAuditEntries = [];
+    let auditFilter = "ALL";
 
+    // Live UTC Clock
     function updateClock() {
       const now = new Date();
       document.getElementById('utc-clock').textContent = 'UTC: ' + now.toISOString().slice(11, 19);
@@ -666,6 +948,61 @@
     setInterval(updateClock, 1000);
     updateClock();
 
+    // Mode Switcher: Operations vs Technical
+    function switchMode(mode) {
+      currentMode = mode;
+      const opsContainer = document.getElementById('view-ops-container');
+      const techContainer = document.getElementById('view-tech-container');
+      const tabOpsBtn = document.getElementById('tab-ops-btn');
+      const tabTechBtn = document.getElementById('tab-tech-btn');
+      const opModeLabel = document.getElementById('operating-mode');
+
+      if (mode === 'ops') {
+        opsContainer.style.display = 'block';
+        techContainer.style.display = 'none';
+        tabOpsBtn.classList.add('active');
+        tabTechBtn.classList.remove('active');
+        opModeLabel.textContent = 'LIVE OPERATIONS';
+        if (window.AstraMissionControl3D) {
+          window.AstraMissionControl3D.refreshScene();
+        }
+      } else {
+        opsContainer.style.display = 'none';
+        techContainer.style.display = 'block';
+        tabOpsBtn.classList.remove('active');
+        tabTechBtn.classList.add('active');
+        opModeLabel.textContent = 'TECHNICAL ANALYSIS';
+        loadPipelineAndNtt();
+      }
+    }
+
+    // Scenario Selection Change
+    function onScenarioChange() {
+      const select = document.getElementById('scenario-select');
+      const payloadInput = document.getElementById('payload-input');
+      switch (select.value) {
+        case 'nominal':
+          payloadInput.value = 'FLIGHT_TELEMETRY_PACKET_MISSION_EPOCH_2026';
+          break;
+        case 'isl_outage':
+          payloadInput.value = 'CRITICAL_WAYPOINT_UPDATE_AWAITING_ORBITAL_PASS';
+          break;
+        case 'ntt_transient':
+          payloadInput.value = 'ORBITAL_CORRECTION_VECTOR_TRANSIENT_SEU_TEST';
+          break;
+        case 'ntt_persistent':
+          payloadInput.value = 'ATTITUDE_CONTROL_DATA_PERSISTENT_FAIL_STOP_TEST';
+          break;
+        case 'replay_attack':
+          payloadInput.value = 'REPLAYED_THRUSTER_COMMAND_SEQUENCE_DUPLICATE';
+          break;
+        case 'tamper_sig':
+          payloadInput.value = 'TAMPERED_TELEMETRY_WITH_CORRUPTED_DIGITAL_SIG';
+          break;
+      }
+    }
+
+    // Load Summary Metrics
     async function loadSummary() {
       try {
         const res = await fetch('/api/experiments/summary');
@@ -675,63 +1012,182 @@
         document.getElementById('sdc-count').textContent = data.sdc_count;
         document.getElementById('e2e-latency').textContent = data.latency_profile_ms.p50 + ' ms';
       } catch (e) {
-        console.error("Failed to load summary", e);
+        console.error("Summary fetch error", e);
       }
     }
 
-    async function loadTrials() {
+    // Load Pipeline and NTT Telemetry
+    async function loadPipelineAndNtt() {
       try {
-        const res = await fetch('/api/experiments/trials?limit=50');
+        const res = await fetch('/api/pipeline/latest');
         const data = await res.json();
-        const tbody = document.getElementById('trials-tbody');
-        tbody.innerHTML = '';
-        data.trials.forEach(t => {
-          const row = document.createElement('tr');
-          row.innerHTML = `
-            <td><strong>${t.experiment_id}</strong></td>
-            <td>${t.group}</td>
-            <td>${t.test_name}</td>
-            <td><code>${t.fault_location}</code></td>
-            <td>${t.fault_timing}</td>
-            <td><span class="badge-pass">${t.detection_result ? 'DETECTED' : 'CLEAN'}</span></td>
-            <td><span class="badge-contained">${t.recovery_result}</span></td>
-            <td><span class="badge-sdc">${t.sdc_outcome ? 'YES' : '0 (NONE)'}</span></td>
-            <td>${t.latency_ms.toFixed(2)} ms</td>
-          `;
-          tbody.appendChild(row);
-        });
-        document.getElementById('trial-count-badge').textContent = `${data.total} Trials Recorded`;
+        if (data.pipeline) updatePipelineUI(data.pipeline);
+        if (data.ntt) updateNttUI(data.ntt);
+
+        const bRes = await fetch('/api/bundle/latest');
+        const bData = await bRes.json();
+        if (bData.bundle) updateBundleUI(bData.bundle);
+
+        const tRes = await fetch('/api/timeline/latest');
+        const tData = await tRes.json();
+        if (tData.timeline) updateTimelineUI(tData.timeline);
       } catch (e) {
-        console.error("Failed to load trials", e);
+        console.error("Pipeline fetch error", e);
       }
     }
 
+    // Update Pipeline Cards UI
+    function updatePipelineUI(pipe) {
+      const container = document.getElementById('pipeline-cards-container');
+      if (!container) return;
+      container.innerHTML = '';
+
+      const stages = [
+        { key: 'stage1_creation', label: '1. ADU Message Creation', details: `Source: ${pipe.stage1_creation.source_eid}<br>Seq: #${pipe.stage1_creation.sequence_id} | Payload: ${pipe.stage1_creation.payload_size_bytes} B` },
+        { key: 'stage2_kem_encapsulation', label: '2. ML-KEM-768 Encap', details: `Algorithm: ${pipe.stage2_kem_encapsulation.algorithm}<br>Ciphertext: ${pipe.stage2_kem_encapsulation.ciphertext_length_bytes} B | SS: ${pipe.stage2_kem_encapsulation.shared_secret_length_bytes} B` },
+        { key: 'stage3_key_derivation', label: '3. HKDF-SHA256 Derivation', details: `Context: ${pipe.stage3_key_derivation.context_label}<br>Derived: ${pipe.stage3_key_derivation.derived_key_type}` },
+        { key: 'stage4_dsa_signature', label: '4. ML-DSA-65 Signature', details: `Algorithm: ${pipe.stage4_dsa_signature.algorithm}<br>Signature: ${pipe.stage4_dsa_signature.signature_size_bytes} B (Canonical)` },
+        { key: 'stage5_aead_encryption', label: '5. AES-256-GCM AEAD', details: `Nonce: ${pipe.stage5_aead_encryption.nonce_length_bytes} B | Tag: ${pipe.stage5_aead_encryption.tag_length_bytes} B<br>Ciphertext: ${pipe.stage5_aead_encryption.ciphertext_size_bytes} B (AAD Bound)` },
+        { key: 'stage6_dtn_bundle', label: '6. BPv7 Wire Framing', details: `Protocol: ${pipe.stage6_dtn_bundle.protocol}<br>Wire Size: ${pipe.stage6_dtn_bundle.total_wire_size_bytes} B (BPSec BIB)` },
+        { key: 'stage7_receiver_verification', label: '7. Receiver Verification', details: `Anti-Replay: ${pipe.stage7_receiver_verification.anti_replay_status}<br>DSA: ${pipe.stage7_receiver_verification.signature_verification} | KEM: ${pipe.stage7_receiver_verification.kem_decapsulation_status}` },
+        { key: 'stage8_acknowledgment', label: '8. Verified ACK at GSA', details: `Status: ${pipe.stage8_acknowledgment.status}<br>ACK ID: ${pipe.stage8_acknowledgment.ack_id || 'NONE'} (${pipe.stage8_acknowledgment.ack_signature_size_bytes} B)` }
+      ];
+
+      stages.forEach(s => {
+        const stageData = pipe[s.key] || {};
+        const status = stageData.status || 'PENDING';
+        const card = document.createElement('div');
+        card.className = `pipe-card ${status.includes('COMPLETED') || status.includes('VERIFIED') ? 'active' : (status.includes('FAILED') || status.includes('REJECTED') ? 'failed' : '')}`;
+        
+        let badgeClass = 'badge-pending';
+        if (status.includes('COMPLETED') || status.includes('VERIFIED')) badgeClass = 'badge-completed';
+        if (status.includes('FAILED') || status.includes('REJECTED')) badgeClass = 'badge-failed';
+        if (status.includes('RUNNING')) badgeClass = 'badge-running';
+
+        card.innerHTML = `
+          <div class="pipe-header">
+            <span>${s.label}</span>
+            <span class="pipe-badge ${badgeClass}">${status}</span>
+          </div>
+          <div style="color:var(--text-muted); font-size:0.7rem; line-height:1.5;">${s.details}</div>
+        `;
+        container.appendChild(card);
+      });
+    }
+
+    // Update NTT Telemetry UI
+    function updateNttUI(ntt) {
+      if (!ntt) return;
+      document.getElementById('ntt-invariant-status').textContent = ntt.invariant_status;
+      document.getElementById('ntt-ref-checker').textContent = ntt.reference_checker + ' (Dual-Transform)';
+      document.getElementById('ntt-rollback-status').textContent = ntt.operand_snapshot_buffer;
+      document.getElementById('ntt-recovered-count').textContent = `${ntt.recovered_count} (Recovered)`;
+      document.getElementById('ntt-failstop-status').textContent = ntt.fail_stop_engaged ? 'ENGAGED (IMPLICIT REJECTION)' : 'K <= 2 (Bounded)';
+      document.getElementById('ntt-twiddle-faults').textContent = `${ntt.mismatch_count} detected`;
+
+      const progEl = document.getElementById('ntt-progression-text');
+      if (ntt.fail_stop_engaged) {
+        progEl.textContent = 'FAULT ARMED -> INVARIANT VIOLATION -> RETRY K>2 -> FAIL-STOP IMPLICIT REJECTION';
+        progEl.style.color = 'var(--accent-red)';
+      } else if (ntt.recovered_count > 0) {
+        progEl.textContent = `FAULT ARMED -> INVARIANT VIOLATION (L${ntt.fault_layer}B${ntt.fault_butterfly}) -> ROLLBACK K=1 -> RETRY -> RECOVERED`;
+        progEl.style.color = 'var(--accent-green)';
+      } else {
+        progEl.textContent = 'NOMINAL -> 128 DUAL BUTTERFLIES CHECKED -> ZERO VIOLATIONS';
+        progEl.style.color = 'var(--accent-cyan)';
+      }
+    }
+
+    // Update Bundle Inspector UI
+    function updateBundleUI(b) {
+      if (!b) return;
+      document.getElementById('b-id').textContent = b.bundle_id;
+      document.getElementById('b-envelope').textContent = b.envelope_id ? b.envelope_id.slice(0, 16) + '...' : 'N/A';
+      document.getElementById('b-src').textContent = b.source_eid;
+      document.getElementById('b-dst').textContent = b.destination_eid;
+      document.getElementById('b-seq').textContent = b.sequence_id;
+      document.getElementById('b-kem-sz').textContent = `${b.kem_ciphertext_bytes} B (FIPS 203)`;
+      document.getElementById('b-dsa-sz').textContent = `${b.signature_bytes} B (FIPS 204)`;
+      document.getElementById('b-aes-sz').textContent = `${b.ciphertext_bytes} B`;
+      document.getElementById('b-nonce-sz').textContent = `${b.nonce_bytes} B + ${b.tag_bytes} B`;
+      document.getElementById('b-status').textContent = b.current_status;
+      document.getElementById('b-replay').textContent = b.anti_replay_status;
+      document.getElementById('b-dsa-stat').textContent = b.dsa_signature_status;
+      document.getElementById('b-kem-stat').textContent = b.kem_invariant_status;
+    }
+
+    // Update Timeline UI
+    function updateTimelineUI(events) {
+      const track = document.getElementById('timeline-track');
+      if (!track || !events) return;
+      track.innerHTML = '';
+
+      events.forEach((ev, idx) => {
+        const item = document.createElement('div');
+        const isFailed = ev.status.includes('FAIL') || ev.status.includes('REJECT') || ev.status.includes('ABORT');
+        item.className = `timeline-item ${isFailed ? 'failed' : 'active'}`;
+        item.title = `${ev.title} (${ev.time})\n${ev.detail}`;
+        item.onclick = () => {
+          addAuditLine(`[TIMELINE INSPECT] ${ev.step}: ${ev.title} at ${ev.node} (${ev.detail})`, 'CRYPTO');
+        };
+
+        item.innerHTML = `
+          <div class="timeline-node">${idx + 1}</div>
+          <div class="timeline-label">${ev.step}<br><span style="color:#fff;">${ev.time}</span></div>
+        `;
+        track.appendChild(item);
+      });
+    }
+
+    // Single Trial Selection
+    async function onTrialSelect() {
+      const trialId = document.getElementById('trial-selector').value;
+      try {
+        const res = await fetch(`/api/experiments/trial/${trialId}`);
+        const data = await res.json();
+        document.getElementById('td-id').textContent = data.trial_id.slice(0, 18) + '...';
+        document.getElementById('td-locus').textContent = data.fault_location;
+        document.getElementById('td-det').textContent = data.detection_result ? 'DETECTED (100.0%)' : 'CLEAN';
+        document.getElementById('td-rec').textContent = data.recovery_result;
+        document.getElementById('td-sdc').textContent = data.sdc_outcome ? 'YES (CORRUPTED)' : '0 (NONE)';
+        document.getElementById('td-lat').textContent = `${data.latency_ms.toFixed(2)} ms`;
+      } catch (e) {
+        console.error("Trial select error", e);
+      }
+    }
+
+    // Load Queues & Satellite Spools
     async function loadQueues() {
       try {
         const res = await fetch('/api/queue');
         const data = await res.json();
         if (data.queues && data.queues.length >= 2) {
-          const sat1StorageEl = document.getElementById('sat1-storage');
-          if (sat1StorageEl) sat1StorageEl.textContent = `${data.queues[0].storage_kb} KB`;
+          const q1 = data.queues[0];
+          const q2 = data.queues[1];
+          const s1El = document.getElementById('tech-sat1-queue');
+          const s2El = document.getElementById('tech-sat2-queue');
+          if (s1El) s1El.textContent = `${q1.pending_bundles} bundles (${q1.storage_kb} KB)`;
+          if (s2El) s2El.textContent = `${q2.pending_bundles} bundles (${q2.storage_kb} KB)`;
         }
         if (window.AstraMissionControl3D) {
           window.AstraMissionControl3D.fetchTelemetry();
         }
       } catch (e) {
-        console.error("Failed to load queues", e);
+        console.error("Queue load error", e);
       }
     }
 
+    // Dispatch Envelope
     async function dispatchEnvelope() {
       const payload = document.getElementById('payload-input').value;
-      const simulateFault = document.getElementById('inject-fault-toggle').checked;
+      const scenario = document.getElementById('scenario-select').value;
       const statusDiv = document.getElementById('dispatch-status');
       statusDiv.style.display = 'block';
-      statusDiv.textContent = 'Encrypting with ML-KEM-768, signing with ML-DSA-65, and routing across 3D satellite constellation...';
+      statusDiv.textContent = `[INITIATING] Encapsulating with ML-KEM-768, signing with ML-DSA-65, executing scenario '${scenario}'...`;
 
-      // Trigger 3D packet animation
+      // Trigger 3D packet flight animation
       if (window.AstraMissionControl3D) {
-        window.AstraMissionControl3D.animatePacketDispatch(null, payload, simulateFault);
+        window.AstraMissionControl3D.animatePacketDispatch(null, payload, scenario === 'ntt_transient', scenario);
       }
 
       try {
@@ -743,18 +1199,28 @@
           },
           body: JSON.stringify({
             payload_text: payload,
-            simulate_transient_fault: simulateFault
+            scenario: scenario,
+            simulate_transient_fault: scenario === 'ntt_transient'
           })
         });
         const data = await res.json();
-        statusDiv.textContent = `[COMPLETED] Status: ${data.status} | Latency: ${data.duration_ms} ms | Delivered: ${data.delivered_to_destination} | Recovered SEU: ${data.transient_recovery_occurred} | Receipt Verified: ${data.receipt_verified}`;
-        addAuditLine(`[DISPATCH] Envelope ${data.envelope_id} routed in ${data.duration_ms} ms (${data.status}). Fault Recovered: ${data.transient_recovery_occurred}`);
+        statusDiv.textContent = `[DISPATCH COMPLETED] Status: ${data.status} | Latency: ${data.duration_ms} ms | Delivered: ${data.delivered_to_destination} | Recovered: ${data.transient_recovery_occurred} | Receipt Verified: ${data.receipt_verified}`;
+        
+        document.getElementById('active-envelope-id').textContent = data.envelope_id ? data.envelope_id.slice(0, 14) + '...' : 'NONE';
+
+        if (data.pipeline) updatePipelineUI(data.pipeline);
+        if (data.ntt) updateNttUI(data.ntt);
+        if (data.bundle) updateBundleUI(data.bundle);
+        if (data.timeline) updateTimelineUI(data.timeline);
+
+        addAuditLine(`[DISPATCH] Envelope ${data.envelope_id} status ${data.status} in ${data.duration_ms} ms (Scenario: ${scenario})`, data.status === 'SUCCESS' ? 'SUCCESS' : 'FAULT');
         loadQueues();
       } catch (e) {
         statusDiv.textContent = 'Error: ' + e;
       }
     }
 
+    // Toggle ISL Link Outage
     async function toggleLinkOutage() {
       const nextState = islState === "UP" ? "link_outage" : "link_restore";
       try {
@@ -778,47 +1244,150 @@
           if (islState === "DOWN") {
             btn.textContent = "RESTORE ISL LINK";
             btn.style.background = "var(--accent-red)";
+            btn.style.borderColor = "var(--accent-red)";
+            btn.style.color = "#fff";
           } else {
-            btn.textContent = "TOGGLE ISL LINK OUTAGE";
+            btn.textContent = "TOGGLE ISL OUTAGE";
             btn.style.background = "";
+            btn.style.borderColor = "";
+            btn.style.color = "";
           }
         }
-        addAuditLine(`[TOPOLOGY] Inter-Satellite Link SAT1 -> SAT2 transitioned to ${islState}`);
+        addAuditLine(`[TOPOLOGY] ISL crosslink SAT1 -> SAT2 transitioned to ${islState}`, 'DTN');
         loadQueues();
       } catch (e) {
         console.error("Link outage error", e);
       }
     }
 
-    function addAuditLine(text) {
-      const log = document.getElementById('audit-log');
-      const div = document.createElement('div');
-      div.className = 'log-line';
+    // Reset All Faults
+    async function resetFaults() {
+      try {
+        await fetch('/api/admin/inject-fault', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${ADMIN_TOKEN}`
+          },
+          body: JSON.stringify({
+            target_node: "dtn://sat1/relay",
+            fault_type: "reset_faults"
+          })
+        });
+        islState = "UP";
+        if (window.AstraMissionControl3D) {
+          window.AstraMissionControl3D.setIslState("UP");
+        }
+        const btn = document.getElementById('isl-toggle-btn');
+        if (btn) {
+          btn.textContent = "TOGGLE ISL OUTAGE";
+          btn.style.background = "";
+          btn.style.borderColor = "";
+          btn.style.color = "";
+        }
+        addAuditLine('[SYSTEM RESET] All injected cryptographic & link faults reset to nominal.', 'SECURITY');
+        loadQueues();
+        loadPipelineAndNtt();
+      } catch (e) {
+        console.error("Reset error", e);
+      }
+    }
+
+    // Add Audit Log Line
+    function addAuditLine(text, category = 'INFO') {
       const timeStr = new Date().toISOString().slice(11, 19);
-      div.textContent = `[${timeStr}] ${text}`;
-      log.insertBefore(div, log.firstChild);
+      const entry = { time: timeStr, text: text, category: category };
+      allAuditEntries.unshift(entry);
+      if (allAuditEntries.length > 100) allAuditEntries.pop();
+      renderAuditLog();
+    }
+
+    // Render Filtered Audit Log
+    function renderAuditLog() {
+      const log = document.getElementById('tech-audit-log');
+      if (!log) return;
+      log.innerHTML = '';
+
+      const filtered = allAuditEntries.filter(e => {
+        if (auditFilter === 'ALL') return true;
+        return e.category === auditFilter;
+      });
+
+      filtered.forEach(e => {
+        const div = document.createElement('div');
+        div.className = 'log-line';
+        let cls = 'log-info';
+        if (e.category === 'CRYPTO') cls = 'log-crypto';
+        if (e.category === 'FAULT') cls = 'log-fault';
+        if (e.category === 'SECURITY') cls = 'log-danger';
+        if (e.category === 'SUCCESS') cls = 'log-success';
+
+        div.innerHTML = `<span style="color:var(--text-muted);">[${e.time}]</span> <span class="${cls}">${e.text}</span>`;
+        log.appendChild(div);
+      });
+    }
+
+    // Filter Audit Log Category
+    function filterAuditLog(cat) {
+      auditFilter = cat;
+      const pills = document.querySelectorAll('.filter-pill');
+      pills.forEach(p => {
+        if (p.textContent === cat) p.classList.add('active');
+        else p.classList.remove('active');
+      });
+      renderAuditLog();
     }
 
     // Connect WebSocket
     function connectWS() {
       const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
       const ws = new WebSocket(`${protocol}//${window.location.host}/ws/live`);
+      const wsStatus = document.getElementById('ws-status');
+
+      ws.onopen = () => {
+        if (wsStatus) {
+          wsStatus.textContent = 'CONNECTED';
+          wsStatus.style.color = 'var(--accent-green)';
+        }
+      };
+
       ws.onmessage = (event) => {
         const msg = JSON.parse(event.data);
         if (window.AstraMissionControl3D) {
           window.AstraMissionControl3D.handleWsMessage(msg);
         }
-        if (msg.type === "MESSAGE_TRANSMITTED") {
-          addAuditLine(`[WS EVENT] Envelope ${msg.record.envelope_id} delivered in ${msg.record.duration_ms} ms`);
+        if (msg.type === "INITIAL_STATE") {
+          if (msg.pipeline) updatePipelineUI(msg.pipeline);
+          if (msg.ntt) updateNttUI(msg.ntt);
+          if (msg.bundle) updateBundleUI(msg.bundle);
+          if (msg.timeline) updateTimelineUI(msg.timeline);
+        } else if (msg.type === "MESSAGE_TRANSMITTED") {
+          addAuditLine(`[WS] Envelope ${msg.record.envelope_id} delivered in ${msg.record.duration_ms} ms (Status: ${msg.record.scenario || 'NOMINAL'})`, 'CRYPTO');
+          if (msg.pipeline) updatePipelineUI(msg.pipeline);
+          if (msg.ntt) updateNttUI(msg.ntt);
+          if (msg.bundle) updateBundleUI(msg.bundle);
+          if (msg.timeline) updateTimelineUI(msg.timeline);
           loadQueues();
         }
       };
-      ws.onclose = () => setTimeout(connectWS, 2000);
+
+      ws.onclose = () => {
+        if (wsStatus) {
+          wsStatus.textContent = 'RECONNECTING';
+          wsStatus.style.color = 'var(--accent-amber)';
+        }
+        setTimeout(connectWS, 2000);
+      };
     }
 
+    // Initial Bootstrap
+    addAuditLine('ASTRA-Sec Mission Observability Engine online. Trust store validated.', 'SECURITY');
+    addAuditLine('Persistent anti-replay filter initialized with HMAC state manifest.', 'SECURITY');
+    addAuditLine('FIPS 203 ML-KEM-768 and FIPS 204 ML-DSA-65 monitored engines loaded.', 'CRYPTO');
     loadSummary();
-    loadTrials();
     loadQueues();
+    loadPipelineAndNtt();
+    onTrialSelect();
     connectWS();
   </script>
 </body>
