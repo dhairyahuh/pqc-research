@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ASTRA-Sec — Mission Control & Cryptographic Security Observability</title>
+  <title>ASTRA-Sec — Aerospace Mission Control & Cryptographic Observability</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -14,13 +14,13 @@
 
   <style>
     :root {
-      --bg-dark: #070a12;
-      --card-bg: #0e1424;
-      --card-bg-sub: #131b2e;
-      --card-border: #1b253b;
+      --bg-dark: #06090f;
+      --card-bg: #0c121e;
+      --card-bg-sub: #111a2c;
+      --card-border: #1a263c;
       --card-border-glow: rgba(0, 229, 255, 0.25);
       --text-main: #e2e8f0;
-      --text-muted: #8b9bb4;
+      --text-muted: #7d8ea6;
       --accent-cyan: #00e5ff;
       --accent-blue: #2979ff;
       --accent-green: #00e676;
@@ -31,72 +31,91 @@
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; }
+    
     body {
       font-family: 'Inter', -apple-system, sans-serif;
       background-color: var(--bg-dark);
       color: var(--text-main);
-      padding: 16px 20px;
-      line-height: 1.45;
-      overflow-x: hidden;
+      height: 100vh;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      line-height: 1.4;
     }
 
-    /* Top Mission Header */
+    /* Custom aerospace scrollbars */
+    ::-webkit-scrollbar { width: 5px; height: 5px; }
+    ::-webkit-scrollbar-track { background: #080d16; }
+    ::-webkit-scrollbar-thumb { background: #1c2940; border-radius: 3px; }
+    ::-webkit-scrollbar-thumb:hover { background: var(--accent-blue); }
+
+    /* Top Aerospace Header (NASA Open MCT style) */
     header {
+      height: 44px;
+      flex-shrink: 0;
+      background: #090e18;
+      border-bottom: 1px solid var(--card-border);
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding-bottom: 14px;
-      border-bottom: 1px solid var(--card-border);
-      margin-bottom: 16px;
-      flex-wrap: wrap;
-      gap: 12px;
+      padding: 0 16px;
+      z-index: 100;
     }
 
-    .brand {
+    .brand-section {
       display: flex;
       align-items: center;
       gap: 12px;
     }
 
-    .brand h1 {
-      font-size: 1.45rem;
+    .brand-title {
+      font-size: 1.15rem;
       font-weight: 800;
-      letter-spacing: -0.5px;
+      letter-spacing: -0.3px;
       color: #fff;
       display: flex;
       align-items: center;
       gap: 8px;
     }
 
-    .brand-pill {
+    .brand-title span.pqc {
+      color: var(--accent-cyan);
+      text-shadow: 0 0 12px rgba(0, 229, 255, 0.4);
+    }
+
+    .brand-badge {
       font-family: 'JetBrains Mono', monospace;
-      font-size: 0.7rem;
+      font-size: 0.68rem;
       background: rgba(0, 229, 255, 0.08);
       border: 1px solid var(--accent-cyan);
       color: var(--accent-cyan);
-      padding: 3px 8px;
+      padding: 2px 7px;
       border-radius: 4px;
-      font-weight: 600;
+      font-weight: 700;
       letter-spacing: 0.5px;
     }
 
-    .header-status {
+    .header-subsystems {
       display: flex;
       align-items: center;
-      gap: 16px;
+      gap: 8px;
       font-family: 'JetBrains Mono', monospace;
-      font-size: 0.78rem;
-      flex-wrap: wrap;
+      font-size: 0.72rem;
     }
 
-    .status-item {
+    .subsys-pill {
       display: flex;
       align-items: center;
       gap: 6px;
       background: var(--card-bg);
       border: 1px solid var(--card-border);
-      padding: 4px 10px;
+      padding: 3px 8px;
       border-radius: 4px;
+      color: var(--text-muted);
+    }
+
+    .subsys-pill strong {
+      color: #fff;
     }
 
     .status-dot {
@@ -107,194 +126,274 @@
       box-shadow: 0 0 6px var(--accent-green);
     }
 
-    /* Mode Navigation Tabs */
-    .mode-nav {
+    .header-controls {
       display: flex;
-      gap: 8px;
-      margin-bottom: 16px;
-      border-bottom: 1px solid var(--card-border);
-      padding-bottom: 10px;
+      align-items: center;
+      gap: 10px;
     }
 
-    .mode-tab-btn {
+    .mode-toggle-btn {
       background: var(--card-bg);
       border: 1px solid var(--card-border);
       color: var(--text-muted);
-      padding: 8px 18px;
-      font-size: 0.82rem;
+      padding: 4px 10px;
+      font-size: 0.72rem;
       font-weight: 700;
       font-family: 'JetBrains Mono', monospace;
-      border-radius: 6px;
+      border-radius: 4px;
       cursor: pointer;
       display: flex;
       align-items: center;
-      gap: 8px;
+      gap: 6px;
       transition: all 0.2s ease;
     }
 
-    .mode-tab-btn.active {
+    .mode-toggle-btn.active {
       background: rgba(0, 229, 255, 0.12);
       border-color: var(--accent-cyan);
       color: #fff;
-      box-shadow: 0 0 12px rgba(0, 229, 255, 0.2);
+      box-shadow: 0 0 10px rgba(0, 229, 255, 0.25);
     }
 
-    /* Card & Grid Containers */
-    .card {
-      background: var(--card-bg);
-      border: 1px solid var(--card-border);
-      border-radius: 8px;
-      padding: 16px 18px;
+    .clock-pill {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.75rem;
+      color: var(--accent-cyan);
+      background: #04070e;
+      border: 1px solid #141f33;
+      padding: 3px 9px;
+      border-radius: 4px;
+      font-weight: 600;
+    }
+
+    /* Main Console View Area */
+    #view-ops-container {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      min-height: 0;
+      padding: 8px 12px;
+      gap: 8px;
+      overflow: hidden;
+    }
+
+    /* 3-Column Operations Grid */
+    .ops-main-grid {
+      flex: 1;
+      display: flex;
+      gap: 8px;
+      min-height: 0;
+    }
+
+    /* Left Column: Constellation & Astrodynamics */
+    .ops-left-col {
+      width: 310px;
+      flex-shrink: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      overflow-y: auto;
+    }
+
+    /* Center Column: 3D Geospatial Earth & Flight Controls */
+    .ops-center-col {
+      flex: 1;
+      min-width: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
       position: relative;
     }
 
-    .card-title {
-      font-size: 0.85rem;
+    /* Right Column: PQC & Fault Observability */
+    .ops-right-col {
+      width: 370px;
+      flex-shrink: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      overflow-y: auto;
+    }
+
+    /* Bottom Dock: Timeline & Audit Trail */
+    .ops-bottom-dock {
+      height: 185px;
+      flex-shrink: 0;
+      display: flex;
+      gap: 8px;
+    }
+
+    /* Generic Panel Card Styling */
+    .panel-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 6px;
+      padding: 10px 12px;
+      position: relative;
+    }
+
+    .panel-header {
+      font-size: 0.72rem;
       font-weight: 700;
       color: var(--text-muted);
       text-transform: uppercase;
       letter-spacing: 0.6px;
-      margin-bottom: 12px;
+      margin-bottom: 8px;
       display: flex;
       justify-content: space-between;
       align-items: center;
       border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-      padding-bottom: 8px;
-    }
-
-    .grid-4 {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-      gap: 14px;
-      margin-bottom: 16px;
-    }
-
-    .grid-3 {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-      gap: 16px;
-      margin-bottom: 16px;
-    }
-
-    .grid-2 {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(480px, 1fr));
-      gap: 16px;
-      margin-bottom: 16px;
-    }
-
-    /* Metric Display */
-    .metric-value {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 1.55rem;
-      font-weight: 700;
-      color: #fff;
-      margin-top: 4px;
-    }
-
-    .metric-subtitle {
-      font-size: 0.72rem;
-      color: var(--text-muted);
-      margin-top: 4px;
+      padding-bottom: 6px;
       font-family: 'JetBrains Mono', monospace;
     }
 
-    /* 3D Mission Control Globe Viewport */
-    .globe-card-wrapper {
-      position: relative;
-      background: #03060c;
+    .panel-header span.tag {
+      color: var(--accent-cyan);
+      font-size: 0.65rem;
+    }
+
+    /* Constellation Node Item Pills */
+    .node-list {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .node-item-pill {
+      background: var(--card-bg-sub);
       border: 1px solid var(--card-border);
-      border-radius: 8px;
-      overflow: hidden;
-      margin-bottom: 16px;
-      box-shadow: 0 4px 30px rgba(0, 0, 0, 0.8);
+      border-radius: 5px;
+      padding: 6px 10px;
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      transition: all 0.2s ease;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.72rem;
     }
+
+    .node-item-pill:hover {
+      border-color: var(--accent-cyan);
+      background: #141f35;
+    }
+
+    .node-item-pill.selected {
+      border-color: var(--accent-cyan);
+      background: rgba(0, 229, 255, 0.1);
+      box-shadow: 0 0 10px rgba(0, 229, 255, 0.15);
+    }
+
+    .node-badge {
+      font-size: 0.62rem;
+      padding: 2px 5px;
+      border-radius: 3px;
+      font-weight: 700;
+    }
+
+    .badge-ground { background: rgba(0, 229, 255, 0.15); color: var(--accent-cyan); }
+    .badge-sat    { background: rgba(255, 215, 0, 0.15); color: var(--accent-gold); }
+    .badge-dest   { background: rgba(0, 230, 118, 0.15); color: var(--accent-green); }
+
+    /* Astrodynamics & Subsystems Grid */
+    .astro-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 6px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.7rem;
+    }
+
+    .astro-cell {
+      background: #090e18;
+      border: 1px solid #141e30;
+      border-radius: 4px;
+      padding: 6px 8px;
+    }
+
+    .astro-label {
+      color: var(--text-muted);
+      font-size: 0.62rem;
+      text-transform: uppercase;
+      margin-bottom: 2px;
+    }
+
+    .astro-val {
+      color: #fff;
+      font-weight: 700;
+    }
+
+    /* 3D Globe Viewport */
+    .globe-container {
+      flex: 1;
+      width: 100%;
+      position: relative;
+      background: radial-gradient(circle at center, #0a1122 0%, #03060c 100%);
+      border: 1px solid var(--card-border);
+      border-radius: 6px;
+      overflow: hidden;
+      cursor: grab;
+      min-height: 380px;
+    }
+
+    .globe-container:active { cursor: grabbing; }
 
     #globe-viewport {
       width: 100%;
-      height: 570px;
-      background: radial-gradient(circle at center, #0a1124 0%, #03060c 100%);
-      position: relative;
-      cursor: grab;
+      height: 100%;
+      position: absolute;
+      top: 0;
+      left: 0;
     }
 
-    #globe-viewport:active {
-      cursor: grabbing;
-    }
-
-    /* HUD Overlays */
+    /* HUD Overlays on 3D Scene */
     .hud-overlay {
       position: absolute;
       z-index: 10;
       pointer-events: none;
     }
 
-    .hud-interactive {
-      pointer-events: auto;
-    }
+    .hud-interactive { pointer-events: auto; }
 
-    .globe-hud-topleft {
-      top: 14px;
-      left: 14px;
-      background: rgba(10, 15, 26, 0.88);
-      border: 1px solid rgba(0, 229, 255, 0.35);
+    .hud-top-telemetry {
+      top: 10px;
+      left: 10px;
+      background: rgba(10, 15, 26, 0.9);
+      border: 1px solid rgba(0, 229, 255, 0.4);
       backdrop-filter: blur(8px);
-      padding: 12px 14px;
-      border-radius: 6px;
-      font-size: 0.72rem;
+      padding: 8px 12px;
+      border-radius: 5px;
+      font-size: 0.7rem;
       font-family: 'JetBrains Mono', monospace;
-      max-width: 280px;
-      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.6);
+      max-width: 270px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.6);
     }
 
-    .globe-hud-topright {
-      top: 14px;
-      right: 14px;
-      background: rgba(10, 15, 26, 0.92);
-      border: 1px solid rgba(41, 121, 255, 0.5);
-      backdrop-filter: blur(10px);
-      padding: 14px;
-      border-radius: 6px;
-      font-size: 0.75rem;
-      width: 320px;
-      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.75);
-      display: none;
-    }
-
-    .globe-hud-bottomcenter {
-      bottom: 18px;
-      left: 50%;
-      transform: translateX(-50%);
-      background: rgba(10, 15, 26, 0.92);
-      border: 1px solid rgba(0, 229, 255, 0.6);
-      backdrop-filter: blur(10px);
-      padding: 10px 22px;
-      border-radius: 8px;
-      text-align: center;
-      min-width: 380px;
-      box-shadow: 0 0 25px rgba(0, 229, 255, 0.35);
-      display: none;
-    }
-
-    .globe-hud-bottomleft {
-      bottom: 14px;
-      left: 14px;
+    .hud-top-telemetry-row {
       display: flex;
-      gap: 6px;
+      justify-content: space-between;
+      margin-bottom: 3px;
+    }
+
+    .hud-cam-controls {
+      bottom: 10px;
+      left: 10px;
+      display: flex;
+      gap: 5px;
       flex-wrap: wrap;
     }
 
     .cam-btn {
-      background: rgba(14, 20, 32, 0.85);
+      background: rgba(14, 20, 32, 0.88);
       border: 1px solid var(--card-border);
       color: var(--text-main);
-      padding: 5px 11px;
-      font-size: 0.72rem;
+      padding: 4px 9px;
+      font-size: 0.68rem;
       font-family: 'JetBrains Mono', monospace;
       border-radius: 4px;
       cursor: pointer;
-      transition: all 0.2s ease;
       backdrop-filter: blur(6px);
+      transition: all 0.2s;
     }
 
     .cam-btn:hover {
@@ -303,96 +402,200 @@
       color: #fff;
     }
 
-    /* Demonstration Controller Bar */
-    .control-row {
-      display: flex;
-      gap: 10px;
-      align-items: center;
-      margin-top: 12px;
-      flex-wrap: wrap;
-      background: var(--card-bg-sub);
-      padding: 12px 14px;
+    .hud-packet-monitor {
+      bottom: 12px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(10, 16, 28, 0.94);
+      border: 1px solid rgba(0, 229, 255, 0.7);
+      backdrop-filter: blur(10px);
+      padding: 8px 18px;
       border-radius: 6px;
+      text-align: center;
+      min-width: 360px;
+      box-shadow: 0 0 25px rgba(0, 229, 255, 0.35);
+      display: none;
+    }
+
+    .hud-node-inspector {
+      top: 10px;
+      right: 10px;
+      background: rgba(10, 15, 26, 0.92);
+      border: 1px solid rgba(41, 121, 255, 0.5);
+      backdrop-filter: blur(10px);
+      padding: 10px 12px;
+      border-radius: 6px;
+      font-size: 0.72rem;
+      width: 290px;
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.75);
+      display: none;
+    }
+
+    /* Integrated Flight Control Bar */
+    .flight-control-strip {
+      background: var(--card-bg);
       border: 1px solid var(--card-border);
+      border-radius: 6px;
+      padding: 8px 12px;
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      flex-wrap: wrap;
     }
 
     input[type="text"], select {
-      background: #090e18;
+      background: #070b13;
       border: 1px solid var(--card-border);
-      border-radius: 5px;
+      border-radius: 4px;
       color: #fff;
       font-family: 'JetBrains Mono', monospace;
-      font-size: 0.8rem;
-      padding: 8px 12px;
+      font-size: 0.74rem;
+      padding: 6px 10px;
     }
 
-    input[type="text"] {
-      flex: 1;
-      min-width: 220px;
-    }
-
-    select {
-      min-width: 220px;
-      cursor: pointer;
-    }
+    input[type="text"] { flex: 1; min-width: 200px; }
+    select { min-width: 230px; cursor: pointer; }
 
     button.btn-primary {
       background: var(--accent-blue);
       color: #fff;
       border: none;
-      border-radius: 5px;
-      padding: 9px 16px;
+      border-radius: 4px;
+      padding: 7px 14px;
       font-weight: 700;
-      font-size: 0.8rem;
+      font-size: 0.74rem;
       cursor: pointer;
-      transition: background 0.2s;
       font-family: 'JetBrains Mono', monospace;
+      transition: background 0.2s;
     }
 
-    button.btn-primary:hover {
-      background: #1e60d4;
-    }
+    button.btn-primary:hover { background: #1e60d4; }
 
     button.btn-warn {
       background: rgba(255, 171, 0, 0.15);
       border: 1px solid var(--accent-amber);
       color: var(--accent-amber);
-      padding: 9px 14px;
+      padding: 7px 12px;
       font-weight: 700;
-      font-size: 0.8rem;
-      border-radius: 5px;
+      font-size: 0.74rem;
+      border-radius: 4px;
       cursor: pointer;
       font-family: 'JetBrains Mono', monospace;
-    }
-
-    button.btn-warn:hover {
-      background: rgba(255, 171, 0, 0.25);
     }
 
     button.btn-danger {
       background: rgba(255, 23, 68, 0.15);
       border: 1px solid var(--accent-red);
       color: var(--accent-red);
-      padding: 9px 14px;
+      padding: 7px 12px;
       font-weight: 700;
-      font-size: 0.8rem;
-      border-radius: 5px;
+      font-size: 0.74rem;
+      border-radius: 4px;
       cursor: pointer;
       font-family: 'JetBrains Mono', monospace;
     }
 
-    /* Horizontal Delivery Timeline */
+    #dispatch-status {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.72rem;
+      color: var(--accent-cyan);
+      display: none;
+      background: #050810;
+      padding: 6px 10px;
+      border-radius: 4px;
+      border: 1px solid var(--card-border);
+      margin-top: 4px;
+    }
+
+    /* PQC Pipeline High-Density Stages */
+    .pipe-compact-list {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+      max-height: 250px;
+      overflow-y: auto;
+    }
+
+    .pipe-card {
+      background: var(--card-bg-sub);
+      border: 1px solid var(--card-border);
+      border-radius: 4px;
+      padding: 6px 8px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.68rem;
+      transition: border-color 0.2s;
+    }
+
+    .pipe-card.active {
+      border-color: var(--accent-cyan);
+      box-shadow: 0 0 8px rgba(0, 229, 255, 0.12);
+    }
+
+    .pipe-card.failed {
+      border-color: var(--accent-red);
+      box-shadow: 0 0 8px rgba(255, 23, 68, 0.12);
+    }
+
+    .pipe-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 2px;
+      font-size: 0.7rem;
+      font-weight: 700;
+      color: #fff;
+    }
+
+    .pipe-badge {
+      font-size: 0.6rem;
+      padding: 1px 5px;
+      border-radius: 3px;
+      font-weight: 700;
+    }
+
+    .badge-completed { background: rgba(0, 230, 118, 0.15); color: var(--accent-green); }
+    .badge-running   { background: rgba(0, 229, 255, 0.15); color: var(--accent-cyan); }
+    .badge-failed    { background: rgba(255, 23, 68, 0.15); color: var(--accent-red); }
+    .badge-pending   { background: rgba(125, 142, 166, 0.15); color: var(--text-muted); }
+
+    /* Wire Meter Bar */
+    .wire-meter {
+      height: 8px;
+      width: 100%;
+      background: #090e18;
+      border-radius: 4px;
+      overflow: hidden;
+      display: flex;
+      margin: 6px 0 8px 0;
+    }
+
+    .meter-kem  { width: 21.3%; background: var(--accent-cyan); }
+    .meter-dsa  { width: 64.6%; background: var(--accent-gold); }
+    .meter-aes  { width: 1.1%;  background: var(--accent-green); }
+    .meter-dtn  { width: 13.0%; background: var(--accent-blue); }
+
+    /* Bottom Dock: Horizontal Timeline */
+    .dock-timeline {
+      flex: 1;
+      min-width: 0;
+      display: flex;
+      flex-direction: column;
+    }
+
     .timeline-container {
-      margin-top: 14px;
+      flex: 1;
       overflow-x: auto;
-      padding-bottom: 6px;
+      overflow-y: hidden;
+      display: flex;
+      align-items: center;
     }
 
     .timeline-track {
       display: flex;
       align-items: center;
       gap: 0;
-      min-width: 900px;
+      min-width: 820px;
+      width: 100%;
       position: relative;
     }
 
@@ -409,7 +612,7 @@
     .timeline-item::before {
       content: '';
       position: absolute;
-      top: 11px;
+      top: 10px;
       left: 0;
       right: 0;
       height: 2px;
@@ -418,15 +621,15 @@
     }
 
     .timeline-node {
-      width: 22px;
-      height: 22px;
+      width: 20px;
+      height: 20px;
       border-radius: 50%;
       background: var(--card-bg);
       border: 2px solid var(--card-border);
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 0.65rem;
+      font-size: 0.62rem;
       font-weight: 700;
       z-index: 2;
       transition: all 0.2s ease;
@@ -438,7 +641,7 @@
       border-color: var(--accent-green);
       background: rgba(0, 230, 118, 0.2);
       color: var(--accent-green);
-      box-shadow: 0 0 8px rgba(0, 230, 118, 0.5);
+      box-shadow: 0 0 8px rgba(0, 230, 118, 0.4);
     }
 
     .timeline-item.failed .timeline-node {
@@ -449,139 +652,37 @@
 
     .timeline-label {
       font-family: 'JetBrains Mono', monospace;
-      font-size: 0.65rem;
-      margin-top: 6px;
+      font-size: 0.62rem;
+      margin-top: 5px;
       text-align: center;
       white-space: nowrap;
       color: var(--text-muted);
     }
 
-    .timeline-item.active .timeline-label {
-      color: #fff;
-      font-weight: 600;
-    }
+    .timeline-item.active .timeline-label { color: #fff; font-weight: 600; }
 
-    /* Cryptographic Pipeline Stage Cards */
-    .pipeline-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 12px;
-      margin-top: 10px;
-    }
-
-    .pipe-card {
-      background: var(--card-bg-sub);
-      border: 1px solid var(--card-border);
-      border-radius: 6px;
-      padding: 12px 14px;
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 0.74rem;
-      position: relative;
-      transition: border-color 0.2s;
-    }
-
-    .pipe-card.active {
-      border-color: var(--accent-cyan);
-      box-shadow: 0 0 10px rgba(0, 229, 255, 0.15);
-    }
-
-    .pipe-card.failed {
-      border-color: var(--accent-red);
-      box-shadow: 0 0 10px rgba(255, 23, 68, 0.15);
-    }
-
-    .pipe-header {
+    /* Bottom Dock: Audit Trail */
+    .dock-audit {
+      flex: 1;
+      min-width: 0;
       display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 8px;
-      font-size: 0.78rem;
-      font-weight: 700;
-      color: #fff;
+      flex-direction: column;
     }
 
-    .pipe-badge {
-      font-size: 0.65rem;
-      padding: 2px 6px;
-      border-radius: 3px;
-      font-weight: 700;
-    }
-
-    .badge-completed { background: rgba(0, 230, 118, 0.15); color: var(--accent-green); }
-    .badge-running   { background: rgba(0, 229, 255, 0.15); color: var(--accent-cyan); }
-    .badge-failed    { background: rgba(255, 23, 68, 0.15); color: var(--accent-red); }
-    .badge-pending   { background: rgba(139, 155, 180, 0.15); color: var(--text-muted); }
-
-    /* Tables & Audit Logs */
-    .table-container {
-      max-height: 280px;
-      overflow-y: auto;
-      margin-top: 8px;
-    }
-
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      font-size: 0.74rem;
-      font-family: 'JetBrains Mono', monospace;
-    }
-
-    th {
-      background: #101726;
-      color: var(--text-muted);
-      text-align: left;
-      padding: 8px 10px;
-      position: sticky;
-      top: 0;
-      border-bottom: 1px solid var(--card-border);
-      font-size: 0.7rem;
-    }
-
-    td {
-      padding: 7px 10px;
-      border-bottom: 1px solid rgba(27, 37, 59, 0.6);
-    }
-
-    tr:hover { background: rgba(41, 121, 255, 0.05); }
-
-    .audit-log {
-      height: 200px;
-      overflow-y: auto;
-      background: #050810;
-      border: 1px solid var(--card-border);
-      border-radius: 6px;
-      padding: 10px 12px;
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 0.72rem;
-      line-height: 1.6;
-    }
-
-    .log-line {
-      margin-bottom: 4px;
-      word-break: break-all;
-    }
-
-    .log-info    { color: var(--text-muted); }
-    .log-crypto  { color: var(--accent-cyan); }
-    .log-fault   { color: var(--accent-amber); font-weight: 600; }
-    .log-danger  { color: var(--accent-red); font-weight: 700; }
-    .log-success { color: var(--accent-green); }
-
-    /* Filter Pills */
     .filter-row {
       display: flex;
-      gap: 6px;
-      margin-bottom: 8px;
+      gap: 5px;
+      margin-bottom: 6px;
     }
 
     .filter-pill {
-      background: #131a2b;
+      background: #090e18;
       border: 1px solid var(--card-border);
       color: var(--text-muted);
       font-family: 'JetBrains Mono', monospace;
-      font-size: 0.68rem;
-      padding: 3px 8px;
-      border-radius: 4px;
+      font-size: 0.65rem;
+      padding: 2px 7px;
+      border-radius: 3px;
       cursor: pointer;
     }
 
@@ -590,324 +691,452 @@
       color: #fff;
       border-color: var(--accent-cyan);
     }
+
+    .audit-log {
+      flex: 1;
+      overflow-y: auto;
+      background: #04070e;
+      border: 1px solid var(--card-border);
+      border-radius: 4px;
+      padding: 6px 10px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.68rem;
+      line-height: 1.5;
+    }
+
+    .log-line { margin-bottom: 3px; word-break: break-all; }
+    .log-info    { color: var(--text-muted); }
+    .log-crypto  { color: var(--accent-cyan); }
+    .log-fault   { color: var(--accent-amber); font-weight: 600; }
+    .log-danger  { color: var(--accent-red); font-weight: 700; }
+    .log-success { color: var(--accent-green); }
+
+    /* View 2: Technical Analysis Mode (Laboratory Matrix) */
+    #view-tech-container {
+      flex: 1;
+      padding: 12px 16px;
+      overflow-y: auto;
+      display: none;
+    }
+
+    .grid-4 {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 12px;
+      margin-bottom: 14px;
+    }
+
+    .grid-2 {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(440px, 1fr));
+      gap: 14px;
+      margin-bottom: 14px;
+    }
+
+    .metric-value {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 1.45rem;
+      font-weight: 700;
+      color: #fff;
+      margin-top: 4px;
+    }
+
+    .metric-subtitle {
+      font-size: 0.68rem;
+      color: var(--text-muted);
+      margin-top: 2px;
+      font-family: 'JetBrains Mono', monospace;
+    }
   </style>
 </head>
 <body>
 
-  <!-- Top Mission Header -->
+  <!-- Top Aerospace Mission Header (NASA Open MCT) -->
   <header>
-    <div class="brand">
-      <h1>
-        <span style="color: var(--accent-cyan);">ASTRA</span>-Sec
-        <span class="brand-pill">MISSION CONTROL OBSERVABILITY</span>
-      </h1>
-      <span class="brand-pill" style="border-color: var(--accent-green); color: var(--accent-green);">FIPS 203 & 204 VERIFIED</span>
+    <div class="brand-section">
+      <div class="brand-title">
+        <span class="pqc">ASTRA</span>-Sec
+        <span class="brand-badge">MISSION CONTROL OBSERVABILITY</span>
+      </div>
+      <span class="brand-badge" style="border-color: var(--accent-green); color: var(--accent-green);">FIPS 203 / 204 VERIFIED</span>
     </div>
 
-    <div class="header-status">
-      <div class="status-item"><div class="status-dot"></div><span id="backend-status">SYSTEM: HEALTHY</span></div>
-      <div class="status-item"><span style="color: var(--accent-cyan);">MODE:</span> <span id="operating-mode">LIVE OPERATIONS</span></div>
-      <div class="status-item"><span style="color: var(--text-muted);">WS:</span> <span id="ws-status" style="color: var(--accent-green);">CONNECTED</span></div>
-      <div class="status-item"><span style="color: var(--text-muted);">KEM:</span> <span>ML-KEM-768</span></div>
-      <div class="status-item"><span style="color: var(--text-muted);">DSA:</span> <span>ML-DSA-65</span></div>
-      <div class="status-item"><span style="color: var(--text-muted);">DTN:</span> <span>RFC 9171 BPv7</span></div>
-      <div class="status-item" id="utc-clock">UTC: 00:00:00</div>
+    <!-- Live Subsystem Health Indicators -->
+    <div class="header-subsystems">
+      <div class="subsys-pill">
+        <div class="status-dot"></div>
+        <span id="backend-status">SYSTEM: <strong>HEALTHY</strong></span>
+      </div>
+      <div class="subsys-pill">
+        <span>CRYPTO:</span> <strong id="crypto-subsys">ML-KEM / ML-DSA</strong>
+      </div>
+      <div class="subsys-pill">
+        <span>DTN:</span> <strong>RFC 9171 BPv7</strong>
+      </div>
+      <div class="subsys-pill">
+        <span>SPOOL:</span> <strong style="color:var(--accent-green);">ACID WAL</strong>
+      </div>
+      <div class="subsys-pill">
+        <span>WS:</span> <strong id="ws-status" style="color: var(--accent-green);">CONNECTED</strong>
+      </div>
+      <div class="subsys-pill">
+        <span>MODE:</span> <strong id="operating-mode" style="color: var(--accent-cyan);">LIVE OPS</strong>
+      </div>
+      <div class="clock-pill" id="utc-clock">UTC: 00:00:00</div>
+    </div>
+
+    <!-- Navigation Mode Toggles -->
+    <div class="header-controls">
+      <button class="mode-toggle-btn active" id="tab-ops-btn" onclick="switchMode('ops')">
+        🌐 FLIGHT CONSOLE
+      </button>
+      <button class="mode-toggle-btn" id="tab-tech-btn" onclick="switchMode('tech')">
+        🔬 EXPERIMENT LAB
+      </button>
     </div>
   </header>
 
-  <!-- Mode Navigation Tabs -->
-  <div class="mode-nav">
-    <button class="mode-tab-btn active" id="tab-ops-btn" onclick="switchMode('ops')">
-      🌐 MISSION OPERATIONS MODE
-    </button>
-    <button class="mode-tab-btn" id="tab-tech-btn" onclick="switchMode('tech')">
-      🔬 TECHNICAL ANALYSIS MODE
-    </button>
-    <div style="flex:1;"></div>
-    <div style="display:flex; align-items:center; gap:8px; font-family:'JetBrains Mono'; font-size:0.75rem; color:var(--text-muted);">
-      <span>ACTIVE ENVELOPE:</span> <code id="active-envelope-id" style="color:var(--accent-cyan);">8f3b2014-a991...</code>
-    </div>
-  </div>
-
   <!-- ========================================================================= -->
-  <!-- VIEW 1: MISSION OPERATIONS MODE (DEFAULT) -->
+  <!-- VIEW 1: UNIFIED AEROSPACE FLIGHT OPERATIONS CONSOLE (DEFAULT) -->
   <!-- ========================================================================= -->
   <div id="view-ops-container">
 
-    <!-- 3D Earth & Constellation Viewport -->
-    <div class="globe-card-wrapper">
-      <div id="globe-viewport"></div>
+    <!-- 3-Column Main Grid -->
+    <div class="ops-main-grid">
 
-      <!-- Top-Left Operational HUD -->
-      <div class="hud-overlay globe-hud-topleft">
-        <div style="color: var(--accent-cyan); font-weight: 700; margin-bottom: 6px; letter-spacing: 0.5px; border-bottom: 1px solid rgba(0,229,255,0.2); padding-bottom: 4px;">
-          MISSION TELEMETRY STREAM
-        </div>
-        <div style="display: flex; justify-content: space-between; margin-bottom: 4px;">
-          <span style="color: var(--text-muted);">Topology:</span>
-          <span>4 Nodes (2 Ground, 2 LEO)</span>
-        </div>
-        <div style="display: flex; justify-content: space-between; margin-bottom: 4px;">
-          <span style="color: var(--text-muted);">Inter-Sat Link:</span>
-          <span id="hud-isl-status" style="color: var(--accent-cyan); font-weight: 700;">ISL: ACTIVE (UP)</span>
-        </div>
-        <div style="display: flex; justify-content: space-between; margin-bottom: 4px;">
-          <span style="color: var(--text-muted);">Crypto Scheme:</span>
-          <span>ML-KEM-768 + ML-DSA-65</span>
-        </div>
-        <div style="display: flex; justify-content: space-between;">
-          <span style="color: var(--text-muted);">Anti-Replay:</span>
-          <span style="color: var(--accent-green);">ACID WAL Persistent</span>
-        </div>
-      </div>
-
-      <!-- Top-Right Node Inspector Panel (Interactive) -->
-      <div class="hud-overlay hud-interactive globe-hud-topright" id="node-inspector-hud">
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; border-bottom: 1px solid var(--card-border); padding-bottom: 6px;">
-          <span id="insp-node-name" style="font-weight: 700; color: #fff; font-size: 0.92rem;">Node Inspector</span>
-          <button onclick="AstraMissionControl3D.deselectNode()" style="background: transparent; border: none; color: var(--text-muted); cursor: pointer; font-size: 1.1rem; padding: 0 4px;">✕</button>
-        </div>
-        <div style="font-family: 'JetBrains Mono', monospace; font-size: 0.72rem; line-height: 1.6;">
-          <div><span style="color: var(--text-muted);">EID:</span> <code id="insp-node-eid" style="color: var(--accent-cyan);">dtn://sat1/relay</code></div>
-          <div><span style="color: var(--text-muted);">Type:</span> <span id="insp-node-type" style="color: #fff;">SATELLITE_RELAY</span></div>
-          <div><span style="color: var(--text-muted);">Coordinates:</span> <span id="insp-node-coords">52.00° N, 38.00° E (Alt: 0.35)</span></div>
-          <div><span style="color: var(--text-muted);">Status:</span> <span id="insp-node-status" style="color: var(--accent-green); font-weight: 700;">ONLINE / NORMAL</span></div>
-          <div><span style="color: var(--text-muted);">Role:</span> <span id="insp-node-role" style="color: var(--text-main);">Store-and-Forward Router</span></div>
-          <div style="margin-top: 6px; padding-top: 6px; border-top: 1px dashed var(--card-border);">
-            <div><span style="color: var(--text-muted);">SQLite WAL Queue:</span> <span id="insp-node-queue" style="color: var(--accent-amber); font-weight: 700;">0 bundles (20.00 KB)</span></div>
-            <div><span style="color: var(--text-muted);">KEM Key ID:</span> <span id="insp-node-kem" style="color: var(--text-muted);">RELAY_TRANSIT_ONLY</span></div>
-            <div><span style="color: var(--text-muted);">DSA Key ID:</span> <span id="insp-node-dsa" style="color: var(--text-muted);">UNAUTHORIZED_FOR_L2_DECAP</span></div>
+      <!-- LEFT COLUMN: Constellation Topology & Astrodynamics Subsystems -->
+      <div class="ops-left-col">
+        
+        <!-- Constellation Network Entities -->
+        <div class="panel-card">
+          <div class="panel-header">
+            <span>CONSTELLATION TOPOLOGY</span>
+            <span class="tag">4 NODES</span>
+          </div>
+          <div class="node-list">
+            <div class="node-item-pill" data-node="gsa" onclick="selectConstellationNode('gsa')">
+              <div>
+                <strong style="color:#fff;">GSA</strong>
+                <span style="color:var(--text-muted); font-size:0.65rem;">Svalbard Polar</span>
+              </div>
+              <span class="node-badge badge-ground">TX ORIGINATOR</span>
+            </div>
+            <div class="node-item-pill selected" data-node="sat1" onclick="selectConstellationNode('sat1')">
+              <div>
+                <strong style="color:#fff;">SAT-1</strong>
+                <span style="color:var(--text-muted); font-size:0.65rem;">LEO Polar (550km)</span>
+              </div>
+              <span class="node-badge badge-sat">ROUTER / WAL</span>
+            </div>
+            <div class="node-item-pill" data-node="sat2" onclick="selectConstellationNode('sat2')">
+              <div>
+                <strong style="color:#fff;">SAT-2</strong>
+                <span style="color:var(--text-muted); font-size:0.65rem;">LEO Inclined (550km)</span>
+              </div>
+              <span class="node-badge badge-sat">ROUTER / WAL</span>
+            </div>
+            <div class="node-item-pill" data-node="gsb" onclick="selectConstellationNode('gsb')">
+              <div>
+                <strong style="color:#fff;">GSB</strong>
+                <span style="color:var(--text-muted); font-size:0.65rem;">Canberra Station</span>
+              </div>
+              <span class="node-badge badge-dest">RX VERIFIER</span>
+            </div>
           </div>
         </div>
+
+        <!-- Selected Node Astrodynamics & Subsystems Inspector -->
+        <div class="panel-card" style="flex: 1; display: flex; flex-direction: column;">
+          <div class="panel-header">
+            <span id="left-node-name">SAT-1 (LEO-1)</span>
+            <span class="tag" id="left-node-role">STORE-AND-FORWARD</span>
+          </div>
+
+          <div style="font-family: 'JetBrains Mono', monospace; font-size: 0.68rem; margin-bottom: 8px;">
+            <div style="color: var(--text-muted); margin-bottom: 2px;">EID: <code id="left-node-eid" style="color: var(--accent-cyan);">dtn://sat1/relay</code></div>
+            <div style="color: var(--text-muted);">LOC: <span id="left-node-location" style="color: #fff;">52.00° N, 38.00° E (~550 km)</span></div>
+          </div>
+
+          <div class="astro-grid" style="margin-bottom: 8px;">
+            <div class="astro-cell">
+              <div class="astro-label" id="astro-lbl-1">SEMI-MAJOR AXIS</div>
+              <div class="astro-val" id="astro-val-1">6,928.14 km</div>
+            </div>
+            <div class="astro-cell">
+              <div class="astro-label" id="astro-lbl-2">ALTITUDE</div>
+              <div class="astro-val" id="astro-val-2">550.00 km</div>
+            </div>
+            <div class="astro-cell">
+              <div class="astro-label" id="astro-lbl-3">VELOCITY</div>
+              <div class="astro-val" id="astro-val-3">7.59 km/s</div>
+            </div>
+            <div class="astro-cell">
+              <div class="astro-label" id="astro-lbl-4">ORBITAL PERIOD</div>
+              <div class="astro-val" id="astro-val-4">95.60 min</div>
+            </div>
+            <div class="astro-cell">
+              <div class="astro-label" id="astro-lbl-5">INCLINATION</div>
+              <div class="astro-val" id="astro-val-5">97.40°</div>
+            </div>
+            <div class="astro-cell">
+              <div class="astro-label" id="astro-lbl-6">QUEUE STORAGE</div>
+              <div class="astro-val" id="astro-val-6" style="color:var(--accent-amber);">0 (20.00 KB)</div>
+            </div>
+          </div>
+
+          <!-- FDIR & Cryptographic Credentials -->
+          <div style="background: #070b13; border: 1px solid #141e30; border-radius: 4px; padding: 6px 8px; font-family: 'JetBrains Mono', monospace; font-size: 0.65rem; line-height: 1.5; margin-top: auto;">
+            <div style="color: var(--accent-cyan); font-weight: 700; margin-bottom: 2px;">SECURITY SUBSYSTEMS:</div>
+            <div><span style="color: var(--text-muted);">KEM Key ID:</span> <span id="left-node-kem" style="color: #fff;">RELAY_TRANSIT_ONLY</span></div>
+            <div><span style="color: var(--text-muted);">DSA Privileges:</span> <span id="left-node-dsa" style="color: #fff;">ROUTER_UNAUTHORIZED</span></div>
+            <div><span style="color: var(--text-muted);">Anti-Replay:</span> <span style="color: var(--accent-green);">ACID WAL Persistent</span></div>
+          </div>
+        </div>
+
       </div>
 
-      <!-- Bottom-Center In-Flight Packet Inspector -->
-      <div class="hud-overlay globe-hud-bottomcenter" id="packet-hud">
-        <div style="font-family: 'JetBrains Mono', monospace; font-size: 0.74rem; color: var(--accent-cyan); font-weight: 700; margin-bottom: 4px;">
-          IN-FLIGHT PQC ENVELOPE: <span id="packet-id-text" style="color: #fff;">DISPATCHING</span>
+      <!-- CENTER COLUMN: 3D Geospatial Scene & Dispatch Controller -->
+      <div class="ops-center-col">
+
+        <!-- 3D Globe Viewport -->
+        <div class="globe-container">
+          <div id="globe-viewport"></div>
+
+          <!-- Top-Left Telemetry HUD Overlay -->
+          <div class="hud-overlay hud-top-telemetry">
+            <div style="color: var(--accent-cyan); font-weight: 700; margin-bottom: 4px; border-bottom: 1px solid rgba(0,229,255,0.25); padding-bottom: 3px;">
+              ORBITAL LINK TELEMETRY
+            </div>
+            <div class="hud-top-telemetry-row">
+              <span style="color: var(--text-muted);">Active Links:</span>
+              <span>GSA-SAT1-SAT2-GSB</span>
+            </div>
+            <div class="hud-top-telemetry-row">
+              <span style="color: var(--text-muted);">Crosslink ISL:</span>
+              <span id="hud-isl-status" style="color: var(--accent-cyan); font-weight: 700;">ISL: ACTIVE (UP)</span>
+            </div>
+            <div class="hud-top-telemetry-row">
+              <span style="color: var(--text-muted);">FDIR Guard:</span>
+              <span style="color: var(--accent-green);">TFIB-Ref Dual-Domain</span>
+            </div>
+            <div class="hud-top-telemetry-row">
+              <span style="color: var(--text-muted);">Envelope ID:</span>
+              <code id="active-envelope-id" style="color: #fff;">8f3b2014...</code>
+            </div>
+          </div>
+
+          <!-- Top-Right Node Inspector HUD Overlay (Interactive) -->
+          <div class="hud-overlay hud-interactive hud-node-inspector" id="node-inspector-hud">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; border-bottom: 1px solid var(--card-border); padding-bottom: 4px;">
+              <span id="insp-node-name" style="font-weight: 700; color: #fff; font-size: 0.8rem;">Node Inspector</span>
+              <button onclick="AstraMissionControl3D.deselectNode()" style="background: transparent; border: none; color: var(--text-muted); cursor: pointer; font-size: 0.95rem;">✕</button>
+            </div>
+            <div style="font-family: 'JetBrains Mono', monospace; font-size: 0.68rem; line-height: 1.5;">
+              <div><span style="color: var(--text-muted);">EID:</span> <code id="insp-node-eid" style="color: var(--accent-cyan);">dtn://sat1/relay</code></div>
+              <div><span style="color: var(--text-muted);">Type:</span> <span id="insp-node-type">SATELLITE_RELAY</span></div>
+              <div><span style="color: var(--text-muted);">Coords:</span> <span id="insp-node-coords">52.00° N, 38.00° E</span></div>
+              <div><span style="color: var(--text-muted);">Status:</span> <span id="insp-node-status" style="color: var(--accent-green); font-weight: 700;">ONLINE / NORMAL</span></div>
+              <div><span style="color: var(--text-muted);">Role:</span> <span id="insp-node-role">Store-and-Forward</span></div>
+              <div style="margin-top: 4px; padding-top: 4px; border-top: 1px dashed var(--card-border);">
+                <div><span style="color: var(--text-muted);">Spool:</span> <span id="insp-node-queue" style="color: var(--accent-amber);">0 (20.00 KB)</span></div>
+                <div><span style="color: var(--text-muted);">KEM:</span> <span id="insp-node-kem" style="color: var(--text-muted);">TRANSIT_ONLY</span></div>
+                <div><span style="color: var(--text-muted);">DSA:</span> <span id="insp-node-dsa" style="color: var(--text-muted);">UNAUTHORIZED</span></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Bottom-Center In-Flight Packet Inspector Overlay -->
+          <div class="hud-overlay hud-packet-monitor" id="packet-hud">
+            <div style="font-family: 'JetBrains Mono', monospace; font-size: 0.72rem; color: var(--accent-cyan); font-weight: 700; margin-bottom: 2px;">
+              IN-FLIGHT PQC ENVELOPE: <span id="packet-id-text" style="color: #fff;">DISPATCHING</span>
+            </div>
+            <div id="packet-hop-text" style="font-size: 0.8rem; font-weight: 700; color: #fff;">
+              HOP 1/3: Uplink GSA -> SAT-1
+            </div>
+            <div id="packet-status-text" style="font-family: 'JetBrains Mono', monospace; font-size: 0.7rem; color: var(--accent-cyan); margin-top: 2px;">
+              Transmitting 5,119 B Post-Quantum Wire Bundle...
+            </div>
+          </div>
+
+          <!-- Bottom-Left Camera Views Overlay -->
+          <div class="hud-overlay hud-interactive hud-cam-controls">
+            <button class="cam-btn" onclick="AstraMissionControl3D.setCameraView('overview')">🌐 Orbit View</button>
+            <button class="cam-btn" onclick="AstraMissionControl3D.setCameraView('sat1')">🛰️ SAT-1</button>
+            <button class="cam-btn" onclick="AstraMissionControl3D.setCameraView('sat2')">🛰️ SAT-2</button>
+            <button class="cam-btn" onclick="AstraMissionControl3D.setCameraView('gsa')">📡 GSA</button>
+            <button class="cam-btn" onclick="AstraMissionControl3D.setCameraView('gsb')">🏢 GSB</button>
+            <button class="cam-btn" id="rotate-toggle-btn" onclick="AstraMissionControl3D.toggleAutoRotate()">Auto-Rotate: OFF</button>
+          </div>
         </div>
-        <div id="packet-hop-text" style="font-size: 0.85rem; font-weight: 700; color: #fff; margin-bottom: 2px;">
-          HOP 1/3: Uplink GSA -> SAT-1
+
+        <!-- Integrated Flight Command Strip -->
+        <div class="flight-control-strip">
+          <input type="text" id="payload-input" value="FLIGHT_TELEMETRY_PACKET_MISSION_EPOCH_2026" placeholder="Application Payload...">
+          
+          <select id="scenario-select" onchange="onScenarioChange()">
+            <option value="nominal">1. Nominal E2E PQC Transmission</option>
+            <option value="isl_outage">2. ISL Link Outage & Spooling</option>
+            <option value="ntt_transient">3. NTT Transient SEU (K=1 Rollback)</option>
+            <option value="ntt_persistent">4. Persistent Fault & Fail-Stop (K > 2)</option>
+            <option value="replay_attack">5. Anti-Replay Attack Suppression</option>
+            <option value="tamper_sig">6. ML-DSA-65 Signature Tamper Rejection</option>
+          </select>
+
+          <button class="btn-primary" id="dispatch-btn" onclick="dispatchEnvelope()">▶ DISPATCH ENVELOPE</button>
+          <button class="btn-warn" id="isl-toggle-btn" onclick="toggleLinkOutage()">⚡ TOGGLE ISL OUTAGE</button>
+          <button class="btn-danger" onclick="resetFaults()">↺ RESET ALL FAULTS</button>
         </div>
-        <div id="packet-status-text" style="font-family: 'JetBrains Mono', monospace; font-size: 0.74rem; color: var(--accent-cyan);">
-          Transmitting 5,119 B Post-Quantum Wire Bundle...
-        </div>
+
+        <!-- Real-Time Dispatch Status Banner -->
+        <div id="dispatch-status"></div>
+
       </div>
 
-      <!-- Bottom-Left Camera Presets & Orbit Controls -->
-      <div class="hud-overlay hud-interactive globe-hud-bottomleft">
-        <button class="cam-btn" onclick="AstraMissionControl3D.setCameraView('overview')">🌐 Orbit Overview</button>
-        <button class="cam-btn" onclick="AstraMissionControl3D.setCameraView('sat1')">🛰️ SAT-1 (LEO)</button>
-        <button class="cam-btn" onclick="AstraMissionControl3D.setCameraView('sat2')">🛰️ SAT-2 (LEO)</button>
-        <button class="cam-btn" onclick="AstraMissionControl3D.setCameraView('gsa')">📡 GSA (Svalbard)</button>
-        <button class="cam-btn" onclick="AstraMissionControl3D.setCameraView('gsb')">🏢 GSB (Canberra)</button>
-        <button class="cam-btn" id="rotate-toggle-btn" onclick="AstraMissionControl3D.toggleAutoRotate()">Auto-Rotate: OFF</button>
+      <!-- RIGHT COLUMN: PQC Pipeline, NTT Invariant & DTN Wire Meter -->
+      <div class="ops-right-col">
+
+        <!-- L2/L3 PQC 8-Stage Security Pipeline -->
+        <div class="panel-card">
+          <div class="panel-header">
+            <span>PQC SECURITY PIPELINE</span>
+            <span class="tag">8 STAGES</span>
+          </div>
+          <div class="pipe-compact-list" id="pipeline-cards-container">
+            <!-- Dynamically populated stages 1 to 8 -->
+          </div>
+        </div>
+
+        <!-- L4 NTT Fault Resilience Monitor -->
+        <div class="panel-card">
+          <div class="panel-header">
+            <span>L4 NTT FAULT MONITOR</span>
+            <span class="tag" style="color:var(--accent-purple);">TFIB-Ref Invariant</span>
+          </div>
+          <div style="font-family: 'JetBrains Mono', monospace; font-size: 0.68rem; line-height: 1.5;">
+            <div style="background: #070b13; padding: 6px 8px; border-radius: 4px; border: 1px solid #141e30; margin-bottom: 6px;">
+              <div style="color: var(--accent-cyan); font-weight: 700;">INVARIANT: r ≡ t · ζ (mod 3329)</div>
+              <div style="color: var(--text-muted); font-size: 0.62rem;">Kyber q = 3329 | 128 dual butterflies checked</div>
+            </div>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 4px;">
+              <div><span style="color: var(--text-muted);">Status:</span> <span id="ntt-invariant-status" style="color: var(--accent-green); font-weight: 700;">NOMINAL_VERIFIED</span></div>
+              <div><span style="color: var(--text-muted);">Checker:</span> <span id="ntt-ref-checker" style="color: var(--accent-cyan);">ACTIVE (Dual)</span></div>
+              <div><span style="color: var(--text-muted);">Rollback:</span> <span id="ntt-rollback-status">ARMED (K &le; 2)</span></div>
+              <div><span style="color: var(--text-muted);">Recovered:</span> <span id="ntt-recovered-count" style="color: var(--accent-green); font-weight: 700;">0 (Nominal)</span></div>
+              <div><span style="color: var(--text-muted);">Fail-Stop:</span> <span id="ntt-failstop-status">K &le; 2 (Bounded)</span></div>
+              <div><span style="color: var(--text-muted);">Mismatches:</span> <span id="ntt-twiddle-faults">0 detected</span></div>
+            </div>
+            <div style="margin-top: 6px; padding: 4px 6px; background: #04070e; border-radius: 3px; border: 1px solid var(--card-border);">
+              <span style="color: var(--text-muted); font-size:0.62rem;">Trace:</span>
+              <code id="ntt-progression-text" style="color: var(--accent-cyan); font-size:0.62rem;">NOMINAL -> 128 BUTTERFLIES CHECKED -> ZERO VIOLATIONS</code>
+            </div>
+          </div>
+        </div>
+
+        <!-- Active DTN Wire Representation (5,119 B Meter) -->
+        <div class="panel-card">
+          <div class="panel-header">
+            <span>DTN WIRE BREAKDOWN</span>
+            <span class="tag">5,119 B TOTAL</span>
+          </div>
+          <div class="wire-meter">
+            <div class="meter-kem" title="ML-KEM-768 Ciphertext: 1,088 B (21.3%)"></div>
+            <div class="meter-dsa" title="ML-DSA-65 Signature: 3,309 B (64.6%)"></div>
+            <div class="meter-aes" title="AES-256-GCM Payload: 56 B (1.1%)"></div>
+            <div class="meter-dtn" title="AEAD Nonce + Tag + BPv7 Headers: 666 B (13.0%)"></div>
+          </div>
+          <div style="font-family: 'JetBrains Mono', monospace; font-size: 0.65rem; display: grid; grid-template-columns: 1fr 1fr; gap: 4px;">
+            <div><span style="color: var(--accent-cyan);">■ KEM-768 CT:</span> <span id="b-kem-sz">1,088 B</span></div>
+            <div><span style="color: var(--accent-gold);">■ DSA-65 SIG:</span> <span id="b-dsa-sz">3,309 B</span></div>
+            <div><span style="color: var(--accent-green);">■ AES AEAD:</span> <span id="b-aes-sz">56 B</span></div>
+            <div><span style="color: var(--accent-blue);">■ BPv7 / BIB:</span> <span id="b-nonce-sz">666 B</span></div>
+          </div>
+          <div style="margin-top: 6px; padding-top: 6px; border-top: 1px dashed var(--card-border); font-family: 'JetBrains Mono', monospace; font-size: 0.65rem;">
+            <div><span style="color: var(--text-muted);">Active Bundle:</span> <span id="b-id" style="color: #fff;">bundle-8f3b2014</span></div>
+            <div><span style="color: var(--text-muted);">Security State:</span> <span id="b-status" style="color: var(--accent-green); font-weight: 700;">DELIVERED & ACK VERIFIED</span></div>
+          </div>
+        </div>
+
       </div>
+
     </div>
 
-    <!-- Live Demonstration & Scenario Dispatch Controller -->
-    <div class="card" style="margin-bottom: 16px;">
-      <div class="card-title">
-        <span>Demonstration Orchestration & Live Packet Dispatch</span>
-        <span style="color: var(--accent-cyan); font-family: 'JetBrains Mono'; font-size: 0.72rem;">INTERACTIVE EXPERIMENT CONTROL</span>
-      </div>
+    <!-- BOTTOM DOCK: Timeline & Forensic Audit Trail -->
+    <div class="ops-bottom-dock">
 
-      <div class="control-row">
-        <input type="text" id="payload-input" value="FLIGHT_TELEMETRY_PACKET_MISSION_EPOCH_2026" placeholder="Enter Application Payload Text...">
-        
-        <select id="scenario-select" onchange="onScenarioChange()">
-          <option value="nominal">1. Nominal E2E PQC Transmission</option>
-          <option value="isl_outage">2. ISL Link Outage & Spooling</option>
-          <option value="ntt_transient">3. NTT Transient SEU (K=1 Rollback)</option>
-          <option value="ntt_persistent">4. Persistent Fault & Fail-Stop (K > 2)</option>
-          <option value="replay_attack">5. Anti-Replay Attack Suppression</option>
-          <option value="tamper_sig">6. ML-DSA-65 Signature Tamper Rejection</option>
-        </select>
-
-        <button class="btn-primary" id="dispatch-btn" onclick="dispatchEnvelope()">DISPATCH ENVELOPE</button>
-        <button class="btn-warn" id="isl-toggle-btn" onclick="toggleLinkOutage()">TOGGLE ISL OUTAGE</button>
-        <button class="btn-danger" onclick="resetFaults()">RESET ALL FAULTS</button>
-      </div>
-
-      <!-- Live Dispatch Status Banner -->
-      <div id="dispatch-status" style="margin-top:10px; font-family:'JetBrains Mono'; font-size:0.76rem; color:var(--accent-cyan); display:none; background: #050810; padding: 8px 12px; border-radius: 4px; border: 1px solid var(--card-border);"></div>
-
-      <!-- End-to-End Security & Delivery Timeline -->
-      <div style="margin-top: 14px;">
-        <div style="font-size: 0.72rem; font-weight: 700; color: var(--text-muted); font-family: 'JetBrains Mono'; letter-spacing: 0.5px; margin-bottom: 4px;">
-          MESSAGE JOURNEY & CRYPTOGRAPHIC MILESTONES (CLICK MILESTONE FOR AUDIT INSPECTION)
+      <!-- Left Half: Message Journey & Cryptographic Milestones -->
+      <div class="panel-card dock-timeline">
+        <div class="panel-header">
+          <span>END-TO-END SECURITY & DELIVERY TIMELINE</span>
+          <span class="tag">CLICK MILESTONE TO AUDIT</span>
         </div>
         <div class="timeline-container">
           <div class="timeline-track" id="timeline-track">
-            <!-- Timeline milestones rendered dynamically -->
+            <!-- Dynamically populated timeline nodes -->
           </div>
         </div>
       </div>
+
+      <!-- Right Half: Cryptographic Forensic Audit Trail -->
+      <div class="panel-card dock-audit">
+        <div class="panel-header">
+          <span>CRYPTOGRAPHIC FORENSIC AUDIT TRAIL</span>
+          <div class="filter-row">
+            <button class="filter-pill active" onclick="filterAuditLog('ALL')">ALL</button>
+            <button class="filter-pill" onclick="filterAuditLog('CRYPTO')">CRYPTO</button>
+            <button class="filter-pill" onclick="filterAuditLog('FAULT')">FAULT</button>
+            <button class="filter-pill" onclick="filterAuditLog('DTN')">DTN</button>
+            <button class="filter-pill" onclick="filterAuditLog('SECURITY')">SECURITY</button>
+          </div>
+        </div>
+        <div class="audit-log" id="tech-audit-log">
+          <!-- Dynamically populated append-only log -->
+        </div>
+      </div>
+
     </div>
 
-    <!-- Core Metrics Row -->
+  </div>
+
+  <!-- ========================================================================= -->
+  <!-- VIEW 2: TECHNICAL ANALYSIS & EXPERIMENT LABORATORY MODE -->
+  <!-- ========================================================================= -->
+  <div id="view-tech-container">
+
+    <!-- Top Core Metrics Cards -->
     <div class="grid-4">
-      <div class="card">
-        <div class="card-title">Empirical Trials</div>
+      <div class="panel-card">
+        <div class="panel-header">TOTAL EMPIRICAL TRIALS</div>
         <div class="metric-value" id="total-trials">38</div>
         <div class="metric-subtitle">Across Groups A, B, C, D, E</div>
       </div>
-      <div class="card">
-        <div class="card-title">Fault Detection Rate</div>
+      <div class="panel-card">
+        <div class="panel-header">FAULT DETECTION RATE</div>
         <div class="metric-value" style="color: var(--accent-green);" id="detection-rate">100.0%</div>
         <div class="metric-subtitle">38 / 38 Anomalies Caught</div>
       </div>
-      <div class="card">
-        <div class="card-title">Silent Data Corruption (SDC)</div>
+      <div class="panel-card">
+        <div class="panel-header">SILENT DATA CORRUPTION</div>
         <div class="metric-value" style="color: var(--accent-cyan);" id="sdc-count">0</div>
         <div class="metric-subtitle">0.00% across tested trials</div>
       </div>
-      <div class="card">
-        <div class="card-title">End-to-End Latency ($p_{50}$)</div>
+      <div class="panel-card">
+        <div class="panel-header">END-TO-END LATENCY (P50)</div>
         <div class="metric-value" id="e2e-latency">11.66 ms</div>
         <div class="metric-subtitle">4-Node Multi-Hop Delivery</div>
       </div>
     </div>
-  </div>
 
-  <!-- ========================================================================= -->
-  <!-- VIEW 2: TECHNICAL ANALYSIS MODE -->
-  <!-- ========================================================================= -->
-  <div id="view-tech-container" style="display: none;">
-
-    <!-- L2 / L3 Cryptographic Security Pipeline Panel -->
-    <div class="card" style="margin-bottom: 16px;">
-      <div class="card-title">
-        <span>L2 / L3 Post-Quantum Cryptographic Security Pipeline</span>
-        <span style="color: var(--accent-cyan); font-family: 'JetBrains Mono'; font-size: 0.72rem;">7-STAGE LIFECYCLE ENGINE</span>
-      </div>
-      <div class="pipeline-grid" id="pipeline-cards-container">
-        <!-- Stages 1 to 8 rendered dynamically -->
-      </div>
-    </div>
-
-    <!-- Grid 2: L4 NTT Fault Monitor & L5/L6 DTN Spool Operations -->
+    <!-- Grid 2: Historical Trial Profiler & Spool Storage Status -->
     <div class="grid-2">
 
-      <!-- L4 NTT Fault Resilience Monitor -->
-      <div class="card">
-        <div class="card-title">
-          <span>L4 NTT Fault Resilience Monitor</span>
-          <span style="color: var(--accent-purple); font-family: 'JetBrains Mono';">TFIB-Ref Dual-Domain</span>
-        </div>
-        <div style="font-family: 'JetBrains Mono', monospace; font-size: 0.75rem; line-height: 1.6;">
-          <div style="background: var(--card-bg-sub); padding: 10px 12px; border-radius: 6px; border: 1px solid var(--card-border); margin-bottom: 12px;">
-            <div style="color: var(--accent-cyan); font-weight: 700; margin-bottom: 2px;">MATHEMATICAL INVARIANT CHECK:</div>
-            <div style="color: #fff; font-size: 0.85rem; font-weight: 700;">r ≡ t · ζ (mod 3329)</div>
-            <div style="color: var(--text-muted); font-size: 0.7rem;">Kyber / ML-KEM modulus q = 3329 | 128 dual butterflies per NTT</div>
-          </div>
-          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
-            <div><span style="color: var(--text-muted);">Invariant Status:</span> <span id="ntt-invariant-status" style="color: var(--accent-green); font-weight: 700;">NOMINAL_VERIFIED</span></div>
-            <div><span style="color: var(--text-muted);">Reference Checker:</span> <span id="ntt-ref-checker" style="color: var(--accent-cyan);">ACTIVE (Dual-Transform)</span></div>
-            <div><span style="color: var(--text-muted);">Snapshot Rollback:</span> <span id="ntt-rollback-status">ARMED (K &le; 2)</span></div>
-            <div><span style="color: var(--text-muted);">Recovery Count:</span> <span id="ntt-recovered-count" style="color: var(--accent-green); font-weight: 700;">0 (Nominal)</span></div>
-            <div><span style="color: var(--text-muted);">Fail-Stop Budget:</span> <span id="ntt-failstop-status">K &le; 2 (Bounded)</span></div>
-            <div><span style="color: var(--text-muted);">Twiddle Faults:</span> <span id="ntt-twiddle-faults">0 detected</span></div>
-          </div>
-          <div style="margin-top: 10px; padding: 8px 10px; background: #050810; border-radius: 4px; border: 1px solid var(--card-border);">
-            <span style="color: var(--text-muted);">Progression:</span>
-            <code id="ntt-progression-text" style="color: var(--accent-cyan);">NOMINAL -> INVARIANT VERIFIED -> ZERO VIOLATIONS</code>
-          </div>
-        </div>
-      </div>
-
-      <!-- L5 / L6 DTN Store-and-Forward Operations -->
-      <div class="card">
-        <div class="card-title">
-          <span>L5 / L6 DTN Store-and-Forward Operations</span>
-          <span style="color: var(--accent-green); font-family: 'JetBrains Mono';">RFC 9171 BPv7 WAL</span>
-        </div>
-        <div style="font-family: 'JetBrains Mono', monospace; font-size: 0.75rem; line-height: 1.6;">
-          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px;">
-            <div style="background: var(--card-bg-sub); padding: 10px; border-radius: 6px; border: 1px solid var(--card-border);">
-              <div style="color: var(--text-muted); font-size: 0.7rem;">SAT-1 QUEUE STORAGE</div>
-              <div style="font-size: 1.25rem; font-weight: 700; color: #fff;" id="tech-sat1-queue">0 bundles (20.00 KB)</div>
-              <div style="font-size: 0.68rem; color: var(--accent-cyan);">SQLite WAL Active</div>
-            </div>
-            <div style="background: var(--card-bg-sub); padding: 10px; border-radius: 6px; border: 1px solid var(--card-border);">
-              <div style="color: var(--text-muted); font-size: 0.7rem;">SAT-2 QUEUE STORAGE</div>
-              <div style="font-size: 1.25rem; font-weight: 700; color: #fff;" id="tech-sat2-queue">0 bundles (20.00 KB)</div>
-              <div style="font-size: 0.68rem; color: var(--accent-cyan);">SQLite WAL Active</div>
-            </div>
-          </div>
-          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
-            <div><span style="color: var(--text-muted);">Spool Mode:</span> <span>ACID Crash-Consistent</span></div>
-            <div><span style="color: var(--text-muted);">Anti-Replay Window:</span> <span>1,000 Seqs (HMAC)</span></div>
-            <div><span style="color: var(--text-muted);">Wire Protocol:</span> <span>RFC 9171 BPv7 CBOR</span></div>
-            <div><span style="color: var(--text-muted);">BPSec Security:</span> <span>BIB Integrity Enforced</span></div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Live Packet & Bundle Inspector -->
-    <div class="card" style="margin-bottom: 16px;">
-      <div class="card-title">
-        <span>Active Dispatched Packet & DTN Bundle Inspector</span>
-        <span style="color: var(--accent-gold); font-family: 'JetBrains Mono'; font-size: 0.72rem;">WIRE REPRESENTATION & SECURITY BOUNDS</span>
-      </div>
-      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 14px; font-family: 'JetBrains Mono', monospace; font-size: 0.73rem;">
-        <div style="background: var(--card-bg-sub); padding: 10px 12px; border-radius: 6px; border: 1px solid var(--card-border);">
-          <div style="color: var(--accent-cyan); font-weight: 700; margin-bottom: 4px;">IDENTIFIERS & HOP</div>
-          <div><span style="color: var(--text-muted);">Bundle ID:</span> <span id="b-id">bundle-8f3b2014</span></div>
-          <div><span style="color: var(--text-muted);">Envelope ID:</span> <span id="b-envelope">8f3b2014-a991...</span></div>
-          <div><span style="color: var(--text-muted);">Source EID:</span> <code id="b-src">dtn://gsa/app</code></div>
-          <div><span style="color: var(--text-muted);">Dest EID:</span> <code id="b-dst">dtn://gsb/app</code></div>
-          <div><span style="color: var(--text-muted);">Sequence #:</span> <span id="b-seq">1</span></div>
-        </div>
-        <div style="background: var(--card-bg-sub); padding: 10px 12px; border-radius: 6px; border: 1px solid var(--card-border);">
-          <div style="color: var(--accent-cyan); font-weight: 700; margin-bottom: 4px;">WIRE SIZES (5,119 B TOTAL)</div>
-          <div><span style="color: var(--text-muted);">KEM Ciphertext:</span> <span id="b-kem-sz">1,088 B (FIPS 203)</span></div>
-          <div><span style="color: var(--text-muted);">DSA Signature:</span> <span id="b-dsa-sz">3,309 B (FIPS 204)</span></div>
-          <div><span style="color: var(--text-muted);">AES Ciphertext:</span> <span id="b-aes-sz">56 B</span></div>
-          <div><span style="color: var(--text-muted);">AEAD Nonce + Tag:</span> <span id="b-nonce-sz">12 B + 16 B</span></div>
-          <div><span style="color: var(--text-muted);">Header Framing:</span> <span>128 B</span></div>
-        </div>
-        <div style="background: var(--card-bg-sub); padding: 10px 12px; border-radius: 6px; border: 1px solid var(--card-border);">
-          <div style="color: var(--accent-cyan); font-weight: 700; margin-bottom: 4px;">SECURITY & DTN STATE</div>
-          <div><span style="color: var(--text-muted);">Delivery Status:</span> <span id="b-status" style="color: var(--accent-green); font-weight: 700;">DELIVERED & ACK VERIFIED</span></div>
-          <div><span style="color: var(--text-muted);">Anti-Replay Filter:</span> <span id="b-replay" style="color: var(--accent-green);">VALID (FRESH)</span></div>
-          <div><span style="color: var(--text-muted);">DSA Verification:</span> <span id="b-dsa-stat" style="color: var(--accent-green);">VALID (GENUINE)</span></div>
-          <div><span style="color: var(--text-muted);">KEM Invariant:</span> <span id="b-kem-stat" style="color: var(--accent-green);">NOMINAL (r = t*zeta)</span></div>
-          <div><span style="color: var(--text-muted);">ACK Receipt:</span> <span id="b-ack-stat" style="color: var(--accent-green);">VERIFIED AT ORIGINATOR</span></div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Live Forensic Audit Trail & Benchmark Analytics Grid -->
-    <div class="grid-2">
-
-      <!-- Live Forensic Audit Stream -->
-      <div class="card">
-        <div class="card-title">
-          <span>Cryptographic Forensic Audit Trail</span>
-          <span style="color: var(--accent-cyan); font-family: 'JetBrains Mono';">APPEND-ONLY AUDIT STREAM</span>
-        </div>
-        <div class="filter-row">
-          <button class="filter-pill active" onclick="filterAuditLog('ALL')">ALL</button>
-          <button class="filter-pill" onclick="filterAuditLog('CRYPTO')">CRYPTO</button>
-          <button class="filter-pill" onclick="filterAuditLog('FAULT')">FAULT</button>
-          <button class="filter-pill" onclick="filterAuditLog('DTN')">DTN</button>
-          <button class="filter-pill" onclick="filterAuditLog('SECURITY')">SECURITY</button>
-        </div>
-        <div class="audit-log" id="tech-audit-log">
-          <!-- Dynamically populated -->
-        </div>
-      </div>
-
-      <!-- Empirical Experiment Selector & Micro-Benchmark Profiles -->
-      <div class="card">
-        <div class="card-title">
-          <span>Empirical Benchmark Profiles & Experiment Laboratory</span>
-          <span style="color: var(--accent-gold); font-family: 'JetBrains Mono';">CAMPAIGN TRIALS (N=38)</span>
+      <!-- Historical Experiment Selector -->
+      <div class="panel-card">
+        <div class="panel-header">
+          <span>EMPIRICAL BENCHMARK PROFILES & EXPERIMENT LABORATORY</span>
+          <span class="tag">N=38 TRIALS</span>
         </div>
         <div style="margin-bottom: 8px; display: flex; align-items: center; gap: 8px;">
-          <span style="font-size: 0.72rem; color: var(--text-muted); font-family: 'JetBrains Mono';">Select Historical Trial:</span>
+          <span style="font-size: 0.7rem; color: var(--text-muted); font-family: 'JetBrains Mono';">Select Historical Trial:</span>
           <select id="trial-selector" onchange="onTrialSelect()" style="flex:1;">
             <option value="EXP-A1">EXP-A1: Ciphertext Modification (Group A)</option>
             <option value="EXP-A2">EXP-A2: Metadata Modification (Group A)</option>
@@ -921,7 +1150,7 @@
             <option value="EXP-E2">EXP-E2: Out-of-Order Message Tolerance (Group E)</option>
           </select>
         </div>
-        <div id="trial-details-box" style="background: var(--card-bg-sub); border: 1px solid var(--card-border); border-radius: 6px; padding: 10px 12px; font-family: 'JetBrains Mono', monospace; font-size: 0.72rem; line-height: 1.6;">
+        <div id="trial-details-box" style="background: #080d16; border: 1px solid var(--card-border); border-radius: 4px; padding: 10px 12px; font-family: 'JetBrains Mono', monospace; font-size: 0.72rem; line-height: 1.6;">
           <div><span style="color: var(--text-muted);">Trial ID:</span> <span id="td-id">4782917a-6b4c-4ded...</span></div>
           <div><span style="color: var(--text-muted);">Fault Locus:</span> <code id="td-locus" style="color: var(--accent-cyan);">L2_AES_GCM_CIPHERTEXT</code></div>
           <div><span style="color: var(--text-muted);">Detection Result:</span> <span id="td-det" style="color: var(--accent-green); font-weight: 700;">DETECTED (100.0%)</span></div>
@@ -930,15 +1159,108 @@
           <div><span style="color: var(--text-muted);">Execution Latency:</span> <span id="td-lat">7.68 ms</span></div>
         </div>
       </div>
+
+      <!-- Spool & Queue Telemetry in Lab View -->
+      <div class="panel-card">
+        <div class="panel-header">
+          <span>DTN STORE-AND-FORWARD SPOOL STORAGE</span>
+          <span class="tag">SQLITE WAL</span>
+        </div>
+        <div style="font-family: 'JetBrains Mono', monospace; font-size: 0.72rem; line-height: 1.6;">
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px;">
+            <div style="background: #080d16; padding: 8px 10px; border-radius: 4px; border: 1px solid var(--card-border);">
+              <div style="color: var(--text-muted); font-size: 0.65rem;">SAT-1 QUEUE STORAGE</div>
+              <div style="font-size: 1.15rem; font-weight: 700; color: #fff;" id="tech-sat1-queue">0 bundles (20.00 KB)</div>
+              <div style="font-size: 0.65rem; color: var(--accent-cyan);">SQLite WAL Active</div>
+            </div>
+            <div style="background: #080d16; padding: 8px 10px; border-radius: 4px; border: 1px solid var(--card-border);">
+              <div style="color: var(--text-muted); font-size: 0.65rem;">SAT-2 QUEUE STORAGE</div>
+              <div style="font-size: 1.15rem; font-weight: 700; color: #fff;" id="tech-sat2-queue">0 bundles (20.00 KB)</div>
+              <div style="font-size: 0.65rem; color: var(--accent-cyan);">SQLite WAL Active</div>
+            </div>
+          </div>
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 6px;">
+            <div><span style="color: var(--text-muted);">Storage Engine:</span> <span>ACID Crash-Consistent</span></div>
+            <div><span style="color: var(--text-muted);">Anti-Replay Window:</span> <span>1,000 Seqs (HMAC)</span></div>
+            <div><span style="color: var(--text-muted);">Wire Protocol:</span> <span>RFC 9171 BPv7 CBOR</span></div>
+            <div><span style="color: var(--text-muted);">Integrity:</span> <span>BPSec BIB Enforced</span></div>
+          </div>
+        </div>
+      </div>
+
     </div>
+
   </div>
 
+  <!-- Operational JavaScript Logic -->
   <script>
     const ADMIN_TOKEN = "astra-mission-control-token";
     let islState = "UP";
     let currentMode = "ops";
     let allAuditEntries = [];
     let auditFilter = "ALL";
+    let activeSelectedNodeKey = "sat1";
+    let isSyncingSelection = false;
+
+    // Constellation Astrodynamic Metadata Map
+    const ASTRO_DATA = {
+      gsa: {
+        name: "Ground Station Alpha (GSA)",
+        role: "CRYPTOGRAPHIC ORIGINATOR",
+        eid: "dtn://gsa/app",
+        location: "Svalbard Polar Station, Norway (78.23° N, 15.41° E)",
+        l1: "FACILITY", v1: "SvalSat Polar Station",
+        l2: "ELEVATION", v2: "450 m ASL",
+        l3: "ANTENNA", v3: "11 m Tracking Radome",
+        l4: "ROLE", v4: "ML-KEM / ML-DSA TX",
+        l5: "LINK TYPE", v5: "Direct Polar S-Band",
+        l6: "SPOOL STATUS", v6: "ONLINE (0 B)",
+        kem: "FIPS 203 ENCAP_KEYPAIR",
+        dsa: "FIPS 204 SIGNING_AUTHORIZED"
+      },
+      sat1: {
+        name: "Satellite Relay 1 (LEO-1)",
+        role: "STORE-AND-FORWARD ROUTER",
+        eid: "dtn://sat1/relay",
+        location: "Sun-Synchronous Polar LEO (~550 km, 52.00° N, 38.00° E)",
+        l1: "SEMI-MAJOR AXIS", v1: "6,928.14 km",
+        l2: "ALTITUDE", v2: "550.00 km",
+        l3: "VELOCITY", v3: "7.59 km/s",
+        l4: "ORBITAL PERIOD", v4: "95.60 min",
+        l5: "INCLINATION", v5: "97.40° (Polar)",
+        l6: "QUEUE STORAGE", v6: "0 (20.00 KB)",
+        kem: "RELAY_TRANSIT_ONLY",
+        dsa: "ROUTER_UNAUTHORIZED"
+      },
+      sat2: {
+        name: "Satellite Relay 2 (LEO-2)",
+        role: "STORE-AND-FORWARD ROUTER",
+        eid: "dtn://sat2/relay",
+        location: "Inclined LEO Relay Constellation (~550 km, -8.00° S, 92.00° E)",
+        l1: "SEMI-MAJOR AXIS", v1: "6,928.14 km",
+        l2: "ALTITUDE", v2: "550.00 km",
+        l3: "VELOCITY", v3: "7.59 km/s",
+        l4: "ORBITAL PERIOD", v4: "95.60 min",
+        l5: "INCLINATION", v5: "45.00° (Inclined)",
+        l6: "QUEUE STORAGE", v6: "0 (20.00 KB)",
+        kem: "RELAY_TRANSIT_ONLY",
+        dsa: "ROUTER_UNAUTHORIZED"
+      },
+      gsb: {
+        name: "Ground Station Bravo (GSB)",
+        role: "DESTINATION VERIFIER",
+        eid: "dtn://gsb/app",
+        location: "Canberra Deep Space Complex, Australia (-35.40° S, 148.98° E)",
+        l1: "FACILITY", v1: "CDSCC Deep Space Complex",
+        l2: "ELEVATION", v2: "650 m ASL",
+        l3: "ANTENNA", v3: "34 m Beam Waveguide Dish",
+        l4: "ROLE", v4: "ML-KEM DECAP / ML-DSA VERIFY",
+        l5: "LINK TYPE", v5: "Deep Space X/Ka-Band",
+        l6: "SPOOL STATUS", v6: "DELIVERED (ACK TX)",
+        kem: "FIPS 203 MONITORED_DECAP",
+        dsa: "FIPS 204 VERIFY_AND_ACK"
+      }
+    };
 
     // Live UTC Clock
     function updateClock() {
@@ -948,7 +1270,67 @@
     setInterval(updateClock, 1000);
     updateClock();
 
-    // Mode Switcher: Operations vs Technical
+    // Select Constellation Node in Left Panel & 3D Globe
+    function selectConstellationNode(nodeKey, syncGlobe = true) {
+      if (isSyncingSelection) return;
+      isSyncingSelection = true;
+      try {
+        activeSelectedNodeKey = nodeKey;
+        const data = ASTRO_DATA[nodeKey];
+        if (!data) return;
+
+        document.getElementById('left-node-name').textContent = data.name;
+        document.getElementById('left-node-role').textContent = data.role;
+        document.getElementById('left-node-eid').textContent = data.eid;
+        document.getElementById('left-node-location').textContent = data.location;
+        document.getElementById('astro-lbl-1').textContent = data.l1;
+        document.getElementById('astro-val-1').textContent = data.v1;
+        document.getElementById('astro-lbl-2').textContent = data.l2;
+        document.getElementById('astro-val-2').textContent = data.v2;
+        document.getElementById('astro-lbl-3').textContent = data.l3;
+        document.getElementById('astro-val-3').textContent = data.v3;
+        document.getElementById('astro-lbl-4').textContent = data.l4;
+        document.getElementById('astro-val-4').textContent = data.v4;
+        document.getElementById('astro-lbl-5').textContent = data.l5;
+        document.getElementById('astro-val-5').textContent = data.v5;
+        document.getElementById('astro-lbl-6').textContent = data.l6;
+        document.getElementById('astro-val-6').textContent = data.v6;
+        document.getElementById('left-node-kem').textContent = data.kem;
+        document.getElementById('left-node-dsa').textContent = data.dsa;
+
+        // Update Left-panel Pill highlighting
+        document.querySelectorAll('.node-item-pill').forEach(pill => {
+          if (pill.getAttribute('data-node') === nodeKey) {
+            pill.classList.add('selected');
+          } else {
+            pill.classList.remove('selected');
+          }
+        });
+
+        // Synchronize 3D Globe Camera
+        if (syncGlobe && window.AstraMissionControl3D) {
+          window.AstraMissionControl3D.setCameraView(nodeKey);
+        }
+      } finally {
+        isSyncingSelection = false;
+      }
+    }
+
+    // Hook from 3D Globe click to Left Panel Astrodynamics
+    window.onNodeSelected = function(d) {
+      if (!d) return;
+      let key = null;
+      if (d.id && d.id.includes('gsa')) key = 'gsa';
+      else if (d.id && d.id.includes('sat1')) key = 'sat1';
+      else if (d.id && d.id.includes('sat2')) key = 'sat2';
+      else if (d.id && d.id.includes('gsb')) key = 'gsb';
+
+      if (key && ASTRO_DATA[key]) {
+        selectConstellationNode(key, false);
+      }
+    };
+
+    // Mode Switcher: Flight Console vs Experiment Lab
     function switchMode(mode) {
       currentMode = mode;
       const opsContainer = document.getElementById('view-ops-container');
@@ -958,11 +1340,11 @@
       const opModeLabel = document.getElementById('operating-mode');
 
       if (mode === 'ops') {
-        opsContainer.style.display = 'block';
+        opsContainer.style.display = 'flex';
         techContainer.style.display = 'none';
         tabOpsBtn.classList.add('active');
         tabTechBtn.classList.remove('active');
-        opModeLabel.textContent = 'LIVE OPERATIONS';
+        opModeLabel.textContent = 'LIVE OPS';
         if (window.AstraMissionControl3D) {
           window.AstraMissionControl3D.refreshScene();
         }
@@ -971,12 +1353,12 @@
         techContainer.style.display = 'block';
         tabOpsBtn.classList.remove('active');
         tabTechBtn.classList.add('active');
-        opModeLabel.textContent = 'TECHNICAL ANALYSIS';
+        opModeLabel.textContent = 'EXP LAB';
         loadPipelineAndNtt();
       }
     }
 
-    // Scenario Selection Change
+    // Scenario Change Handler
     function onScenarioChange() {
       const select = document.getElementById('scenario-select');
       const payloadInput = document.getElementById('payload-input');
@@ -1036,21 +1418,21 @@
       }
     }
 
-    // Update Pipeline Cards UI
+    // Update Pipeline UI (High-Density Stages)
     function updatePipelineUI(pipe) {
       const container = document.getElementById('pipeline-cards-container');
       if (!container) return;
       container.innerHTML = '';
 
       const stages = [
-        { key: 'stage1_creation', label: '1. ADU Message Creation', details: `Source: ${pipe.stage1_creation.source_eid}<br>Seq: #${pipe.stage1_creation.sequence_id} | Payload: ${pipe.stage1_creation.payload_size_bytes} B` },
-        { key: 'stage2_kem_encapsulation', label: '2. ML-KEM-768 Encap', details: `Algorithm: ${pipe.stage2_kem_encapsulation.algorithm}<br>Ciphertext: ${pipe.stage2_kem_encapsulation.ciphertext_length_bytes} B | SS: ${pipe.stage2_kem_encapsulation.shared_secret_length_bytes} B` },
-        { key: 'stage3_key_derivation', label: '3. HKDF-SHA256 Derivation', details: `Context: ${pipe.stage3_key_derivation.context_label}<br>Derived: ${pipe.stage3_key_derivation.derived_key_type}` },
-        { key: 'stage4_dsa_signature', label: '4. ML-DSA-65 Signature', details: `Algorithm: ${pipe.stage4_dsa_signature.algorithm}<br>Signature: ${pipe.stage4_dsa_signature.signature_size_bytes} B (Canonical)` },
-        { key: 'stage5_aead_encryption', label: '5. AES-256-GCM AEAD', details: `Nonce: ${pipe.stage5_aead_encryption.nonce_length_bytes} B | Tag: ${pipe.stage5_aead_encryption.tag_length_bytes} B<br>Ciphertext: ${pipe.stage5_aead_encryption.ciphertext_size_bytes} B (AAD Bound)` },
-        { key: 'stage6_dtn_bundle', label: '6. BPv7 Wire Framing', details: `Protocol: ${pipe.stage6_dtn_bundle.protocol}<br>Wire Size: ${pipe.stage6_dtn_bundle.total_wire_size_bytes} B (BPSec BIB)` },
-        { key: 'stage7_receiver_verification', label: '7. Receiver Verification', details: `Anti-Replay: ${pipe.stage7_receiver_verification.anti_replay_status}<br>DSA: ${pipe.stage7_receiver_verification.signature_verification} | KEM: ${pipe.stage7_receiver_verification.kem_decapsulation_status}` },
-        { key: 'stage8_acknowledgment', label: '8. Verified ACK at GSA', details: `Status: ${pipe.stage8_acknowledgment.status}<br>ACK ID: ${pipe.stage8_acknowledgment.ack_id || 'NONE'} (${pipe.stage8_acknowledgment.ack_signature_size_bytes} B)` }
+        { key: 'stage1_creation', label: '1. ADU Creation', details: `Source: ${pipe.stage1_creation.source_eid} (Seq #${pipe.stage1_creation.sequence_id})` },
+        { key: 'stage2_kem_encapsulation', label: '2. ML-KEM-768 Encap', details: `CT: ${pipe.stage2_kem_encapsulation.ciphertext_length_bytes} B | SS: ${pipe.stage2_kem_encapsulation.shared_secret_length_bytes} B (FIPS 203)` },
+        { key: 'stage3_key_derivation', label: '3. HKDF-SHA256 Derivation', details: `Context: ${pipe.stage3_key_derivation.context_label}` },
+        { key: 'stage4_dsa_signature', label: '4. ML-DSA-65 Signature', details: `Signature: ${pipe.stage4_dsa_signature.signature_size_bytes} B (FIPS 204)` },
+        { key: 'stage5_aead_encryption', label: '5. AES-256-GCM AEAD', details: `AAD Nonce: ${pipe.stage5_aead_encryption.nonce_length_bytes} B | CT: ${pipe.stage5_aead_encryption.ciphertext_size_bytes} B` },
+        { key: 'stage6_dtn_bundle', label: '6. BPv7 Wire Framing', details: `Total Wire: ${pipe.stage6_dtn_bundle.total_wire_size_bytes} B (BPSec BIB)` },
+        { key: 'stage7_receiver_verification', label: '7. Receiver Verification', details: `Replay: ${pipe.stage7_receiver_verification.anti_replay_status} | DSA: ${pipe.stage7_receiver_verification.signature_verification}` },
+        { key: 'stage8_acknowledgment', label: '8. Verified ACK at GSA', details: `Status: ${pipe.stage8_acknowledgment.status} (${pipe.stage8_acknowledgment.ack_signature_size_bytes} B)` }
       ];
 
       stages.forEach(s => {
@@ -1069,7 +1451,7 @@
             <span>${s.label}</span>
             <span class="pipe-badge ${badgeClass}">${status}</span>
           </div>
-          <div style="color:var(--text-muted); font-size:0.7rem; line-height:1.5;">${s.details}</div>
+          <div style="color:var(--text-muted); font-size:0.65rem;">${s.details}</div>
         `;
         container.appendChild(card);
       });
@@ -1079,10 +1461,10 @@
     function updateNttUI(ntt) {
       if (!ntt) return;
       document.getElementById('ntt-invariant-status').textContent = ntt.invariant_status;
-      document.getElementById('ntt-ref-checker').textContent = ntt.reference_checker + ' (Dual-Transform)';
+      document.getElementById('ntt-ref-checker').textContent = ntt.reference_checker + ' (Dual)';
       document.getElementById('ntt-rollback-status').textContent = ntt.operand_snapshot_buffer;
       document.getElementById('ntt-recovered-count').textContent = `${ntt.recovered_count} (Recovered)`;
-      document.getElementById('ntt-failstop-status').textContent = ntt.fail_stop_engaged ? 'ENGAGED (IMPLICIT REJECTION)' : 'K <= 2 (Bounded)';
+      document.getElementById('ntt-failstop-status').textContent = ntt.fail_stop_engaged ? 'ENGAGED (IMPLICIT REJ)' : 'K <= 2 (Bounded)';
       document.getElementById('ntt-twiddle-faults').textContent = `${ntt.mismatch_count} detected`;
 
       const progEl = document.getElementById('ntt-progression-text');
@@ -1098,22 +1480,15 @@
       }
     }
 
-    // Update Bundle Inspector UI
+    // Update Bundle UI
     function updateBundleUI(b) {
       if (!b) return;
       document.getElementById('b-id').textContent = b.bundle_id;
-      document.getElementById('b-envelope').textContent = b.envelope_id ? b.envelope_id.slice(0, 16) + '...' : 'N/A';
-      document.getElementById('b-src').textContent = b.source_eid;
-      document.getElementById('b-dst').textContent = b.destination_eid;
-      document.getElementById('b-seq').textContent = b.sequence_id;
-      document.getElementById('b-kem-sz').textContent = `${b.kem_ciphertext_bytes} B (FIPS 203)`;
-      document.getElementById('b-dsa-sz').textContent = `${b.signature_bytes} B (FIPS 204)`;
+      document.getElementById('b-kem-sz').textContent = `${b.kem_ciphertext_bytes} B`;
+      document.getElementById('b-dsa-sz').textContent = `${b.signature_bytes} B`;
       document.getElementById('b-aes-sz').textContent = `${b.ciphertext_bytes} B`;
-      document.getElementById('b-nonce-sz').textContent = `${b.nonce_bytes} B + ${b.tag_bytes} B`;
+      document.getElementById('b-nonce-sz').textContent = `${b.nonce_bytes + b.tag_bytes + 638} B`;
       document.getElementById('b-status').textContent = b.current_status;
-      document.getElementById('b-replay').textContent = b.anti_replay_status;
-      document.getElementById('b-dsa-stat').textContent = b.dsa_signature_status;
-      document.getElementById('b-kem-stat').textContent = b.kem_invariant_status;
     }
 
     // Update Timeline UI
@@ -1139,7 +1514,7 @@
       });
     }
 
-    // Single Trial Selection
+    // Historical Trial Selection in Lab Mode
     async function onTrialSelect() {
       const trialId = document.getElementById('trial-selector').value;
       try {
@@ -1156,7 +1531,7 @@
       }
     }
 
-    // Load Queues & Satellite Spools
+    // Load Queues & Spools
     async function loadQueues() {
       try {
         const res = await fetch('/api/queue');
@@ -1168,6 +1543,13 @@
           const s2El = document.getElementById('tech-sat2-queue');
           if (s1El) s1El.textContent = `${q1.pending_bundles} bundles (${q1.storage_kb} KB)`;
           if (s2El) s2El.textContent = `${q2.pending_bundles} bundles (${q2.storage_kb} KB)`;
+
+          // If SAT-1 selected, update Left Panel astro cell
+          if (activeSelectedNodeKey === 'sat1') {
+            document.getElementById('astro-val-6').textContent = `${q1.pending_bundles} (${q1.storage_kb} KB)`;
+          } else if (activeSelectedNodeKey === 'sat2') {
+            document.getElementById('astro-val-6').textContent = `${q2.pending_bundles} (${q2.storage_kb} KB)`;
+          }
         }
         if (window.AstraMissionControl3D) {
           window.AstraMissionControl3D.fetchTelemetry();
@@ -1206,7 +1588,7 @@
         const data = await res.json();
         statusDiv.textContent = `[DISPATCH COMPLETED] Status: ${data.status} | Latency: ${data.duration_ms} ms | Delivered: ${data.delivered_to_destination} | Recovered: ${data.transient_recovery_occurred} | Receipt Verified: ${data.receipt_verified}`;
         
-        document.getElementById('active-envelope-id').textContent = data.envelope_id ? data.envelope_id.slice(0, 14) + '...' : 'NONE';
+        document.getElementById('active-envelope-id').textContent = data.envelope_id ? data.envelope_id.slice(0, 10) + '...' : 'NONE';
 
         if (data.pipeline) updatePipelineUI(data.pipeline);
         if (data.ntt) updateNttUI(data.ntt);
@@ -1247,7 +1629,7 @@
             btn.style.borderColor = "var(--accent-red)";
             btn.style.color = "#fff";
           } else {
-            btn.textContent = "TOGGLE ISL OUTAGE";
+            btn.textContent = "⚡ TOGGLE ISL OUTAGE";
             btn.style.background = "";
             btn.style.borderColor = "";
             btn.style.color = "";
@@ -1280,7 +1662,7 @@
         }
         const btn = document.getElementById('isl-toggle-btn');
         if (btn) {
-          btn.textContent = "TOGGLE ISL OUTAGE";
+          btn.textContent = "⚡ TOGGLE ISL OUTAGE";
           btn.style.background = "";
           btn.style.borderColor = "";
           btn.style.color = "";
@@ -1293,7 +1675,7 @@
       }
     }
 
-    // Add Audit Log Line
+    // Add Audit Log Entry
     function addAuditLine(text, category = 'INFO') {
       const timeStr = new Date().toISOString().slice(11, 19);
       const entry = { time: timeStr, text: text, category: category };
@@ -1327,7 +1709,7 @@
       });
     }
 
-    // Filter Audit Log Category
+    // Filter Audit Log
     function filterAuditLog(cat) {
       auditFilter = cat;
       const pills = document.querySelectorAll('.filter-pill');
@@ -1338,7 +1720,7 @@
       renderAuditLog();
     }
 
-    // Connect WebSocket
+    // WebSocket Telemetry Connection
     function connectWS() {
       const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
       const ws = new WebSocket(`${protocol}//${window.location.host}/ws/live`);
@@ -1380,10 +1762,11 @@
       };
     }
 
-    // Initial Bootstrap
-    addAuditLine('ASTRA-Sec Mission Observability Engine online. Trust store validated.', 'SECURITY');
+    // System Initialization
+    addAuditLine('ASTRA-Sec Flight Operations Console online. Trust store validated.', 'SECURITY');
+    addAuditLine('FIPS 203 ML-KEM-768 and FIPS 204 ML-DSA-65 active cryptosystem online.', 'CRYPTO');
     addAuditLine('Persistent anti-replay filter initialized with HMAC state manifest.', 'SECURITY');
-    addAuditLine('FIPS 203 ML-KEM-768 and FIPS 204 ML-DSA-65 monitored engines loaded.', 'CRYPTO');
+    selectConstellationNode('sat1');
     loadSummary();
     loadQueues();
     loadPipelineAndNtt();

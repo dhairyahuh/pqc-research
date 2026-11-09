@@ -12,39 +12,40 @@ $$\text{Originator ADU} \longrightarrow \text{ML-KEM-768 Encap} \longrightarrow 
 
 ## 2. Features Actually Implemented
 
-### A. Dual Coordinated Operational Modes
-1. **Mission Operations Mode (`[🌐 MISSION OPERATIONS]`)**:
-   - Central interactive 3D Earth rendered via Globe.gl with local high-resolution textures (`earth-night.jpg`, `night-sky.png`).
-   - Spacecraft and ground stations with deterministic WGS84 geodetic coordinates, dynamic callout labels, and live queue status.
-   - Dynamic 3D communication arcs (Uplink, ISL, Downlink, Return ACK) terminating precisely at node altitudes ($0.015$ ground radome, $0.35$ satellite bus).
-   - In-flight packet animation engine tracking multi-hop transit, outage halting at SAT-1, and reverse signed ACK transmission.
-   - Interactive Node Inspector panel displaying live EID, WGS84 coordinates, SQLite WAL depth, storage bytes, and public key fingerprints.
-   - Camera presets: Orbit Overview, SAT-1 (LEO-1), SAT-2 (LEO-2), GSA (Svalbard), GSB (Canberra), and auto-rotate.
-   - End-to-End Security & Delivery Timeline with clickable milestones.
+### A. Unified NASA Open MCT & Orbit-02 Console Architecture
+The dashboard follows the high-density flight operations architecture inspired by NASA Open MCT and aerospace mission control centers (Orbit-02):
+1. **Top Mission Header (44px)**:
+   - Aerospace mission branding with FIPS 203 & 204 verification badges.
+   - Live subsystem health pills: System Health (`HEALTHY`), Crypto Suite (`ML-KEM-768 / ML-DSA-65`), DTN (`RFC 9171 BPv7`), Spool (`ACID WAL`), WebSocket connection status, and live real-time ticking UTC clock.
+   - One-click navigation toggle between the primary **Flight Console** and the deep **Experiment Lab**.
 
-2. **Technical Analysis Mode (`[🔬 TECHNICAL ANALYSIS]`)**:
-   - **L2/L3 Post-Quantum Cryptographic Security Pipeline (8 Stages)**:
-     - Stage 1: ADU Creation (Originator EID, Payload bytes, Timestamp, Sequence ID).
-     - Stage 2: FIPS 203 ML-KEM-768 Key Encapsulation (1,088 B Ciphertext, 32 B Shared Secret, Execution latency).
-     - Stage 3: HKDF-SHA256 Session Key Derivation (RFC 5869, context label `astra-sec-payload-v1`).
-     - Stage 4: FIPS 204 ML-DSA-65 Digital Signature (3,309 B Signature over canonical representation).
-     - Stage 5: AES-256-GCM AEAD Encryption (12 B Nonce, 16 B Tag, Canonical AAD binding).
-     - Stage 6: RFC 9171 BPv7 Wire Framing & BPSec (5,119 B Wire Size, BIB integrity block).
-     - Stage 7: Destination Verification at GSB (Anti-replay filter, DSA verification, ML-KEM decapsulation, AEAD tag verify, App acceptance).
-     - Stage 8: Verified Cryptographic ACK (Signed acknowledgment verified under GSB public key).
-   - **L4 NTT Fault Resilience Monitor**:
-     - Mathematical Invariant Card: $r \equiv t \cdot \zeta \pmod{3329}$ where $q = 3329$.
-     - 128 Dual butterflies monitored, Reference Checker status, Operand snapshot buffer ($K \le 2$).
-     - Live progression state trace: `NOMINAL` $\rightarrow$ `INVARIANT VIOLATION` $\rightarrow$ `ROLLBACK (K=1)` $\rightarrow$ `RETRY` $\rightarrow$ `RECOVERED` or `FAIL-STOP IMPLICIT REJECTION`.
-   - **L5/L6 DTN Store-and-Forward Operations**:
-     - Real-time SAT-1 & SAT-2 SQLite WAL spool queue depth, pending bundles, storage usage (KB), and ACID crash-consistent status.
-   - **Active Dispatched Packet & DTN Bundle Inspector**:
-     - Complete binary wire representation breakdown (Header, KEM Ciphertext, Nonce, AES Ciphertext, Tag, ML-DSA Signature).
-   - **Cryptographic Forensic Audit Trail**:
-     - Real-time append-only audit stream with categorized filters (ALL, CRYPTO, FAULT, DTN, SECURITY).
-   - **Empirical Experiment Selector & Micro-Benchmark Analytics**:
-     - Real latency percentiles ($p_{50}, p_{90}, p_{99}$) and throughput from `benchmark_results.json`.
-     - Interactive trial selector that queries `campaign_results.jsonl` to display exact raw experimental data from the 38-trial empirical campaign.
+2. **Main 3-Column Flight Operations Grid**:
+   - **Left Panel (310px)**:
+     - Constellation Network Entities (GSA Svalbard, SAT-1 Polar LEO, SAT-2 Inclined LEO, GSB Canberra) with status pills and active node selection.
+     - Selected Node Astrodynamics & Subsystems Inspector:
+       - Real satellite orbital parameters: Semi-Major Axis ($6,928.14\text{ km}$), Orbital Altitude ($550.00\text{ km}$), Orbital Velocity ($7.59\text{ km/s}$), Orbital Period ($95.60\text{ min}$), Inclination ($97.40^\circ$), and Queue Depth.
+       - Ground station facility parameters: Facility name, Elevation, Tracking Antenna, and Cryptographic Authorization Role.
+       - Synchronized two-way selection: clicking any node in the left panel updates the 3D globe camera; clicking any node on the 3D globe updates the left panel astrodynamics.
+   - **Center Panel (Flexible Width)**:
+     - Central interactive 3D Earth rendered via Globe.gl with local high-resolution textures (`earth-night.jpg`, `night-sky.png`).
+     - Dynamic 3D communication arcs (Uplink, ISL, Downlink, Return ACK) terminating precisely at node altitudes ($0.015$ ground radome, $0.35$ satellite bus).
+     - Integrated Flight Command Strip: Payload text input, 6-scenario demonstration selector, `[▶ DISPATCH ENVELOPE]`, `[⚡ TOGGLE ISL OUTAGE]`, and `[↺ RESET ALL FAULTS]`.
+     - HUD overlays: Live Orbital Link Telemetry, Interactive Node Inspector, In-Flight Packet Inspector, and Camera Presets (Overview, SAT-1, SAT-2, GSA, GSB, Auto-Rotate).
+     - Live dispatch feedback banner with latency, delivery, and recovery indicators.
+   - **Right Panel (370px)**:
+     - **L2/L3 PQC Pipeline (8 Stages)**: Compact stage cards with live status badges (`COMPLETED`, `RUNNING`, `FAILED`, `PENDING`), algorithm details, and byte sizes.
+     - **L4 NTT Fault Resilience Monitor**: Mathematical invariant verification $r \equiv t \cdot \zeta \pmod{3329}$, 128 dual butterflies checked, reference checker status, snapshot rollback buffer ($K \le 2$), recovery counters, fail-stop status, and live execution progression trace.
+     - **Active DTN Wire Breakdown**: Visual segmented meter and breakdown of the 5,119 B wire bundle (ML-KEM-768 CT: 1,088 B, ML-DSA-65 Sig: 3,309 B, AES-256 CT: 56 B, AEAD Nonce + Tag + BPv7 Headers: 666 B).
+
+3. **Bottom Dock (185px)**:
+   - **Left Half**: End-to-End Security & Delivery Timeline with clickable milestones for audit inspection.
+   - **Right Half**: Cryptographic Forensic Audit Trail with live append-only logging and category filter pills (`ALL`, `CRYPTO`, `FAULT`, `DTN`, `SECURITY`).
+
+4. **Experiment Lab & Historical Matrix View**:
+   - Accessible via the header toggle `[🔬 EXPERIMENT LAB]`.
+   - Complete 38-trial empirical campaign explorer (Group A through E) querying raw records directly from `campaign_results.jsonl`.
+   - Core metrics summary: Total Trials (38), Fault Detection Rate (100.0%), SDC Count (0), Latency profile ($p_{50} = 11.66\text{ ms}$).
+   - Satellite SQLite WAL queue storage telemetry breakdown.
 
 ### B. Demonstration Orchestration Engine
 Supports 6 interactive real-time scenarios via `/api/admin/dispatch`:
@@ -125,3 +126,4 @@ open http://localhost:8000
 
 1. **Constellation Scaling**: The 3D scene is currently optimized for the 4-node space network (GSA, SAT1, SAT2, GSB). A Walker constellation of 100+ nodes will require dynamic Level-of-Detail (LOD) point instancing.
 2. **Physical Orbital Propagation**: Satellites currently follow deterministic sun-synchronous/inclined coordinates. Continuous physical orbital drift propagation via SGP4/TLE and `satellite.js` can be added in a future phase.
+

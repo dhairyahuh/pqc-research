@@ -1,19 +1,13 @@
 /**
  * ASTRA-Sec: Professional 3D Satellite Mission Control & Geospatial Network Visualization.
+ * Inspired by NASA Open MCT and Aerospace Flight Operations consoles.
  * Powered by Globe.gl (Open Source, MIT License - 100% Offline Air-Gapped).
- * 
- * Features:
- * - Deterministic WGS84 Geodetic Coordinates for 4-Node Space Pipeline (GSA, SAT1, SAT2, GSB).
- * - High-visibility 3D HTML aerospace satellite & ground station markers with live queue telemetry.
- * - Dynamic 3D communication arcs (Uplink, ISL, Downlink, Return ACK) terminating precisely at node altitudes.
- * - Multi-hop in-flight packet flight animation engine with disruption halting & queue spooling.
- * - Interactive node inspection HUD, live telemetry synchronization, and camera orbit controls.
  */
 
 (function () {
   'use strict';
 
-  // --- Constellation Node Coordinates (Deterministic WGS84 Geodetic) ---
+  // --- Constellation Node Coordinates & Astrodynamics ---
   const NODE_CONFIG = {
     gsa: {
       id: 'dtn://gsa/app',
@@ -24,6 +18,9 @@
       alt: 0.015,
       type: 'ground_station',
       color: '#00e5ff',
+      facility: 'SvalSat Polar Tracking Station',
+      elevation: '450 m ASL',
+      antenna: '11 m S/X-Band Tracking Radome',
       role: 'Cryptographic Originator (ML-KEM Encap / ML-DSA Signer / L2 AEAD)'
     },
     sat1: {
@@ -35,6 +32,12 @@
       alt: 0.35,
       type: 'satellite',
       color: '#ffd700',
+      orbit: 'Sun-Synchronous Polar LEO',
+      altitude_km: 550,
+      inclination_deg: 97.4,
+      velocity_kms: 7.59,
+      period_min: 95.6,
+      semi_major_axis_km: 6928,
       role: 'Store-and-Forward Router (SQLite WAL Persistent Spool / RFC 9171 BPv7)'
     },
     sat2: {
@@ -46,6 +49,12 @@
       alt: 0.35,
       type: 'satellite',
       color: '#ffd700',
+      orbit: 'Inclined LEO Relay Constellation',
+      altitude_km: 550,
+      inclination_deg: 45.0,
+      velocity_kms: 7.59,
+      period_min: 95.6,
+      semi_major_axis_km: 6928,
       role: 'Store-and-Forward Router (SQLite WAL Persistent Spool / RFC 9171 BPv7)'
     },
     gsb: {
@@ -57,6 +66,9 @@
       alt: 0.015,
       type: 'ground_station',
       color: '#00e676',
+      facility: 'CDSCC Deep Space Communication Complex',
+      elevation: '650 m ASL',
+      antenna: '34 m Beam Waveguide Parabolic Dish',
       role: 'Destination Verifier (ML-KEM Monitored Decaps / ML-DSA Verify / ACK Signer)'
     }
   };
@@ -128,7 +140,6 @@
       }
     ];
 
-    // Add return ACK path if active
     if (returnAckActive) {
       links.push({
         id: 'ack-return',
@@ -152,14 +163,14 @@
     return links;
   }
 
-  // Node Points Data (Base Luminous Glows)
+  // Node Points Data
   function getPointsData() {
     return Object.values(NODE_CONFIG).map(n => {
       const isSat = n.type === 'satellite';
       const isOutage = n.id.includes('sat') && activeIslState === 'DOWN';
       return {
         ...n,
-        radius: isSat ? 1.1 : 0.85,
+        radius: isSat ? 1.15 : 0.85,
         color: isOutage ? (n.id.includes('sat1') ? '#ffab00' : '#ff1744') : n.color
       };
     });
@@ -244,6 +255,8 @@
     if (!container) return;
 
     worldGlobe = Globe()(container)
+      .width(container.clientWidth || 800)
+      .height(container.clientHeight || 560)
       .globeImageUrl('/static/textures/earth-night.jpg')
       .backgroundImageUrl('/static/textures/night-sky.png')
       .showAtmosphere(true)
@@ -306,9 +319,18 @@
     // Default Camera Framing (Centered on space constellation & Earth)
     worldGlobe.pointOfView({ lat: 25.0, lng: 55.0, altitude: 2.2 }, 1500);
 
-    // Responsive window resizing
+    // Responsive window & panel resizing
+    if (window.ResizeObserver) {
+      const ro = new ResizeObserver(() => {
+        if (worldGlobe && container && container.clientWidth > 0 && container.clientHeight > 0) {
+          worldGlobe.width(container.clientWidth);
+          worldGlobe.height(container.clientHeight);
+        }
+      });
+      ro.observe(container);
+    }
     window.addEventListener('resize', () => {
-      if (worldGlobe && container) {
+      if (worldGlobe && container && container.clientWidth > 0 && container.clientHeight > 0) {
         worldGlobe.width(container.clientWidth);
         worldGlobe.height(container.clientHeight);
       }
@@ -375,52 +397,58 @@
     }
   }
 
-  // --- Node Inspection HUD ---
+  // --- Node Inspection HUD & Left Panel Dispatch ---
   function selectNode(d) {
     if (typeof d === 'string') {
       d = NODE_CONFIG[d] || { id: d, name: d, type: 'UNKNOWN', lat: 0, lng: 0, alt: 0, role: 'Node' };
     }
     if (!d) return;
     selectedNode = d;
-    const panel = document.getElementById('node-inspector-hud');
-    if (!panel) return;
 
-    const q = (d.id && queueTelemetry[d.id]) || { pending: 0, kb: 0 };
-    const t = (d.id && nodesTelemetry[d.id]) || {};
-
-    const nameEl = document.getElementById('insp-node-name');
-    if (nameEl) nameEl.textContent = d.name || d.id || 'Node Inspector';
-    const eidEl = document.getElementById('insp-node-eid');
-    if (eidEl) eidEl.textContent = d.id || 'N/A';
-    const typeEl = document.getElementById('insp-node-type');
-    if (typeEl) typeEl.textContent = (d.type || 'NODE').toUpperCase();
-    const coordsEl = document.getElementById('insp-node-coords');
-    if (coordsEl) coordsEl.textContent = `${(d.lat || 0).toFixed(2)}° N/S, ${(d.lng || 0).toFixed(2)}° E/W (Alt: ${(d.alt || 0).toFixed(2)})`;
-    const roleEl = document.getElementById('insp-node-role');
-    if (roleEl) roleEl.textContent = d.role || 'Network Node';
-
-    const statusEl = document.getElementById('insp-node-status');
-    if (statusEl) {
-      if (d.id && d.id.includes('sat') && activeIslState === 'DOWN') {
-        statusEl.textContent = 'INTERRUPTED (SPOOLING)';
-        statusEl.style.color = 'var(--accent-red)';
-      } else {
-        statusEl.textContent = 'ONLINE / NORMAL';
-        statusEl.style.color = 'var(--accent-green)';
-      }
+    // Trigger external Left-Panel telemetry updater if available
+    if (typeof window.onNodeSelected === 'function') {
+      window.onNodeSelected(d);
     }
 
-    const queueEl = document.getElementById('insp-node-queue');
-    if (queueEl) queueEl.textContent = `${q.pending} bundles (${q.kb} KB)`;
+    const panel = document.getElementById('node-inspector-hud');
+    if (panel) {
+      const q = (d.id && queueTelemetry[d.id]) || { pending: 0, kb: 0 };
+      const t = (d.id && nodesTelemetry[d.id]) || {};
 
-    const kemFp = t.active_kem_pk_fingerprint || (d.id && d.id.includes('sat') ? 'RELAY_TRANSIT_ONLY' : 'b4a89e1f72c081...');
-    const dsaFp = t.active_dsa_pk_fingerprint || (d.id && d.id.includes('sat') ? 'UNAUTHORIZED_FOR_L2_DECAP' : '9c34cc27d4ee...');
-    const kemEl = document.getElementById('insp-node-kem');
-    if (kemEl) kemEl.textContent = kemFp;
-    const dsaEl = document.getElementById('insp-node-dsa');
-    if (dsaEl) dsaEl.textContent = dsaFp;
+      const nameEl = document.getElementById('insp-node-name');
+      if (nameEl) nameEl.textContent = d.name || d.id || 'Node Inspector';
+      const eidEl = document.getElementById('insp-node-eid');
+      if (eidEl) eidEl.textContent = d.id || 'N/A';
+      const typeEl = document.getElementById('insp-node-type');
+      if (typeEl) typeEl.textContent = (d.type || 'NODE').toUpperCase();
+      const coordsEl = document.getElementById('insp-node-coords');
+      if (coordsEl) coordsEl.textContent = `${(d.lat || 0).toFixed(2)}° N/S, ${(d.lng || 0).toFixed(2)}° E/W (Alt: ${(d.alt || 0).toFixed(2)})`;
+      const roleEl = document.getElementById('insp-node-role');
+      if (roleEl) roleEl.textContent = d.role || 'Network Node';
 
-    panel.style.display = 'block';
+      const statusEl = document.getElementById('insp-node-status');
+      if (statusEl) {
+        if (d.id && d.id.includes('sat') && activeIslState === 'DOWN') {
+          statusEl.textContent = 'INTERRUPTED (SPOOLING)';
+          statusEl.style.color = 'var(--accent-red)';
+        } else {
+          statusEl.textContent = 'ONLINE / NORMAL';
+          statusEl.style.color = 'var(--accent-green)';
+        }
+      }
+
+      const queueEl = document.getElementById('insp-node-queue');
+      if (queueEl) queueEl.textContent = `${q.pending} bundles (${q.kb} KB)`;
+
+      const kemFp = t.active_kem_pk_fingerprint || (d.id && d.id.includes('sat') ? 'RELAY_TRANSIT_ONLY' : 'b4a89e1f72c081...');
+      const dsaFp = t.active_dsa_pk_fingerprint || (d.id && d.id.includes('sat') ? 'UNAUTHORIZED_FOR_L2_DECAP' : '9c34cc27d4ee...');
+      const kemEl = document.getElementById('insp-node-kem');
+      if (kemEl) kemEl.textContent = kemFp;
+      const dsaEl = document.getElementById('insp-node-dsa');
+      if (dsaEl) dsaEl.textContent = dsaFp;
+
+      panel.style.display = 'block';
+    }
   }
 
   function deselectNode() {
@@ -448,7 +476,10 @@
 
     // Hop 1: GSA -> SAT-1 (Uplink)
     if (packetHop) packetHop.textContent = 'HOP 1/3: Uplink GSA -> SAT-1';
-    if (packetStatus) packetStatus.textContent = 'Transmitting 5,119 B Post-Quantum Wire Bundle...';
+    if (packetStatus) {
+      packetStatus.textContent = 'Transmitting 5,119 B Post-Quantum Wire Bundle...';
+      packetStatus.style.color = 'var(--accent-cyan)';
+    }
     await sleep(900);
 
     // Hop 2: SAT-1 -> SAT-2 (ISL)
@@ -458,7 +489,6 @@
         packetStatus.textContent = 'Halting at SAT-1. Persisting to SQLite WAL Queue...';
         packetStatus.style.color = 'var(--accent-amber)';
       }
-      // Re-fetch telemetry to show queue increment
       fetchTelemetry();
       await sleep(1800);
       inFlightAnimationActive = false;
@@ -605,13 +635,13 @@
     fetchTelemetry: fetchTelemetry,
     handleWsMessage: handleWsMessage,
     animatePacketDispatch: animatePacketDispatch,
+    getNodeConfig: () => NODE_CONFIG,
     setIslState: (state) => {
       activeIslState = state;
       refreshScene();
     }
   };
 
-  // Auto-initialize when DOM is ready
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', init3DGlobe);
   } else {
