@@ -45,3 +45,39 @@ class StaleMessageError(ProtocolError):
     def __init__(self, message: str) -> None:
         super().__init__(message)
         self.error_code = "ASTRA_STALE_MESSAGE"
+
+
+class SecurityContinuityError(AstraError):
+    """Base class for security state and authorization violations."""
+
+    def __init__(self, message: str, error_code: str = "ASTRA_SECURITY_ERROR") -> None:
+        super().__init__(message, error_code=error_code)
+
+
+class SecurityStateCorruptionError(SecurityContinuityError):
+    """Raised when persistent cryptographic security state has been tampered or corrupted."""
+
+    def __init__(self, message: str) -> None:
+        super().__init__(message, error_code="ASTRA_SECURITY_STATE_CORRUPTED")
+
+
+class KeyLifecycleError(SecurityContinuityError):
+    """Raised when key transition, rotation, or retirement rules are violated."""
+
+    def __init__(self, message: str) -> None:
+        super().__init__(message, error_code="ASTRA_KEY_LIFECYCLE_ERROR")
+
+
+class IdentityRevokedError(SecurityContinuityError):
+    """Raised when a revoked or blacklisted peer attempts an operation."""
+
+    def __init__(self, message: str) -> None:
+        super().__init__(message, error_code="ASTRA_IDENTITY_REVOKED")
+
+
+class InvalidAcknowledgmentError(SecurityContinuityError):
+    """Raised when a cryptographic receipt fails verification or correlation."""
+
+    def __init__(self, message: str) -> None:
+        super().__init__(message, error_code="ASTRA_INVALID_ACK")
+

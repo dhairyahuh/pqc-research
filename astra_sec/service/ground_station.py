@@ -3,7 +3,7 @@
 import logging
 import time
 import uuid
-from typing import Callable, Optional, Tuple
+from typing import Any, Callable, Optional, Tuple
 
 from astra_sec.core.exceptions import AstraError, ProtocolError, SchemaValidationError
 from astra_sec.crypto.aead import Aes256GcmAead, HkdfSha256Engine
@@ -53,9 +53,11 @@ class GroundStationNode:
         aead_engine: Optional[Aes256GcmAead] = None,
         trust_store: Optional[PublicKeyTrustStore] = None,
         replay_filter: Optional[AntiReplayFilter] = None,
+        policy: Optional[Any] = None,
     ):
         self.node_eid = node_eid
         self.role = role
+        self.policy = policy
 
         # Cryptographic adapters (defaulting to primary native monitored engines)
         self.kem = kem_adapter or CryptoEngineFactory.get_kem_adapter()
@@ -100,6 +102,35 @@ class GroundStationNode:
     def get_public_identity(self) -> NodeIdentity:
         """Exports the public certificate / identity for peer trust distribution."""
         return self.identity
+
+    def rotate_node_keys(self) -> Tuple[KeyPair, KeyPair]:
+        """Rotates ML-KEM-768 and ML-DSA-65 keys for this node and updates trust identity."""
+        kem_pk, kem_sk = self.kem.generate_keypair()
+        dsa_pk, dsa_sk = self.dsa.generate_keypair()
+
+        self.kem_keys = KeyPair(algorithm=self.kem.ALGORITHM_NAME, public_key=kem_pk, secret_key=kem_sk)
+        self.dsa_keys = KeyPair(algorithm=self.dsa.ALGORITHM_NAME, public_key=dsa_pk, secret_key=dsa_sk)
+
+        self.identity = NodeIdentity(
+            eid=self.node_eid,
+            role=self.role,
+            kem_public_key=kem_pk,
+            dsa_public_key=dsa_pk,
+            is_authorized=True,
+        )
+        self.trust_store.register_peer(self.identity)
+        logger.info("Node %s rotated cryptographic keys.", self.node_eid)
+        return self.kem_keys, self.dsa_keys
+
+    def revoke_peer(self, peer_eid: str, reason: str = "Revocation") -> None:
+        """Revokes authorization for a peer in local trust store and policy."""
+        peer = self.trust_store.get_peer(peer_eid)
+        if peer:
+            peer.is_authorized = False
+        if self.policy is not None and hasattr(self.policy, "revoke_identity"):
+            self.policy.revoke_identity(peer_eid, reason)
+        logger.warning("Node %s revoked authorization for peer '%s': %s", self.node_eid, peer_eid, reason)
+
 
     def send_message(
         self,
@@ -202,6 +233,9 @@ class GroundStationNode:
             )
 
         # 2. Verify Sender Authorization in Trust Store
+        if self.policy is not None and hasattr(self.policy, "validate_sender"):
+            self.policy.validate_sender(header.source_eid)
+
         try:
             sender_dsa_pk = self.trust_store.get_dsa_public_key(header.source_eid)
         except TrustError as e:
@@ -210,13 +244,23 @@ class GroundStationNode:
             ) from e
 
         # 3. Verify Freshness & Anti-Replay
-        self.replay_filter.check_and_update(
-            source_eid=header.source_eid,
-            sequence_id=header.sequence_id,
-            timestamp_utc=header.timestamp_utc,
-            ttl_seconds=header.ttl_seconds,
-            current_time=current_time,
-        )
+        try:
+            self.replay_filter.check_and_update(
+                source_eid=header.source_eid,
+                sequence_id=header.sequence_id,
+                timestamp_utc=header.timestamp_utc,
+                ttl_seconds=header.ttl_seconds,
+                envelope_id=header.envelope_id,
+                current_time=current_time,
+            )
+        except TypeError:
+            self.replay_filter.check_and_update(
+                source_eid=header.source_eid,
+                sequence_id=header.sequence_id,
+                timestamp_utc=header.timestamp_utc,
+                ttl_seconds=header.ttl_seconds,
+                current_time=current_time,
+            )
 
         # 4. Verify ML-DSA-65 Signature
         signable_bytes = header.to_signable_representation(envelope.ciphertext, envelope.tag)
