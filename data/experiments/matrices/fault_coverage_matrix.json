@@ -1,0 +1,354 @@
+{
+  "GROUP_A_MESSAGE_SECURITY": [
+    {
+      "id": "EXP-A1",
+      "name": "Ciphertext Modification",
+      "fault": "bit_flip_ciphertext",
+      "location": "L2_AES_GCM_CIPHERTEXT",
+      "detected": true,
+      "recovery": "REJECTED",
+      "sdc": false
+    },
+    {
+      "id": "EXP-A2",
+      "name": "Metadata Modification",
+      "fault": "header_sequence_tamper",
+      "location": "L2_ENVELOPE_HEADER",
+      "detected": true,
+      "recovery": "REJECTED",
+      "sdc": false
+    },
+    {
+      "id": "EXP-A3",
+      "name": "Invalid Digital Signature",
+      "fault": "sig_bit_flip",
+      "location": "L3_ML_DSA_65_SIGNATURE",
+      "detected": true,
+      "recovery": "REJECTED",
+      "sdc": false
+    },
+    {
+      "id": "EXP-A4",
+      "name": "Unauthorized Sender",
+      "fault": "unauthorized_sender_eid",
+      "location": "L7_TRUST_STORE",
+      "detected": true,
+      "recovery": "REJECTED",
+      "sdc": false
+    },
+    {
+      "id": "EXP-A5",
+      "name": "Incorrect Recipient EID",
+      "fault": "dst_eid_mismatch",
+      "location": "L2_ENVELOPE_HEADER",
+      "detected": true,
+      "recovery": "REJECTED",
+      "sdc": false
+    },
+    {
+      "id": "EXP-A6",
+      "name": "Replay Attack",
+      "fault": "sequence_replay",
+      "location": "L6_ANTI_REPLAY",
+      "detected": true,
+      "recovery": "REJECTED",
+      "sdc": false
+    },
+    {
+      "id": "EXP-A7",
+      "name": "Duplicate Command Suppression",
+      "fault": "duplicate_envelope_id",
+      "location": "L5_RELAY_CACHE",
+      "detected": true,
+      "recovery": "SUPPRESSED",
+      "sdc": false
+    },
+    {
+      "id": "EXP-A8",
+      "name": "Expired Command Rejection",
+      "fault": "ttl_expiration",
+      "location": "L2_HEADER_FRESHNESS",
+      "detected": true,
+      "recovery": "REJECTED",
+      "sdc": false
+    },
+    {
+      "id": "EXP-A9",
+      "name": "Unauthorized Relay Nonce Modification",
+      "fault": "nonce_tamper",
+      "location": "L2_AUTHENTICATED_AAD",
+      "detected": true,
+      "recovery": "REJECTED",
+      "sdc": false
+    }
+  ],
+  "GROUP_B_NETWORK_DISRUPTION": [
+    {
+      "id": "EXP-B1",
+      "name": "Temporary Link Outage",
+      "fault": "link_down_event",
+      "location": "L5_CONTACT_SCHEDULE",
+      "detected": true,
+      "recovery": "RECOVERED_VIA_SPOOL",
+      "sdc": false
+    },
+    {
+      "id": "EXP-B2",
+      "name": "Extended Disconnection Occultation",
+      "fault": "extended_orbital_occultation",
+      "location": "L6_DISRUPTION_SPOOL",
+      "detected": true,
+      "recovery": "WAITING_CONTACT",
+      "sdc": false
+    },
+    {
+      "id": "EXP-B3",
+      "name": "Delayed Valid Delivery",
+      "fault": "propagation_delay_500s",
+      "location": "L5_TRANSPORT_DELAY",
+      "detected": true,
+      "recovery": "DELIVERED_VALID",
+      "sdc": false
+    },
+    {
+      "id": "EXP-B4",
+      "name": "Duplicate BPv7 Bundles",
+      "fault": "duplicate_cbor_bundle",
+      "location": "L5_BPV7_PRIMARY_BLOCK",
+      "detected": true,
+      "recovery": "SUPPRESSED",
+      "sdc": false
+    },
+    {
+      "id": "EXP-B5",
+      "name": "Reordered Delivery Handling",
+      "fault": "packet_reordering",
+      "location": "L6_SLIDING_WINDOW",
+      "detected": true,
+      "recovery": "DELIVERED_VALID",
+      "sdc": false
+    },
+    {
+      "id": "EXP-B6",
+      "name": "Relay Process Restart",
+      "fault": "process_power_cycle",
+      "location": "L6_PERSISTENT_WAL_SPOOL",
+      "detected": true,
+      "recovery": "RECOVERED_FROM_SPOOL",
+      "sdc": false
+    },
+    {
+      "id": "EXP-B7",
+      "name": "Ground-Station Endpoint Restart",
+      "fault": "destination_reboot",
+      "location": "L6_PERSISTENT_SECURITY_STATE",
+      "detected": true,
+      "recovery": "REPLAY_SUPPRESSED",
+      "sdc": false
+    },
+    {
+      "id": "EXP-B8",
+      "name": "Reconnection & Reverse ACK",
+      "fault": "temporary_link_sever",
+      "location": "L5_DTN_TOPOLOGY",
+      "detected": true,
+      "recovery": "DELIVERED_VALID",
+      "sdc": false
+    },
+    {
+      "id": "EXP-B9",
+      "name": "Stale Key Information Rejection",
+      "fault": "stale_peer_key",
+      "location": "L7_AUTHORIZATION_POLICY",
+      "detected": true,
+      "recovery": "REJECTED",
+      "sdc": false
+    }
+  ],
+  "GROUP_C_CRYPTOGRAPHIC_FAULTS": [
+    {
+      "id": "EXP-C1",
+      "name": "Transient NTT Butterfly Fault",
+      "fault": "transient_twiddle_bit_flip",
+      "location": "L4_NTT_BUTTERFLY_LAYER_2",
+      "detected": true,
+      "recovery": "RECOVERED_TRANSIENT",
+      "sdc": false
+    },
+    {
+      "id": "EXP-C2",
+      "name": "Persistent Register Fault",
+      "fault": "persistent_register_stuck_at",
+      "location": "L4_NTT_STAGE_3_REGISTER",
+      "detected": true,
+      "recovery": "FAIL_STOP_CONTAINED",
+      "sdc": false
+    },
+    {
+      "id": "EXP-C3",
+      "name": "Memory Ciphertext Corruption",
+      "fault": "memory_seu_bit_flip",
+      "location": "L3_CIPHERTEXT_BUFFER",
+      "detected": true,
+      "recovery": "IMPLICIT_REJECTION_CONTAINED",
+      "sdc": false
+    },
+    {
+      "id": "EXP-C4",
+      "name": "Twiddle-Factor Reference Blindness (TFIB-Ref)",
+      "fault": "reference_twiddle_corruption",
+      "location": "L4_TFIB_ZETAS_REF",
+      "detected": true,
+      "recovery": "FAIL_STOP_CONTAINED",
+      "sdc": false
+    },
+    {
+      "id": "EXP-C5",
+      "name": "Snapshot Register Corruption",
+      "fault": "snapshot_operand_tamper",
+      "location": "L4_LOCAL_SNAPSHOT_BUFFER",
+      "detected": true,
+      "recovery": "FAIL_STOP_CONTAINED",
+      "sdc": false
+    },
+    {
+      "id": "EXP-C6",
+      "name": "Checker Decision Logic Perturbation",
+      "fault": "checker_comparator_fault",
+      "location": "L4_INVARIANT_EVALUATOR",
+      "detected": true,
+      "recovery": "FAIL_STOP_CONTAINED",
+      "sdc": false
+    },
+    {
+      "id": "EXP-C7",
+      "name": "Recovery Budget Exhaustion (K=2)",
+      "fault": "exhausted_rollback_budget",
+      "location": "L4_RETRY_CONTROLLER",
+      "detected": true,
+      "recovery": "FAIL_STOP_CONTAINED",
+      "sdc": false
+    }
+  ],
+  "GROUP_D_CHECKER_INDEPENDENCE": [
+    {
+      "id": "EXP-D1",
+      "name": "Common-Mode Shared-State Corruption",
+      "fault": "common_mode_multiplier_glitch",
+      "location": "L4_ALU_PIPELINE",
+      "detected": true,
+      "recovery": "MITIGATED_VIA_TFIB_REF",
+      "sdc": false
+    },
+    {
+      "id": "EXP-D2",
+      "name": "Reference Table Corruption",
+      "fault": "ref_twiddle_tamper",
+      "location": "L4_TFIB_ZETAS_REF",
+      "detected": true,
+      "recovery": "FAIL_STOP_CONTAINED",
+      "sdc": false
+    },
+    {
+      "id": "EXP-D3",
+      "name": "Snapshot Tampering Resistance",
+      "fault": "snapshot_memory_fault",
+      "location": "L4_SNAPSHOT_STORAGE",
+      "detected": true,
+      "recovery": "FAIL_STOP_CONTAINED",
+      "sdc": false
+    },
+    {
+      "id": "EXP-D4",
+      "name": "Transient Fault During Invariant Evaluation",
+      "fault": "comparator_glitch",
+      "location": "L4_INVARIANT_BRANCH",
+      "detected": true,
+      "recovery": "FAIL_STOP_CONTAINED",
+      "sdc": false
+    },
+    {
+      "id": "EXP-D5",
+      "name": "Fault Injected During Rollback Copy",
+      "fault": "bus_glitch_during_memcpy",
+      "location": "L4_RESTORE_PATH",
+      "detected": true,
+      "recovery": "FAIL_STOP_CONTAINED",
+      "sdc": false
+    },
+    {
+      "id": "EXP-D6",
+      "name": "Fault Injected During Retry Execution",
+      "fault": "secondary_retry_fault",
+      "location": "L4_RETRY_EXECUTION",
+      "detected": true,
+      "recovery": "FAIL_STOP_CONTAINED",
+      "sdc": false
+    },
+    {
+      "id": "EXP-D7",
+      "name": "False Acceptance Resistance Under Implicit Rejection",
+      "fault": "false_shared_secret_substitution",
+      "location": "L2_AES_GCM_AUTH_TAG",
+      "detected": true,
+      "recovery": "AEAD_TAG_AUTHENTICATION_FAILURE",
+      "sdc": false
+    }
+  ],
+  "GROUP_E_CROSS_LAYER_FAILURE": [
+    {
+      "id": "EXP-E1",
+      "name": "Network Disruption + Transient Crypto Fault",
+      "fault": "link_outage_plus_transient_ntt_fault",
+      "location": "L5_L4_CROSS_LAYER",
+      "detected": true,
+      "recovery": "RECOVERED_TRANSIENT_AND_DELIVERED",
+      "sdc": false
+    },
+    {
+      "id": "EXP-E2",
+      "name": "Duplicate Delivery + Destination Restart",
+      "fault": "replayed_bundle_across_reboot",
+      "location": "L5_L6_CROSS_LAYER",
+      "detected": true,
+      "recovery": "SUPPRESSED_AND_REJECTED",
+      "sdc": false
+    },
+    {
+      "id": "EXP-E3",
+      "name": "Delayed Command + Authorization Expiry",
+      "fault": "in_flight_authorization_revocation",
+      "location": "L5_L7_CROSS_LAYER",
+      "detected": true,
+      "recovery": "REJECTED_STALE_AUTHORIZATION",
+      "sdc": false
+    },
+    {
+      "id": "EXP-E4",
+      "name": "Cryptographic Failure During Key Update",
+      "fault": "malformed_public_key_injection",
+      "location": "L3_L7_CROSS_LAYER",
+      "detected": true,
+      "recovery": "REJECTED_PREVIOUS_KEY_PRESERVED",
+      "sdc": false
+    },
+    {
+      "id": "EXP-E5",
+      "name": "Relay Restart While Forwarding",
+      "fault": "relay_crash_during_queue",
+      "location": "L5_L6_CROSS_LAYER",
+      "detected": true,
+      "recovery": "SPOOL_RESTORED_AND_DELIVERED",
+      "sdc": false
+    },
+    {
+      "id": "EXP-E6",
+      "name": "Corrupted Acknowledgement Generation",
+      "fault": "ack_signature_tamper",
+      "location": "L7_VERIFIER_AUDIT",
+      "detected": true,
+      "recovery": "REJECTED_AUDIT_ALERTED",
+      "sdc": false
+    }
+  ]
+}
