@@ -2,10 +2,20 @@ CC = clang
 CFLAGS = -O3 -Wall -Wextra -std=c11 -I/opt/homebrew/include
 LDFLAGS = -L/opt/homebrew/lib -loqs
 
+UNAME_S := $(shell uname -s)
+ifeq ($(UNAME_S),Darwin)
+    SHARED_LIB_EXT := dylib
+    SHARED_LIB_FLAG := -dynamiclib
+else
+    SHARED_LIB_EXT := so
+    SHARED_LIB_FLAG := -shared -fPIC
+endif
+
 BIN_DIR = bin
 OBJ_DIR = bin/obj
+ASTRA_CRYPTO_LIB = $(BIN_DIR)/libastra_crypto.$(SHARED_LIB_EXT)
 
-all: $(BIN_DIR)/ml_kem_harness $(BIN_DIR)/ml_dsa_harness $(BIN_DIR)/test_interop $(BIN_DIR)/test_fips_kats $(BIN_DIR)/mlkem768_internal_fault_experiment
+all: $(BIN_DIR)/ml_kem_harness $(BIN_DIR)/ml_dsa_harness $(BIN_DIR)/test_interop $(BIN_DIR)/test_fips_kats $(BIN_DIR)/mlkem768_internal_fault_experiment $(ASTRA_CRYPTO_LIB)
 
 $(BIN_DIR):
 	mkdir -p $(BIN_DIR)
@@ -56,6 +66,10 @@ $(OBJ_DIR)/mlkem768_instrumented.o: algorithms/source_ref/mlkem/mlkem_native.c |
 # Path A vs Path B Cross-Validation binary
 $(BIN_DIR)/test_interop: tests/test_interop_path_a_b.c $(OBJ_DIR)/mlkem768.o $(OBJ_DIR)/mldsa65.o | $(BIN_DIR)
 	$(CC) $(CFLAGS) -I algorithms/source_ref/mlkem -I algorithms/source_ref/mldsa $^ -o $@ $(LDFLAGS)
+
+# ASTRA-Sec Monitored C Cryptographic Shared Library
+$(ASTRA_CRYPTO_LIB): src/astra_crypto_bridge.c $(OBJ_DIR)/mlkem768_instrumented.o $(OBJ_DIR)/mlkem_fault_hooks.o $(OBJ_DIR)/mldsa65.o | $(BIN_DIR)
+	$(CC) $(SHARED_LIB_FLAG) -O3 -Wall -Wextra -std=c11 -I algorithms/source_ref/mlkem -I algorithms/source_ref/mldsa $^ -o $@
 
 # Comprehensive NIST FIPS 203 & 204 KAT Runner (ML-KEM-512/768/1024 & ML-DSA-44/65/87)
 $(BIN_DIR)/test_fips_kats: tests/test_fips_kats.c tests/kat_mlkem512.c tests/kat_mlkem768.c tests/kat_mlkem1024.c tests/kat_mldsa44.c tests/kat_mldsa65.c tests/kat_mldsa87.c $(OBJ_DIR)/mlkem512.o $(OBJ_DIR)/mlkem768_kat.o $(OBJ_DIR)/mlkem1024.o $(OBJ_DIR)/mldsa44.o $(OBJ_DIR)/mldsa65_kat.o $(OBJ_DIR)/mldsa87.o | $(BIN_DIR)
