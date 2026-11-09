@@ -1,0 +1,102 @@
+{
+  "manifest_version": "1.0",
+  "experiment_id": "37cb31d0-49d3-4695-ae9c-cd125ec3af56",
+  "status": "COMPLETED",
+  "start_time_utc": "2026-11-09T15:06:49.554964+00:00",
+  "end_time_utc": "2026-11-09T15:06:50.035907+00:00",
+  "environment": {
+    "git_commit": "b0b915f0c3f2ad5fa15d1d99cc2e49329367f940",
+    "git_branch": "astra-sec",
+    "git_dirty": true,
+    "python_version": "3.9.6",
+    "os_name": "Darwin",
+    "os_release": "27.0.0",
+    "os_architecture": "arm64",
+    "processor": "arm",
+    "cpu_logical_cores": 8,
+    "total_ram_bytes": 8589934592
+  },
+  "config_hash": "c686d90484a2b658f72df7deb00f01d021a4ba810d0883aaa04ff347af527496",
+  "configuration": {
+    "experiment_name": "Group J Cryptographic Fault Campaign: Single-Bit SEU",
+    "group": "J",
+    "scenario_id": "EXP-J01-FAULT-SEU",
+    "description": "Injects transient single-bit flips into ML-KEM polynomial coefficients and measures invariant detection & SDC rate.",
+    "baseline": "TREATMENT_E_FULL_ASTRA_SEC",
+    "workload": {
+      "payload_size_bytes": 512,
+      "total_messages": 10,
+      "rate_msg_per_sec": 20.0,
+      "concurrency": 1,
+      "burst_mode": false
+    },
+    "impairment": {
+      "delay_ms": 0.0,
+      "jitter_ms": 0.0,
+      "loss_rate": 0.0,
+      "duplication_rate": 0.0,
+      "reorder_rate": 0.0,
+      "bandwidth_kbps": null,
+      "outage_duration_s": 0.0,
+      "outage_start_s": 0.0
+    },
+    "fault": {
+      "enabled": true,
+      "fault_type": "transient_seu",
+      "target_layer": 3,
+      "bit_position": 7,
+      "injection_probability": 1.0,
+      "retry_budget_exhaustion": false
+    },
+    "random_seed": 9009,
+    "warmup_messages": 0,
+    "repetitions": 1,
+    "timeout_seconds": 30.0,
+    "output_dir": "research/phase3_experimental_lab/results/raw"
+  },
+  "raw_output_path": "/Users/dhairyajain/Desktop/pqc research/research/phase3_experimental_lab/results/raw/EXP-J01-FAULT-SEU_37cb31d0.jsonl",
+  "summary_statistics": {
+    "total_attempted": 10,
+    "delivered_count": 0,
+    "delivery_rate_pct": 0.0,
+    "throughput_msg_per_sec": 0.0,
+    "total_duration_seconds": 0.4666,
+    "latency_distribution_us": {
+      "count": 0,
+      "mean": 0.0,
+      "std": 0.0,
+      "min": 0.0,
+      "median": 0.0,
+      "p90": 0.0,
+      "p95": 0.0,
+      "p99": 0.0,
+      "max": 0.0,
+      "iqr": 0.0,
+      "ci_lower": 0.0,
+      "ci_upper": 0.0
+    },
+    "resource_utilization": {
+      "mean_cpu_percent": 14.96,
+      "peak_rss_bytes": 99647488,
+      "initial_rss_bytes": 97173504,
+      "rss_growth_bytes": 2473984,
+      "sample_count": 10
+    },
+    "impairment_telemetry": {
+      "total_intercepted": 20,
+      "total_dropped": 0,
+      "total_duplicated": 0,
+      "mean_injected_delay_ms": 0.0
+    },
+    "fault_telemetry": {
+      "total_injected": 10,
+      "total_activated": 10,
+      "detected_count": 0,
+      "recovered_count": 0,
+      "fail_stop_count": 0,
+      "sdc_count": 0,
+      "detection_coverage_pct": 0.0
+    }
+  },
+  "error_details": null
+}

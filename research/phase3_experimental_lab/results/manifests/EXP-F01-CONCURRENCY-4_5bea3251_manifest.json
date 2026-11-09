@@ -1,0 +1,104 @@
+{
+  "manifest_version": "1.0",
+  "experiment_id": "5bea3251-7b47-434e-924b-3005152843d8",
+  "status": "COMPLETED",
+  "start_time_utc": "2026-11-09T15:06:24.084277+00:00",
+  "end_time_utc": "2026-11-09T15:06:24.199861+00:00",
+  "environment": {
+    "git_commit": "b0b915f0c3f2ad5fa15d1d99cc2e49329367f940",
+    "git_branch": "astra-sec",
+    "git_dirty": true,
+    "python_version": "3.9.6",
+    "os_name": "Darwin",
+    "os_release": "27.0.0",
+    "os_architecture": "arm64",
+    "processor": "arm",
+    "cpu_logical_cores": 8,
+    "total_ram_bytes": 8589934592
+  },
+  "config_hash": "31ab27ca11b3c5f6bca50887332bf99049c6cc4c7039365bf6b9858434923fe2",
+  "configuration": {
+    "experiment_name": "Group F Scaling: Concurrency (4 Threads)",
+    "group": "F",
+    "scenario_id": "EXP-F01-CONCURRENCY-4",
+    "description": "Evaluates SQLite WAL contention and CPU throughput under 4 concurrent sender threads.",
+    "baseline": "TREATMENT_E_FULL_ASTRA_SEC",
+    "workload": {
+      "payload_size_bytes": 512,
+      "total_messages": 12,
+      "rate_msg_per_sec": 50.0,
+      "concurrency": 4,
+      "burst_mode": true
+    },
+    "impairment": {
+      "delay_ms": 0.0,
+      "jitter_ms": 0.0,
+      "loss_rate": 0.0,
+      "duplication_rate": 0.0,
+      "reorder_rate": 0.0,
+      "bandwidth_kbps": null,
+      "outage_duration_s": 0.0,
+      "outage_start_s": 0.0
+    },
+    "fault": {
+      "enabled": false,
+      "fault_type": "none",
+      "target_layer": 0,
+      "bit_position": 0,
+      "injection_probability": 0.0,
+      "retry_budget_exhaustion": false
+    },
+    "random_seed": 6006,
+    "warmup_messages": 0,
+    "repetitions": 1,
+    "timeout_seconds": 30.0,
+    "output_dir": "research/phase3_experimental_lab/results/raw"
+  },
+  "raw_output_path": "/Users/dhairyajain/Desktop/pqc research/research/phase3_experimental_lab/results/raw/EXP-F01-CONCURRENCY-4_5bea3251.jsonl",
+  "summary_statistics": {
+    "total_attempted": 12,
+    "delivered_count": 1,
+    "delivery_rate_pct": 8.33,
+    "throughput_msg_per_sec": 9.97,
+    "total_duration_seconds": 0.1003,
+    "latency_distribution_us": {
+      "count": 1,
+      "mean": 22523.54,
+      "std": 0.0,
+      "min": 22523.54,
+      "p25": 22523.54,
+      "median": 22523.54,
+      "p75": 22523.54,
+      "iqr": 0.0,
+      "p90": 22523.54,
+      "p95": 22523.54,
+      "p99": 22523.54,
+      "max": 22523.54,
+      "ci_lower": 22523.54,
+      "ci_upper": 22523.54
+    },
+    "resource_utilization": {
+      "mean_cpu_percent": 20.18,
+      "peak_rss_bytes": 100597760,
+      "initial_rss_bytes": 97402880,
+      "rss_growth_bytes": 3194880,
+      "sample_count": 12
+    },
+    "impairment_telemetry": {
+      "total_intercepted": 24,
+      "total_dropped": 0,
+      "total_duplicated": 0,
+      "mean_injected_delay_ms": 0.0
+    },
+    "fault_telemetry": {
+      "total_injected": 0,
+      "total_activated": 0,
+      "detected_count": 0,
+      "recovered_count": 0,
+      "fail_stop_count": 0,
+      "sdc_count": 0,
+      "detection_coverage_pct": 0.0
+    }
+  },
+  "error_details": null
+}

@@ -1,0 +1,36 @@
+{
+  "experiment_name": "Group J Cryptographic Fault Campaign: Single-Bit SEU",
+  "group": "J",
+  "scenario_id": "EXP-J01-FAULT-SEU",
+  "description": "Injects transient single-bit flips into ML-KEM polynomial coefficients and measures invariant detection & SDC rate.",
+  "baseline": "TREATMENT_E_FULL_ASTRA_SEC",
+  "workload": {
+    "payload_size_bytes": 512,
+    "total_messages": 10,
+    "rate_msg_per_sec": 20.0,
+    "concurrency": 1,
+    "burst_mode": false
+  },
+  "impairment": {
+    "delay_ms": 0.0,
+    "jitter_ms": 0.0,
+    "loss_rate": 0.0,
+    "duplication_rate": 0.0,
+    "reorder_rate": 0.0,
+    "outage_duration_s": 0.0,
+    "outage_start_s": 0.0
+  },
+  "fault": {
+    "enabled": true,
+    "fault_type": "transient_seu",
+    "target_layer": 3,
+    "bit_position": 7,
+    "injection_probability": 1.0,
+    "retry_budget_exhaustion": false
+  },
+  "random_seed": 9009,
+  "warmup_messages": 0,
+  "repetitions": 1,
+  "timeout_seconds": 30.0,
+  "output_dir": "research/phase3_experimental_lab/results/raw"
+}

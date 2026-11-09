@@ -1,0 +1,104 @@
+{
+  "manifest_version": "1.0",
+  "experiment_id": "7ba9c66e-827c-45f1-80f9-504d58dfda84",
+  "status": "COMPLETED",
+  "start_time_utc": "2026-11-09T15:06:41.581709+00:00",
+  "end_time_utc": "2026-11-09T15:06:42.583530+00:00",
+  "environment": {
+    "git_commit": "b0b915f0c3f2ad5fa15d1d99cc2e49329367f940",
+    "git_branch": "astra-sec",
+    "git_dirty": true,
+    "python_version": "3.9.6",
+    "os_name": "Darwin",
+    "os_release": "27.0.0",
+    "os_architecture": "arm64",
+    "processor": "arm",
+    "cpu_logical_cores": 8,
+    "total_ram_bytes": 8589934592
+  },
+  "config_hash": "b25c8349941c7ddcd59dce7c0ea37a7d1a9392a11e04c5ca7df564e336b5dd9d",
+  "configuration": {
+    "experiment_name": "Group G Network Impairment: High Delay & Loss",
+    "group": "G",
+    "scenario_id": "EXP-G01-IMPAIRMENT",
+    "description": "Evaluates 4-node store-and-forward behavior under 50 ms delay, 10 ms jitter, and 5% stochastic loss.",
+    "baseline": "TREATMENT_E_FULL_ASTRA_SEC",
+    "workload": {
+      "payload_size_bytes": 512,
+      "total_messages": 10,
+      "rate_msg_per_sec": 10.0,
+      "concurrency": 1,
+      "burst_mode": false
+    },
+    "impairment": {
+      "delay_ms": 20.0,
+      "jitter_ms": 5.0,
+      "loss_rate": 0.05,
+      "duplication_rate": 0.0,
+      "reorder_rate": 0.0,
+      "bandwidth_kbps": null,
+      "outage_duration_s": 0.0,
+      "outage_start_s": 0.0
+    },
+    "fault": {
+      "enabled": false,
+      "fault_type": "none",
+      "target_layer": 0,
+      "bit_position": 0,
+      "injection_probability": 0.0,
+      "retry_budget_exhaustion": false
+    },
+    "random_seed": 7007,
+    "warmup_messages": 0,
+    "repetitions": 1,
+    "timeout_seconds": 30.0,
+    "output_dir": "research/phase3_experimental_lab/results/raw"
+  },
+  "raw_output_path": "/Users/dhairyajain/Desktop/pqc research/research/phase3_experimental_lab/results/raw/EXP-G01-IMPAIRMENT_7ba9c66e.jsonl",
+  "summary_statistics": {
+    "total_attempted": 10,
+    "delivered_count": 9,
+    "delivery_rate_pct": 90.0,
+    "throughput_msg_per_sec": 9.14,
+    "total_duration_seconds": 0.9846,
+    "latency_distribution_us": {
+      "count": 9,
+      "mean": 68630.88,
+      "std": 6935.39,
+      "min": 56076.04,
+      "p25": 64866.54,
+      "median": 67546.08,
+      "p75": 73224.21,
+      "iqr": 8357.67,
+      "p90": 75188.39,
+      "p95": 77122.09,
+      "p99": 78669.05,
+      "max": 79055.79,
+      "ci_lower": 60873.91,
+      "ci_upper": 76387.85
+    },
+    "resource_utilization": {
+      "mean_cpu_percent": 27.9,
+      "peak_rss_bytes": 99434496,
+      "initial_rss_bytes": 97009664,
+      "rss_growth_bytes": 2424832,
+      "sample_count": 10
+    },
+    "impairment_telemetry": {
+      "total_intercepted": 19,
+      "total_dropped": 1,
+      "total_duplicated": 0,
+      "mean_injected_delay_ms": 18.64250368273477
+    },
+    "fault_telemetry": {
+      "total_injected": 0,
+      "total_activated": 0,
+      "detected_count": 9,
+      "recovered_count": 9,
+      "fail_stop_count": 0,
+      "sdc_count": 0,
+      "detection_coverage_pct": 900.0
+    }
+  },
+  "error_details": null
+}

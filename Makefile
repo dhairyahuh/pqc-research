@@ -361,6 +361,28 @@ dashboard:
 	@echo "\n=== Starting ASTRA-Sec Research Monitoring Dashboard on http://localhost:8000 ==="
 	python3 -m uvicorn astra_sec.dashboard.app:app --host 0.0.0.0 --port 8000
 
-.PHONY: all clean test test-c test-python health-check setup-dev lint audit-deps dashboard phase5 test-phase5 phase6 test-phase6 phase6b test-phase6b phase7 test-phase7 phase7b test-phase7b phase7c test-phase7c phase7d test-phase7d phase7e test-phase7e phase7f test-phase7f phase7g test-phase7g phase7h test-phase7h phase7i test-phase7i phase7j test-phase7j phase7k test-phase7k
+# Phase 3 Experimental Laboratory Targets
+lab-validate:
+	@echo "\n=== Phase 3: Validating Experiment Configurations ==="
+	python3 scripts/run_phase3_lab.py --validate
+
+lab-test:
+	@echo "\n=== Phase 3: Running Experimental Lab Unit & Integration Tests ==="
+	python3 -m unittest discover -s research/phase3_experimental_lab/tests -v
+
+lab-pilot:
+	@echo "\n=== Phase 3: Running Experimental Lab Pilot Run ==="
+	python3 scripts/run_phase3_lab.py --pilot
+
+lab-campaign:
+	@echo "\n=== Phase 3: Running Full Core Experimental Campaign Suite ==="
+	python3 scripts/run_phase3_lab.py --run research/phase3_experimental_lab/configs/group_a_baseline_non_pqc.json
+	python3 scripts/run_phase3_lab.py --run research/phase3_experimental_lab/configs/group_b_baseline_unmonitored_pqc.json
+	python3 scripts/run_phase3_lab.py --run research/phase3_experimental_lab/configs/group_d_full_astra_sec.json
+	python3 scripts/run_phase3_lab.py --run research/phase3_experimental_lab/configs/group_e_payload_scaling.json
+	python3 scripts/run_phase3_lab.py --run research/phase3_experimental_lab/configs/group_g_impairment.json
+	python3 scripts/run_phase3_lab.py --run research/phase3_experimental_lab/configs/group_j_fault_campaign.json
+
+.PHONY: all clean test test-c test-python health-check setup-dev lint audit-deps dashboard phase5 test-phase5 phase6 test-phase6 phase6b test-phase6b phase7 test-phase7 phase7b test-phase7b phase7c test-phase7c phase7d test-phase7d phase7e test-phase7e phase7f test-phase7f phase7g test-phase7g phase7h test-phase7h phase7i test-phase7i phase7j test-phase7j phase7k test-phase7k lab-validate lab-test lab-pilot lab-campaign
 
 

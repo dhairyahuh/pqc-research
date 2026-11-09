@@ -1,0 +1,104 @@
+{
+  "manifest_version": "1.0",
+  "experiment_id": "24bd1cdf-a525-4601-8486-9676590419c9",
+  "status": "COMPLETED",
+  "start_time_utc": "2026-11-09T15:06:11.962243+00:00",
+  "end_time_utc": "2026-11-09T15:06:12.465538+00:00",
+  "environment": {
+    "git_commit": "b0b915f0c3f2ad5fa15d1d99cc2e49329367f940",
+    "git_branch": "astra-sec",
+    "git_dirty": true,
+    "python_version": "3.9.6",
+    "os_name": "Darwin",
+    "os_release": "27.0.0",
+    "os_architecture": "arm64",
+    "processor": "arm",
+    "cpu_logical_cores": 8,
+    "total_ram_bytes": 8589934592
+  },
+  "config_hash": "21318270a4de71839cba50ef0c9c3c2a39936a2f83cab66477f197c065ba463a",
+  "configuration": {
+    "experiment_name": "Group D Treatment: Full ASTRA-Sec",
+    "group": "D",
+    "scenario_id": "EXP-D01-FULL-ASTRA",
+    "description": "Full ASTRA-Sec 4-node pipeline with monitored native C ML-KEM-768, ML-DSA-65, and persistent SQLite WAL spools.",
+    "baseline": "TREATMENT_E_FULL_ASTRA_SEC",
+    "workload": {
+      "payload_size_bytes": 512,
+      "total_messages": 10,
+      "rate_msg_per_sec": 20.0,
+      "concurrency": 1,
+      "burst_mode": false
+    },
+    "impairment": {
+      "delay_ms": 0.0,
+      "jitter_ms": 0.0,
+      "loss_rate": 0.0,
+      "duplication_rate": 0.0,
+      "reorder_rate": 0.0,
+      "bandwidth_kbps": null,
+      "outage_duration_s": 0.0,
+      "outage_start_s": 0.0
+    },
+    "fault": {
+      "enabled": false,
+      "fault_type": "none",
+      "target_layer": 0,
+      "bit_position": 0,
+      "injection_probability": 0.0,
+      "retry_budget_exhaustion": false
+    },
+    "random_seed": 4004,
+    "warmup_messages": 1,
+    "repetitions": 1,
+    "timeout_seconds": 30.0,
+    "output_dir": "research/phase3_experimental_lab/results/raw"
+  },
+  "raw_output_path": "/Users/dhairyajain/Desktop/pqc research/research/phase3_experimental_lab/results/raw/EXP-D01-FULL-ASTRA_24bd1cdf.jsonl",
+  "summary_statistics": {
+    "total_attempted": 10,
+    "delivered_count": 10,
+    "delivery_rate_pct": 100.0,
+    "throughput_msg_per_sec": 21.06,
+    "total_duration_seconds": 0.4748,
+    "latency_distribution_us": {
+      "count": 10,
+      "mean": 15248.8,
+      "std": 2282.6,
+      "min": 11913.54,
+      "p25": 13848.7,
+      "median": 14925.21,
+      "p75": 16010.31,
+      "iqr": 2161.61,
+      "p90": 17677.08,
+      "p95": 18915.47,
+      "p99": 19906.19,
+      "max": 20153.88,
+      "ci_lower": 12903.0,
+      "ci_upper": 17594.61
+    },
+    "resource_utilization": {
+      "mean_cpu_percent": 18.55,
+      "peak_rss_bytes": 99516416,
+      "initial_rss_bytes": 97091584,
+      "rss_growth_bytes": 2424832,
+      "sample_count": 10
+    },
+    "impairment_telemetry": {
+      "total_intercepted": 22,
+      "total_dropped": 0,
+      "total_duplicated": 0,
+      "mean_injected_delay_ms": 0.0
+    },
+    "fault_telemetry": {
+      "total_injected": 0,
+      "total_activated": 0,
+      "detected_count": 10,
+      "recovered_count": 10,
+      "fail_stop_count": 0,
+      "sdc_count": 0,
+      "detection_coverage_pct": 1000.0
+    }
+  },
+  "error_details": null
+}

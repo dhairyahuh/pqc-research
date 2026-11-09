@@ -1,0 +1,36 @@
+{
+  "experiment_name": "Group E Scaling: Large Payload (4 KB)",
+  "group": "E",
+  "scenario_id": "EXP-E01-PAYLOAD-4KB",
+  "description": "Evaluates end-to-end performance and memory impact under 4,096-byte telecommand payloads.",
+  "baseline": "TREATMENT_E_FULL_ASTRA_SEC",
+  "workload": {
+    "payload_size_bytes": 4096,
+    "total_messages": 10,
+    "rate_msg_per_sec": 20.0,
+    "concurrency": 1,
+    "burst_mode": false
+  },
+  "impairment": {
+    "delay_ms": 0.0,
+    "jitter_ms": 0.0,
+    "loss_rate": 0.0,
+    "duplication_rate": 0.0,
+    "reorder_rate": 0.0,
+    "outage_duration_s": 0.0,
+    "outage_start_s": 0.0
+  },
+  "fault": {
+    "enabled": false,
+    "fault_type": "none",
+    "target_layer": 0,
+    "bit_position": 0,
+    "injection_probability": 0.0,
+    "retry_budget_exhaustion": false
+  },
+  "random_seed": 5005,
+  "warmup_messages": 1,
+  "repetitions": 1,
+  "timeout_seconds": 30.0,
+  "output_dir": "research/phase3_experimental_lab/results/raw"
+}

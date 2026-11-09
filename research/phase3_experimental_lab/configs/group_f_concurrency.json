@@ -1,0 +1,36 @@
+{
+  "experiment_name": "Group F Scaling: Concurrency (4 Threads)",
+  "group": "F",
+  "scenario_id": "EXP-F01-CONCURRENCY-4",
+  "description": "Evaluates SQLite WAL contention and CPU throughput under 4 concurrent sender threads.",
+  "baseline": "TREATMENT_E_FULL_ASTRA_SEC",
+  "workload": {
+    "payload_size_bytes": 512,
+    "total_messages": 12,
+    "rate_msg_per_sec": 50.0,
+    "concurrency": 4,
+    "burst_mode": true
+  },
+  "impairment": {
+    "delay_ms": 0.0,
+    "jitter_ms": 0.0,
+    "loss_rate": 0.0,
+    "duplication_rate": 0.0,
+    "reorder_rate": 0.0,
+    "outage_duration_s": 0.0,
+    "outage_start_s": 0.0
+  },
+  "fault": {
+    "enabled": false,
+    "fault_type": "none",
+    "target_layer": 0,
+    "bit_position": 0,
+    "injection_probability": 0.0,
+    "retry_budget_exhaustion": false
+  },
+  "random_seed": 6006,
+  "warmup_messages": 0,
+  "repetitions": 1,
+  "timeout_seconds": 30.0,
+  "output_dir": "research/phase3_experimental_lab/results/raw"
+}

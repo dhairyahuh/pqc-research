@@ -1,0 +1,36 @@
+{
+  "experiment_name": "Group G Network Impairment: High Delay & Loss",
+  "group": "G",
+  "scenario_id": "EXP-G01-IMPAIRMENT",
+  "description": "Evaluates 4-node store-and-forward behavior under 50 ms delay, 10 ms jitter, and 5% stochastic loss.",
+  "baseline": "TREATMENT_E_FULL_ASTRA_SEC",
+  "workload": {
+    "payload_size_bytes": 512,
+    "total_messages": 10,
+    "rate_msg_per_sec": 10.0,
+    "concurrency": 1,
+    "burst_mode": false
+  },
+  "impairment": {
+    "delay_ms": 20.0,
+    "jitter_ms": 5.0,
+    "loss_rate": 0.05,
+    "duplication_rate": 0.0,
+    "reorder_rate": 0.0,
+    "outage_duration_s": 0.0,
+    "outage_start_s": 0.0
+  },
+  "fault": {
+    "enabled": false,
+    "fault_type": "none",
+    "target_layer": 0,
+    "bit_position": 0,
+    "injection_probability": 0.0,
+    "retry_budget_exhaustion": false
+  },
+  "random_seed": 7007,
+  "warmup_messages": 0,
+  "repetitions": 1,
+  "timeout_seconds": 30.0,
+  "output_dir": "research/phase3_experimental_lab/results/raw"
+}

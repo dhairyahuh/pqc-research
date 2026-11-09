@@ -1,0 +1,36 @@
+{
+  "experiment_name": "Group D Treatment: Full ASTRA-Sec",
+  "group": "D",
+  "scenario_id": "EXP-D01-FULL-ASTRA",
+  "description": "Full ASTRA-Sec 4-node pipeline with monitored native C ML-KEM-768, ML-DSA-65, and persistent SQLite WAL spools.",
+  "baseline": "TREATMENT_E_FULL_ASTRA_SEC",
+  "workload": {
+    "payload_size_bytes": 512,
+    "total_messages": 10,
+    "rate_msg_per_sec": 20.0,
+    "concurrency": 1,
+    "burst_mode": false
+  },
+  "impairment": {
+    "delay_ms": 0.0,
+    "jitter_ms": 0.0,
+    "loss_rate": 0.0,
+    "duplication_rate": 0.0,
+    "reorder_rate": 0.0,
+    "outage_duration_s": 0.0,
+    "outage_start_s": 0.0
+  },
+  "fault": {
+    "enabled": false,
+    "fault_type": "none",
+    "target_layer": 0,
+    "bit_position": 0,
+    "injection_probability": 0.0,
+    "retry_budget_exhaustion": false
+  },
+  "random_seed": 4004,
+  "warmup_messages": 1,
+  "repetitions": 1,
+  "timeout_seconds": 30.0,
+  "output_dir": "research/phase3_experimental_lab/results/raw"
+}
