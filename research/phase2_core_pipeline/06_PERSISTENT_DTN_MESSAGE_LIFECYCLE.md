@@ -103,3 +103,4 @@ To prevent confusion, ASTRA-Sec formally separates transport delivery from comma
 ## 6. Verdict
 
 The persistent DTN spool is **crash-consistent, ACID-compliant, survives unannounced reboots, and guarantees at-most-once command execution semantics**.
+

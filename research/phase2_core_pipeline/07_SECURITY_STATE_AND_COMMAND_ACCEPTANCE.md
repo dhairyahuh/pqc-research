@@ -114,3 +114,4 @@ If a power-cycle reboot occurs at Phase 3, the database WAL already contains the
 ## 5. Verdict
 
 ASTRA-Sec's command acceptance rules are **atomic, crash-consistent, fail-closed, and guarantee zero duplicate command executions across unannounced system reboots**.
+

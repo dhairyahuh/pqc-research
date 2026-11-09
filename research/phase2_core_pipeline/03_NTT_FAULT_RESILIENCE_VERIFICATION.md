@@ -118,3 +118,4 @@ Across 3,000 native C fault injection campaigns in `experiments/phase7k/`:
 ## 6. Verdict
 
 ASTRA-Sec's NTT fault resilience mechanism is **mathematically sound, physically verified in C memory, strictly bounded ($K \le 2$), and guarantees 0.00% SDC**.
+

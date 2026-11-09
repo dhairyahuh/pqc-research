@@ -205,3 +205,4 @@ The exact sequence of function invocations during an end-to-end command dispatch
 1. **Zero Dynamic Allocation on Cryptographic Path:** Native C functions allocate intermediate polynomials exclusively on the call stack (`int16_t r[256]`).
 2. **Strict Relay Payload Opacity:** `SatelliteRelayNode` never imports or accesses `CryptoEngineFactory.get_kem_adapter()`. Ciphertext cannot be decrypted at intermediate hops.
 3. **Crash Consistency:** Anti-replay sequence marks and message spools are protected by SQLite Write-Ahead Logging (`PRAGMA synchronous = NORMAL` / `FULL`).
+

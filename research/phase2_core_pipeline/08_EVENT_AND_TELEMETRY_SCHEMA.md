@@ -83,3 +83,4 @@ To prevent side-channel exposure and data leaks, the logging engine strictly for
 ## 6. Verdict
 
 The telemetry schema provides **comprehensive, structured auditability while strictly enforcing zero leakage of cryptographic keys and plaintext**.
+

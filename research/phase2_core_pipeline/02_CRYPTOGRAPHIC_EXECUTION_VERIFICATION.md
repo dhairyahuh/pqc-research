@@ -128,3 +128,4 @@ Executing `./bin/test_fips_kats` validates ASTRA-Sec against official NIST test 
 ## 6. Verdict
 
 All cryptographic engines are **100% operational, fully conformant to NIST standards**, and exhibit zero heap allocations on the operational flight path.
+

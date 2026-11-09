@@ -59,3 +59,4 @@ These items are documented transparently to ensure that academic publications an
 | **"Cosmic Radiation Resilience"** | C memory register bit-flip injection | "Software-level fault resilience against simulated SEUs" |
 | **"Zero SDC"** | Formally verified in 3,000 trials via implicit rejection | "Zero SDC observed across 3,000 software fault trials" |
 | **"At-Most-Once Execution"** | Enforced via SQLite WAL anti-replay sequence | "At-most-once telecommand execution across process reboots" |
+

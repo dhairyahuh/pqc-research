@@ -77,3 +77,4 @@ ASTRA-Sec provides basic support for RFC 9172 extension blocks (`astra_sec/dtn/b
 - RFC 9171 BPv7: **CONFORMANT & VERIFIED** for unfragmented space bundles.
 - RFC 9172 BPSec: **PARTIALLY IMPLEMENTED** (BIB/BCB basic structures supported).
 - NASA/JPL ION: **CONFIGURED & EMULATED via internal BPv7 engine**.
+

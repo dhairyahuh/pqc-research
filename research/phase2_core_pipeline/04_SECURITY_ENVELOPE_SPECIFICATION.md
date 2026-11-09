@@ -130,3 +130,4 @@ CBOR Array [4 items]:
 ## 7. Verdict
 
 The envelope schema is **strictly validated, deterministically serializable in CBOR, and cryptographically unforgeable**.
+
