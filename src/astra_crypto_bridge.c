@@ -93,6 +93,8 @@ int astra_mlkem_decaps_monitored(
 
     /* Enforce TFIB-Ref mode: Strategy 1 Dual-Reference Table */
     tfib_set_mode(TFIB_MODE_REF);
+    g_tfib_ref_stats.executed_count = 0;
+    g_tfib_ref_stats.retry_attempt_count = 0;
 
     uint32_t raw_status = 0;
     int rc = mlkem768_dec_monitored(ss, ct, sk, &raw_status);

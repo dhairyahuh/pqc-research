@@ -6,6 +6,8 @@ import uuid
 from typing import Any, Callable, Optional, Tuple
 
 from astra_sec.core.exceptions import AstraError, ProtocolError, SchemaValidationError
+from astra_sec.core.telemetry_engine import TelemetryEngine
+from astra_sec.schema.telemetry import ComponentLayer, EventType
 from astra_sec.crypto.aead import Aes256GcmAead, HkdfSha256Engine
 from astra_sec.crypto.base import DecapsulationStatus, DsaAdapter, KemAdapter
 from astra_sec.crypto.factory import CryptoEngineFactory
@@ -168,12 +170,53 @@ class GroundStationNode:
 
         timestamp = custom_timestamp if custom_timestamp is not None else int(time.time())
         envelope_id = str(uuid.uuid4())
+        engine = TelemetryEngine.get_instance()
+
+        engine.emit_event(
+            event_type=EventType.CRYPTO_OPERATION,
+            component=ComponentLayer.L1_APPLICATION,
+            source_node=self.node_eid,
+            destination_node=destination_eid,
+            message_id=envelope_id,
+            operation="ADU_CREATE",
+            status="SUCCESS",
+            correlation_id=envelope_id,
+            metadata={"payload_size_bytes": len(payload), "sequence_id": seq_id},
+        )
 
         # 3. ML-KEM-768 Encapsulation
+        t0 = time.perf_counter_ns()
         kem_ciphertext, shared_secret = self.kem.encapsulate(peer_kem_pk)
+        dur_kem = time.perf_counter_ns() - t0
+        engine.emit_event(
+            event_type=EventType.CRYPTO_OPERATION,
+            component=ComponentLayer.L3_KEM,
+            source_node=self.node_eid,
+            destination_node=destination_eid,
+            message_id=envelope_id,
+            operation="KEM_ENCAPSULATE",
+            status="SUCCESS",
+            duration_ns=dur_kem,
+            correlation_id=envelope_id,
+            metadata={"algorithm": "ML-KEM-768", "ciphertext_length_bytes": len(kem_ciphertext), "shared_secret_length_bytes": len(shared_secret)},
+        )
 
         # 4. HKDF-SHA256 Key Derivation
+        t0 = time.perf_counter_ns()
         aead_key = HkdfSha256Engine.derive_payload_key(shared_secret)
+        dur_hkdf = time.perf_counter_ns() - t0
+        engine.emit_event(
+            event_type=EventType.CRYPTO_OPERATION,
+            component=ComponentLayer.L2_AEAD,
+            source_node=self.node_eid,
+            destination_node=destination_eid,
+            message_id=envelope_id,
+            operation="HKDF_DERIVE",
+            status="SUCCESS",
+            duration_ns=dur_hkdf,
+            correlation_id=envelope_id,
+            metadata={"context_label": "astra-sec-payload-v1", "derived_key_bytes": len(aead_key)},
+        )
 
         # 5. Nonce generation
         nonce = self.aead.generate_nonce()
@@ -193,11 +236,39 @@ class GroundStationNode:
 
         # 6. AES-256-GCM Encryption with canonical AAD
         aad = header.to_canonical_aad()
+        t0 = time.perf_counter_ns()
         ciphertext, tag = self.aead.encrypt(aead_key, nonce, payload, aad)
+        dur_aead = time.perf_counter_ns() - t0
+        engine.emit_event(
+            event_type=EventType.CRYPTO_OPERATION,
+            component=ComponentLayer.L2_AEAD,
+            source_node=self.node_eid,
+            destination_node=destination_eid,
+            message_id=envelope_id,
+            operation="AEAD_ENCRYPT",
+            status="SUCCESS",
+            duration_ns=dur_aead,
+            correlation_id=envelope_id,
+            metadata={"algorithm": "AES-256-GCM", "ciphertext_size_bytes": len(ciphertext), "nonce_bytes": len(nonce), "tag_bytes": len(tag), "canonical_aad_bound": True},
+        )
 
         # 7. ML-DSA-65 Signature over canonical signable representation
         signable_bytes = header.to_signable_representation(ciphertext, tag)
+        t0 = time.perf_counter_ns()
         signature = self.dsa.sign(signable_bytes, self.dsa_keys.secret_key)
+        dur_dsa = time.perf_counter_ns() - t0
+        engine.emit_event(
+            event_type=EventType.CRYPTO_OPERATION,
+            component=ComponentLayer.L3_DSA,
+            source_node=self.node_eid,
+            destination_node=destination_eid,
+            message_id=envelope_id,
+            operation="DSA_SIGN",
+            status="SUCCESS",
+            duration_ns=dur_dsa,
+            correlation_id=envelope_id,
+            metadata={"algorithm": "ML-DSA-65", "signature_size_bytes": len(signature)},
+        )
 
         return PqcMessageEnvelope(
             header=header,
@@ -225,9 +296,19 @@ class GroundStationNode:
         Returns: (plaintext_bytes, signed_acknowledgment)
         """
         header = envelope.header
+        engine = TelemetryEngine.get_instance()
 
         # 1. Verify Destination matches this node
         if header.destination_eid != self.node_eid:
+            engine.emit_event(
+                event_type=EventType.SECURITY_AUDIT,
+                component=ComponentLayer.L1_APPLICATION,
+                source_node=self.node_eid,
+                destination_node=header.destination_eid,
+                operation="DESTINATION_CHECK",
+                status="REJECTED_MISMATCH",
+                correlation_id=header.envelope_id,
+            )
             raise DestinationMismatchError(
                 f"Destination mismatch: envelope targeted '{header.destination_eid}', "
                 f"but this node is '{self.node_eid}'."
@@ -240,6 +321,15 @@ class GroundStationNode:
         try:
             sender_dsa_pk = self.trust_store.get_dsa_public_key(header.source_eid)
         except TrustError as e:
+            engine.emit_event(
+                event_type=EventType.SECURITY_AUDIT,
+                component=ComponentLayer.L3_DSA,
+                source_node=self.node_eid,
+                destination_node=header.source_eid,
+                operation="SENDER_TRUST_VERIFY",
+                status="UNAUTHORIZED_SENDER",
+                correlation_id=header.envelope_id,
+            )
             raise UnauthorizedSenderError(
                 f"Sender '{header.source_eid}' is not recognized or unauthorized: {e}"
             ) from e
@@ -254,6 +344,16 @@ class GroundStationNode:
                 envelope_id=header.envelope_id,
                 current_time=current_time,
             )
+            engine.emit_event(
+                event_type=EventType.SECURITY_AUDIT,
+                component=ComponentLayer.L6_SPOOL,
+                source_node=self.node_eid,
+                destination_node=header.source_eid,
+                operation="ANTI_REPLAY_CHECK",
+                status="VERIFIED_FRESH",
+                correlation_id=header.envelope_id,
+                metadata={"sequence_id": header.sequence_id},
+            )
         except TypeError:
             self.replay_filter.check_and_update(
                 source_eid=header.source_eid,
@@ -262,35 +362,113 @@ class GroundStationNode:
                 ttl_seconds=header.ttl_seconds,
                 current_time=current_time,
             )
+            engine.emit_event(
+                event_type=EventType.SECURITY_AUDIT,
+                component=ComponentLayer.L6_SPOOL,
+                source_node=self.node_eid,
+                destination_node=header.source_eid,
+                operation="ANTI_REPLAY_CHECK",
+                status="VERIFIED_FRESH",
+                correlation_id=header.envelope_id,
+                metadata={"sequence_id": header.sequence_id},
+            )
 
         # 4. Verify ML-DSA-65 Signature
         signable_bytes = header.to_signable_representation(envelope.ciphertext, envelope.tag)
+        t0 = time.perf_counter_ns()
         is_sig_valid = self.dsa.verify(signable_bytes, envelope.signature, sender_dsa_pk)
+        dur_dsa_v = time.perf_counter_ns() - t0
         if not is_sig_valid:
+            engine.emit_event(
+                event_type=EventType.CRYPTO_OPERATION,
+                component=ComponentLayer.L3_DSA,
+                source_node=self.node_eid,
+                destination_node=header.source_eid,
+                operation="DSA_VERIFY",
+                status="REJECTED_INVALID_SIG",
+                duration_ns=dur_dsa_v,
+                correlation_id=header.envelope_id,
+                metadata={"verified": False, "algorithm": "ML-DSA-65"},
+            )
             raise SignatureVerificationError(
                 f"Signature verification failed for envelope '{header.envelope_id}' from '{header.source_eid}'."
             )
+        engine.emit_event(
+            event_type=EventType.CRYPTO_OPERATION,
+            component=ComponentLayer.L3_DSA,
+            source_node=self.node_eid,
+            destination_node=header.source_eid,
+            operation="DSA_VERIFY",
+            status="VERIFIED_VALID",
+            duration_ns=dur_dsa_v,
+            correlation_id=header.envelope_id,
+            metadata={"verified": True, "algorithm": "ML-DSA-65"},
+        )
 
         # 5. Decapsulate ML-KEM-768 Shared Secret (Monitored Native C Engine)
         if hasattr(self.kem, "decapsulate_with_telemetry"):
+            t0 = time.perf_counter_ns()
             try:
                 shared_secret, telemetry = self.kem.decapsulate_with_telemetry(
                     header.kem_ciphertext, self.kem_keys.secret_key
                 )
+                dur_kem_d = time.perf_counter_ns() - t0
                 self.last_decaps_telemetry = telemetry
                 self.fdir_telemetry.transient_recoveries += telemetry.recovered_count
                 self.fdir_telemetry.twiddle_faults_detected += telemetry.twiddle_faults_detected
+
+                engine.emit_event(
+                    event_type=EventType.FAULT_INSPECTION,
+                    component=ComponentLayer.L4_NTT,
+                    source_node=self.node_eid,
+                    destination_node=header.source_eid,
+                    operation="NTT_DECAPSULATE_MONITORED",
+                    status="RECOVERED" if telemetry.recovered_count > 0 else "NOMINAL_VERIFIED",
+                    duration_ns=dur_kem_d,
+                    correlation_id=header.envelope_id,
+                    metadata={
+                        "butterflies_executed": telemetry.butterflies_executed,
+                        "mismatch_count": telemetry.mismatch_count,
+                        "recovered_count": telemetry.recovered_count,
+                        "retry_count": telemetry.retry_count,
+                        "fail_stop_engaged": telemetry.fail_stop_engaged,
+                    },
+                )
             except Exception as e:
+                dur_kem_d = time.perf_counter_ns() - t0
                 self.fdir_telemetry.persistent_fail_stops += 1
                 self.fdir_telemetry.bundles_rejected += 1
+                engine.emit_event(
+                    event_type=EventType.FAULT_INSPECTION,
+                    component=ComponentLayer.L4_NTT,
+                    source_node=self.node_eid,
+                    destination_node=header.source_eid,
+                    operation="NTT_DECAPSULATE_MONITORED",
+                    status="FAIL_STOP_SUPPRESSED",
+                    duration_ns=dur_kem_d,
+                    correlation_id=header.envelope_id,
+                    metadata={"error": str(e), "fail_stop_engaged": True},
+                )
                 raise DecapsulationFaultError(
                     f"Monitored ML-KEM decapsulation fault suppression engaged: {e}"
                 ) from e
         else:
+            t0 = time.perf_counter_ns()
             shared_secret, dec_status = self.kem.decapsulate(header.kem_ciphertext, self.kem_keys.secret_key)
+            dur_kem_d = time.perf_counter_ns() - t0
             if not dec_status.is_success:
                 self.fdir_telemetry.persistent_fail_stops += 1
                 self.fdir_telemetry.bundles_rejected += 1
+                engine.emit_event(
+                    event_type=EventType.FAULT_INSPECTION,
+                    component=ComponentLayer.L3_KEM,
+                    source_node=self.node_eid,
+                    destination_node=header.source_eid,
+                    operation="KEM_DECAPSULATE",
+                    status="FAILED",
+                    duration_ns=dur_kem_d,
+                    correlation_id=header.envelope_id,
+                )
                 raise DecapsulationFaultError(
                     f"ML-KEM decapsulation rejected or faulted with status {dec_status.name} (0x{dec_status.value:08X})."
                 )
@@ -298,11 +476,48 @@ class GroundStationNode:
         self.fdir_telemetry.bundles_forwarded += 1
 
         # 6. Derive AES key via HKDF-SHA256
+        t0 = time.perf_counter_ns()
         aead_key = HkdfSha256Engine.derive_payload_key(shared_secret)
+        dur_hkdf_d = time.perf_counter_ns() - t0
+        engine.emit_event(
+            event_type=EventType.CRYPTO_OPERATION,
+            component=ComponentLayer.L2_AEAD,
+            source_node=self.node_eid,
+            destination_node=header.source_eid,
+            operation="HKDF_DERIVE",
+            status="SUCCESS",
+            duration_ns=dur_hkdf_d,
+            correlation_id=header.envelope_id,
+            metadata={"context_label": "astra-sec-payload-v1"},
+        )
 
         # 7. AES-256-GCM Decryption and Tag Verification
         aad = header.to_canonical_aad()
+        t0 = time.perf_counter_ns()
         plaintext = self.aead.decrypt(aead_key, header.nonce, envelope.ciphertext, envelope.tag, aad)
+        dur_aead_d = time.perf_counter_ns() - t0
+        engine.emit_event(
+            event_type=EventType.CRYPTO_OPERATION,
+            component=ComponentLayer.L2_AEAD,
+            source_node=self.node_eid,
+            destination_node=header.source_eid,
+            operation="AEAD_DECRYPT",
+            status="SUCCESS",
+            duration_ns=dur_aead_d,
+            correlation_id=header.envelope_id,
+            metadata={"tag_verified": True},
+        )
+
+        engine.emit_event(
+            event_type=EventType.SECURITY_AUDIT,
+            component=ComponentLayer.L1_APPLICATION,
+            source_node=self.node_eid,
+            destination_node=header.source_eid,
+            operation="APP_ACCEPT",
+            status="ACCEPTED",
+            correlation_id=header.envelope_id,
+            metadata={"plaintext_bytes": len(plaintext)},
+        )
 
         # 8. Construct and sign Verified Cryptographic Acknowledgment
         ack_timestamp = current_time if current_time is not None else int(time.time())
@@ -315,8 +530,21 @@ class GroundStationNode:
             signature=b"\x00" * 3309,  # Placeholder before signing
         )
         ack_signable = ack.to_signable_bytes()
+        t0 = time.perf_counter_ns()
         ack_sig = self.dsa.sign(ack_signable, self.dsa_keys.secret_key)
+        dur_ack_s = time.perf_counter_ns() - t0
         ack.signature = ack_sig
+        engine.emit_event(
+            event_type=EventType.CRYPTO_OPERATION,
+            component=ComponentLayer.L3_DSA,
+            source_node=self.node_eid,
+            destination_node=header.source_eid,
+            operation="ACK_SIGN",
+            status="SUCCESS",
+            duration_ns=dur_ack_s,
+            correlation_id=header.envelope_id,
+            metadata={"ack_id": ack.ack_id},
+        )
 
         return plaintext, ack
 
@@ -335,7 +563,21 @@ class GroundStationNode:
             return False
 
         ack_signable = ack.to_signable_bytes()
-        return self.dsa.verify(ack_signable, ack.signature, peer_dsa_pk)
+        t0 = time.perf_counter_ns()
+        is_ack_valid = self.dsa.verify(ack_signable, ack.signature, peer_dsa_pk)
+        dur = time.perf_counter_ns() - t0
+        TelemetryEngine.get_instance().emit_event(
+            event_type=EventType.CRYPTO_OPERATION,
+            component=ComponentLayer.L3_DSA,
+            source_node=self.node_eid,
+            destination_node=ack.source_eid,
+            operation="ACK_VERIFY",
+            status="VERIFIED_AT_GSA" if is_ack_valid else "REJECTED_INVALID_ACK",
+            duration_ns=dur,
+            correlation_id=original_envelope.header.envelope_id,
+            metadata={"ack_id": ack.ack_id, "verified": is_ack_valid},
+        )
+        return is_ack_valid
 
     def transmit(
         self,

@@ -62,6 +62,14 @@ class SatelliteRelayNode:
         """Returns count of pending messages in the non-volatile spool."""
         return self.spool.count_pending()
 
+    def get_dtn_telemetry(self) -> Dict[str, Any]:
+        """Returns comprehensive L5/L6 DTN spool and routing metrics."""
+        stats = self.spool.get_detailed_stats()
+        stats["relay_eid"] = self.node_eid
+        stats["queue_capacity"] = 1000
+        stats["forwarding_events_logged"] = len(self.events)
+        return stats
+
     def log_event(
         self,
         event_type: str,
@@ -84,6 +92,24 @@ class SatelliteRelayNode:
             details=details or {},
         )
         self.events.append(event)
+
+        try:
+            from astra_sec.core.telemetry_engine import TelemetryEngine
+            from astra_sec.schema.telemetry import ComponentLayer, EventType
+
+            TelemetryEngine.get_instance().emit_event(
+                event_type=EventType.DTN_STORE_FORWARD,
+                component=ComponentLayer.L5_BPV7 if "FORWARD" in event_type else ComponentLayer.L6_SPOOL,
+                source_node=self.node_eid,
+                destination_node=destination_eid,
+                operation=event_type,
+                status=status.value,
+                correlation_id=envelope_id,
+                metadata=details or {},
+            )
+        except Exception:
+            pass
+
         logger.info(
             "[%s] %s | env=%s | %s -> %s | next=%s | status=%s",
             self.node_eid,

@@ -10,11 +10,13 @@ from astra_sec.core.exceptions import (
     StaleMessageError,
 )
 from astra_sec.core.logging import configure_logging
+from astra_sec.core.telemetry_engine import TelemetryEngine
 
 __all__ = [
     "AstraNodeConfig",
     "load_node_config",
     "configure_logging",
+    "TelemetryEngine",
     "AstraError",
     "ConfigurationError",
     "SchemaValidationError",

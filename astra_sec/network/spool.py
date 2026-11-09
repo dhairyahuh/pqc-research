@@ -191,6 +191,55 @@ class PersistentMessageSpool:
                 cursor = conn.execute("SELECT COUNT(*) as cnt FROM message_spool")
                 return cursor.fetchone()["cnt"]
 
+    def get_detailed_stats(self) -> dict:
+        """Returns physical and logical storage telemetry for this spool."""
+        db_size = os.path.getsize(self.db_path) if os.path.exists(self.db_path) else 0
+        wal_path = f"{self.db_path}-wal"
+        wal_size = os.path.getsize(wal_path) if os.path.exists(wal_path) else 0
+
+        with self._lock:
+            with self._get_connection() as conn:
+                pending_cnt = conn.execute(
+                    "SELECT COUNT(*) as cnt FROM message_spool WHERE status IN (?, ?)",
+                    (DeliveryStatus.QUEUED.value, DeliveryStatus.WAITING_CONTACT.value),
+                ).fetchone()["cnt"]
+
+                persisted_cnt = conn.execute(
+                    "SELECT COUNT(*) as cnt FROM message_spool"
+                ).fetchone()["cnt"]
+
+                last_ins = conn.execute(
+                    "SELECT MAX(created_at_utc) as ts FROM message_spool"
+                ).fetchone()["ts"]
+
+                last_fwd = conn.execute(
+                    "SELECT MAX(updated_at_utc) as ts FROM message_spool WHERE status = ?",
+                    (DeliveryStatus.FORWARDED.value,),
+                ).fetchone()["ts"]
+
+                expired_cnt = conn.execute(
+                    "SELECT COUNT(*) as cnt FROM message_spool WHERE status = ?",
+                    (DeliveryStatus.EXPIRED.value,),
+                ).fetchone()["cnt"]
+
+                row = conn.execute("PRAGMA journal_mode").fetchone()
+                journal_mode = row[0].upper() if row else "UNKNOWN"
+
+        return {
+            "pending_bundles": pending_cnt,
+            "persisted_bundles": persisted_cnt,
+            "expired_bundles": expired_cnt,
+            "database_bytes": db_size,
+            "database_kb": round(db_size / 1024.0, 2),
+            "wal_bytes": wal_size,
+            "wal_kb": round(wal_size / 1024.0, 2),
+            "wal_mode": journal_mode == "WAL",
+            "last_insertion_utc": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime(last_ins)) if last_ins else None,
+            "last_forwarding_utc": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime(last_fwd)) if last_fwd else None,
+            "last_inserted_utc": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime(last_ins)) if last_ins else None,
+            "last_forwarded_utc": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime(last_fwd)) if last_fwd else None,
+        }
+
     def purge(self) -> None:
         """Clears all records in spool."""
         with self._lock:
